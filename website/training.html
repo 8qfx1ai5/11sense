@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's train agile multiplication :)</title>
+    <style>
+        button {
+            background-color: dimgrey;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            width: 49%;
+            color: #d7ba7d;
+        }
+
+        #solution {
+            border: 1px dashed grey;
+            text-align: center;
+            width: 100%;
+            color: #6e270b;
+            background-color: darkgrey;
+        }
+
+        #solution:focus {
+            outline: none !important;
+        }
+
+        .valid {
+            background-color: green;
+        }
+
+        .invalid {
+            background-color: red;
+        }
+
+        #wrapper {
+            width: 300px;
+            margin: auto;
+            text-align: center;
+        }
+
+        #task {
+            font-weight: bold;
+        }
+
+        body {
+            background-color: #252526;
+            color: #d7ba7d;
+            font-size: larger;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="config">
+            <button id="newTask" onclick="newTask()">(N)ew</button>
+            <button id="resolveTask" onclick="updateViewSolution()">(S)olution</button>
+        </div>
+        <section id="task">
+            <p id="current-task">
+
+            </p>
+        </section>
+        <section id="input">
+            <input type="number" id="solution" name="solution" placeholder="=">
+        </section>
+        <section>
+            <p id="temp-solutions"></p>
+        </section>
+    </div>
+    <script>
+        let currentTask = document.getElementById('current-task');
+        let currentSolution = document.getElementById('solution');
+        let tempSolutions = document.getElementById('temp-solutions')
+
+        window.addEventListener("keydown", function (e) {
+            if (e.keyCode == '32') {
+                // space
+                saveTempSolution();
+            }
+            else if (e.keyCode == '13') {
+                // enter
+                validateResult();
+            }
+            else if (e.keyCode == '78') {
+                // t
+                newTask();
+            }
+            else if (e.keyCode == '83') {
+                // s
+                updateViewSolution();
+            }
+
+            currentSolution.focus();
+        });
+
+
+        let factor1 = 0;
+        let factor2 = 0;
+        let result = 0;
+
+        function validateResult() {
+            solution = currentSolution.value
+
+            if (parseInt(solution, 10) == result) {
+                currentTask.classList.add("valid");
+            } else {
+                currentTask.classList.add("invalid");
+            }
+
+            updateViewSolution()
+        }
+
+        function calculateTask(a, b) {
+            factor1 = Math.ceil(Math.random() * (10 ** a));
+            factor2 = Math.ceil(Math.random() * (10 ** b));
+            result = factor1 * factor2
+        }
+
+        function updateView() {
+            currentTask.innerText = factor1 + " * " + factor2
+        }
+
+        function updateViewSolution() {
+            currentTask.innerText = factor1 + " * " + factor2 + " = " + result
+        }
+
+        function newTask() {
+            calculateTask(1, 2)
+            updateView()
+            resetInput()
+        }
+
+        function resetInput() {
+            currentSolution.value = "";
+            currentTask.classList.remove("valid");
+            currentTask.classList.remove("invalid");
+            tempSolutions.innerText = ""
+        }
+
+        function saveTempSolution() {
+            tempSolutions.innerText = currentSolution.value + "\n" + tempSolutions.innerText
+            currentSolution.value = ""
+        }
+
+        (function () {
+            newTask();
+            currentSolution.focus();
+        })();
+    </script>
+</body>
+
+</html>
