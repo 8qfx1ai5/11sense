@@ -17,14 +17,34 @@
             cursor: pointer;
             width: 49%;
             color: #d7ba7d;
+            margin-top: 5px;
+        }
+
+        header {
+            color: #d7ba7d;
+            margin-bottom: 50px;
+        }
+
+        header p {
+            margin-top: 5px;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        button:focus {
+            outline: none !important;
         }
 
         #solution {
-            border: 1px dashed grey;
+            border: none;
             text-align: center;
             width: 100%;
             color: #6e270b;
             background-color: darkgrey;
+            height: 2em;
+            border-radius: 25px;
         }
 
         #solution:focus {
@@ -40,13 +60,19 @@
         }
 
         #wrapper {
-            width: 300px;
+            width: 350px;
             margin: auto;
             text-align: center;
+            margin-top: 10%;
         }
 
         #task {
             font-weight: bold;
+        }
+
+        #current-task {
+            border-radius: 25px;
+            line-height: 2em;
         }
 
         body {
@@ -54,19 +80,74 @@
             color: #d7ba7d;
             font-size: larger;
         }
+
+        .config {
+            width: 49%;
+            display: inline-block;
+            padding: 0;
+            border: none;
+            height: 2em;
+            text-align: center;
+            vertical-align: middle;
+            background-color: darkgrey;
+            color: #6e270b;
+            border-radius: 25px;
+        }
+
+        .config:focus {
+            outline: none !important;
+        }
+
+        #config {
+            margin: 10px 0px;
+        }
+
+        #config p {
+            margin: 5px 0px 2px 0px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #nav {
+            margin-bottom: 50px;
+        }
     </style>
 </head>
 
 <body>
     <div id="wrapper">
-        <div id="config">
-            <button id="newTask" onclick="newTask()">(N)ew</button>
-            <button id="resolveTask" onclick="updateViewSolution()">(S)olution</button>
+        <div id="nav">
+            <header>
+                <h1>Mula</h1>
+                <p>Agile Multiplication Trainer</p>
+            </header>
+            <div id="control">
+                <button id="newTask" title="Create a new task based on the config and reset the view."
+                    onclick="newTask()">(N)ew</button>
+                <button id="resolveTask" title="Show the solution as a hint without validation of the input."
+                    onclick="updateViewSolution()">(S)olution</button>
+                <button id="clearSolutions" title="Clear the list with all temporary solutions saved for this task."
+                    onclick="clearSolutions()">(C)lear</button>
+                <button id="hideNavigation" title="Hide the header, navigation and config area."
+                    onclick="toggleNav()">(H)ide</button>
+                <button id="saveTempSolution"
+                    title="Save the current solution in the temporary list without submitting."
+                    onclick="saveTempSolution()">(<span style="font-size: smaller;">␣</span>)
+                    Keep</button>
+                <button id="submit" title="Submit and validate the current result." onclick="validateResult()">(<span
+                        style="font-size: x-small;">⏎</span>)
+                    Submit</button>
+            </div>
+            <div id="config">
+                <p># of digits:</p>
+                <input class="config" type="number" id="f1" name="factor1" placeholder="1" value="1">
+                <input class="config" type="number" id="f2" name="factor2" placeholder="2" value="2">
+            </div>
         </div>
-        <section id="task">
-            <p id="current-task">
-
-            </p>
+        <section id="task" onclick="toggleNav()">
+            <p id="current-task"></p>
         </section>
         <section id="input">
             <input type="number" id="solution" name="solution" placeholder="=">
@@ -79,35 +160,57 @@
         let currentTask = document.getElementById('current-task');
         let currentSolution = document.getElementById('solution');
         let tempSolutions = document.getElementById('temp-solutions')
+        let f1input = document.getElementById('f1')
+        let f2input = document.getElementById('f2')
+        let navigation = document.getElementById('nav')
 
         window.addEventListener("keydown", function (e) {
             if (e.keyCode == '32') {
                 // space
                 saveTempSolution();
+                currentSolution.focus();
             }
             else if (e.keyCode == '13') {
                 // enter
                 validateResult();
+                currentSolution.focus();
             }
             else if (e.keyCode == '78') {
-                // t
+                // n
                 newTask();
+                currentSolution.focus();
             }
             else if (e.keyCode == '83') {
                 // s
+                currentSolution.disabled = true;
+                currentSolution.value = ""
                 updateViewSolution();
+                currentSolution.focus();
             }
-
-            currentSolution.focus();
+            else if (e.keyCode == '72') {
+                // h
+                toggleNav();
+                currentSolution.focus();
+            }
+            else if (e.keyCode == '67') {
+                // c
+                clearSolutions();
+                currentSolution.focus();
+            }
         });
 
 
         let factor1 = 0;
         let factor2 = 0;
         let result = 0;
+        let fractions = new Map()
+        let startTime;
+        let endTime;
 
         function validateResult() {
+            currentSolution.disabled = true;
             solution = currentSolution.value
+            endTime = performance.now();
 
             if (parseInt(solution, 10) == result) {
                 currentTask.classList.add("valid");
@@ -119,38 +222,140 @@
         }
 
         function calculateTask(a, b) {
-            factor1 = Math.ceil(Math.random() * (10 ** a));
-            factor2 = Math.ceil(Math.random() * (10 ** b));
+            a = Math.max(1, a)
+            b = Math.max(1, b)
+            do {
+                factor1 = Math.floor(Math.random() * (10 ** a));
+            } while (factor1 < 2);
+            do {
+                factor2 = Math.floor(Math.random() * (10 ** b));
+            } while (factor2 < 2);
             result = factor1 * factor2
+            startTime = performance.now();
+            endTime = null;
         }
 
         function updateView() {
             currentTask.innerText = factor1 + " * " + factor2
+            currentSolution.focus();
         }
 
         function updateViewSolution() {
             currentTask.innerText = factor1 + " * " + factor2 + " = " + result
+            if (currentSolution.value && result != currentSolution.value) {
+                currentTask.innerText = currentTask.innerText + " ≠ " + currentSolution.value
+            }
+            currentSolution.value = ""
+            currentSolution.placeholder = ""
+            if (endTime) {
+                currentSolution.placeholder = ((endTime - startTime).toFixed(0) / 1000).toString() + " sec."
+            }
+            currentSolution.focus();
         }
 
         function newTask() {
-            calculateTask(1, 2)
+            let f1 = parseInt(f1input.value, 10)
+            let f2 = parseInt(f2input.value, 10)
+            localStorage.setItem('f1', f1)
+            localStorage.setItem('f2', f2)
+            calculateTask(f1, f2)
             updateView()
             resetInput()
+            calculateFractions()
+        }
+
+        function calculateFractions() {
+            fractions = new Map();
+            let f1s = factor1.toString();
+            let f2s = factor2.toString();
+
+            for (let i = 0; i < f1s.length; i++) {
+                let ti = parseInt(f1s[i], 10) * Math.pow(10, f1s.length - i - 1)
+                if (ti == 0) {
+                    continue
+                }
+                for (let j = 0; j < f2s.length; j++) {
+                    let tj = parseInt(f2s[j], 10) * Math.pow(10, f2s.length - j - 1);
+                    if (tj == 0) {
+                        continue
+                    }
+                    fractions.set(ti + "*" + tj, ti * tj)
+                }
+            }
         }
 
         function resetInput() {
             currentSolution.value = "";
+            currentSolution.placeholder = "="
             currentTask.classList.remove("valid");
             currentTask.classList.remove("invalid");
             tempSolutions.innerText = ""
+            currentSolution.focus();
+            currentSolution.disabled = false;
         }
 
         function saveTempSolution() {
-            tempSolutions.innerText = currentSolution.value + "\n" + tempSolutions.innerText
+            currentSolution.focus();
+            if (currentSolution.value == "") {
+                return
+            }
+            let c = parseInt(currentSolution.value, 10)
+            analizationResult = analizeTempSolution(c)
+            if (analizationResult == "") {
+                tempSolutions.innerHTML = currentSolution.value + " ?<br/>" + tempSolutions.innerHTML
+                currentSolution.placeholder = "="
+            } else if (c == result) {
+                tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
+                validateResult();
+            } else {
+                tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
+                let x = c * 100 / result
+                currentSolution.placeholder = x.toFixed(1) + "%"
+            }
             currentSolution.value = ""
         }
 
+        function analizeTempSolution(s) {
+            let keys = sumRecursive(0, 0, s)
+            return keys.join("+")
+        }
+
+        function sumRecursive(i, c, s) {
+            let keys = Array.from(fractions.keys());
+            for (let j = i; j < keys.length; j++) {
+                let newCurrent = c + fractions.get(keys[j]);
+                if (newCurrent > s) {
+                    continue
+                }
+                if (newCurrent == s) {
+                    return [keys[j]]
+                }
+                let tempResult = sumRecursive(j + 1, newCurrent, s)
+                if (0 < tempResult.length) {
+                    tempResult.push(keys[j])
+                    return tempResult
+                }
+            }
+            return []
+        }
+
+        function toggleNav() {
+            navigation.classList.toggle("hidden");
+            currentSolution.focus();
+        }
+
+        function clearSolutions() {
+            tempSolutions.innerText = ""
+            currentSolution.focus();
+        }
+
         (function () {
+            if (localStorage.getItem('f1')) {
+                f1input.value = localStorage.getItem('f1')
+            }
+            if (localStorage.getItem('f2')) {
+                f2input.value = localStorage.getItem('f2')
+            }
             newTask();
             currentSolution.focus();
         })();
