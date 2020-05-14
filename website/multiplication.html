@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Let's train agile multiplication :)</title>
     <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
         #blame {
             position: absolute;
             width: 350px;
@@ -131,11 +142,11 @@
             <h2>Partial Solutions</h2>
             <p id="partial-solutions"></p>
         </div>
+        <header onclick="toggleNav()">
+            <h1>Mula</h1>
+            <p>Agile Multiplication Trainer</p>
+        </header>
         <div id="nav">
-            <header>
-                <h1>Mula</h1>
-                <p>Agile Multiplication Trainer</p>
-            </header>
             <div id="control">
                 <button id="newTask" title="Create a new task based on the config and reset the view."
                     onclick="newTask()">(N)ew</button>
@@ -156,7 +167,7 @@
                 <input class="config" type="number" id="f2" name="factor2" placeholder="2" value="2">
             </div>
         </div>
-        <section id="task" onclick="toggleNav()">
+        <section id="task" onclick="newTask()">
             <p id="current-task"></p>
         </section>
         <section id="input">
@@ -186,7 +197,6 @@
             else if (e.keyCode == '78') {
                 // n
                 newTask();
-                currentSolution.focus();
             }
             else if (e.keyCode == '83') {
                 // s
@@ -314,6 +324,7 @@
             updateView()
             resetInput()
             calculateFractions()
+            currentSolution.focus();
         }
 
         function calculateFractions() {

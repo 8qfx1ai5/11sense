@@ -35,7 +35,7 @@ access:
 .PHONY: deploy
  # call like: make deploy dir=$(pwd) ip=64.225.104.7
  deploy: prep-do
-	ssh root@$(ip) "cd /$(dir); make build run"
+	ssh root@$(ip) "cd /mula; make build clear-docker run"
 
 
 # prepare droplet on digital ocean from remote
@@ -46,7 +46,7 @@ access:
 	#ssh root@$(ip) "mkdir viewcrypt"
 	rsync -v --archive --delete --exclude=.git* --compress $(dir) root@$(ip):/
 	#scp -r $(dir) root@$(ip):/
-	ssh root@$(ip) "apt-get -y install make; cd /mula; make clear"
+	ssh root@$(ip) "apt-get -y install make"
 
 
 # get shell inside of the first running docker container
