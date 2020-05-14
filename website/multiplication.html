@@ -133,6 +133,15 @@
         #nav {
             margin-bottom: 50px;
         }
+
+        .speech img {
+            float: right;
+            position: absolute;
+            height: 0.8em;
+            width: 0.6em;
+            padding: 5px;
+            padding-left: 10px;
+        }
     </style>
 </head>
 
@@ -170,8 +179,9 @@
         <section id="task" onclick="newTask()">
             <p id="current-task"></p>
         </section>
-        <section id="input">
-            <input type="number" id="solution" name="solution" placeholder="=">
+        <section id="input" class="speech">
+            <img onclick="startDictation()" src="32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
+            <input type="number" id="solution" name="solution" placeholder="=" />
         </section>
         <section>
             <p id="temp-solutions"></p>
@@ -192,7 +202,6 @@
             if (e.keyCode == '13' || e.keyCode == '32') {
                 // enter or space
                 saveTempSolution();
-                currentSolution.focus();
             }
             else if (e.keyCode == '78') {
                 // n
@@ -432,6 +441,35 @@
             newTask();
             currentSolution.focus();
         })();
+
+        function startDictation() {
+
+            if (window.hasOwnProperty('webkitSpeechRecognition')) {
+
+                var recognition = new webkitSpeechRecognition();
+
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                recognition.lang = "de-DE";
+                // recognition.lang = "en-US";
+                recognition.start();
+
+                recognition.onresult = function (e) {
+                    document.getElementById('solution').value
+                        = e.results[0][0].transcript;
+                    // console.log(e.results[0][0].transcript);
+                    recognition.stop();
+                    //document.getElementById('labnol').submit();
+                    saveTempSolution();
+                };
+
+                recognition.onerror = function (e) {
+                    recognition.stop();
+                }
+
+            }
+        }
     </script>
 </body>
 
