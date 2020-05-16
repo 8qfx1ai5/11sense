@@ -237,6 +237,8 @@
         let micImage = document.getElementById('mic-image')
         let SolutionTask = document.getElementById('Solution-task')
         let isVoiceModeActive = false;
+        let isBeginnerModeActive = false;
+        let funnySmilies = ["😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🤫", "🤨", "😏", "🤯", "🤠", "🥳", "😎", "🤓", "🧐", "😲", "😳", "🥺", "😱", "😈", "😺", "😸", "😹", "😻", "😼", "😽", "🙀"]
 
         window.addEventListener("keydown", function (e) {
 
@@ -408,6 +410,9 @@
             }
             localStorage.setItem('f1', f1x)
             localStorage.setItem('f2', f2x)
+
+            isBeginnerModeActive = (f1x == 1 && f2x == 1);
+
             calculateTask(f1x, f2x)
             updateView()
             resetInput()
@@ -438,7 +443,8 @@
             updateSolution()
         }
 
-        function updateSolution() {
+        // function creates and sets the content of the solution page for Pro mode
+        function updateSolutionPro() {
             let keys = Array.from(fractions.keys());
             psolutions.innerHTML = "";
             let f1s = factor1.toString();
@@ -456,7 +462,32 @@
                 let f2padded = factors[1].padStart(f2s.length);
                 let productPadded = fractions.get(keys[i]).toString().padStart(resultLength)
                 let x = currentSum * 100 / result
-                psolutions.innerHTML = psolutions.innerHTML + (i+1).toString().padStart(2) + ". " + f1padded + " * " + f2padded + " = " + productPadded + " | " + currentSum.toString().padStart(resultLength) + " ≙ " + x.toFixed(2).padStart(6) + "%" + "<br />"
+                psolutions.innerHTML = psolutions.innerHTML + (i + 1).toString().padStart(2) + ". " + f1padded + " * " + f2padded + " = " + productPadded + " | " + currentSum.toString().padStart(resultLength) + " ≙ " + x.toFixed(2).padStart(6) + "%" + "<br />"
+            }
+        }
+
+        // function creates and sets the content of the solution page for beginner mode
+        function updateSolutionBeginner() {
+            psolutions.innerHTML = "";
+            let f1s = factor1.toString();
+            let f2s = factor2.toString();
+            SolutionTask.innerHTML = f1s + " * " + f2s + " = " + result.toString();
+            let resultLength = result.toString().length;
+            let currentSum = 0;
+            for (let i = 1; i <= factor1; i++) {
+                currentSum += factor2;
+                let x = currentSum * 100 / result
+                psolutions.innerHTML = psolutions.innerHTML + (i).toString() + " * " + f2s + " = " + currentSum.toString().padStart(resultLength) + " ≙ " + x.toFixed(2).padStart(6) + "%" + "<br />"
+
+            }
+        }
+
+        // function creates and sets the content of the solution page
+        function updateSolution() {
+            if (isBeginnerModeActive) {
+                updateSolutionBeginner();
+            } else {
+                updateSolutionPro();
             }
         }
 
@@ -471,22 +502,26 @@
             Solution.style.display = "none";
         }
 
-        function saveTempSolution() {
+        function getRandomElement(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function saveTempSolutionPro() {
             currentSolution.focus();
             hideNav();
             if (currentSolution.value == "") {
                 if (!isVoiceModeActive) {
-                    if(currentSolution.placeholder == "="){
-                        currentSolution.placeholder = "😶";
+                    if (currentSolution.placeholder == "=") {
+                        currentSolution.placeholder = getRandomElement(funnySmilies);
                     } else {
-                        currentSolution.placeholder = currentSolution.placeholder + "😶";
+                        currentSolution.placeholder = getRandomElement(funnySmilies);
                     }
                 }
 
                 return
             }
             let c = parseInt(currentSolution.value, 10)
-            analizationResult = analizeTempSolution(c)
+            let analizationResult = analizeTempSolution(c)
             if (analizationResult == "") {
                 tempSolutions.innerHTML = currentSolution.value + " ?<br/>" + tempSolutions.innerHTML
                 if (!isVoiceModeActive) {
@@ -505,7 +540,53 @@
             currentSolution.value = ""
         }
 
+        function saveTempSolutionBeginner() {
+            currentSolution.focus();
+            hideNav();
+            if (currentSolution.value == "") {
+                if (!isVoiceModeActive) {
+                    if (currentSolution.placeholder == "=") {
+                        currentSolution.placeholder = getRandomElement(funnySmilies);
+                    } else {
+                        currentSolution.placeholder = currentSolution.placeholder + getRandomElement(funnySmilies);
+                    }
+                }
+
+                return
+            }
+            let c = parseInt(currentSolution.value, 10)
+            let analizationResult = analizeTempSolution(c)
+            if (analizationResult == "") {
+                tempSolutions.innerHTML = currentSolution.value + " ?<br/>" + tempSolutions.innerHTML
+                if (!isVoiceModeActive) {
+                    currentSolution.placeholder = "="
+                }
+                //startDictation();
+            } else if (c == result) {
+                tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
+                validateResult();
+            } else {
+                tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
+                let x = c * 100 / result
+                currentSolution.placeholder = x.toFixed(1) + "%"
+                //startDictation();
+            }
+            currentSolution.value = ""
+        }
+
+        function saveTempSolution() {
+            if (isBeginnerModeActive) {
+                saveTempSolutionBeginner();
+            } else {
+                saveTempSolutionPro();
+            }
+        }
+
         function analizeTempSolution(s) {
+            if (isBeginnerModeActive) {
+                let keys = sumFlat(s)
+                return keys.join("+")
+            }
             let keys = sumRecursive(0, 0, s)
             return keys.join("+")
         }
@@ -524,6 +605,34 @@
                 if (0 < tempResult.length) {
                     tempResult.push(keys[j])
                     return tempResult
+                }
+            }
+            return []
+        }
+
+        function sumFlat(s) {
+            let keys = Array();
+            let tempSum = 0;
+            for (let i = 1; i <= factor1; i++) {
+                keys.push(factor2)
+                tempSum += factor2;
+                if (tempSum == s) {
+                    if (i == 1) {
+                        return ["1*" + factor2.toString()]
+                    }
+                    return [i.toString() + "*" + factor2.toString() + "=" + keys.join("+")]
+                }
+            }
+            keys = Array();
+            tempSum = 0;
+            for (let j = 1; j <= factor2; j++) {
+                keys.push(factor1)
+                tempSum += factor1;
+                if (tempSum == s) {
+                    if (j == 1) {
+                        return ["1*" + factor1.toString()]
+                    }
+                    return [j.toString() + "*" + factor1.toString()  + "=" + keys.join("+")]
                 }
             }
             return []
