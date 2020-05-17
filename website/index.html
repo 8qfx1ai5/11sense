@@ -205,8 +205,8 @@
                     onclick="toggleSolution()">(S)olution</button>
                 <button id="voiceMode" title="Use voice recognition instead of keyboard input."
                     onclick="toggleVoiceMode()"></button>
-                <button id="impress" title="Print legal information and credits."
-                    onclick="">(L)egal Notice<br/><span style='font-size: x-small'>(Impressum)</span></button>
+                <button id="impress" title="Print legal information and credits." onclick="">(L)egal Notice<br /><span
+                        style='font-size: x-small'>(Impressum)</span></button>
             </div>
             <div id="config">
                 <p># of digits:</p>
@@ -581,7 +581,7 @@
         }
 
         function saveTempSolution() {
-            if(wasSolved){
+            if (wasSolved) {
                 newTask();
                 return;
             }
@@ -726,10 +726,9 @@
         }
 
         (function () {
-            if (localStorage.getItem('isVoiceModeActive')) {
-                isVoiceModeActive = localStorage.getItem('isVoiceModeActive') == "false";
-                toggleVoiceMode();
-            }
+            isVoiceModeActive = localStorage.getItem('isVoiceModeActive') != "true";
+            toggleVoiceMode();
+
             if (localStorage.getItem('f1')) {
                 f1input.value = localStorage.getItem('f1');
             }
