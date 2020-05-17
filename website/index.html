@@ -517,11 +517,11 @@
             hideNav();
             if (currentSolution.value == "") {
                 if (!isVoiceModeActive) {
-                    if (currentSolution.placeholder == "=" || currentSolution.placeholder.includes("%")) {
-                        currentSolution.placeholder = getRandomElement(funnySmilies);
-                    } else {
-                        currentSolution.placeholder = getRandomElement(funnySmilies);
-                    }
+                    let smiley;
+                    do {
+                        smiley = getRandomElement(funnySmilies);
+                    } while (currentSolution.placeholder == smiley);
+                    currentSolution.placeholder = smiley;
                 }
 
                 return
@@ -551,11 +551,11 @@
             hideNav();
             if (currentSolution.value == "") {
                 if (!isVoiceModeActive) {
-                    if (currentSolution.placeholder == "=" || currentSolution.placeholder.includes("%") || currentSolution.placeholder.includes("sec")) {
-                        currentSolution.placeholder = getRandomElement(funnySmilies);
-                    } else {
-                        currentSolution.placeholder = currentSolution.placeholder + getRandomElement(funnySmilies);
-                    }
+                    let smiley;
+                    do {
+                        smiley = getRandomElement(funnySmilies);
+                    } while (currentSolution.placeholder == smiley);
+                    currentSolution.placeholder = smiley;
                 }
 
                 return
