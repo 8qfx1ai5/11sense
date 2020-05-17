@@ -111,7 +111,7 @@
         }
 
         .config {
-            width: 49%;
+            width: 20%;
             display: inline-block;
             padding: 0;
             border: none;
@@ -123,6 +123,11 @@
             border-radius: 25px;
         }
 
+        .config-label {
+            display: inline-block;
+            width: 50%;
+        }
+
         .config:focus {
             outline: none !important;
         }
@@ -130,6 +135,7 @@
         #config {
             margin: 10px auto;
             width: 350px;
+            text-align: left;
         }
 
         #config p {
@@ -209,11 +215,14 @@
                         style='font-size: x-small'>(Impressum)</span></button>
             </div>
             <div id="config">
-                <p># of digits:</p>
-                <input class="config" type="number" id="f1" name="factor1" placeholder="1" value="1"
-                    onclick="this.select();" oninput="newTask()" />
-                <input class="config" type="number" id="f2" name="factor2" placeholder="2" value="2"
-                    onclick="this.select();" oninput="newTask()" />
+                <p><span class="config-label"># of digits:</span><input class="config" type="number" id="f1"
+                        name="factor1" placeholder="1" value="1" onclick="this.select();" oninput="newTask(false)" />
+                    <input class="config" type="number" id="f2" name="factor2" placeholder="2" value="2"
+                        onclick="this.select();" oninput="newTask(false)" /></p>
+                <p><span class="config-label">auto task after:</span><input class="config" type="number"
+                        id="autoTaskInput" name="autoTaskInput" placeholder="-" value="" onclick="this.select();"
+                        oninput="saveAutoTaskInterval()" />
+                    <span>sec.</span></p>
             </div>
         </div>
         <section id="task">
@@ -239,6 +248,7 @@
         let voiceMode = document.getElementById('voiceMode')
         let micImage = document.getElementById('mic-image')
         let SolutionTask = document.getElementById('Solution-task')
+        let autoTaskInput = document.getElementById('autoTaskInput')
         let isVoiceModeActive = false;
         let isBeginnerModeActive = false;
         let wasSolved = false;
@@ -352,6 +362,7 @@
         let fractions = new Map()
         let startTime;
         let endTime;
+        let autoTaskTimer;
         // let recognition;
 
         function validateResult() {
@@ -361,6 +372,45 @@
             wasSolved = true;
 
             updateViewSolution()
+
+            let interval = getAutoTaskInterval();
+            if (0 < interval) {
+                autoTaskTimer = setInterval(function () {
+                    if (!wasSolved || !endTime) {
+                        clearInterval(autoTaskTimer);
+                        return
+                    }
+                    // Get today's date and time
+                    let now = performance.now();
+                    if (interval < now - endTime) {
+                        newTask();
+                        clearInterval(autoTaskTimer);
+                    }
+
+                }, 1000);
+            }
+        }
+
+        function saveAutoTaskInterval() {
+            let v = autoTaskInput.value;
+            console.log(v)
+            if (v === "" || v == "-") {
+                localStorage.setItem("autoTaskInterval", 0)
+                return;
+            }
+            v = Math.max(1, v)
+            v = Math.min(100, v)
+            localStorage.setItem("autoTaskInterval", v * 1000);
+            autoTaskInput.value = v;
+        }
+
+        function getAutoTaskInterval() {
+            let i = localStorage.getItem("autoTaskInterval");
+            if (!i || i == "") {
+                saveAutoTaskInterval()
+                i = localStorage.getItem("autoTaskInterval");
+            }
+            return i;
         }
 
         function calculateTask(a, b) {
@@ -381,7 +431,7 @@
 
         function updateView() {
             currentTask.innerText = factor1 + " * " + factor2
-            currentSolution.focus();
+            //currentSolution.focus();
         }
 
         function updateViewSolution() {
@@ -394,7 +444,7 @@
             //currentSolution.focus();
         }
 
-        function newTask() {
+        function newTask(setFocus = true) {
             let f1 = parseInt(f1input.value, 10)
             if (isNaN(f1)) {
                 f1 = 1
@@ -418,13 +468,16 @@
 
             isBeginnerModeActive = (f1x == 1 && f2x == 1);
             wasSolved = false;
+            clearInterval(autoTaskTimer);
 
             calculateTask(f1x, f2x)
             updateView()
             resetInput()
             calculateFractions()
-            currentSolution.focus();
-            hideNav();
+            if (setFocus) {
+                hideNav();
+                currentSolution.focus();
+            }
             //startDictation();
         }
 
@@ -503,7 +556,7 @@
             currentTask.classList.remove("valid");
             currentTask.classList.remove("invalid");
             tempSolutions.innerHTML = ""
-            currentSolution.focus();
+            //currentSolution.focus();
             currentSolution.disabled = false;
             Solution.style.display = "none";
         }
@@ -630,7 +683,7 @@
                     if (i == 1) {
                         return ["1*" + factor2.toString()]
                     }
-                    return [i.toString() + "*" + factor2.toString() + "=" + keys.join("+")]
+                    return [i.toString() + "*" + factor2.toString() + " = " + keys.join("+")]
                 }
             }
             keys = Array();
@@ -642,7 +695,7 @@
                     if (j == 1) {
                         return ["1*" + factor1.toString()]
                     }
-                    return [j.toString() + "*" + factor1.toString() + "=" + keys.join("+")]
+                    return [j.toString() + "*" + factor1.toString() + " = " + keys.join("+")]
                 }
             }
             return []
@@ -726,6 +779,11 @@
         }
 
         (function () {
+            if (localStorage.getItem('autoTaskInterval')) {
+                if(0 < localStorage.getItem('autoTaskInterval')){
+                    autoTaskInput.value = localStorage.getItem('autoTaskInterval')/1000;
+                }
+            }
             isVoiceModeActive = localStorage.getItem('isVoiceModeActive') != "true";
             toggleVoiceMode();
 
