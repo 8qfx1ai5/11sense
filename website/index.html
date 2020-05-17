@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Let's train agile multiplication :)</title>
     <style>
+
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -31,7 +32,7 @@
         button {
             background-color: dimgrey;
             border: none;
-            padding: 15px 32px;
+            /* padding: 15px 32px; */
             text-align: center;
             text-decoration: none;
             display: inline-block;
@@ -46,7 +47,7 @@
 
         header {
             color: #d7ba7d;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
         }
 
         header p {
@@ -89,7 +90,7 @@
             width: 350px;
             margin: auto;
             text-align: center;
-            margin-top: 10%;
+            /* margin-top: 10%; */
         }
 
         #task {
@@ -143,7 +144,7 @@
         }
 
         #control {
-            width: 350px;
+            /* width: 350px; */
             margin: auto;
         }
 
@@ -154,9 +155,9 @@
         #nav {
             margin-bottom: 50px;
             background-color: black;
-            padding: 10px 0px 40px 0px;
-            min-width: 100%;
-            position: fixed;
+            padding: 10px 10px 40px 10px;
+            /* min-width: 100%; */
+            /* position: fixed; */
             left: 0px;
             z-index: 10;
         }
@@ -184,12 +185,18 @@
             display: inline-block;
             font-size: x-large;
         }
+
+        #settings-image {
+            height: 2.5em;
+            padding-top: 1em;
+        }
     </style>
 </head>
 
 <body>
     <div id="wrapper">
-        <header onclick="toggleNav()">
+        <header id="header" onclick="toggleNav()">
+            <img id="settings-image" src="settings.png" />
             <h1>Mula</h1>
             <p>Agile Multiplication Trainer</p>
         </header>
@@ -225,16 +232,19 @@
                     <span>sec.</span></p>
             </div>
         </div>
-        <section id="task">
-            <p id="current-task" onclick="newTask()"></p>
-        </section>
-        <section id="input" class="speech" onclick="startDictation()">
-            <img id="mic-image" class="hidden" src="32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
-            <input type="number" id="solution" name="solution" placeholder="=" />
-        </section>
-        <section>
-            <p id="temp-solutions" onclick="toggleSolution()"></p>
-        </section>
+        <div id="trainer-page">
+            <section id="task">
+                <p id="current-task" onclick="newTask()"></p>
+            </section>
+            <section id="input" class="speech" onclick="startDictation()">
+                <img id="mic-image" class="hidden" src="32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
+                <input type="number" id="solution" name="solution" placeholder="=" />
+            </section>
+            <section>
+                <p id="temp-solutions" onclick="toggleSolution()"></p>
+            </section>
+
+        </div>
     </div>
     <script>
         let currentTask = document.getElementById('current-task');
@@ -249,6 +259,7 @@
         let micImage = document.getElementById('mic-image')
         let SolutionTask = document.getElementById('Solution-task')
         let autoTaskInput = document.getElementById('autoTaskInput')
+        let trainerPage = document.getElementById('trainer-page')
         let isVoiceModeActive = false;
         let isBeginnerModeActive = false;
         let wasSolved = false;
@@ -284,6 +295,24 @@
                 currentSolution.focus();
             }
         });
+
+        function toggleTrainerPage() {
+            if (trainerPage.classList.contains("hidden")) {
+                showTrainerPage();
+                currentSolution.focus();
+            } else {
+                hideTrainerPage();
+            }
+        }
+
+        function showTrainerPage() {
+            trainerPage.classList.removeﬂ("hidden")
+            hideNav();
+        }
+
+        function hideTrainerPage() {
+           trainerPage.classList.add("hidden")
+        }
 
         function toggleSolution() {
             if (Solution.style.display === "none") {
@@ -780,8 +809,8 @@
 
         (function () {
             if (localStorage.getItem('autoTaskInterval')) {
-                if(0 < localStorage.getItem('autoTaskInterval')){
-                    autoTaskInput.value = localStorage.getItem('autoTaskInterval')/1000;
+                if (0 < localStorage.getItem('autoTaskInterval')) {
+                    autoTaskInput.value = localStorage.getItem('autoTaskInterval') / 1000;
                 }
             }
             isVoiceModeActive = localStorage.getItem('isVoiceModeActive') != "true";
