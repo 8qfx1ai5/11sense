@@ -1,0 +1,5 @@
+# headers file
+
+# force https without preload
+/*
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
