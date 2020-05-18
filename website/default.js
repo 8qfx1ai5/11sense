@@ -106,7 +106,7 @@ let currentTask = document.getElementById('current-task');
         function toggleFullScreen() {
             var element = document.documentElement
             if (!document.fullscreen && !document.mozFullScreen && !document.webkitFullScreen && !document.msRequestFullscreen) {
-                enterFullscreen(element)
+                enterFullscreen()
             } else {
                 exitFullscreen()
             }
@@ -114,7 +114,8 @@ let currentTask = document.getElementById('current-task');
             currentSolution.focus();
         }
 
-        function enterFullscreen(element) {
+        function enterFullscreen() {
+            var element = document.documentElement
             if (element.requestFullscreen) {
                 element.requestFullscreen();
             } else if (element.mozRequestFullScreen) {
@@ -248,6 +249,9 @@ let currentTask = document.getElementById('current-task');
         }
 
         function newTask(setFocus = true) {
+            if (wasSolved) {
+                enterFullscreen();
+            }
             let f1 = parseInt(f1input.value, 10)
             if (isNaN(f1)) {
                 f1 = 1
@@ -445,6 +449,15 @@ let currentTask = document.getElementById('current-task');
                 saveTempSolutionBeginner();
             } else {
                 saveTempSolutionPro();
+            }
+        }
+
+        function guessInput(){
+            if (isVoiceModeActive) {
+                return;
+            }
+            if(currentSolution.value.length == result.toString().length){
+                saveTempSolution()
             }
         }
 

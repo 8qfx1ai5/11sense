@@ -41,7 +41,7 @@
                     <input class="config" type="number" id="f2" name="factor2" placeholder="2" value="2"
                         onclick="this.select();" oninput="newTask(false)" /></p>
                 <p><span class="config-label">auto task after:</span><input class="config" type="number"
-                        id="autoTaskInput" name="autoTaskInput" placeholder="-" value="" onclick="this.select();"
+                        id="autoTaskInput" name="autoTaskInput" placeholder="-" value="5" onclick="this.select();"
                         oninput="saveAutoTaskInterval()" />
                     <span>sec.</span></p>
             </div>
@@ -52,7 +52,7 @@
             </section>
             <section id="input" class="speech" onclick="startDictation()">
                 <img id="mic-image" class="hidden" src="32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
-                <input type="number" id="solution" name="solution" placeholder="=" />
+                <input type="number" id="solution" name="solution" placeholder="=" onkeyup="guessInput()" />
             </section>
             <section>
                 <p id="temp-solutions" onclick="toggleSolution()"></p>
@@ -66,6 +66,8 @@
             if (localStorage.getItem('autoTaskInterval')) {
                 if (0 < localStorage.getItem('autoTaskInterval')) {
                     autoTaskInput.value = localStorage.getItem('autoTaskInterval') / 1000;
+                } else {
+                    autoTaskInput.value = "";
                 }
             }
             isVoiceModeActive = localStorage.getItem('isVoiceModeActive') != "true";
