@@ -249,6 +249,11 @@ let currentTask = document.getElementById('current-task');
         }
 
         function newTask(setFocus = true) {
+            if (setFocus) {
+                hideNav();
+                currentSolution.focus();
+                window.scrollTo(0, 0);
+            }
             if (wasSolved) {
                 enterFullscreen();
             }
@@ -283,10 +288,7 @@ let currentTask = document.getElementById('current-task');
             updateView()
             resetInput()
             calculateFractions()
-            if (setFocus) {
-                hideNav();
-                currentSolution.focus();
-            }
+            
             //startDictation();
         }
 
