@@ -1,0 +1,186 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+#Solution {
+    border: 1px solid black;
+    margin-bottom: 15px;
+    background-color: black;
+    padding-bottom: 20px;
+    min-width: 100%;
+    position: fixed;
+    left: 0px;
+    z-index: 20;
+}
+
+button {
+    background-color: dimgrey;
+    border: none;
+    /* padding: 15px 32px; */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    width: 49%;
+    color: #d7ba7d;
+    margin-top: 5px;
+    height: 4em;
+    vertical-align: top;
+}
+
+header {
+    color: #d7ba7d;
+    margin-bottom: 10px;
+}
+
+header p {
+    margin-top: 5px;
+}
+
+h1 {
+    margin-bottom: 5px;
+}
+
+button:focus {
+    outline: none !important;
+}
+
+#solution {
+    border: none;
+    text-align: center;
+    width: 100%;
+    color: #6e270b;
+    background-color: darkgrey;
+    height: 2em;
+    border-radius: 25px;
+    padding: 0px 00px;
+    font-size: larger;
+}
+
+#solution:focus {
+    outline: none !important;
+}
+
+.valid {
+    color: green;
+}
+
+.invalid {
+    color: red;
+}
+
+#wrapper {
+    width: 350px;
+    margin: auto;
+    text-align: center;
+    /* margin-top: 10%; */
+}
+
+#task {
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+#current-task {
+    border-radius: 25px;
+    line-height: 2em;
+    display: inline-block;
+    margin: 0.5em;
+}
+
+body {
+    background-color: #252526;
+    color: #d7ba7d;
+    font-size: larger;
+}
+
+.config {
+    width: 20%;
+    display: inline-block;
+    padding: 0;
+    border: none;
+    height: 2em;
+    text-align: center;
+    vertical-align: middle;
+    background-color: darkgrey;
+    color: #6e270b;
+    border-radius: 25px;
+}
+
+.config-label {
+    display: inline-block;
+    width: 50%;
+}
+
+.config:focus {
+    outline: none !important;
+}
+
+#config {
+    margin: 10px auto;
+    width: 350px;
+    text-align: left;
+}
+
+#config p {
+    margin: 5px 0px 2px 0px;
+}
+
+#control {
+    /* width: 350px; */
+    margin: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+#nav {
+    /* margin-bottom: 50px; */
+    background-color: black;
+    padding: 10px 10px 40px 10px;
+    /* min-width: 100%; */
+    /* position: fixed; */
+    left: 0px;
+    z-index: 10;
+}
+
+#input {
+    margin-bottom: 1em;
+}
+
+#input img {
+    float: right;
+    position: absolute;
+    height: 1.5em;
+    width: 1.2em;
+    margin: 8px 0px 0px 15px;
+}
+
+#partial-solutions {
+    font-family: monospace;
+    text-align: center;
+    white-space: pre;
+    padding: 10px;
+}
+
+#temp-solutions {
+    display: inline-block;
+    font-size: x-large;
+    height: 7em;
+}
+
+#settings-image {
+    height: 1em;
+    /* padding-top: 1em; */
+    display: inline-block;
+    vertical-align: sub;
+}
