@@ -252,18 +252,18 @@ let currentTask = document.getElementById('current-task');
             if (wasSolved) {
                 enterFullscreen();
             }
-            let f1 = parseInt(f1input.value, 10)
+            let f1 = parseInt(f1input.value, 10);
             if (isNaN(f1)) {
-                f1 = 1
+                f1 = parseInt(f1input.placeholder, 10);
             }
-            let f2 = parseInt(f2input.value, 10)
+            f1 = f1 % 10;
+            let f2 = parseInt(f2input.value, 10);
             if (isNaN(f2)) {
-                f2 = 2
+                f2 = parseInt(f2input.placeholder, 10);
             }
+            f2 = f2 % 10;
             let f1x = Math.max(1, f1)
-            f1x = Math.min(9, f1x)
             let f2x = Math.max(1, f2)
-            f2x = Math.min(9, f2x)
             if (f1 != f1x) {
                 f1input.value = f1x
             }
@@ -272,6 +272,8 @@ let currentTask = document.getElementById('current-task');
             }
             localStorage.setItem('f1', f1x)
             localStorage.setItem('f2', f2x)
+            f1input.value = f1x;
+            f2input.value = f2x;
 
             isBeginnerModeActive = (f1x == 1 && f2x == 1);
             wasSolved = false;
