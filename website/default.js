@@ -164,11 +164,13 @@ function validateResult() {
         autoTaskTimer = setInterval(function () {
             if (!wasSolved || !endTime) {
                 clearInterval(autoTaskTimer);
+                currentSolution.style.backgroundSize = "0%";
                 return
             }
             // Get today's date and time
             let now = performance.now();
-            if (3000 <= now - endTime && now - endTime < 4000) {
+            currentSolution.style.backgroundSize = ((now - endTime)*120/interval)+"%";
+            if (3000 <= now - endTime && now - endTime < 3100) {
                 enterFullscreen();
                 hideNav();
                 currentSolution.focus();
@@ -188,7 +190,7 @@ function validateResult() {
                 }
             }
 
-        }, 1000);
+        }, 10);
     }
 }
 
@@ -383,6 +385,7 @@ function updateSolution() {
 function resetInput() {
     currentSolution.value = "";
     currentSolution.placeholder = "="
+    currentSolution.style.backgroundSize = "0%";
     currentTask.classList.remove("valid");
     currentTask.classList.remove("invalid");
     tempSolutions.innerHTML = ""

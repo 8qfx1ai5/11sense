@@ -63,6 +63,12 @@ button:focus {
     border-radius: 25px;
     padding: 0px 00px;
     font-size: larger;
+    background-image: url("loading-dark-grey.png");
+    background-position: 0%;
+    background-repeat: repeat-y;
+    background-attachment: inherit;
+    /* variable for loading screen 0-120% */
+    background-size: 0%; 
 }
 
 #solution:focus {
