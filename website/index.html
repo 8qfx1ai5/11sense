@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Let's train agile multiplication :)</title>
-    <link rel="stylesheet" type="text/css" href="default.css" media="screen"/>
+    <title>Mula - Agile Math Trainer :)</title>
+    <link rel="shortcut icon" type="image/png" href="settings.png" />
+    <link rel="stylesheet" type="text/css" href="default.css" media="screen" />
 </head>
 
 <body>
     <div id="wrapper">
-        <header id="header" onclick="toggleNav()">  
+        <header id="header" onclick="toggleNav()">
             <h1>Mula <img id="settings-image" src="settings.png" /></h1>
-            <p>Agile Multiplication Trainer</p>
+            <p>Agile Math Trainer</p>
         </header>
         <div id="Solution" style="display: none;" onclick="toggleSolution()">
             <h2>Solutions</h2>
@@ -41,9 +42,14 @@
                         oninput="saveAutoTaskInterval()" />
                     <span>sec.</span></p>
                 <p><span class="config-label"># of digits:</span><input class="config" type="number" id="f1"
-                name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="this.placeholder=this.value;this.value='';config.scrollIntoView(true);" oninput="newTask(false)" />
-                    <input class="config" type="number" id="f2" name="factor2" placeholder="2" value="2" onblur="if(this.value==''){this.value=this.placeholder}"
-                        onclick="this.placeholder=this.value;this.value='';config.scrollIntoView(true)" oninput="newTask(false)" /></p>
+                        name="factor1" placeholder="1" value="1"
+                        onblur="if(this.value==''){this.value=this.placeholder}"
+                        onclick="this.placeholder=this.value;this.value='';config.scrollIntoView(true);"
+                        oninput="newTask(false)" />
+                    <input class="config" type="number" id="f2" name="factor2" placeholder="2" value="2"
+                        onblur="if(this.value==''){this.value=this.placeholder}"
+                        onclick="this.placeholder=this.value;this.value='';config.scrollIntoView(true)"
+                        oninput="newTask(false)" /></p>
             </div>
         </div>
         <div id="trainer-page">
