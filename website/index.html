@@ -37,9 +37,9 @@
             </div>
             <div id="config">
                 <p><span class="config-label"># of digits:</span><input class="config" type="number" id="f1"
-                name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="this.placeholder=this.value;this.value='';this.scrollIntoView();" oninput="newTask(false)" />
+                name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="this.placeholder=this.value;this.value='';currentSolution.scrollIntoView();" oninput="newTask(false)" />
                     <input class="config" type="number" id="f2" name="factor2" placeholder="2" value="2" onblur="if(this.value==''){this.value=this.placeholder}"
-                        onclick="this.placeholder=this.value;this.value='';this.scrollIntoView()" oninput="newTask(false)" /></p>
+                        onclick="this.placeholder=this.value;this.value='';currentSolution.scrollIntoView()" oninput="newTask(false)" /></p>
                 <p><span class="config-label">auto task after:</span><input class="config" type="number"
                         id="autoTaskInput" name="autoTaskInput" placeholder="-" value="5" onclick="this.select();"
                         oninput="saveAutoTaskInterval()" />
