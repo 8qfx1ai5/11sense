@@ -44,11 +44,11 @@
                 <p><span class="config-label"># of digits:</span><input class="config" type="number" id="f1"
                         name="factor1" placeholder="1" value="1"
                         onblur="if(this.value==''){this.value=this.placeholder}"
-                        onclick="this.placeholder=this.value;this.value='';config.scrollIntoView(true);"
+                        onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};config.scrollIntoView(true);"
                         oninput="newTask(false)" />
                     <input class="config" type="number" id="f2" name="factor2" placeholder="2" value="2"
                         onblur="if(this.value==''){this.value=this.placeholder}"
-                        onclick="this.placeholder=this.value;this.value='';config.scrollIntoView(true)"
+                        onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};config.scrollIntoView(true);"
                         oninput="newTask(false)" /></p>
             </div>
         </div>
