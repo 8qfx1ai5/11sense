@@ -423,7 +423,7 @@ function saveTempSolutionPro() {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         validateResult();
         if(0 == getAutoTaskInterval()){
-            newTask(false);
+            newTask();
         }
     } else {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
@@ -460,7 +460,7 @@ function saveTempSolutionBeginner() {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         validateResult();
         if(0 == getAutoTaskInterval()){
-            newTask(false);
+            newTask();
         }
     } else {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
