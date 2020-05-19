@@ -169,7 +169,7 @@ function validateResult() {
             }
             // Get today's date and time
             let now = performance.now();
-            currentSolution.style.backgroundSize = ((now - endTime)*120/interval)+"%";
+            currentSolution.style.backgroundSize = ((now - endTime)*125/interval)+"%";
             if (3000 <= now - endTime && now - endTime < 3010) {
                 enterFullscreen();
                 hideNav();
