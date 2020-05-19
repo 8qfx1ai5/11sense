@@ -59,7 +59,7 @@
             <section id="input" class="speech" onclick="startDictation()">
                 <img id="mic-image" class="hidden" src="32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
                 <input type="number" id="solution" name="solution" placeholder="=" onkeyup="guessInput()"
-                    onselectstart="return false;" />
+                    onselect="return false;" onfocus="return false;" />
             </section>
             <section>
                 <p id="temp-solutions" onclick="toggleSolution()"></p>
