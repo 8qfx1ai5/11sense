@@ -90,7 +90,7 @@ function toggleVoiceMode() {
         // deactivate voice mode
         localStorage.setItem('isVoiceModeActive', false)
         currentSolution.removeAttribute("readonly")
-        voiceMode.innerHTML = "(V)oice is OFF<br/><span style='font-size: x-small'>(beta)</span>"
+        voiceMode.innerHTML = "Voice is OFF<br/><span style='font-size: x-small'>(beta)</span>"
         isVoiceModeActive = false
         micImage.classList.add("hidden")
         return
@@ -98,7 +98,7 @@ function toggleVoiceMode() {
     // activate voice mode
     localStorage.setItem('isVoiceModeActive', true)
     micImage.classList.remove("hidden")
-    voiceMode.innerHTML = "(V)oice is ON<br/><span style='font-size: x-small'>(beta)</span>"
+    voiceMode.innerHTML = "Voice is ON<br/><span style='font-size: x-small'>(beta)</span>"
     currentSolution.setAttribute("readonly", "readonly")
     isVoiceModeActive = true
 }
@@ -487,7 +487,7 @@ function guessInput() {
     if (isVoiceModeActive) {
         return;
     }
-    if (currentSolution.value.length == result.toString().length) {
+    if (currentSolution.value.length >= result.toString().length) {
         saveTempSolution()
     }
 }

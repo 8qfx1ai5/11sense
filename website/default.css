@@ -195,8 +195,8 @@ body {
 }
 
 #settings-image {
-    height: 1em;
+    height: 0.75em;
     /* padding-top: 1em; */
     display: inline-block;
-    vertical-align: sub;
+    /* vertical-align: sub; */
 }
