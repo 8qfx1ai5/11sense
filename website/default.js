@@ -196,12 +196,11 @@ function validateResult() {
 
 function saveAutoTaskInterval() {
     let v = autoTaskInput.value;
-    console.log(v)
     if (v === "" || v == "-") {
-        localStorage.setItem("autoTaskInterval", 0)
+        localStorage.setItem("autoTaskInterval", -1)
         return;
     }
-    v = Math.max(1, v)
+    v = Math.max(0, v)
     v = Math.min(100, v)
     localStorage.setItem("autoTaskInterval", v * 1000);
     autoTaskInput.value = v;
@@ -423,6 +422,9 @@ function saveTempSolutionPro() {
     } else if (c == result) {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         validateResult();
+        if(0 == getAutoTaskInterval()){
+            newTask(false);
+        }
     } else {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         let x = c * 100 / result
@@ -457,6 +459,9 @@ function saveTempSolutionBeginner() {
     } else if (c == result) {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         validateResult();
+        if(0 == getAutoTaskInterval()){
+            newTask(false);
+        }
     } else {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         let x = c * 100 / result
