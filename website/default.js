@@ -254,12 +254,12 @@ function arrayIncludesCombination(a, f1, f2) {
 }
 
 function updateView() {
-    currentTask.innerText = factor1 + " * " + factor2
+    currentTask.innerText = factor1 + " ⋅ " + factor2
     //currentSolution.focus();
 }
 
 function updateViewSolution() {
-    currentTask.innerHTML = factor1.toString() + " * " + factor2.toString() + " = <span class='valid'>" + result + " ✓</span>"
+    currentTask.innerHTML = factor1.toString() + " ⋅ " + factor2.toString() + " = <span class='valid'>" + result + " ✓</span>"
     currentSolution.value = ""
     currentSolution.placeholder = ""
     if (endTime) {
@@ -327,7 +327,7 @@ function calculateFractions() {
             if (tj == 0) {
                 continue
             }
-            fractions.set(ti + "*" + tj, ti * tj)
+            fractions.set(ti + "⋅" + tj, ti * tj)
         }
     }
     updateSolution()
@@ -339,7 +339,7 @@ function updateSolutionPro() {
     psolutions.innerHTML = "";
     let f1s = factor1.toString();
     let f2s = factor2.toString();
-    SolutionTask.innerHTML = f1s + " * " + f2s + " = " + result.toString();
+    SolutionTask.innerHTML = f1s + " ⋅ " + f2s + " = " + result.toString();
     let resultLength = result.toString().length;
     let currentSum = 0;
     keys.sort(function (a, b) {
@@ -347,12 +347,12 @@ function updateSolutionPro() {
     });
     for (let i = 0; i < keys.length; i++) {
         currentSum += fractions.get(keys[i])
-        let factors = keys[i].split("*");
+        let factors = keys[i].split("⋅");
         let f1padded = factors[0].padStart(f1s.length);
         let f2padded = factors[1].padStart(f2s.length);
         let productPadded = fractions.get(keys[i]).toString().padStart(resultLength)
         let x = currentSum * 100 / result
-        psolutions.innerHTML = psolutions.innerHTML + (i + 1).toString().padStart(2) + ". " + f1padded + " * " + f2padded + " = " + productPadded + " | " + currentSum.toString().padStart(resultLength) + " ≙ " + x.toFixed(2).padStart(6) + "%" + "<br />"
+        psolutions.innerHTML = psolutions.innerHTML + (i + 1).toString().padStart(2) + ". " + f1padded + " ⋅ " + f2padded + " = " + productPadded + " | " + currentSum.toString().padStart(resultLength) + " ≙ " + x.toFixed(2).padStart(6) + "%" + "<br />"
     }
 }
 
@@ -361,13 +361,13 @@ function updateSolutionBeginner() {
     psolutions.innerHTML = "";
     let f1s = factor1.toString();
     let f2s = factor2.toString();
-    SolutionTask.innerHTML = f1s + " * " + f2s + " = " + result.toString();
+    SolutionTask.innerHTML = f1s + " ⋅ " + f2s + " = " + result.toString();
     let resultLength = result.toString().length;
     let currentSum = 0;
     for (let i = 1; i <= factor1; i++) {
         currentSum += factor2;
         let x = currentSum * 100 / result
-        psolutions.innerHTML = psolutions.innerHTML + (i).toString() + " * " + f2s + " = " + currentSum.toString().padStart(resultLength) + " ≙ " + x.toFixed(2).padStart(6) + "%" + "<br />"
+        psolutions.innerHTML = psolutions.innerHTML + (i).toString() + " ⋅ " + f2s + " = " + currentSum.toString().padStart(resultLength) + " ≙ " + x.toFixed(2).padStart(6) + "%" + "<br />"
 
     }
 }
@@ -528,9 +528,9 @@ function sumFlat(s) {
         tempSum += factor2;
         if (tempSum == s) {
             if (i == 1) {
-                return ["1*" + factor2.toString()]
+                return ["1⋅" + factor2.toString()]
             }
-            return [i.toString() + "*" + factor2.toString() + " = " + keys.join("+")]
+            return [i.toString() + "⋅" + factor2.toString() + " = " + keys.join("+")]
         }
     }
     keys = Array();
@@ -540,9 +540,9 @@ function sumFlat(s) {
         tempSum += factor1;
         if (tempSum == s) {
             if (j == 1) {
-                return ["1*" + factor1.toString()]
+                return ["1⋅" + factor1.toString()]
             }
-            return [j.toString() + "*" + factor1.toString() + " = " + keys.join("+")]
+            return [j.toString() + "⋅" + factor1.toString() + " = " + keys.join("+")]
         }
     }
     return []

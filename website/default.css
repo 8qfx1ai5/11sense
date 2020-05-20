@@ -34,6 +34,7 @@ button {
     margin-top: 5px;
     height: 4em;
     vertical-align: top;
+    font-family: inherit;
 }
 
 header {
@@ -69,6 +70,7 @@ button:focus {
     background-attachment: inherit;
     /* variable for loading screen 0-120% */
     background-size: 0%; 
+    font-family: inherit;
 }
 
 #solution:focus {
@@ -107,6 +109,7 @@ body {
     color: #d7ba7d;
     font-size: larger;
     margin: 0px;
+    font-family: cursive;
 
     /* disable text selection to omit selection dialog */
     -webkit-touch-callout: none;
@@ -128,6 +131,7 @@ body {
     background-color: darkgrey;
     color: #6e270b;
     border-radius: 25px;
+    font-family: inherit;
 }
 
 .config-label {
@@ -195,7 +199,7 @@ body {
 }
 
 #settings-image {
-    height: 0.75em;
+    height: 0.5em;
     /* padding-top: 1em; */
     display: inline-block;
     /* vertical-align: sub; */
