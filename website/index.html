@@ -26,7 +26,7 @@
                 <button id="toggleSolution" title="Show the solution and steps as a hint.">How to use<br /><span
                         style='font-size: x-small'>(Manual)</span></button>
                 <button id="voiceMode" title="Use voice recognition instead of keyboard input."
-                    onclick="toggleVoiceMode()"></button>
+                    onclick="enterFullscreen();toggleVoiceMode()"></button>
                 <button id="impress" title="Print legal information and credits.">Legal Notice<br /><span
                         style='font-size: x-small'>(Impressum)</span></button>
                 <button id="impress" title="Get information about how to contact." onclick="window.open('https://paypal.me/pools/c/8pfcrOnyif')">Feedback, Bugs<br />&
@@ -52,7 +52,7 @@
             <section id="task">
                 <p id="current-task" onclick="newTask()"></p>
             </section>
-            <section id="input" class="speech" onclick="startDictation()">
+            <section id="input" class="speech">
                 <img id="mic-image" class="hidden" src="32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
                 <input type="number" id="solution" name="solution" placeholder="=" onkeyup="guessInput()"
                     onselect="return false;" onfocus="return false;" />
