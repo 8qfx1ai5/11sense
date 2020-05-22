@@ -11,10 +11,16 @@ let micImage = document.getElementById('mic-image')
 let SolutionTask = document.getElementById('Solution-task')
 let autoTaskInput = document.getElementById('autoTaskInput')
 let trainerPage = document.getElementById('trainer-page')
+let voiceButtonLabelOn = document.getElementById('voice-button-on')
+let voiceButtonLabelOff = document.getElementById('voice-button-off')
+let soundButtonLabelOn = document.getElementById('sound-button-on')
+let soundButtonLabelOff = document.getElementById('sound-button-off')
 let isVoiceModeActive = false;
+let isSoundModeActive = false;
 let isBeginnerModeActive = false;
 let wasSolved = false;
 let funnySmilies = ["😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🤫", "🤨", "😏", "🤯", "🤠", "🥳", "😎", "🤓", "🧐", "😲", "😳", "🥺", "😱", "😈", "😺", "😸", "😹", "😻", "😼", "😽", "🙀"]
+let successMessages = ["richtig", "sehr gut", "hervorragend", "gut gemacht", "genau so", "weiter so", "bravo", "ja"];
 let lastTasks = [];
 
 window.addEventListener("keydown", function (e) {
@@ -94,7 +100,8 @@ function toggleVoiceMode() {
         }
         localStorage.setItem('isVoiceModeActive', false);
         currentSolution.removeAttribute("readonly");
-        voiceMode.innerHTML = "Voice is OFF<br/><span style='font-size: x-small'>(beta)</span>";
+        voiceButtonLabelOn.classList.add("hidden");
+        voiceButtonLabelOff.classList.remove("hidden");
         isVoiceModeActive = false;
         micImage.classList.add("hidden");
         return;
@@ -102,10 +109,27 @@ function toggleVoiceMode() {
     // activate voice mode
     localStorage.setItem('isVoiceModeActive', true);
     micImage.classList.remove("hidden");
-    voiceMode.innerHTML = "Voice is ON<br/><span style='font-size: x-small'>(beta)</span>";
+    voiceButtonLabelOn.classList.remove("hidden");
+    voiceButtonLabelOff.classList.add("hidden");
     currentSolution.setAttribute("readonly", "readonly");
     isVoiceModeActive = true;
     startDictation();
+}
+
+function toggleSoundMode() {
+    if (isSoundModeActive) {
+        // deactivate sound mode
+        isSoundModeActive = false;
+        soundButtonLabelOn.classList.add("hidden");
+        soundButtonLabelOff.classList.remove("hidden");
+        localStorage.setItem('isSoundModeActive', false);
+    } else {
+        // activate sound mode
+        isSoundModeActive = true;
+        soundButtonLabelOn.classList.remove("hidden");
+        soundButtonLabelOff.classList.add("hidden");
+        localStorage.setItem('isSoundModeActive', true);
+    }
 }
 
 function toggleFullScreen() {
@@ -262,11 +286,19 @@ function arrayIncludesCombination(a, f1, f2) {
 
 function updateView() {
     currentTask.innerText = factor1 + " ⋅ " + factor2
+    if (isSoundModeActive) {
+        let aussage = new SpeechSynthesisUtterance(factor1 + " mal " + factor2);
+        window.speechSynthesis.speak(aussage);
+    }
     //currentSolution.focus();
 }
 
 function updateViewSolution() {
     currentTask.innerHTML = factor1.toString() + " ⋅ " + factor2.toString() + " = <span class='valid'>" + result + " ✓</span>"
+    if (isSoundModeActive) {
+        let aussage = new SpeechSynthesisUtterance(getRandomElement(successMessages));
+        window.speechSynthesis.speak(aussage);
+    }
     currentSolution.value = ""
     currentSolution.placeholder = ""
     if (endTime) {
@@ -391,7 +423,7 @@ function updateSolution() {
 function resetInput() {
     currentSolution.value = "";
     currentSolution.placeholder = "..."
-    if(!isVoiceModeActive){
+    if (!isVoiceModeActive) {
         currentSolution.placeholder = "="
     }
     currentSolution.style.backgroundSize = "0%";
@@ -428,6 +460,10 @@ function saveTempSolutionPro() {
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
+        if (isSoundModeActive) {
+            let aussage = new SpeechSynthesisUtterance(c + " leider nein");
+            window.speechSynthesis.speak(aussage);
+        }
         //startDictation();
     } else if (c == result) {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
@@ -439,6 +475,10 @@ function saveTempSolutionPro() {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         let x = c * 100 / result
         currentSolution.placeholder = x.toFixed(1) + "%"
+        if (isSoundModeActive) {
+            let aussage = new SpeechSynthesisUtterance(c + ", die Richtung stimmt");
+            window.speechSynthesis.speak(aussage);
+        }
         //startDictation();
     }
     currentSolution.value = ""
@@ -465,6 +505,10 @@ function saveTempSolutionBeginner() {
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
+        if (isSoundModeActive) {
+            let aussage = new SpeechSynthesisUtterance(c + " leider nein");
+            window.speechSynthesis.speak(aussage);
+        }
         //startDictation();
     } else if (c == result) {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
@@ -476,6 +520,10 @@ function saveTempSolutionBeginner() {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         let x = c * 100 / result
         currentSolution.placeholder = x.toFixed(1) + "%"
+        if (isSoundModeActive) {
+            let aussage = new SpeechSynthesisUtterance(c + ", die Richtung stimmt");
+            window.speechSynthesis.speak(aussage);
+        }
         //startDictation();
     }
     currentSolution.value = ""
@@ -507,6 +555,9 @@ function guessVoiceInput(s) {
         return false;
     }
     let c = parseInt(s, 10);
+    if (c == factor1 || c == factor2) {
+        return false;
+    }
     let analizationResult = analizeTempSolution(c);
     if (c == result) {
         currentSolution.value = s;
@@ -640,11 +691,13 @@ function startDictation() {
                     newTask(false);
                     return;
                 }
-                if(!wasSolved){
+                if (!wasSolved) {
                     let c = parseInt(e.results[e.results.length - 1][0].transcript.replace("Uhr", "").trim(), 10);
-                    if(c){
-                        currentSolution.value = c;
-                        saveTempSolution();
+                    if (c) {
+                        if (c != factor1 && c !== factor2) {
+                            currentSolution.value = c;
+                            saveTempSolution();
+                        }
                         currentSolution.placeholder = "...";
                         console.log("ok.. dictation restart");
                         recognition.stop();
@@ -654,9 +707,9 @@ function startDictation() {
                 let input = e.results[e.results.length - 1][0].transcript.replace("Uhr", "");
                 input = input.replace("/", " ");
                 let parts = input.split(" ");
-                for(let i = 0; i < parts.length; i++){
+                for (let i = 0; i < parts.length; i++) {
                     console.log(parts[i]);
-                    if(guessVoiceInput(parts[i])){
+                    if (guessVoiceInput(parts[i])) {
                         console.log("ok.. dictation restart");
                         recognition.stop();
                         break;

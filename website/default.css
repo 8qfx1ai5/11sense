@@ -4,7 +4,9 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+
 /* Firefox */
+
 input[type=number] {
     -moz-appearance: textfield;
 }
@@ -21,20 +23,25 @@ input[type=number] {
 }
 
 button {
+    line-height: 0.9em;
     background-color: dimgrey;
     border: none;
     /* padding: 15px 32px; */
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 1.5em;
     cursor: pointer;
-    width: 49%;
+    width: 100%;
     color: #d7ba7d;
     margin-top: 5px;
-    height: 4em;
+    height: 3em;
     vertical-align: top;
     font-family: inherit;
+}
+
+.button-sub {
+    font-size: 0.6em;
 }
 
 header {
@@ -69,7 +76,7 @@ button:focus {
     background-repeat: repeat-y;
     background-attachment: inherit;
     /* variable for loading screen 0-120% */
-    background-size: 0%; 
+    background-size: 0%;
     font-family: inherit;
 }
 
@@ -110,7 +117,6 @@ body {
     font-size: larger;
     margin: 0px;
     font-family: cursive;
-
     /* disable text selection to omit selection dialog */
     -webkit-touch-callout: none;
     -webkit-user-select: none;

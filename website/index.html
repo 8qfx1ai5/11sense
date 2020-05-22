@@ -24,12 +24,18 @@
             <h2 onclick="toggleNav()">Options</h2>
             <div id="control">
                 <button id="toggleSolution" title="Show the solution and steps as a hint.">How to use<br /><span
-                        style='font-size: x-small'>(Manual)</span></button>
+                        class="button-sub">(Manual)</span></button>
                 <button id="voiceMode" title="Use voice recognition instead of keyboard input."
-                    onclick="enterFullscreen();toggleVoiceMode()"></button>
+                    onclick="enterFullscreen();toggleVoiceMode()"><span class="hidden" id="voice-button-on">Voice is
+                        ON</span><span id="voice-button-off">Voice is OFF</span><br /><span
+                        class="button-sub">(beta)</span></button>
+                <button id="soundMode" title="Use audio output for tasks and status feedback."
+                    onclick="toggleSoundMode();"><span class="hidden" id="sound-button-on">Sound is ON</span><span
+                        id="sound-button-off">Sound is OFF</span><br /><span class="button-sub">(beta)</span></button>
                 <button id="impress" title="Print legal information and credits.">Legal Notice<br /><span
-                        style='font-size: x-small'>(Impressum)</span></button>
-                <button id="impress" title="Get information about how to contact." onclick="window.open('https://paypal.me/pools/c/8pfcrOnyif')">Feedback, Bugs<br />&
+                        class="button-sub">(Impressum)</span></button>
+                <button id="impress" title="Get information about how to contact."
+                    onclick="window.open('https://paypal.me/pools/c/8pfcrOnyif')">Feedback, Bugs<br />&
                     Support..</button>
             </div>
             <div id="config">
@@ -75,6 +81,9 @@
             }
             isVoiceModeActive = localStorage.getItem('isVoiceModeActive') != "true";
             toggleVoiceMode();
+
+            isSoundModeActive = localStorage.getItem('isSoundModeActive') != "true";
+            toggleSoundMode();
 
             if (localStorage.getItem('f1')) {
                 f1input.value = localStorage.getItem('f1');
