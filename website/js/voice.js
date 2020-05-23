@@ -53,10 +53,8 @@ function startDictation() {
                 if (!wasSolved) {
                     let c = parseInt(e.results[e.results.length - 1][0].transcript.replace("Uhr", "").trim(), 10);
                     if (c) {
-                        if (c != factor1 && c !== factor2) {
-                            currentSolution.value = c;
-                            saveTempSolution();
-                        }
+                        currentSolution.value = c;
+                        saveTempSolution();
                         currentSolution.placeholder = "...";
                         console.log("ok.. dictation restart");
                         recognition.stop();
@@ -134,6 +132,7 @@ function activateVoiceMode() {
     voiceButtonLabelOff.classList.add("hidden");
     currentSolution.setAttribute("readonly", "readonly");
     isVoiceModeActive = true;
+    isVoiceModeTempMuted = false;
     startDictation();
 }
 
@@ -146,6 +145,7 @@ function deactivateVoiceMode() {
     voiceButtonLabelOn.classList.add("hidden");
     voiceButtonLabelOff.classList.remove("hidden");
     isVoiceModeActive = false;
+    isVoiceModeTempMuted = true;
     micImage.classList.add("hidden");
 }
 
@@ -166,9 +166,7 @@ function muteVoice() {
 
 function remuteVoice() {
     isVoiceModeTempMuted = false;
-    if (isVoiceModeActive) {
-        startDictation();
-    }
+    startDictation();
 }
 
 (function() {
