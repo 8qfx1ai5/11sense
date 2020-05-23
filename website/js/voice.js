@@ -4,6 +4,7 @@ let voiceButtonLabelOff;
 let voiceMode;
 let isVoiceModeActive = false;
 let isVoiceModeTempMuted = false;
+let wasCanceledByMute = false;
 let recognition;
 
 function startDictation() {
@@ -36,7 +37,11 @@ function startDictation() {
 
         recognition.onresult = function(e) {
             isDebugMode && console.log(e.results);
-            if (!isVoiceModeTempMuted) {
+            if (isVoiceModeTempMuted) {
+                isDebugMode && console.log("muted.. dictation restart");
+                wasCanceledByMute = true;
+                recognition.abort();
+            } else {
                 currentSolution.placeholder = e.results[e.results.length - 1][0].transcript.trim();
 
                 if (e.results[e.results.length - 1][0].transcript.trim() == "stop") {
@@ -72,9 +77,6 @@ function startDictation() {
                         isDebugMode && console.log("invalid");
                     }
                 }
-            } else {
-                isDebugMode && console.log("muted.. dictation restart");
-                recognition.abort();
             }
         };
 
@@ -87,7 +89,9 @@ function startDictation() {
         recognition.onend = function(e) {
             currentSolution.placeholder = "🙉";
             isDebugMode && console.log("dictation finished");
-            startDictation();
+            if (!wasCanceledByMute) {
+                startDictation();
+            }
         }
     }
 }
@@ -177,6 +181,7 @@ function muteVoice() {
     setStatusPlaceholder();
     if (typeof recognition == "object") {
         isDebugMode && console.log("recognition aborted by mute");
+        wasCanceledByMute = true;
         recognition.abort();
     }
 }
@@ -185,6 +190,8 @@ function remuteVoice() {
     isVoiceModeTempMuted = false;
     isDebugMode && console.log("muted = " + isVoiceModeTempMuted);
     setStatusPlaceholder();
-
-    // startDictation();
+    if (wasCanceledByMute) {
+        wasCanceledByMute = false;
+        startDictation();
+    }
 }
