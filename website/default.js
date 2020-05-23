@@ -23,31 +23,26 @@ let funnySmilies = ["😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "�
 let successMessages = ["richtig", "sehr gut", "hervorragend", "gut gemacht", "genau so", "weiter so", "bravo", "ja"];
 let lastTasks = [];
 
-window.addEventListener("keydown", function (e) {
+window.addEventListener("keydown", function(e) {
 
     if (e.keyCode == '13' || e.keyCode == '32') {
         // enter or space
         saveTempSolution();
-    }
-    else if (e.keyCode == '78') {
+    } else if (e.keyCode == '78') {
         // n
         newTask();
-    }
-    else if (e.keyCode == '83') {
+    } else if (e.keyCode == '83') {
         // s              
         toggleSolution();
         currentSolution.focus();
-    }
-    else if (e.keyCode == '79') {
+    } else if (e.keyCode == '79') {
         // o
         toggleNav();
-    }
-    else if (e.keyCode == '70') {
+    } else if (e.keyCode == '70') {
         // f
         toggleFullScreen();
         currentSolution.focus();
-    }
-    else if (e.keyCode == '86') {
+    } else if (e.keyCode == '86') {
         // V
         toggleVoiceMode();
         enterFullscreen();
@@ -129,6 +124,8 @@ function toggleSoundMode() {
         soundButtonLabelOn.classList.remove("hidden");
         soundButtonLabelOff.classList.add("hidden");
         localStorage.setItem('isSoundModeActive', true);
+        let aussage = new SpeechSynthesisUtterance("Hallo");
+        window.speechSynthesis.speak(aussage);
     }
 }
 
@@ -155,7 +152,7 @@ function enterFullscreen() {
         } else if (element.msRequestFullscreen) {
             element.msRequestFullscreen();
         }
-    } catch (e) { } finally { }
+    } catch (e) {} finally {}
 }
 
 function exitFullscreen() {
@@ -167,7 +164,7 @@ function exitFullscreen() {
         } else if (document.webkitExitFullscreen) {
             document.webkitExitFullscreen();
         }
-    } catch (e) { } finally { }
+    } catch (e) {} finally {}
 }
 
 
@@ -191,7 +188,7 @@ function validateResult() {
 
     let interval = getAutoTaskInterval();
     if (0 < interval) {
-        autoTaskTimer = setInterval(function () {
+        autoTaskTimer = setInterval(function() {
             if (!wasSolved || !endTime) {
                 clearInterval(autoTaskTimer);
                 currentSolution.style.backgroundSize = "0%";
@@ -381,7 +378,7 @@ function updateSolutionPro() {
     SolutionTask.innerHTML = f1s + " ⋅ " + f2s + " = " + result.toString();
     let resultLength = result.toString().length;
     let currentSum = 0;
-    keys.sort(function (a, b) {
+    keys.sort(function(a, b) {
         return b.length - a.length;
     });
     for (let i = 0; i < keys.length; i++) {
@@ -430,7 +427,7 @@ function resetInput() {
     currentTask.classList.remove("valid");
     currentTask.classList.remove("invalid");
     tempSolutions.innerHTML = ""
-    //currentSolution.focus();
+        //currentSolution.focus();
     currentSolution.disabled = false;
     Solution.style.display = "none";
 }
@@ -673,12 +670,12 @@ function startDictation() {
         // recognition.lang = "en-US";
         recognition.start();
 
-        recognition.onstart = function () {
+        recognition.onstart = function() {
             console.log("start recognition");
             currentSolution.placeholder = "...";
         }
 
-        recognition.onresult = function (e) {
+        recognition.onresult = function(e) {
             console.log(e.results);
             currentSolution.placeholder = e.results[e.results.length - 1][0].transcript.trim();
 
@@ -719,13 +716,13 @@ function startDictation() {
             }
         };
 
-        recognition.onerror = function (e) {
+        recognition.onerror = function(e) {
             currentSolution.placeholder = "🙉";
             console.log("uppps.. dictation interrupted");
             recognition.stop();
         }
 
-        recognition.onend = function (e) {
+        recognition.onend = function(e) {
             currentSolution.placeholder = "🙉";
             console.log("dictation finished");
             startDictation();
