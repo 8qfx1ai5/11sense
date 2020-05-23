@@ -74,7 +74,7 @@ function startDictation() {
                 }
             } else {
                 isDebugMode && console.log("muted.. dictation restart");
-                recognition.stop();
+                recognition.abort();
             }
         };
 
