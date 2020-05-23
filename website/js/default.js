@@ -6,21 +6,14 @@ let f2input = document.getElementById('f2')
 let navigation = document.getElementById('nav')
 let Solution = document.getElementById('Solution')
 let psolutions = document.getElementById('partial-solutions')
-let voiceMode = document.getElementById('voiceMode')
-let micImage = document.getElementById('mic-image')
+
 let SolutionTask = document.getElementById('Solution-task')
 let autoTaskInput = document.getElementById('autoTaskInput')
 let trainerPage = document.getElementById('trainer-page')
-let voiceButtonLabelOn = document.getElementById('voice-button-on')
-let voiceButtonLabelOff = document.getElementById('voice-button-off')
-let soundButtonLabelOn = document.getElementById('sound-button-on')
-let soundButtonLabelOff = document.getElementById('sound-button-off')
-let isVoiceModeActive = false;
-let isSoundModeActive = false;
+
 let isBeginnerModeActive = false;
 let wasSolved = false;
 let funnySmilies = ["😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🤫", "🤨", "😏", "🤯", "🤠", "🥳", "😎", "🤓", "🧐", "😲", "😳", "🥺", "😱", "😈", "😺", "😸", "😹", "😻", "😼", "😽", "🙀"]
-let successMessages = ["richtig", "sehr gut", "hervorragend", "gut gemacht", "genau so", "weiter so", "bravo", "ja"];
 let lastTasks = [];
 
 window.addEventListener("keydown", function(e) {
@@ -85,48 +78,6 @@ function showSolution() {
 
 function hideSolution() {
     Solution.style.display = "none";
-}
-
-function toggleVoiceMode() {
-    if (isVoiceModeActive) {
-        // deactivate voice mode
-        if (typeof recognition == "object") {
-            recognition.stop();
-        }
-        localStorage.setItem('isVoiceModeActive', false);
-        currentSolution.removeAttribute("readonly");
-        voiceButtonLabelOn.classList.add("hidden");
-        voiceButtonLabelOff.classList.remove("hidden");
-        isVoiceModeActive = false;
-        micImage.classList.add("hidden");
-        return;
-    }
-    // activate voice mode
-    localStorage.setItem('isVoiceModeActive', true);
-    micImage.classList.remove("hidden");
-    voiceButtonLabelOn.classList.remove("hidden");
-    voiceButtonLabelOff.classList.add("hidden");
-    currentSolution.setAttribute("readonly", "readonly");
-    isVoiceModeActive = true;
-    startDictation();
-}
-
-function toggleSoundMode() {
-    if (isSoundModeActive) {
-        // deactivate sound mode
-        isSoundModeActive = false;
-        soundButtonLabelOn.classList.add("hidden");
-        soundButtonLabelOff.classList.remove("hidden");
-        localStorage.setItem('isSoundModeActive', false);
-    } else {
-        // activate sound mode
-        isSoundModeActive = true;
-        soundButtonLabelOn.classList.remove("hidden");
-        soundButtonLabelOff.classList.add("hidden");
-        localStorage.setItem('isSoundModeActive', true);
-        let aussage = new SpeechSynthesisUtterance("Hallo");
-        window.speechSynthesis.speak(aussage);
-    }
 }
 
 function toggleFullScreen() {
@@ -283,19 +234,13 @@ function arrayIncludesCombination(a, f1, f2) {
 
 function updateView() {
     currentTask.innerText = factor1 + " ⋅ " + factor2
-    if (isSoundModeActive) {
-        let aussage = new SpeechSynthesisUtterance(factor1 + " mal " + factor2);
-        window.speechSynthesis.speak(aussage);
-    }
+    speak(factor1 + " mal " + factor2, 1.1);
     //currentSolution.focus();
 }
 
 function updateViewSolution() {
     currentTask.innerHTML = factor1.toString() + " ⋅ " + factor2.toString() + " = <span class='valid'>" + result + " ✓</span>"
-    if (isSoundModeActive) {
-        let aussage = new SpeechSynthesisUtterance(getRandomElement(successMessages));
-        window.speechSynthesis.speak(aussage);
-    }
+    speak(getRandomElement(successMessages), 1);
     currentSolution.value = ""
     currentSolution.placeholder = ""
     if (endTime) {
@@ -457,10 +402,7 @@ function saveTempSolutionPro() {
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
-        if (isSoundModeActive) {
-            let aussage = new SpeechSynthesisUtterance(c + " leider nein");
-            window.speechSynthesis.speak(aussage);
-        }
+        speak(c + " leider nein");
         //startDictation();
     } else if (c == result) {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
@@ -471,11 +413,8 @@ function saveTempSolutionPro() {
     } else {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         let x = c * 100 / result
-        currentSolution.placeholder = x.toFixed(1) + "%"
-        if (isSoundModeActive) {
-            let aussage = new SpeechSynthesisUtterance(c + ", die Richtung stimmt");
-            window.speechSynthesis.speak(aussage);
-        }
+        currentSolution.placeholder = x.toFixed(1) + "%";
+        speak(c + ", die Richtung stimmt");
         //startDictation();
     }
     currentSolution.value = ""
@@ -502,10 +441,7 @@ function saveTempSolutionBeginner() {
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
-        if (isSoundModeActive) {
-            let aussage = new SpeechSynthesisUtterance(c + " leider nein");
-            window.speechSynthesis.speak(aussage);
-        }
+        speak(c + " leider nein");
         //startDictation();
     } else if (c == result) {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
@@ -517,10 +453,7 @@ function saveTempSolutionBeginner() {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         let x = c * 100 / result
         currentSolution.placeholder = x.toFixed(1) + "%"
-        if (isSoundModeActive) {
-            let aussage = new SpeechSynthesisUtterance(c + ", die Richtung stimmt");
-            window.speechSynthesis.speak(aussage);
-        }
+        speak(c + ", die Richtung stimmt");
         //startDictation();
     }
     currentSolution.value = ""
@@ -536,33 +469,6 @@ function saveTempSolution() {
     } else {
         saveTempSolutionPro();
     }
-}
-
-function guessInput() {
-    if (isVoiceModeActive) {
-        return;
-    }
-    if (currentSolution.value.length >= result.toString().length) {
-        saveTempSolution()
-    }
-}
-
-function guessVoiceInput(s) {
-    if (s.length != result.toString().length) {
-        return false;
-    }
-    let c = parseInt(s, 10);
-    if (c == factor1 || c == factor2) {
-        return false;
-    }
-    let analizationResult = analizeTempSolution(c);
-    if (c == result) {
-        currentSolution.value = s;
-        saveTempSolution();
-        currentSolution.placeholder = "...";
-        return true;
-    }
-    return false;
 }
 
 function analizeTempSolution(s) {
@@ -643,90 +549,4 @@ function hideNav() {
 function clearSolutions() {
     tempSolutions.innerHTML = ""
     currentSolution.focus();
-}
-
-let recognition;
-
-function startDictation() {
-
-    if (!isVoiceModeActive) {
-        return;
-    }
-
-    if (window.hasOwnProperty('webkitSpeechRecognition')) {
-
-        //if (typeof recognition === 'undefined' || recognition === null) {
-        recognition = new webkitSpeechRecognition();
-        //}
-
-        // recognition.stop();
-
-        recognition.continuous = true;
-        recognition.interimResults = true;
-
-
-
-        recognition.lang = "de-DE";
-        // recognition.lang = "en-US";
-        recognition.start();
-
-        recognition.onstart = function() {
-            console.log("start recognition");
-            currentSolution.placeholder = "...";
-        }
-
-        recognition.onresult = function(e) {
-            console.log(e.results);
-            currentSolution.placeholder = e.results[e.results.length - 1][0].transcript.trim();
-
-            if (e.results[e.results.length - 1][0].transcript.trim() == "stop") {
-                toggleVoiceMode();
-            }
-
-            if (e.results[e.results.length - 1].isFinal) {
-                if (["neue Aufgabe", "neu", "next", "weiter"].includes(e.results[e.results.length - 1][0].transcript.trim())) {
-                    newTask(false);
-                    return;
-                }
-                if (!wasSolved) {
-                    let c = parseInt(e.results[e.results.length - 1][0].transcript.replace("Uhr", "").trim(), 10);
-                    if (c) {
-                        if (c != factor1 && c !== factor2) {
-                            currentSolution.value = c;
-                            saveTempSolution();
-                        }
-                        currentSolution.placeholder = "...";
-                        console.log("ok.. dictation restart");
-                        recognition.stop();
-                    }
-                }
-            } else {
-                let input = e.results[e.results.length - 1][0].transcript.replace("Uhr", "");
-                input = input.replace("/", " ");
-                let parts = input.split(" ");
-                for (let i = 0; i < parts.length; i++) {
-                    console.log(parts[i]);
-                    if (guessVoiceInput(parts[i])) {
-                        console.log("ok.. dictation restart");
-                        recognition.stop();
-                        break;
-                    }
-                    console.log("invalid");
-                }
-            }
-        };
-
-        recognition.onerror = function(e) {
-            currentSolution.placeholder = "🙉";
-            console.log("uppps.. dictation interrupted");
-            recognition.stop();
-        }
-
-        recognition.onend = function(e) {
-            currentSolution.placeholder = "🙉";
-            console.log("dictation finished");
-            startDictation();
-        }
-
-    }
 }

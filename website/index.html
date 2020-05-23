@@ -55,7 +55,9 @@
 
         </div>
     </div>
-    <script src="default.js"></script>
+    <script src="js/default.js"></script>
+    <script src="js/sound.js"></script>
+    <script src="js/voice.js"></script>
     <script>
         (function() {
             if (localStorage.getItem('autoTaskInterval')) {
@@ -65,11 +67,6 @@
                     autoTaskInput.value = "";
                 }
             }
-            isVoiceModeActive = localStorage.getItem('isVoiceModeActive') != "true";
-            toggleVoiceMode();
-
-            isSoundModeActive = localStorage.getItem('isSoundModeActive') != "true";
-            toggleSoundMode();
 
             if (localStorage.getItem('f1')) {
                 f1input.value = localStorage.getItem('f1');
