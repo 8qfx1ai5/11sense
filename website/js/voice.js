@@ -3,11 +3,15 @@ let voiceButtonLabelOn = document.getElementById('voice-button-on')
 let voiceButtonLabelOff = document.getElementById('voice-button-off')
 let voiceMode = document.getElementById('voiceMode')
 let isVoiceModeActive = false;
+let isVoiceModeTempMuted = false;
 let recognition;
 
 function startDictation() {
 
     if (!isVoiceModeActive) {
+        return;
+    }
+    if (isVoiceModeTempMuted) {
         return;
     }
 
@@ -117,19 +121,13 @@ function guessVoiceInput(s) {
 
 function toggleVoiceMode() {
     if (isVoiceModeActive) {
-        // deactivate voice mode
-        if (typeof recognition == "object") {
-            recognition.stop();
-        }
-        localStorage.setItem('isVoiceModeActive', false);
-        currentSolution.removeAttribute("readonly");
-        voiceButtonLabelOn.classList.add("hidden");
-        voiceButtonLabelOff.classList.remove("hidden");
-        isVoiceModeActive = false;
-        micImage.classList.add("hidden");
-        return;
+        deactivateVoiceMode();
+    } else {
+        activateVoiceMode();
     }
-    // activate voice mode
+}
+
+function activateVoiceMode() {
     localStorage.setItem('isVoiceModeActive', true);
     micImage.classList.remove("hidden");
     voiceButtonLabelOn.classList.remove("hidden");
@@ -137,6 +135,40 @@ function toggleVoiceMode() {
     currentSolution.setAttribute("readonly", "readonly");
     isVoiceModeActive = true;
     startDictation();
+}
+
+function deactivateVoiceMode() {
+    if (typeof recognition == "object") {
+        recognition.stop();
+    }
+    localStorage.setItem('isVoiceModeActive', false);
+    currentSolution.removeAttribute("readonly");
+    voiceButtonLabelOn.classList.add("hidden");
+    voiceButtonLabelOff.classList.remove("hidden");
+    isVoiceModeActive = false;
+    micImage.classList.add("hidden");
+}
+
+function toggleVoiceMute() {
+    if (isVoiceModeTempMuted) {
+        remuteVoice();
+    } else {
+        muteVoice();
+    }
+}
+
+function muteVoice() {
+    isVoiceModeTempMuted = true;
+    if (typeof recognition == "object") {
+        recognition.stop();
+    }
+}
+
+function remuteVoice() {
+    isVoiceModeTempMuted = false;
+    if (isVoiceModeActive) {
+        startDictation();
+    }
 }
 
 (function() {

@@ -5,10 +5,17 @@ let soundButtonLabelOff = document.getElementById('sound-button-off')
 
 function speak(s, r = 0.9) {
     if (isSoundModeActive) {
-        let aussage = new SpeechSynthesisUtterance(s);
-        aussage.lang = 'de-DE';
-        aussage.rate = r;
-        speechSynthesis.speak(aussage);
+        let statement = new SpeechSynthesisUtterance(s);
+        statement.lang = 'de-DE';
+        statement.rate = r;
+        statement.pitch = 0.4
+        statement.onstart = function(event) {
+            muteVoice();
+        }
+        statement.onend = function(event) {
+            remuteVoice();
+        }
+        speechSynthesis.speak(statement);
     }
 }
 
