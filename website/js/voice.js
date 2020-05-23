@@ -1,7 +1,7 @@
-let micImage = document.getElementById('mic-image')
-let voiceButtonLabelOn = document.getElementById('voice-button-on')
-let voiceButtonLabelOff = document.getElementById('voice-button-off')
-let voiceMode = document.getElementById('voiceMode')
+let micImage;
+let voiceButtonLabelOn;
+let voiceButtonLabelOff;
+let voiceMode;
 let isVoiceModeActive = false;
 let isVoiceModeTempMuted = false;
 let recognition;
@@ -39,6 +39,9 @@ function startDictation() {
 
         recognition.onresult = function(e) {
             isDebugMode && console.log(e.results);
+            if (isVoiceModeTempMuted) {
+                return;
+            }
             currentSolution.placeholder = e.results[e.results.length - 1][0].transcript.trim();
 
             if (e.results[e.results.length - 1][0].transcript.trim() == "stop") {
@@ -79,6 +82,7 @@ function startDictation() {
         recognition.onerror = function(e) {
             currentSolution.placeholder = "🙉";
             isDebugMode && console.log("uppps.. dictation interrupted");
+            // await Sleep(1000);
             recognition.stop();
         }
 
@@ -159,17 +163,12 @@ function toggleVoiceMute() {
 
 function muteVoice() {
     isVoiceModeTempMuted = true;
-    if (typeof recognition == "object") {
-        recognition.stop();
-    }
+    // if (typeof recognition == "object") {
+    //     recognition.stop();
+    // }
 }
 
 function remuteVoice() {
     isVoiceModeTempMuted = false;
-    startDictation();
+    // startDictation();
 }
-
-(function() {
-    isVoiceModeActive = localStorage.getItem('isVoiceModeActive') != "true";
-    toggleVoiceMode();
-})();

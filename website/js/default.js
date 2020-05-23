@@ -1,48 +1,21 @@
-let currentTask = document.getElementById('current-task');
-let currentSolution = document.getElementById('solution');
-let tempSolutions = document.getElementById('temp-solutions')
-let f1input = document.getElementById('f1')
-let f2input = document.getElementById('f2')
-let navigation = document.getElementById('nav')
-let Solution = document.getElementById('Solution')
-let psolutions = document.getElementById('partial-solutions')
+let currentTask;
+let currentSolution;
+let tempSolutions;
+let f1input;
+let f2input;
+let navigation;
+let Solution;
+let psolutions;
 
-let SolutionTask = document.getElementById('Solution-task')
-let autoTaskInput = document.getElementById('autoTaskInput')
-let trainerPage = document.getElementById('trainer-page')
-let header = document.getElementById('header')
+let SolutionTask;
+let autoTaskInput;
+let trainerPage;
+let header;
 
 let isBeginnerModeActive = false;
 let wasSolved = false;
 let funnySmilies = ["😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🤫", "🤨", "😏", "🤯", "🤠", "🥳", "😎", "🤓", "🧐", "😲", "😳", "🥺", "😱", "😈", "😺", "😸", "😹", "😻", "😼", "😽", "🙀"]
 let lastTasks = [];
-
-window.addEventListener("keydown", function(e) {
-
-    if (e.keyCode == '13' || e.keyCode == '32') {
-        // enter or space
-        saveTempSolution();
-    } else if (e.keyCode == '78') {
-        // n
-        newTask();
-    } else if (e.keyCode == '83') {
-        // s              
-        toggleSolution();
-        currentSolution.focus();
-    } else if (e.keyCode == '79') {
-        // o
-        toggleNav();
-    } else if (e.keyCode == '70') {
-        // f
-        toggleFullScreen();
-        currentSolution.focus();
-    } else if (e.keyCode == '86') {
-        // V
-        toggleVoiceMode();
-        enterFullscreen();
-        currentSolution.focus();
-    }
-});
 
 function toggleTrainerPage() {
     if (trainerPage.classList.contains("hidden")) {
@@ -130,6 +103,7 @@ let autoTaskTimer;
 // let recognition;
 
 function validateResult() {
+    //muteVoice();
     //currentSolution.disabled = true;
     solution = currentSolution.value
     endTime = performance.now();
@@ -150,20 +124,20 @@ function validateResult() {
             let now = performance.now();
             //console.log(now - endTime)
             currentSolution.style.backgroundSize = ((now - endTime) * 125 / interval) + "%";
-            if (3000 <= now - endTime && now - endTime < 3010) {
-                enterFullscreen();
+            if (2000 <= now - endTime && now - endTime < 2010) {
+                !isVoiceModeActive && enterFullscreen();
                 hideNav();
                 currentSolution.focus();
                 window.scrollTo(0, 0);
             }
-            if (3000 < now - endTime) {
-                // more than 3 seconds are passed (omit fullscreen error)
+            if (2000 < now - endTime) {
+                // more than 2 seconds are passed (omit fullscreen error)
                 if (interval < now - endTime) {
                     newTask(false);
                     clearInterval(autoTaskTimer);
                 }
             } else {
-                // less than 3 seconds are passed
+                // less than 2 seconds are passed
                 if (interval < now - endTime) {
                     newTask();
                     clearInterval(autoTaskTimer);
@@ -290,8 +264,8 @@ function newTask(setFocus = true) {
     updateView()
     resetInput()
     calculateFractions()
-
-    //startDictation();
+        //remuteVoice();
+        //startDictation();
 }
 
 function calculateFractions() {

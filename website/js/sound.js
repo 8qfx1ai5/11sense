@@ -1,7 +1,7 @@
 let isSoundModeActive = false;
 let successMessages = ["richtig", "sehr gut", "hervorragend", "gut gemacht", "genau so", "weiter so", "bravo", "ja"];
-let soundButtonLabelOn = document.getElementById('sound-button-on')
-let soundButtonLabelOff = document.getElementById('sound-button-off')
+let soundButtonLabelOn;
+let soundButtonLabelOff;
 
 function speak(s, r = 0.9) {
     if (isSoundModeActive) {
@@ -35,8 +35,3 @@ function toggleSoundMode() {
         speak("Hallo. Ja, ich kann auch sprechen. Lass uns üben.", 0.9);
     }
 }
-
-(function() {
-    isSoundModeActive = localStorage.getItem('isSoundModeActive') != "true";
-    toggleSoundMode();
-})();
