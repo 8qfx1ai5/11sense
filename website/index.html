@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dorie Agile Math</title>
-    <link rel="shortcut icon" type="image/png" href="settings.png" />
-    <link rel="stylesheet" type="text/css" href="default.css" media="screen" />
+    <link rel="shortcut icon" type="image/png" href="img/settings.png" />
+    <link rel="stylesheet" type="text/css" href="styles/default.css" media="screen" />
 </head>
 
 <body>
     <div id="wrapper">
         <header id="header" onclick="toggleNav()">
-            <h1>D<img id="settings-image" src="settings.png" />rie</h1>
+            <h1>D<img id="settings-image" src="img/settings.png" />rie</h1>
             <p>Agile Math Training</p>
         </header>
         <div id="Solution" style="display: none;" onclick="toggleSolution()">
@@ -46,7 +46,7 @@
                 <p id="current-task" onclick="newTask()"></p>
             </section>
             <section id="input" class="speech">
-                <img id="mic-image" class="hidden" src="32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
+                <img id="mic-image" class="hidden" src="img/32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
                 <input type="number" id="solution" name="solution" placeholder="=" onkeyup="guessInput()" onselect="return false;" onfocus="return false;" />
             </section>
             <section>

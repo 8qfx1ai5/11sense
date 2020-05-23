@@ -84,7 +84,7 @@ button:focus {
     border-radius: 25px;
     padding: 0px 00px;
     font-size: larger;
-    background-image: url("loading-dark-grey.png");
+    background-image: url("../img/loading-dark-grey_1.png");
     background-position: 0%;
     background-repeat: repeat-y;
     background-attachment: inherit;
