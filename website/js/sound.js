@@ -3,12 +3,12 @@ let successMessages = ["richtig", "sehr gut", "hervorragend", "gut gemacht", "ge
 let soundButtonLabelOn;
 let soundButtonLabelOff;
 
-function speak(s, r = 0.9) {
+function speak(s, r = 1) {
     if (isSoundModeActive) {
         let statement = new SpeechSynthesisUtterance(s);
         statement.lang = 'de-DE';
         statement.rate = r;
-        statement.pitch = 0.4
+        statement.pitch = 0.6
         statement.onstart = function(event) {
             muteVoice();
         }

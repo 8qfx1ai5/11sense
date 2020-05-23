@@ -72,6 +72,9 @@ function startDictation() {
                         isDebugMode && console.log("invalid");
                     }
                 }
+            } else {
+                isDebugMode && console.log("muted.. dictation restart");
+                recognition.stop();
             }
         };
 
