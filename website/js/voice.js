@@ -175,9 +175,10 @@ function muteVoice() {
     isVoiceModeTempMuted = true;
     isDebugMode && console.log("muted = " + isVoiceModeTempMuted);
     setStatusPlaceholder();
-    // if (typeof recognition == "object") {
-    //     recognition.stop();
-    // }
+    if (typeof recognition == "object") {
+        isDebugMode && console.log("recognition aborted by mute");
+        recognition.abort();
+    }
 }
 
 function remuteVoice() {
