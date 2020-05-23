@@ -11,9 +11,6 @@ function startDictation() {
     if (!isVoiceModeActive) {
         return;
     }
-    if (isVoiceModeTempMuted) {
-        return;
-    }
 
     if (window.hasOwnProperty('webkitSpeechRecognition')) {
 
@@ -34,47 +31,46 @@ function startDictation() {
 
         recognition.onstart = function() {
             isDebugMode && console.log("start recognition");
-            currentSolution.placeholder = "...";
+            setStatusPlaceholder();
         }
 
         recognition.onresult = function(e) {
             isDebugMode && console.log(e.results);
-            if (isVoiceModeTempMuted) {
-                return;
-            }
-            currentSolution.placeholder = e.results[e.results.length - 1][0].transcript.trim();
+            if (!isVoiceModeTempMuted) {
+                currentSolution.placeholder = e.results[e.results.length - 1][0].transcript.trim();
 
-            if (e.results[e.results.length - 1][0].transcript.trim() == "stop") {
-                toggleVoiceMode();
-            }
+                if (e.results[e.results.length - 1][0].transcript.trim() == "stop") {
+                    toggleVoiceMode();
+                }
 
-            if (e.results[e.results.length - 1].isFinal) {
-                if (["neue Aufgabe", "neu", "next", "weiter"].includes(e.results[e.results.length - 1][0].transcript.trim())) {
-                    newTask(false);
-                    return;
-                }
-                if (!wasSolved) {
-                    let c = parseInt(e.results[e.results.length - 1][0].transcript.replace("Uhr", "").trim(), 10);
-                    if (c) {
-                        currentSolution.value = c;
-                        saveTempSolution();
-                        currentSolution.placeholder = "...";
-                        isDebugMode && console.log("ok.. dictation restart");
-                        recognition.stop();
+                if (e.results[e.results.length - 1].isFinal) {
+                    if (["neue Aufgabe", "neu", "next", "weiter"].includes(e.results[e.results.length - 1][0].transcript.trim())) {
+                        newTask(false);
+                        return;
                     }
-                }
-            } else {
-                let input = e.results[e.results.length - 1][0].transcript.replace("Uhr", "");
-                input = input.replace("/", " ");
-                let parts = input.split(" ");
-                for (let i = 0; i < parts.length; i++) {
-                    isDebugMode && console.log(parts[i]);
-                    if (guessVoiceInput(parts[i])) {
-                        isDebugMode && console.log("ok.. dictation restart");
-                        recognition.stop();
-                        break;
+                    if (!wasSolved) {
+                        let c = parseInt(e.results[e.results.length - 1][0].transcript.replace("Uhr", "").trim(), 10);
+                        if (c) {
+                            currentSolution.value = c;
+                            saveTempSolution();
+                            setStatusPlaceholder()
+                            isDebugMode && console.log("ok.. dictation restart");
+                            recognition.stop();
+                        }
                     }
-                    isDebugMode && console.log("invalid");
+                } else {
+                    let input = e.results[e.results.length - 1][0].transcript.replace("Uhr", "");
+                    input = input.replace("/", " ");
+                    let parts = input.split(" ");
+                    for (let i = 0; i < parts.length; i++) {
+                        isDebugMode && console.log(parts[i]);
+                        if (guessVoiceInput(parts[i])) {
+                            isDebugMode && console.log("ok.. dictation restart");
+                            recognition.stop();
+                            break;
+                        }
+                        isDebugMode && console.log("invalid");
+                    }
                 }
             }
         };
@@ -82,7 +78,6 @@ function startDictation() {
         recognition.onerror = function(e) {
             currentSolution.placeholder = "🙉";
             isDebugMode && console.log("uppps.. dictation interrupted");
-            // await Sleep(1000);
             recognition.stop();
         }
 
@@ -92,6 +87,18 @@ function startDictation() {
             startDictation();
         }
     }
+}
+
+function setStatusPlaceholder() {
+    if (isVoiceModeActive) {
+        if (isVoiceModeTempMuted) {
+            currentSolution.placeholder = "🙉";
+            return;
+        }
+        currentSolution.placeholder = "...";
+        return;
+    }
+    currentSolution.placeholder = "=";
 }
 
 function guessInput() {
@@ -115,7 +122,7 @@ function guessVoiceInput(s) {
     if (c == result) {
         currentSolution.value = s;
         saveTempSolution();
-        currentSolution.placeholder = "...";
+        setStatusPlaceholder()
         return true;
     }
     return false;
@@ -163,6 +170,8 @@ function toggleVoiceMute() {
 
 function muteVoice() {
     isVoiceModeTempMuted = true;
+    isDebugMode && console.log("muted = " + isVoiceModeTempMuted);
+    setStatusPlaceholder();
     // if (typeof recognition == "object") {
     //     recognition.stop();
     // }
@@ -170,5 +179,8 @@ function muteVoice() {
 
 function remuteVoice() {
     isVoiceModeTempMuted = false;
+    isDebugMode && console.log("muted = " + isVoiceModeTempMuted);
+    setStatusPlaceholder();
+
     // startDictation();
 }

@@ -103,7 +103,7 @@ let autoTaskTimer;
 // let recognition;
 
 function validateResult() {
-    //muteVoice();
+    muteVoice();
     //currentSolution.disabled = true;
     solution = currentSolution.value
     endTime = performance.now();
@@ -264,8 +264,8 @@ function newTask(setFocus = true) {
     updateView()
     resetInput()
     calculateFractions()
-        //remuteVoice();
-        //startDictation();
+    remuteVoice();
+    //startDictation();
 }
 
 function calculateFractions() {
@@ -339,9 +339,9 @@ function updateSolution() {
 
 function resetInput() {
     currentSolution.value = "";
-    currentSolution.placeholder = "..."
-    if (!isVoiceModeActive) {
-        currentSolution.placeholder = "="
+    currentSolution.placeholder = "="
+    if (isVoiceModeActive) {
+        currentSolution.placeholder = "..."
     }
     currentSolution.style.backgroundSize = "0%";
     currentTask.classList.remove("valid");
