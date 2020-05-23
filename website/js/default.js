@@ -10,6 +10,7 @@ let psolutions = document.getElementById('partial-solutions')
 let SolutionTask = document.getElementById('Solution-task')
 let autoTaskInput = document.getElementById('autoTaskInput')
 let trainerPage = document.getElementById('trainer-page')
+let header = document.getElementById('header')
 
 let isBeginnerModeActive = false;
 let wasSolved = false;
@@ -402,7 +403,7 @@ function saveTempSolutionPro() {
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
-        speak(c + " leider nein");
+        speak(c + "?");
         //startDictation();
     } else if (c == result) {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
@@ -441,7 +442,7 @@ function saveTempSolutionBeginner() {
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
-        speak(c + " leider nein");
+        speak(c + "?");
         //startDictation();
     } else if (c == result) {
         tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
@@ -509,7 +510,7 @@ function sumFlat(s) {
             if (i == 1) {
                 return ["1⋅" + factor2.toString()]
             }
-            return [i.toString() + "⋅" + factor2.toString() + " = " + keys.join("+")]
+            return [i.toString() + "⋅" + factor2.toString()]
         }
     }
     keys = Array();
@@ -521,7 +522,7 @@ function sumFlat(s) {
             if (j == 1) {
                 return ["1⋅" + factor1.toString()]
             }
-            return [j.toString() + "⋅" + factor1.toString() + " = " + keys.join("+")]
+            return [j.toString() + "⋅" + factor1.toString()]
         }
     }
     return []

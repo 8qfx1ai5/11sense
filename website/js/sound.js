@@ -32,7 +32,7 @@ function toggleSoundMode() {
         soundButtonLabelOn.classList.remove("hidden");
         soundButtonLabelOff.classList.add("hidden");
         localStorage.setItem('isSoundModeActive', true);
-        speak("Hallo", 1);
+        speak("Hallo. Ja, ich kann auch sprechen. Lass uns üben.", 0.9);
     }
 }
 

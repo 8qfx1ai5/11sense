@@ -33,12 +33,12 @@ function startDictation() {
         recognition.start();
 
         recognition.onstart = function() {
-            console.log("start recognition");
+            isDebugMode && console.log("start recognition");
             currentSolution.placeholder = "...";
         }
 
         recognition.onresult = function(e) {
-            console.log(e.results);
+            isDebugMode && console.log(e.results);
             currentSolution.placeholder = e.results[e.results.length - 1][0].transcript.trim();
 
             if (e.results[e.results.length - 1][0].transcript.trim() == "stop") {
@@ -56,7 +56,7 @@ function startDictation() {
                         currentSolution.value = c;
                         saveTempSolution();
                         currentSolution.placeholder = "...";
-                        console.log("ok.. dictation restart");
+                        isDebugMode && console.log("ok.. dictation restart");
                         recognition.stop();
                     }
                 }
@@ -65,26 +65,26 @@ function startDictation() {
                 input = input.replace("/", " ");
                 let parts = input.split(" ");
                 for (let i = 0; i < parts.length; i++) {
-                    console.log(parts[i]);
+                    isDebugMode && console.log(parts[i]);
                     if (guessVoiceInput(parts[i])) {
-                        console.log("ok.. dictation restart");
+                        isDebugMode && console.log("ok.. dictation restart");
                         recognition.stop();
                         break;
                     }
-                    console.log("invalid");
+                    isDebugMode && console.log("invalid");
                 }
             }
         };
 
         recognition.onerror = function(e) {
             currentSolution.placeholder = "🙉";
-            console.log("uppps.. dictation interrupted");
+            isDebugMode && console.log("uppps.. dictation interrupted");
             recognition.stop();
         }
 
         recognition.onend = function(e) {
             currentSolution.placeholder = "🙉";
-            console.log("dictation finished");
+            isDebugMode && console.log("dictation finished");
             startDictation();
         }
     }
