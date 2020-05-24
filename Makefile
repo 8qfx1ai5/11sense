@@ -6,16 +6,22 @@ build:
 	docker build -t mula-alpha -f ./build/Dockerfile .
 
 
-	# build container image from container manifest file
+# build container image from container manifest file
 .PHONY: buildt
 buildt:
-	docker build -t dorie-test -f ./build/test/Dockerfile .
+	@docker build -q -t dorie-test -f ./build/test/Dockerfile . > /dev/null
 
 
-	# build container image from container manifest file
+# build container image from container manifest file
+# docker run -it -v "$(pwd)":/dorie dorie-test
 .PHONY: runt
 runt:
-	docker run dorie-test $(cmd)
+	@docker run -it dorie-test
+
+
+# build container image from container manifest file
+.PHONY: test
+test: buildt runt
 
 
 # run container based on an image

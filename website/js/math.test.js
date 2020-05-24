@@ -1,6 +1,6 @@
-const { findFractions } = require("./math");
+const m = require("./math");
 
 test("double decimal places", () => {
-    const output = findFractions("0.54", 2, "0.035", 3);
-    expect(output).toBeNaN();
-})
+    let output = m.findFractions("0.54", 2, "0.035", 3);
+    expect(output.size).toBe(9);
+});
