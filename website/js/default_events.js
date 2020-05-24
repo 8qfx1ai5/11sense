@@ -39,4 +39,21 @@
             currentSolution.focus();
         }
     });
+
+    if (localStorage.getItem('autoTaskInterval')) {
+        if (0 <= localStorage.getItem('autoTaskInterval')) {
+            autoTaskInput.value = localStorage.getItem('autoTaskInterval') / 1000;
+        } else {
+            autoTaskInput.value = "";
+        }
+    }
+
+    if (localStorage.getItem('f1')) {
+        f1input.value = localStorage.getItem('f1');
+    }
+    if (localStorage.getItem('f2')) {
+        f2input.value = localStorage.getItem('f2');
+    }
+
+    currentSolution.focus();
 })();

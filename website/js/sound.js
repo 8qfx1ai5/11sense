@@ -19,6 +19,19 @@ function speak(s, r = 1) {
     }
 }
 
+function formatToSpeakableNumber(n) {
+    let nS = n.toString();
+    let nSsplit = nS.split(".");
+    if (nSsplit.length < 2) {
+        return nS;
+    }
+    let output = nSsplit[0] + ",";
+    for (let i = 0; i < nSsplit[1].length; i++) {
+        output += nSsplit[1][i] + " "
+    }
+    return output;
+}
+
 function toggleSoundMode() {
     if (isSoundModeActive) {
         // deactivate sound mode

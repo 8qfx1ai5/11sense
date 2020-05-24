@@ -15,7 +15,6 @@ let header;
 let isBeginnerModeActive = false;
 let wasSolved = false;
 let funnySmilies = ["😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🤫", "🤨", "😏", "🤯", "🤠", "🥳", "😎", "🤓", "🧐", "😲", "😳", "🥺", "😱", "😈", "😺", "😸", "😹", "😻", "😼", "😽", "🙀"]
-let lastTasks = [];
 
 function toggleTrainerPage() {
     if (trainerPage.classList.contains("hidden")) {
@@ -92,11 +91,6 @@ function exitFullscreen() {
     } catch (e) {} finally {}
 }
 
-
-let factor1 = 0;
-let factor2 = 0;
-let result = 0;
-let fractions = new Map()
 let startTime;
 let endTime;
 let autoTaskTimer;
@@ -169,52 +163,14 @@ function getAutoTaskInterval() {
     return i;
 }
 
-function calculateTask(a, b) {
-    a = Math.max(1, a)
-    a = Math.min(10, a)
-    b = Math.max(1, b)
-    b = Math.min(10, b)
-    do {
-        do {
-            factor1 = Math.floor(Math.random() * (10 ** a));
-        } while (factor1 < 2 || factor1.toString().length != a);
-        do {
-            factor2 = Math.floor(Math.random() * (10 ** b));
-        } while (factor2 < 2 || factor2.toString().length != b);
-    } while (arrayIncludesCombination(lastTasks, factor1, factor2));
-
-    for (let i = 19; i < lastTasks.length; i++) {
-        lastTasks.pop();
-    }
-
-    lastTasks.unshift([factor1, factor2]);
-
-    result = factor1 * factor2
-    startTime = performance.now();
-    endTime = null;
-}
-
-function arrayIncludesCombination(a, f1, f2) {
-    for (let i = 0; i < a.length; i++) {
-        let oldTask = a[i];
-        if (oldTask[0] == f1 && oldTask[1] == f2) {
-            return true;
-        }
-        if (oldTask[0] == f2 && oldTask[1] == f1) {
-            return true;
-        }
-    }
-    return false
-}
-
 function updateView() {
-    currentTask.innerText = factor1 + " ⋅ " + factor2
-    speak(factor1 + " mal " + factor2, 1.1);
+    currentTask.innerText = factor1.toString().replace(".", ",") + " ⋅ " + factor2.toString().replace(".", ",")
+    speak(formatToSpeakableNumber(factor1) + " mal " + formatToSpeakableNumber(factor2), 1.1);
     //currentSolution.focus();
 }
 
 function updateViewSolution() {
-    currentTask.innerHTML = factor1.toString() + " ⋅ " + factor2.toString() + " = <span class='valid'>" + result + " ✓</span>"
+    currentTask.innerHTML = factor1.toString() + " ⋅ " + factor2.toString() + " = <span class='valid'>" + formatNumberForDisplay(result) + " ✓</span>"
     speak(getRandomElement(successMessages), 1);
     currentSolution.value = ""
     currentSolution.placeholder = ""
@@ -222,71 +178,6 @@ function updateViewSolution() {
         currentSolution.placeholder = ((endTime - startTime).toFixed(0) / 1000).toString() + " sec."
     }
     //currentSolution.focus();
-}
-
-function newTask(setFocus = true) {
-    if (setFocus) {
-        hideNav();
-        currentSolution.focus();
-        window.scrollTo(0, 0);
-        if (wasSolved && !isVoiceModeActive) {
-            enterFullscreen();
-        }
-    }
-    let f1 = parseInt(f1input.value, 10);
-    if (isNaN(f1)) {
-        f1 = parseInt(f1input.placeholder, 10);
-    }
-    f1 = f1 % 10;
-    let f2 = parseInt(f2input.value, 10);
-    if (isNaN(f2)) {
-        f2 = parseInt(f2input.placeholder, 10);
-    }
-    f2 = f2 % 10;
-    let f1x = Math.max(1, f1)
-    let f2x = Math.max(1, f2)
-    if (f1 != f1x) {
-        f1input.value = f1x
-    }
-    if (f2 != f2x) {
-        f2input.value = f2x
-    }
-    localStorage.setItem('f1', f1x)
-    localStorage.setItem('f2', f2x)
-    f1input.value = f1x;
-    f2input.value = f2x;
-
-    isBeginnerModeActive = (f1x == 1 && f2x == 1);
-    wasSolved = false;
-    clearInterval(autoTaskTimer);
-
-    calculateTask(f1x, f2x)
-    updateView()
-    resetInput()
-    calculateFractions()
-    remuteVoice();
-    //startDictation();
-}
-
-function calculateFractions() {
-    fractions = new Map();
-    let f1s = factor1.toString();
-    let f2s = factor2.toString();
-
-    for (let i = 0; i < f1s.length; i++) {
-        let ti = parseInt(f1s[i], 10) * Math.pow(10, f1s.length - i - 1)
-        if (ti == 0) {
-            continue
-        }
-        for (let j = 0; j < f2s.length; j++) {
-            let tj = parseInt(f2s[j], 10) * Math.pow(10, f2s.length - j - 1);
-            if (tj == 0) {
-                continue
-            }
-            fractions.set(ti + "⋅" + tj, ti * tj)
-        }
-    }
-    updateSolution()
 }
 
 // function creates and sets the content of the solution page for Pro mode
@@ -352,8 +243,8 @@ function resetInput() {
     Solution.style.display = "none";
 }
 
-function getRandomElement(array) {
-    return array[Math.floor(Math.random() * array.length)];
+function formatNumberForDisplay(n) {
+    return n.toString().replace(".", ",");
 }
 
 function saveTempSolutionPro() {
@@ -370,26 +261,26 @@ function saveTempSolutionPro() {
 
         return
     }
-    let c = parseInt(currentSolution.value, 10)
+    let c = parseFloat(currentSolution.value.replace(",", "."))
     let analizationResult = analizeTempSolution(c)
     if (analizationResult == "") {
-        tempSolutions.innerHTML = currentSolution.value + " ?<br/>" + tempSolutions.innerHTML
+        tempSolutions.innerHTML = formatNumberForDisplay(c) + " ?<br/>" + tempSolutions.innerHTML
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
-        speak(c + "?");
+        speak(formatToSpeakableNumber(c) + "?");
         //startDictation();
     } else if (c == result) {
-        tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
+        tempSolutions.innerHTML = "<span style='color: green'>" + formatNumberForDisplay(c) + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         validateResult();
         if (0 == getAutoTaskInterval()) {
             newTask();
         }
     } else {
-        tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
+        tempSolutions.innerHTML = "<span style='color: green'>" + formatNumberForDisplay(c) + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         let x = c * 100 / result
         currentSolution.placeholder = x.toFixed(1) + "%";
-        speak(c + ", die Richtung stimmt");
+        speak(formatToSpeakableNumber(c) + ", die Richtung stimmt");
         //startDictation();
     }
     currentSolution.value = ""
@@ -409,7 +300,7 @@ function saveTempSolutionBeginner() {
 
         return
     }
-    let c = parseInt(currentSolution.value, 10)
+    let c = parseFloat(currentSolution.value)
     let analizationResult = analizeTempSolution(c)
     if (analizationResult == "") {
         tempSolutions.innerHTML = currentSolution.value + " ?<br/>" + tempSolutions.innerHTML
@@ -447,59 +338,16 @@ function saveTempSolution() {
 }
 
 function analizeTempSolution(s) {
+    let keys = [];
     if (isBeginnerModeActive) {
-        let keys = sumFlat(s)
-        return keys.join("+")
+        keys = sumFlat(s)
+    } else {
+        keys = sumRecursive(0, 0, s)
     }
-    let keys = sumRecursive(0, 0, s)
+    for (let i = 0; i < keys.length; i++) {
+        keys[i] = keys[i].replace(".", ",");
+    }
     return keys.join("+")
-}
-
-function sumRecursive(i, c, s) {
-    let keys = Array.from(fractions.keys());
-    for (let j = i; j < keys.length; j++) {
-        let newCurrent = c + fractions.get(keys[j]);
-        if (newCurrent > s) {
-            continue
-        }
-        if (newCurrent == s) {
-            return [keys[j]]
-        }
-        let tempResult = sumRecursive(j + 1, newCurrent, s)
-        if (0 < tempResult.length) {
-            tempResult.push(keys[j])
-            return tempResult
-        }
-    }
-    return []
-}
-
-function sumFlat(s) {
-    let keys = Array();
-    let tempSum = 0;
-    for (let i = 1; i <= factor1; i++) {
-        keys.push(factor2)
-        tempSum += factor2;
-        if (tempSum == s) {
-            if (i == 1) {
-                return ["1⋅" + factor2.toString()]
-            }
-            return [i.toString() + "⋅" + factor2.toString()]
-        }
-    }
-    keys = Array();
-    tempSum = 0;
-    for (let j = 1; j <= factor2; j++) {
-        keys.push(factor1)
-        tempSum += factor1;
-        if (tempSum == s) {
-            if (j == 1) {
-                return ["1⋅" + factor1.toString()]
-            }
-            return [j.toString() + "⋅" + factor1.toString()]
-        }
-    }
-    return []
 }
 
 function toggleNav() {
