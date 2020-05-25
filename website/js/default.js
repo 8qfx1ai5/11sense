@@ -186,21 +186,54 @@ function updateSolutionPro() {
     psolutions.innerHTML = "";
     let f1s = factor1.toString();
     let f2s = factor2.toString();
-    SolutionTask.innerHTML = f1s + " ⋅ " + f2s + " = " + result.toString();
-    let resultLength = result.toString().length;
+    let rs = result.toString();
+    let rSplit = rs.split(".");
+    let rDecimals = getNumberOfDecimals(result);
+    let f1Split = f1s.split(".");
+    let f2Split = f2s.split(".");
+    SolutionTask.innerHTML = formatNumberForDisplay(factor1) + " ⋅ " + formatNumberForDisplay(factor2) + " = " + formatNumberForDisplay(result);
     let currentSum = 0;
     keys.sort(function(a, b) {
-        return b.length - a.length;
+        let aSplit = a.split("⋅");
+        let a1 = aSplit[0].length - 1;
+        if (aSplit[0].includes(".")) {
+            a1 = (aSplit[0].length - 2) * -1;
+        }
+        let a2 = aSplit[1].length - 1;
+        if (aSplit[1].includes(".")) {
+            a2 = (aSplit[1].length - 2) * -1;
+        }
+        let bSplit = b.split("⋅");
+        let b1 = bSplit[0].length - 1;
+        if (bSplit[0].includes(".")) {
+            b1 = (bSplit[0].length - 2) * -1;
+        }
+        let b2 = bSplit[1].length - 1;
+        if (bSplit[1].includes(".")) {
+            b2 = (bSplit[1].length - 2) * -1;
+        }
+
+        return b1 + b2 - a1 - a2;
     });
     for (let i = 0; i < keys.length; i++) {
-        currentSum += fractions.get(keys[i])
+        currentSum = addDecimal(currentSum, fractions.get(keys[i]));
         let factors = keys[i].split("⋅");
-        let f1padded = factors[0].padStart(f1s.length);
-        let f2padded = factors[1].padStart(f2s.length);
-        let productPadded = fractions.get(keys[i]).toString().padStart(resultLength)
-        let x = currentSum * 100 / result
-        psolutions.innerHTML = psolutions.innerHTML + (i + 1).toString().padStart(2) + ". " + f1padded + " ⋅ " + f2padded + " = " + productPadded + " | " + currentSum.toString().padStart(resultLength) + " ≙ " + x.toFixed(2).padStart(6) + "%" + "<br />"
+        //let x = currentSum * 100 / result
+        psolutions.innerHTML = psolutions.innerHTML + (i + 1).toString().padStart(2) + ". " + formatNumberForMonoLength(factors[0], f1Split[0].length, factor1Decimals) + " ⋅ " + formatNumberForMonoLength(factors[1], f2Split[0].length, factor2Decimals) + " = " + formatNumberForMonoLength(fractions.get(keys[i]), rSplit[0].length, rDecimals) + " | " + formatNumberForMonoLength(currentSum, rSplit[0].length, rDecimals) + "<br />"
     }
+}
+
+function formatNumberForMonoLength(n, x, y) {
+    let ns = n.toString();
+    let nSplit = ns.split(".");
+    let result = nSplit[0].padStart(x, " ");
+    if (nSplit.length < 2) {
+        nSplit[1] = "0";
+    }
+    if (0 < y) {
+        result += "." + nSplit[1].padEnd(y, " ")
+    }
+    return result.replace(/[.]/g, ",");
 }
 
 // function creates and sets the content of the solution page for beginner mode
@@ -208,14 +241,20 @@ function updateSolutionBeginner() {
     psolutions.innerHTML = "";
     let f1s = factor1.toString();
     let f2s = factor2.toString();
-    SolutionTask.innerHTML = f1s + " ⋅ " + f2s + " = " + result.toString();
-    let resultLength = result.toString().length;
+    let rs = result.toString();
+    let rSplit = rs.split(".");
+    let rDecimals = getNumberOfDecimals(result);
+    let f1Split = f1s.split(".");
+    let f2Split = f2s.split(".");
+    SolutionTask.innerHTML = formatNumberForDisplay(factor1) + " ⋅ " + formatNumberForDisplay(factor2) + " = " + formatNumberForDisplay(result);
     let currentSum = 0;
-    for (let i = 1; i <= factor1; i++) {
-        currentSum += factor2;
-        let x = currentSum * 100 / result
-        psolutions.innerHTML = psolutions.innerHTML + (i).toString() + " ⋅ " + f2s + " = " + currentSum.toString().padStart(resultLength) + " ≙ " + x.toFixed(2).padStart(6) + "%" + "<br />"
-
+    let currentF1 = 0;
+    let iterations = parseInt(f1s.replace(".", ""), 10);
+    let iterator = factor1 / iterations;
+    for (let i = 1; i <= iterations; i++) {
+        currentF1 = multiplyDecimal(i, iterator);
+        currentSum = multiplyDecimal(currentF1, factor2);
+        psolutions.innerHTML = psolutions.innerHTML + formatNumberForMonoLength(currentF1, f1Split[0].length, factor1Decimals) + " ⋅ " + formatNumberForMonoLength(factor2, f2Split[0].length, factor2Decimals) + " = " + formatNumberForMonoLength(currentSum, rSplit[0].length, rDecimals) + "<br />"
     }
 }
 

@@ -102,16 +102,10 @@ function calculateFractions() {
 
 const findFractions = (x, y) => {
     xs = x.toString();
-    s1d = xs.length - xs.indexOf(".") - 1;
-    if (s1d == xs.length) {
-        s1d = 0;
-    }
+    s1d = getNumberOfDecimals(x);
     s1s = xs.split(".").join("");
     ys = y.toString();
-    s2d = ys.length - ys.indexOf(".") - 1;
-    if (s2d == ys.length) {
-        s2d = 0;
-    }
+    s2d = getNumberOfDecimals(y);
     s2s = ys.split(".").join("");
     //console.log(xs, s1d, s1s);
     //console.log(ys, s2d, s2s);
@@ -135,6 +129,15 @@ const findFractions = (x, y) => {
         }
     }
     return f;
+}
+
+function getNumberOfDecimals(n) {
+    ns = n.toString();
+    decimals = ns.length - ns.indexOf(".") - 1;
+    if (decimals == ns.length) {
+        decimals = 0;
+    }
+    return decimals;
 }
 
 function getRandomElement(array) {
