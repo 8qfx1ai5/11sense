@@ -52,6 +52,29 @@ function multiplyDecimal(x, y) {
     return divideBy10(p, decimals);
 }
 
+function addDecimal(x, y) {
+    let xSplit = x.toString().split(".");
+    let ySplit = y.toString().split(".");
+    let maxDecimal = 0;
+    if (xSplit.length > 1) {
+        maxDecimal = Math.max(maxDecimal, xSplit[1].length);
+    } else {
+        xSplit[1] = "";
+    }
+    if (ySplit.length > 1) {
+        maxDecimal = Math.max(maxDecimal, ySplit[1].length);
+    } else {
+        ySplit[1] = "";
+    }
+    xSplit[1] = xSplit[1].padEnd(maxDecimal, "0");
+    ySplit[1] = ySplit[1].padEnd(maxDecimal, "0");
+    let xs = parseInt(xSplit.join(""), 10)
+    let ys = parseInt(ySplit.join(""), 10)
+    let sum = xs + ys;
+
+    return divideBy10(sum, maxDecimal);
+}
+
 function divideBy10(x, i = 1) {
     let xs = x.toString();
     let result = "";
@@ -69,28 +92,46 @@ function divideBy10(x, i = 1) {
 }
 
 function calculateFractions() {
-    fractions = findFractions(factor1StringJoined, factor1Decimals, factor2StringJoined, factor2Decimals);
+    let fractionsTemp = findFractions(factor1, factor2);
+    fractions = new Map();
+    for (let i = 0; i < fractionsTemp.length; i++) {
+        fractions.set(fractionsTemp[i][0] + "⋅" + fractionsTemp[i][1], fractionsTemp[i][2])
+    }
     updateSolution()
 }
 
-function findFractions(s1, s1d, s2, s2d) {
-    let f = new Map();
+const findFractions = (x, y) => {
+    xs = x.toString();
+    s1d = xs.length - xs.indexOf(".") - 1;
+    if (s1d == xs.length) {
+        s1d = 0;
+    }
+    s1s = xs.split(".").join("");
+    ys = y.toString();
+    s2d = ys.length - ys.indexOf(".") - 1;
+    if (s2d == ys.length) {
+        s2d = 0;
+    }
+    s2s = ys.split(".").join("");
+    //console.log(xs, s1d, s1s);
+    //console.log(ys, s2d, s2s);
+    let f = [];
 
-    for (let i = 0; i < s1.length; i++) {
-        let currentTi = parseInt(s1[i], 10);
-        let currentTiShift = s1.length - i - 1 - s1d;
+    for (let i = 0; i < s1s.length; i++) {
+        let currentTi = parseInt(s1s[i], 10);
+        let currentTiShift = s1s.length - i - 1 - s1d;
         let ti = divideBy10(currentTi, currentTiShift * (-1));
         if (ti == 0) {
             continue
         }
-        for (let j = 0; j < s2.length; j++) {
-            let currentTj = parseInt(s2[j], 10);
-            let currentTjShift = s2.length - j - 1 - s2d;
+        for (let j = 0; j < s2s.length; j++) {
+            let currentTj = parseInt(s2s[j], 10);
+            let currentTjShift = s2s.length - j - 1 - s2d;
             let tj = divideBy10(currentTj, currentTjShift * (-1));
             if (tj == 0) {
                 continue
             }
-            f.set(ti + "⋅" + tj, multiplyDecimal(ti, tj))
+            f.push([ti, tj, multiplyDecimal(ti, tj)]);
         }
     }
     return f;
@@ -103,7 +144,7 @@ function getRandomElement(array) {
 function sumRecursive(i, c, s) {
     let keys = Array.from(fractions.keys());
     for (let j = i; j < keys.length; j++) {
-        let newCurrent = c + fractions.get(keys[j]);
+        let newCurrent = addDecimal(c, fractions.get(keys[j]));
         if (newCurrent > s) {
             continue
         }
@@ -250,3 +291,5 @@ function calculateTask(a, b) {
     startTime = performance.now();
     endTime = null;
 }
+
+// module.exports = { findFractions }

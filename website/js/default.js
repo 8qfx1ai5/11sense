@@ -345,7 +345,7 @@ function analizeTempSolution(s) {
         keys = sumRecursive(0, 0, s)
     }
     for (let i = 0; i < keys.length; i++) {
-        keys[i] = keys[i].replace(".", ",");
+        keys[i] = keys[i].replace(/[.]/g, ",");
     }
     return keys.join("+")
 }
