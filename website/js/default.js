@@ -170,7 +170,7 @@ function updateView() {
 }
 
 function updateViewSolution() {
-    currentTask.innerHTML = factor1.toString() + " ⋅ " + factor2.toString() + " = <span class='valid'>" + formatNumberForDisplay(result) + " ✓</span>"
+    currentTask.innerHTML = formatNumberForDisplay(factor1) + " ⋅ " + formatNumberForDisplay(factor2) + " = <span class='valid'>" + formatNumberForDisplay(result) + " ✓</span>"
     speak(getRandomElement(successMessages), 1);
     currentSolution.value = ""
     currentSolution.placeholder = ""

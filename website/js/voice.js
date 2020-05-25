@@ -54,25 +54,32 @@ function startDictation() {
                         return;
                     }
                     if (!wasSolved) {
-                        let c = parseInt(e.results[e.results.length - 1][0].transcript.replace("Uhr", "").trim(), 10);
+                        let tempInput = e.results[e.results.length - 1][0].transcript.replace("Uhr", "").replace(",", ".").trim();
+                        let c = parseFloat(tempInput);
                         if (c) {
                             currentSolution.value = c;
                             saveTempSolution();
                             setStatusPlaceholder()
                             isDebugMode && console.log("ok.. dictation restart");
                             recognition.stop();
+                            return;
                         }
                     }
                 } else {
                     let input = e.results[e.results.length - 1][0].transcript.replace("Uhr", "");
                     input = input.replace("/", " ");
+                    if (guessVoiceInput(input.replace(/ /g, "").replace(/[/]/g, ""))) {
+                        isDebugMode && console.log("ok.. dictation restart");
+                        recognition.stop();
+                        return;
+                    }
                     let parts = input.split(" ");
                     for (let i = 0; i < parts.length; i++) {
                         isDebugMode && console.log(parts[i]);
                         if (guessVoiceInput(parts[i])) {
                             isDebugMode && console.log("ok.. dictation restart");
                             recognition.stop();
-                            break;
+                            return;
                         }
                         isDebugMode && console.log("invalid");
                     }
@@ -118,10 +125,11 @@ function guessInput() {
 }
 
 function guessVoiceInput(s) {
+    s = s.replace(",", ".");
     if (s.length != result.toString().length) {
         return false;
     }
-    let c = parseInt(s, 10);
+    let c = parseFloat(s);
     if (c == factor1 || c == factor2) {
         return false;
     }
