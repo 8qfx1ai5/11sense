@@ -7,3 +7,37 @@ header {
 header p {
     margin: 0em;
 }
+
+header .floatLeft {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 45%;
+    text-align: left;
+}
+
+header .floatRight {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 45%;
+    text-align: right;
+}
+
+#settings-image {
+    height: 2.5em;
+    margin: 1em;
+    /* padding-top: 1em; */
+    display: inline-block;
+    /* vertical-align: sub; */
+    opacity: 0.3;
+}
+
+#stats-image {
+    height: 2.5em;
+    margin: 1em;
+    /* padding-top: 1em; */
+    display: inline-block;
+    /* vertical-align: sub; */
+    opacity: 0.3;
+}

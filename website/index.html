@@ -24,9 +24,17 @@
 
 <body>
     <div id="wrapper">
-        <header id="header" onclick="toggleNav()">
-            <h1>D<img id="settings-image" src="img/settings.png" />rie</h1>
-            <p>Agile Math Training</p>
+        <header id="header">
+            <div>
+                <h1>Dorie</h1>
+                <p>Agile Math Training</p>
+            </div>
+            <div class="floatLeft">
+                <img id="stats-image" src="img/stats_100x100.png" />
+            </div>
+            <div class="floatRight" onclick="toggleNav()">
+                <img id="settings-image" src="img/settings_100x100.png" />
+            </div>
         </header>
         <div id="content">
             <div id="Solution" style="display: none;" onclick="toggleSolution()">

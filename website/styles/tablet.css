@@ -200,13 +200,6 @@ body {
     /* height: 15em; */
 }
 
-#settings-image {
-    height: 0.5em;
-    /* padding-top: 1em; */
-    display: inline-block;
-    /* vertical-align: sub; */
-}
-
 #content {
     max-width: 650px;
     margin: auto;

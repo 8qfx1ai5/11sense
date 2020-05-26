@@ -196,10 +196,3 @@ body {
     font-size: x-large;
     /* height: 15em; */
 }
-
-#settings-image {
-    height: 0.5em;
-    /* padding-top: 1em; */
-    display: inline-block;
-    /* vertical-align: sub; */
-}
