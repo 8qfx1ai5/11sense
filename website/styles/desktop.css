@@ -12,9 +12,7 @@ input[type=number] {
 }
 
 #Solution {
-    border: 1px solid black;
     margin-bottom: 15px;
-    background-color: black;
     padding-bottom: 20px;
     min-width: 100%;
     position: fixed;
@@ -22,13 +20,8 @@ input[type=number] {
     z-index: 20;
 }
 
-.debugging {
-    color: darkred;
-}
-
 button {
     line-height: 0.9em;
-    background-color: dimgrey;
     border: none;
     /* padding: 15px 32px; */
     text-align: left;
@@ -37,11 +30,9 @@ button {
     font-size: 1.5em;
     cursor: pointer;
     width: 100%;
-    color: #d7ba7d;
     margin-top: 5px;
     /* height: 3em; */
     vertical-align: top;
-    font-family: inherit;
     padding: 0.4em 1em 0.4em 1em;
     position: relative;
 }
@@ -63,17 +54,6 @@ h2 {
     font-size: 0.6em;
 }
 
-header {
-    color: #d7ba7d;
-    /* margin-bottom: 10px; */
-    height: 5em;
-    border-bottom: 3px solid #d7ba7d;
-}
-
-header p {
-    margin: 0em;
-}
-
 h1 {
     margin: 0em;
 }
@@ -86,31 +66,14 @@ button:focus {
     border: none;
     text-align: center;
     width: 100%;
-    color: #6e270b;
-    background-color: darkgrey;
     height: 2em;
     border-radius: 25px;
     padding: 0px 00px;
     font-size: larger;
-    background-image: url("../img/loading-dark-grey_1.png");
-    background-position: 0%;
-    background-repeat: repeat-y;
-    background-attachment: inherit;
-    /* variable for loading screen 0-120% */
-    background-size: 0%;
-    font-family: inherit;
 }
 
 #solution:focus {
     outline: none !important;
-}
-
-.valid {
-    color: green;
-}
-
-.invalid {
-    color: red;
 }
 
 #wrapper {
@@ -134,11 +97,8 @@ button:focus {
 }
 
 body {
-    background-color: #252526;
-    color: #d7ba7d;
     font-size: larger;
     margin: 0px;
-    font-family: cursive;
     /* disable text selection to omit selection dialog */
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -156,10 +116,7 @@ body {
     height: 2em;
     text-align: center;
     vertical-align: middle;
-    background-color: darkgrey;
-    color: #6e270b;
     border-radius: 25px;
-    font-family: inherit;
 }
 
 .config-label {
@@ -200,13 +157,12 @@ body {
 }
 
 #nav {
-    background-color: black;
     padding: 10px 10px 40px 10px;
     min-width: 300px;
     position: absolute;
     left: 10px;
-    z-index: 10;
-    border: 1px solid #d7ba7d;
+    z-index: 40;
+    border: 1px solid;
     top: 10px;
     height: calc(100% - 4em);
     overflow: auto;
@@ -230,7 +186,6 @@ body {
 }
 
 #partial-solutions {
-    font-family: monospace;
     text-align: center;
     white-space: pre;
     padding: 10px;

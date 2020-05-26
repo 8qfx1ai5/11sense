@@ -1,0 +1,9 @@
+header {
+    height: 5em;
+    position: relative;
+    z-index: 20;
+}
+
+header p {
+    margin: 0em;
+}
