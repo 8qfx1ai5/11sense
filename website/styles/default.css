@@ -36,7 +36,7 @@ button {
     display: inline-block;
     font-size: 1.5em;
     cursor: pointer;
-    width: 100%;
+    width: 95%;
     color: #d7ba7d;
     margin-top: 5px;
     /* height: 3em; */
@@ -186,14 +186,14 @@ body {
 }
 
 #nav {
-    /* margin-bottom: 50px; */
     background-color: black;
-    padding: 10px 10px 40px 10px;
-    /* min-width: 100%; */
-    /* position: fixed; */
+    /* padding: 10px 10px 40px 10px; */
+    width: 100%;
+    position: absolute;
     left: 0px;
     z-index: 10;
-    border: 1px solid #d7ba7d;
+    /* border: 1px solid #d7ba7d; */
+    top: 0px;
 }
 
 #input {
