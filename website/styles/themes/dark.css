@@ -60,3 +60,7 @@ body {
 #partial-solutions {
     font-family: monospace;
 }
+
+#task {
+    color: darkcyan;
+}
