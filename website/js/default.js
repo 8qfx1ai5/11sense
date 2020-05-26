@@ -342,20 +342,20 @@ function saveTempSolutionBeginner() {
     let c = parseFloat(currentSolution.value)
     let analizationResult = analizeTempSolution(c)
     if (analizationResult == "") {
-        tempSolutions.innerHTML = currentSolution.value + " ?<br/>" + tempSolutions.innerHTML
+        tempSolutions.innerHTML = formatNumberForDisplay(c) + " ?<br/>" + tempSolutions.innerHTML
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
         speak(c + "?");
         //startDictation();
     } else if (c == result) {
-        tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
+        tempSolutions.innerHTML = "<span style='color: green'>" + formatNumberForDisplay(c) + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         validateResult();
         if (0 == getAutoTaskInterval()) {
             newTask();
         }
     } else {
-        tempSolutions.innerHTML = "<span style='color: green'>" + currentSolution.value + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
+        tempSolutions.innerHTML = "<span style='color: green'>" + formatNumberForDisplay(c) + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         let x = c * 100 / result
         currentSolution.placeholder = x.toFixed(1) + "%"
         speak(c + ", die Richtung stimmt");

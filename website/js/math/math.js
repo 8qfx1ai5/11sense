@@ -165,28 +165,27 @@ function sumRecursive(i, c, s) {
 
 function sumFlat(s) {
     let keys = Array();
-    let tempSum = 0;
-    for (let i = 1; i <= factor1; i++) {
-        keys.push(factor2)
-        tempSum += factor2;
-        if (tempSum == s) {
-            if (i == 1) {
-                return ["1⋅" + factor2.toString()]
-            }
-            return [i.toString() + "⋅" + factor2.toString()]
-        }
+    let tempProd = 0;
+    let tempFactor1 = 0;
+    let iterations = parseInt(factor1.toString().replace(".", ""), 10);
+    let iterator = factor1 / iterations;
+    do {
+        tempFactor1 = addDecimal(tempFactor1, iterator);
+        tempProd = multiplyDecimal(tempFactor1, factor2);
+    } while (tempProd < s && tempFactor1 < factor1);
+    if (tempProd == s) {
+        return [tempFactor1.toString() + "⋅" + factor2.toString()]
     }
-    keys = Array();
-    tempSum = 0;
-    for (let j = 1; j <= factor2; j++) {
-        keys.push(factor1)
-        tempSum += factor1;
-        if (tempSum == s) {
-            if (j == 1) {
-                return ["1⋅" + factor1.toString()]
-            }
-            return [j.toString() + "⋅" + factor1.toString()]
-        }
+    tempProd = 0;
+    let tempFactor2 = 0;
+    iterations = parseInt(factor2.toString().replace(".", ""), 10);
+    iterator = factor2 / iterations;
+    do {
+        tempFactor2 = addDecimal(tempFactor2, iterator);
+        tempProd = multiplyDecimal(tempFactor2, factor1);
+    } while (tempProd < s && tempFactor2 < factor2);
+    if (tempProd == s) {
+        return [factor1.toString() + "⋅" + tempFactor2.toString()]
     }
     return []
 }
