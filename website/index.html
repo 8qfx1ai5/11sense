@@ -7,11 +7,16 @@
     <title>Dorie Agile Math</title>
     <link rel="shortcut icon" type="image/png" href="img/settings.png" />
     <link rel="stylesheet" type="text/css" href="styles/default.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="styles/desktop.css" media='screen and (min-width: 700px)' />
     <script src="js/debug.js"></script>
     <script src="js/default.js"></script>
     <script src="js/voice.js"></script>
     <script src="js/sound.js"></script>
     <script src="js/math/math.js"></script>
+    <!-- production -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    <!-- development -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
 </head>
 
 <body>
@@ -20,49 +25,51 @@
             <h1>D<img id="settings-image" src="img/settings.png" />rie</h1>
             <p>Agile Math Training</p>
         </header>
-        <div id="Solution" style="display: none;" onclick="toggleSolution()">
-            <h2>Solutions</h2>
-            <h3 id="Solution-task"></h3>
-            <p id="partial-solutions"></p>
-        </div>
-        <div id="nav" class="hidden">
-            <h2 onclick="toggleNav()">Options</h2>
-            <div id="control">
-                <button id="toggleSolution" title="Show the solution and steps as a hint.">How to use<br /><span
+        <div id="content">
+            <div id="Solution" style="display: none;" onclick="toggleSolution()">
+                <h2>Solutions</h2>
+                <h3 id="Solution-task"></h3>
+                <p id="partial-solutions"></p>
+            </div>
+            <div id="nav" class="hidden">
+                <h2 onclick="toggleNav()">Options</h2>
+                <div id="control">
+                    <button id="toggleSolution" title="Show the solution and steps as a hint.">How to use<br /><span
                         class="button-sub">(Manual)</span></button>
-                <button id="voiceMode" title="Use voice recognition instead of keyboard input." onclick="enterFullscreen();toggleVoiceMode()">Voice is <span class="hidden b-label-status" id="voice-button-on">ON</span><span id="voice-button-off" class="b-label-status">OFF</span><br /><span
-                        class="button-sub">(beta)</span></button>
-                <button id="soundMode" title="Use audio output for tasks and status feedback." onclick="toggleSoundMode();">Sound is  <span class="hidden b-label-status" id="sound-button-on">ON</span><span id="sound-button-off" class="b-label-status">OFF</span><br /><span class="button-sub">(beta)</span></button>
-                <button id="button-decimalPlaces" title="Allow randomly decimal places in the task.">Decimal Places <span
-                    class="hidden b-label-status" id="decimalPlaces-button-on">ON</span><span
-                    id="decimalPlaces-button-off" class="b-label-status">OFF</span><br /><span
-                    class="button-sub">(random)</span></button>
-                <button id="impress" title="Print legal information and credits.">Legal Notice<br /><span
-                        class="button-sub">(Imprint)</span></button>
-                <button id="impress" title="Get information about how to contact." onclick="window.open('https://paypal.me/pools/c/8pfcrOnyif')">Feedback, Bugs<br />& Support..</button>
-                <button id="button-debug" title="Switch between debug mode and default." class="hidden debugging">Debugging is  <span class="hidden b-label-status" id="debug-button-on">ON</span><span id="debug-button-off" class="b-label-status">OFF</span><br/><span></span></button>
+                    <button id="voiceMode" title="Use voice recognition instead of keyboard input." onclick="enterFullscreen();toggleVoiceMode()">Voice is <span class="hidden b-label-status" id="voice-button-on">ON</span><span id="voice-button-off" class="b-label-status">OFF</span><br /><span
+                            class="button-sub">(beta)</span></button>
+                    <button id="soundMode" title="Use audio output for tasks and status feedback." onclick="toggleSoundMode();">Sound is  <span class="hidden b-label-status" id="sound-button-on">ON</span><span id="sound-button-off" class="b-label-status">OFF</span><br /><span class="button-sub">(beta)</span></button>
+                    <button id="button-decimalPlaces" title="Allow randomly decimal places in the task.">Decimal Places <span
+                                class="hidden b-label-status" id="decimalPlaces-button-on">ON</span><span
+                                id="decimalPlaces-button-off" class="b-label-status">OFF</span><br /><span
+                                class="button-sub">(random)</span></button>
+                    <button id="impress" title="Print legal information and credits.">Legal Notice<br /><span
+                                    class="button-sub">(Imprint)</span></button>
+                    <button id="impress" title="Get information about how to contact." onclick="window.open('https://paypal.me/pools/c/8pfcrOnyif')">Feedback, Bugs<br />& Support..</button>
+                    <button id="button-debug" title="Switch between debug mode and default." class="hidden debugging">Debugging is  <span class="hidden b-label-status" id="debug-button-on">ON</span><span id="debug-button-off" class="b-label-status">OFF</span><br/><span></span></button>
+                </div>
+                <div id="config">
+                    <p><span class="config-label">auto task after:</span><input class="config" type="number" id="autoTaskInput" name="autoTaskInput" placeholder="-" value="5" oninput="saveAutoTaskInterval()" />
+                        <span>sec.</span></p>
+                    <p><span class="config-label"># of digits:</span><input class="config" type="number" id="f1" name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};config.scrollIntoView(true);"
+                            oninput="newTask(false)" />
+                        <input class="config" type="number" id="f2" name="factor2" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};config.scrollIntoView(true);" oninput="newTask(false)"
+                        /></p>
+                </div>
             </div>
-            <div id="config">
-                <p><span class="config-label">auto task after:</span><input class="config" type="number" id="autoTaskInput" name="autoTaskInput" placeholder="-" value="5" oninput="saveAutoTaskInterval()" />
-                    <span>sec.</span></p>
-                <p><span class="config-label"># of digits:</span><input class="config" type="number" id="f1" name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};config.scrollIntoView(true);"
-                        oninput="newTask(false)" />
-                    <input class="config" type="number" id="f2" name="factor2" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};config.scrollIntoView(true);" oninput="newTask(false)"
-                    /></p>
-            </div>
-        </div>
-        <div id="trainer-page">
-            <section id="task">
-                <p id="current-task" onclick="newTask()"></p>
-            </section>
-            <section id="input" class="speech">
-                <img id="mic-image" class="hidden" src="img/32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
-                <input type="number" id="solution" name="solution" placeholder="=" onkeyup="guessInput()" onselect="return false;" onfocus="return false;" />
-            </section>
-            <section>
-                <p id="temp-solutions" onclick="toggleSolution()"></p>
-            </section>
+            <div id="trainer-page">
+                <section id="task">
+                    <p id="current-task" onclick="newTask()"></p>
+                </section>
+                <section id="input" class="speech">
+                    <img id="mic-image" class="hidden" src="img/32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
+                    <input type="number" id="solution" name="solution" placeholder="=" onkeyup="guessInput()" onselect="return false;" onfocus="return false;" />
+                </section>
+                <section>
+                    <p id="temp-solutions" onclick="toggleSolution()"></p>
+                </section>
 
+            </div>
         </div>
     </div>
     <script src="js/default_events.js"></script>

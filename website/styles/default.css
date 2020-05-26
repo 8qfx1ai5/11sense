@@ -189,6 +189,7 @@ body {
     background-color: black;
     /* padding: 10px 10px 40px 10px; */
     width: 100%;
+    min-width: 350px;
     position: absolute;
     left: 0px;
     z-index: 10;
