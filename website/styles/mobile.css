@@ -36,7 +36,7 @@ button {
     display: inline-block;
     font-size: 1.5em;
     cursor: pointer;
-    width: 100%;
+    width: 95%;
     color: #d7ba7d;
     margin-top: 5px;
     /* height: 3em; */
@@ -172,22 +172,22 @@ body {
 }
 
 #trainer-page {
-    width: 45%;
-    max-width: 400px;
-    margin: auto;
-    display: inline-block;
-    margin: 10px;
-    vertical-align: top;
+    /* display: none; */
+    height: calc(100% - 5.5em);
+    overflow: auto;
+    /* position: absolute; */
+    width: 100%;
+    min-width: 330px;
 }
 
 #config {
-    margin: 10px auto;
-    /* width: 350px; */
+    width: 95%;
+    margin: auto;
     text-align: left;
 }
 
 #config p {
-    margin: 5px 0px 2px 0px;
+    margin: 10px auto;
 }
 
 #control {
@@ -196,22 +196,21 @@ body {
 }
 
 .hidden {
-    display: none !important;
+    display: none;
 }
 
 #nav {
     background-color: black;
-    padding: 10px 10px 40px 10px;
-    min-width: 300px;
+    /* padding: 10px 10px 40px 10px; */
+    width: 100%;
+    min-width: 330px;
     position: absolute;
-    left: 10px;
+    left: 0px;
     z-index: 10;
-    border: 1px solid #d7ba7d;
-    top: 10px;
-    height: calc(100% - 4em);
+    /* border: 1px solid #d7ba7d; */
+    /* top: 0px; */
+    height: calc(100% - 5.5em);
     overflow: auto;
-    max-width: 30%;
-    width: 45%;
 }
 
 #input {

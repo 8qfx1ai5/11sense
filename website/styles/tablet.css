@@ -48,7 +48,9 @@ button {
 
 h2 {
     font-size: 1.8em;
-    margin: 0.5em;
+    margin: 0em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
 }
 
 .b-label-status {
@@ -63,15 +65,17 @@ h2 {
 
 header {
     color: #d7ba7d;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
+    height: 5em;
+    border-bottom: 3px solid #d7ba7d;
 }
 
 header p {
-    margin-top: 5px;
+    margin: 0em;
 }
 
 h1 {
-    margin-bottom: 5px;
+    margin: 0em;
 }
 
 button:focus {
@@ -110,10 +114,12 @@ button:focus {
 }
 
 #wrapper {
-    width: 350px;
+    width: 100%;
+    min-width: 330px;
     margin: auto;
     text-align: center;
     /* margin-top: 10%; */
+    max-width: 650px;
 }
 
 #task {
@@ -166,14 +172,24 @@ body {
     outline: none !important;
 }
 
+#trainer-page {
+    width: 45%;
+    max-width: 400px;
+    margin: auto;
+    display: inline-block;
+    margin: 10px;
+    vertical-align: top;
+}
+
 #config {
     margin: 10px auto;
-    width: 350px;
+    /* width: 350px; */
     text-align: left;
 }
 
 #config p {
-    margin: 5px 0px 2px 0px;
+    width: 95%;
+    margin: 10px auto;
 }
 
 #control {
@@ -182,23 +198,30 @@ body {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 #nav {
     background-color: black;
     /* padding: 10px 10px 40px 10px; */
-    width: 100%;
-    min-width: 350px;
+    /* min-width: 100%; */
     position: absolute;
-    left: 0px;
+    /* left: 0px; */
     z-index: 10;
-    /* border: 1px solid #d7ba7d; */
-    top: 0px;
+    border: 1px solid #d7ba7d;
+    /* top: 0px; */
+    height: calc(100% - 5.5em);
+    overflow: auto;
+    max-width: 648px;
+    margin: auto;
+    /* width: 45%; */
 }
 
 #input {
     margin-bottom: 1em;
+    width: 90%;
+    margin: auto;
+    max-width: 20em;
 }
 
 #input img {
@@ -219,7 +242,7 @@ body {
 #temp-solutions {
     display: inline-block;
     font-size: x-large;
-    height: 15em;
+    /* height: 15em; */
 }
 
 #settings-image {
@@ -227,4 +250,10 @@ body {
     /* padding-top: 1em; */
     display: inline-block;
     /* vertical-align: sub; */
+}
+
+#content {
+    max-width: 650px;
+    margin: auto;
+    width: 100%;
 }
