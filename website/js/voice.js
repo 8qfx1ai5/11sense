@@ -42,9 +42,14 @@ function startDictation() {
                 wasCanceledByMute = true;
                 recognition.abort();
             } else {
-                currentSolution.placeholder = e.results[e.results.length - 1][0].transcript.trim();
+                let currentResult = e.results[e.results.length - 1][0].transcript.trim();
+                if (currentResult.length <= 10) {
+                    currentSolution.placeholder = currentResult;
+                } else {
+                    currentSolution.placeholder = currentResult.substring(0, 8) + "..";
+                }
 
-                if (e.results[e.results.length - 1][0].transcript.trim() == "stop") {
+                if (currentResult == "stop") {
                     toggleVoiceMode();
                 }
 
