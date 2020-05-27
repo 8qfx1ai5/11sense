@@ -52,9 +52,12 @@ body {
     font-family: inherit;
 }
 
-#nav {
-    background-color: black;
+#control {
     border-color: #d7ba7d;
+}
+
+#nav {
+    background-color: #252526;
 }
 
 #partial-solutions {

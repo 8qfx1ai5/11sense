@@ -150,6 +150,8 @@ body {
 #control {
     /* width: 350px; */
     margin: auto;
+    overflow: auto;
+    height: calc(100% - 5em);
 }
 
 .hidden {
@@ -165,7 +167,6 @@ body {
     /* border: 1px solid; */
     /* top: 0px; */
     height: calc(100% - 5.5em);
-    overflow: auto;
     max-width: 648px;
     margin: auto;
     /* width: 45%; */

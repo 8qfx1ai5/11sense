@@ -59,14 +59,14 @@
                                     class="button-sub">(Imprint)</span></button>
                     <button id="impress" title="Get information about how to contact." onclick="window.open('https://paypal.me/pools/c/8pfcrOnyif')">Feedback, Bugs<br />& Support..</button>
                     <button id="button-debug" title="Switch between debug mode and default." class="hidden debugging">Debugging is  <span class="hidden b-label-status" id="debug-button-on">ON</span><span id="debug-button-off" class="b-label-status">OFF</span><br/><span></span></button>
-                </div>
-                <div id="config">
-                    <p><span class="config-label">auto task after:</span><input class="config" type="number" id="autoTaskInput" name="autoTaskInput" placeholder="-" value="5" oninput="saveAutoTaskInterval()" />
-                        <span>sec.</span></p>
-                    <p><span class="config-label"># of digits:</span><input class="config" type="number" id="f1" name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};config.scrollIntoView(true);"
-                            oninput="newTask(false)" />
-                        <input class="config" type="number" id="f2" name="factor2" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};config.scrollIntoView(true);" oninput="newTask(false)"
-                        /></p>
+                    <div id="config">
+                        <p><span class="config-label">auto task after:</span><input class="config" type="number" id="autoTaskInput" name="autoTaskInput" placeholder="-" value="5" oninput="saveAutoTaskInterval()" />
+                            <span>sec.</span></p>
+                        <p><span class="config-label"># of digits:</span><input class="config" type="number" id="f1" name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};config.scrollIntoView(true);"
+                                oninput="newTask(false)" />
+                            <input class="config" type="number" id="f2" name="factor2" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};config.scrollIntoView(true);" oninput="newTask(false)"
+                            /></p>
+                    </div>
                 </div>
             </div>
             <div id="trainer-page">
