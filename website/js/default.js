@@ -170,7 +170,7 @@ function updateView() {
 }
 
 function updateViewSolution() {
-    currentTask.innerHTML = formatNumberForDisplay(factor1) + " ⋅ " + formatNumberForDisplay(factor2) + " <span class='mainColor'>=</span> <span class='valid'>" + formatNumberForDisplay(result) + " ✓</span>"
+    currentTask.innerHTML = "<span class='mainColor'>" + formatNumberForDisplay(factor1) + " ⋅ " + formatNumberForDisplay(factor2) + " =</span> <span class='valid'>" + formatNumberForDisplay(result) + " ✓</span>"
     speak(getRandomElement(successMessages), 1);
     currentSolution.value = ""
     currentSolution.placeholder = ""
@@ -387,25 +387,6 @@ function analizeTempSolution(s) {
         keys[i] = keys[i].replace(/[.]/g, ",");
     }
     return keys.join("+")
-}
-
-function toggleNav() {
-    if (navigation.classList.contains("hidden")) {
-        showNav();
-    } else {
-        hideNav();
-        currentSolution.focus();
-    }
-}
-
-function showNav() {
-    navigation.classList.remove("hidden");
-    hideSolution();
-    navigation.focus();
-}
-
-function hideNav() {
-    navigation.classList.add("hidden")
 }
 
 function clearSolutions() {

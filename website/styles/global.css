@@ -8,20 +8,25 @@ header p {
     margin: 0em;
 }
 
-header .floatLeft {
+#header-main {
+    margin: auto;
+}
+
+#header-left {
     position: absolute;
     top: 0px;
     left: 0px;
-    width: 45%;
+    width: 33%;
     text-align: left;
 }
 
-header .floatRight {
+#header-right {
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 45%;
+    width: 33%;
     text-align: right;
+    z-index: 100;
 }
 
 #settings-image {
@@ -30,7 +35,6 @@ header .floatRight {
     /* padding-top: 1em; */
     display: inline-block;
     /* vertical-align: sub; */
-    opacity: 0.3;
 }
 
 #stats-image {
@@ -39,7 +43,6 @@ header .floatRight {
     /* padding-top: 1em; */
     display: inline-block;
     /* vertical-align: sub; */
-    opacity: 0.3;
 }
 
 #task {
@@ -49,4 +52,8 @@ header .floatRight {
 #current-task {
     margin-top: 1.5em;
     margin-bottom: 0em;
+}
+
+.inactive-page-icon {
+    opacity: 0.3;
 }

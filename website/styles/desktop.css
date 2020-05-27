@@ -162,11 +162,11 @@ body {
     right: 10px;
     z-index: 40;
     border: 1px solid;
-    top: 10px;
-    height: calc(100% - 4em);
+    height: calc(100% - 9em);
     overflow: auto;
     max-width: 30%;
     width: 45%;
+    margin-top: 15px;
 }
 
 #input {

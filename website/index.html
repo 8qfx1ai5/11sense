@@ -16,6 +16,7 @@
     <script src="js/voice.js"></script>
     <script src="js/sound.js"></script>
     <script src="js/math/math.js"></script>
+    <script src="js/page/page.js"></script>
     <!-- production -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
     <!-- development -->
@@ -25,15 +26,15 @@
 <body>
     <div id="wrapper">
         <header id="header">
-            <div>
-                <h1>Dorie</h1>
-                <p>Agile Math Training</p>
+            <div id="header-main">
+                <h1 onclick="backToMainPage()">Dorie</h1>
+                <p onclick="backToMainPage()">Agile Math Training</p>
             </div>
-            <div class="floatLeft">
-                <img id="stats-image" src="img/stats_100x100.png" />
+            <div id="header-left">
+                <img id="stats-image" src="img/stats_100x100.png" class="inactive-page-icon" />
             </div>
-            <div class="floatRight" onclick="toggleNav()">
-                <img id="settings-image" src="img/settings_100x100.png" />
+            <div id="header-right" onclick="toggleNav()">
+                <img id="settings-image" src="img/settings_100x100.png" class="inactive-page-icon" />
             </div>
         </header>
         <div id="content">
@@ -83,6 +84,7 @@
             </div>
         </div>
     </div>
+    <script src="js/page/page_event.js"></script>
     <script src="js/default_events.js"></script>
     <script src="js/debug_events.js"></script>
     <script src="js/voice_events.js"></script>
