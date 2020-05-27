@@ -12,6 +12,9 @@
         isDebugMode && console.log("current location hash: '" + window.location.hash + "'");
 
         switch (window.location.hash) {
+            case "#welcome":
+                setMainPageLocation();
+                return;
             case "":
                 backToMainPage();
                 break;
@@ -40,6 +43,9 @@ function getTouches(evt) {
 }
 
 function handleTouchStart(evt) {
+    if (firstClick) {
+        return;
+    }
     const firstTouch = getTouches(evt)[0];
     xDown = firstTouch.clientX;
     yDown = firstTouch.clientY;
