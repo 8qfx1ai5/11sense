@@ -6,13 +6,17 @@
     document.addEventListener('touchmove', handleTouchMove, false);
 
     window.addEventListener('popstate', function(e) {
+        if (isDesktopMode()) {
+            return;
+        }
         isDebugMode && console.log("current location hash: '" + window.location.hash + "'");
+
         switch (window.location.hash) {
             case "":
-                backToMainPage(true);
+                backToMainPage();
                 break;
             case "#nav":
-                showNav(true);
+                showNav();
                 break;
         }
     });
@@ -46,9 +50,9 @@ function handleTouchMove(evt) {
 
     if (Math.abs(xDiff) > Math.abs(yDiff)) { /*most significant*/
         if (xDiff > 0) {
-            showNav();
+            clickNavPage();
         } else {
-            backToMainPage();
+            clickMainPage();
         }
     } else {
         if (yDiff > 0) {

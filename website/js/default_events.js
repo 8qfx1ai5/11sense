@@ -27,7 +27,7 @@
             currentSolution.focus();
         } else if (e.keyCode == '79') {
             // o
-            toggleNav();
+            clickNavPage();
         } else if (e.keyCode == '70') {
             // f
             toggleFullScreen();

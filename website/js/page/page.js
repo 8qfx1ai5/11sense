@@ -1,6 +1,10 @@
 let settingsImage;
 let headerMain;
 
+function isDesktopMode() {
+    return 1100 <= screen.width
+}
+
 function toggleNav() {
     if (navigation.classList.contains("hidden")) {
         showNav();
@@ -9,48 +13,64 @@ function toggleNav() {
     }
 }
 
-function showNav(action = false) {
-    if (action) {
-        navigation.classList.remove("hidden");
-        hideSolution();
-        settingsImage.classList.remove("inactive-page-icon");
-        if (screen.width < 1100) {
-            hideMainPage(true);
-        }
-        navigation.focus();
-    } else {
-        window.location.assign("#nav");
+function showNav() {
+    navigation.classList.remove("hidden");
+    hideSolution();
+    settingsImage.classList.remove("inactive-page-icon");
+    if (screen.width < 1100) {
+        hideMainPage();
     }
+    navigation.focus();
 }
 
 function hideNav(action = false) {
-    if (action) {
-        navigation.classList.add("hidden")
-        settingsImage.classList.add("inactive-page-icon");
+    navigation.classList.add("hidden")
+    settingsImage.classList.add("inactive-page-icon");
+}
+
+function backToMainPage() {
+    showMainPage();
+    hideNav();
+}
+
+function showMainPage() {
+    headerMain.classList.remove("inactive-page-icon");
+    currentSolution.focus();
+}
+
+function hideMainPage() {
+    headerMain.classList.add("inactive-page-icon");
+    currentSolution.blur();
+}
+
+function clickMainPage() {
+    document.getElementById('mainPageTrigger').click();
+}
+
+function clickNavPage() {
+    document.getElementById('header-right').click();
+}
+
+function onClickMainPage() {
+    if (!isDesktopMode()) {
+        setMainPageLocation();
+    }
+}
+
+function onClickNavPage() {
+    if (isDesktopMode()) {
+        toggleNav();
     } else {
-        window.location.replace('#');
+        setNavPageLocation();
     }
 }
 
-function backToMainPage(action = false) {
-    if (action) {
-        showMainPage(true);
-        hideNav(true);
-    } else {
-        window.location.replace('#');
-    }
+function setMainPageLocation() {
+    console.log("set main page location");
+    window.location.replace('#');
 }
 
-function showMainPage(action = true) {
-    if (action) {
-        headerMain.classList.remove("inactive-page-icon");
-        currentSolution.focus();
-    }
-}
-
-function hideMainPage(action = true) {
-    if (action) {
-        headerMain.classList.add("inactive-page-icon");
-        currentSolution.blur();
-    }
+function setNavPageLocation() {
+    console.log("set nav page location");
+    window.location.assign("#nav");
 }

@@ -27,13 +27,13 @@
     <div id="wrapper">
         <header id="header">
             <div id="header-main">
-                <h1 onclick="backToMainPage()">Dorie</h1>
-                <p onclick="backToMainPage()">Agile Math Training</p>
+                <h1 id="mainPageTrigger" onclick="onClickMainPage()">Dorie</h1>
+                <p onclick="onClickMainPage()">Agile Math Training</p>
             </div>
             <div id="header-left">
                 <img id="stats-image" src="img/stats_100x100.png" class="inactive-page-icon" />
             </div>
-            <div id="header-right" onclick="toggleNav()">
+            <div id="header-right" onclick="onClickNavPage()">
                 <img id="settings-image" src="img/settings_100x100.png" class="inactive-page-icon" />
             </div>
         </header>
@@ -44,7 +44,7 @@
                 <p id="partial-solutions"></p>
             </div>
             <div id="nav" class="hidden">
-                <h2 onclick="toggleNav()">Options</h2>
+                <h2>Options</h2>
                 <div id="control">
                     <button id="button-debug" title="Switch between debug mode and default." class="hidden debugging">Debugging is  <span class="hidden b-label-status" id="debug-button-on">ON</span><span id="debug-button-off" class="b-label-status">OFF</span><br/><span></span></button>
                     <button id="howToUse" title="Get an introduction about the navigation and features.">How to use<br /><span
