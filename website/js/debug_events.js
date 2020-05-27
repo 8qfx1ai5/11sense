@@ -11,16 +11,16 @@
     isDeveloperMode = localStorage.getItem('isDeveloperMode') != "true";
     toggleDeveloperMode();
 
-    headerDebug.addEventListener('click', function(e) {
+    headerMainDebug.addEventListener('click', function(e) {
         if (e.detail >= 8) {
             toggleDeveloperMode();
             alert('Mode switched.');
         }
     });
 
-    headerDebug.addEventListener('touchstart', function(e) {
+    headerMainDebug.addEventListener('touchstart', function(e) {
         let now = performance.now();
-        if (!devModeClickCounterStart || now - devModeClickCounterStart > 2000) {
+        if (!devModeClickCounterStart || now - devModeClickCounterStart > 1500) {
             devModeClickCounterStart = now;
             devModeClickCounter = 1;
             return;
