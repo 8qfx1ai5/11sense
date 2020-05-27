@@ -127,13 +127,15 @@ function validateResult() {
             if (2000 < now - endTime) {
                 // more than 2 seconds are passed (omit fullscreen error)
                 if (interval < now - endTime) {
-                    newTask(false);
+                    currentTask.click();
+                    // newTask(false);
                     clearInterval(autoTaskTimer);
                 }
             } else {
                 // less than 2 seconds are passed
                 if (interval < now - endTime) {
-                    newTask();
+                    currentTask.click();
+                    // newTask();
                     clearInterval(autoTaskTimer);
                 }
             }

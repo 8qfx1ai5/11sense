@@ -12,8 +12,6 @@
         isDebugMode && console.log("current location hash: '" + window.location.hash + "'");
 
         switch (window.location.hash) {
-            case "#welcome":
-                return;
             case "":
                 backToMainPage();
                 break;
