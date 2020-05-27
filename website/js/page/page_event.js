@@ -22,7 +22,12 @@
     });
 
     if (!isDesktopMode()) {
-        clickMainPage();
+        window.addEventListener('click', function(e) {
+            if (firstClick) {
+                firstClick = false;
+                clickMainPage();
+            }
+        });
     }
 })();
 
