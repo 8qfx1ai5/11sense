@@ -14,10 +14,10 @@ function showNav() {
     navigation.classList.remove("hidden");
     hideSolution();
     settingsImage.classList.remove("inactive-page-icon");
-    navigation.focus();
     if (screen.width < 1100) {
         hideMainPage();
     }
+    navigation.focus();
 }
 
 function hideNav() {
