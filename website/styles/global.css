@@ -41,3 +41,12 @@ header .floatRight {
     /* vertical-align: sub; */
     opacity: 0.3;
 }
+
+#task {
+    height: 4em;
+}
+
+#current-task {
+    margin-top: 1.5em;
+    margin-bottom: 0em;
+}
