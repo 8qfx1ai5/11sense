@@ -13,7 +13,6 @@
 
         switch (window.location.hash) {
             case "#welcome":
-                setMainPageLocation();
                 return;
             case "":
                 backToMainPage();
@@ -43,9 +42,12 @@ function getTouches(evt) {
 }
 
 function handleTouchStart(evt) {
-    if (firstClick) {
-        return;
-    }
+    window.addEventListener('click', function(e) {
+        if (firstClick) {
+            firstClick = false;
+            window.location.assign("#welcome");
+        }
+    });
     const firstTouch = getTouches(evt)[0];
     xDown = firstTouch.clientX;
     yDown = firstTouch.clientY;
