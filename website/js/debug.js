@@ -1,8 +1,13 @@
-let isDebugMode = false;
+let isLoggingMode = false;
 let isDeveloperMode = false;
-let debugButton;
-let debugButtonOn;
-let debugButtonOff;
+let loggingButton;
+let loggingButtonOn;
+let loggingButtonOff;
+let headerDebug;
+let headerMainDebug;
+let loggingMax = 2000;
+let devModeClickCounter = 0;
+let devModeClickCounterStart;
 
 function toggleDeveloperMode() {
     if (isDeveloperMode) {
@@ -13,35 +18,55 @@ function toggleDeveloperMode() {
 }
 
 function activateDeveloperMode() {
+    log("activate dev mode");
     isDeveloperMode = true;
     localStorage.setItem('isDeveloperMode', true);
-    debugButton.classList.remove("hidden");
+    loggingButton.classList.remove("hidden");
+    headerMainDebug.classList.add("debugging");
 }
 
 function deactivateDeveloperMode() {
+    log("deactivate dev mode");
     isDeveloperMode = false;
     localStorage.setItem('isDeveloperMode', false);
-    debugButton.classList.add("hidden");
+    loggingButton.classList.add("hidden");
+    headerMainDebug.classList.remove("debugging");
 }
 
-function toggleDebugMode() {
-    if (isDebugMode) {
-        deactivateDebugMode();
+function toggleLoggingMode() {
+    if (isLoggingMode) {
+        deactivateLoggingMode();
     } else {
-        activateDebugMode();
+        activateLoggingMode();
     }
 }
 
-function activateDebugMode() {
-    isDebugMode = true;
-    localStorage.setItem('isDebugMode', true);
-    debugButtonOn.classList.remove("hidden");
-    debugButtonOff.classList.add("hidden");
+function activateLoggingMode() {
+    isLoggingMode = true;
+    localStorage.setItem('isLoggingMode', true);
+    loggingButtonOn.classList.remove("hidden");
+    loggingButtonOff.classList.add("hidden");
+    log("activate logging");
 }
 
-function deactivateDebugMode() {
-    isDebugMode = false;
-    localStorage.setItem('isDebugMode', false);
-    debugButtonOn.classList.add("hidden");
-    debugButtonOff.classList.remove("hidden");
+function deactivateLoggingMode() {
+    log("deactivate logging");
+    isLoggingMode = false;
+    localStorage.setItem('isLoggingMode', false);
+    loggingButtonOn.classList.add("hidden");
+    loggingButtonOff.classList.remove("hidden");
+}
+
+function log(s) {
+    if (isLoggingMode) {
+        console.log(s);
+        let currentLog = localStorage.getItem("debugLog");
+        if (!currentLog) {
+            currentLog = "";
+        }
+        if (loggingMax < currentLog.length) {
+            currentLog = currentLog.substr(currentLog.length - loggingMax);
+        }
+        localStorage.setItem("debugLog", currentLog + "|||" + new Date().toLocaleString() + ": " + s);
+    }
 }

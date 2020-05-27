@@ -31,14 +31,14 @@ function startDictation() {
         recognition.start();
 
         recognition.onstart = function() {
-            isDebugMode && console.log("start recognition");
+            log("start recognition");
             setStatusPlaceholder();
         }
 
         recognition.onresult = function(e) {
-            isDebugMode && console.log(e.results);
+            log(e.results);
             if (isVoiceModeTempMuted) {
-                isDebugMode && console.log("muted.. dictation restart");
+                log("muted.. dictation restart");
                 wasCanceledByMute = true;
                 recognition.abort();
             } else {
@@ -65,7 +65,7 @@ function startDictation() {
                             currentSolution.value = c;
                             saveTempSolution();
                             setStatusPlaceholder()
-                            isDebugMode && console.log("ok.. dictation restart");
+                            log("ok.. dictation restart");
                             recognition.stop();
                             return;
                         }
@@ -74,19 +74,19 @@ function startDictation() {
                     let input = e.results[e.results.length - 1][0].transcript.replace("Uhr", "");
                     input = input.replace("/", " ");
                     if (guessVoiceInput(input.replace(/ /g, "").replace(/[/]/g, ""))) {
-                        isDebugMode && console.log("ok.. dictation restart");
+                        log("ok.. dictation restart");
                         recognition.stop();
                         return;
                     }
                     let parts = input.split(" ");
                     for (let i = 0; i < parts.length; i++) {
-                        isDebugMode && console.log(parts[i]);
+                        log(parts[i]);
                         if (guessVoiceInput(parts[i])) {
-                            isDebugMode && console.log("ok.. dictation restart");
+                            log("ok.. dictation restart");
                             recognition.stop();
                             return;
                         }
-                        isDebugMode && console.log("invalid");
+                        log("invalid");
                     }
                 }
             }
@@ -94,13 +94,13 @@ function startDictation() {
 
         recognition.onerror = function(e) {
             currentSolution.placeholder = "🙉";
-            isDebugMode && console.log("uppps.. dictation interrupted");
+            log("uppps.. dictation interrupted");
             recognition.stop();
         }
 
         recognition.onend = function(e) {
             currentSolution.placeholder = "🙉";
-            isDebugMode && console.log("dictation finished");
+            log("dictation finished");
             if (!wasCanceledByMute) {
                 startDictation();
             }
@@ -190,10 +190,12 @@ function toggleVoiceMute() {
 
 function muteVoice() {
     isVoiceModeTempMuted = true;
-    isDebugMode && console.log("muted = " + isVoiceModeTempMuted);
+    if (isVoiceModeActive) {
+        log("muted = " + isVoiceModeTempMuted);
+    }
     setStatusPlaceholder();
     if (typeof recognition == "object") {
-        isDebugMode && console.log("recognition aborted by mute");
+        log("recognition aborted by mute");
         wasCanceledByMute = true;
         recognition.abort();
     }
@@ -201,7 +203,9 @@ function muteVoice() {
 
 function remuteVoice() {
     isVoiceModeTempMuted = false;
-    isDebugMode && console.log("muted = " + isVoiceModeTempMuted);
+    if (isVoiceModeActive) {
+        log("muted = " + isVoiceModeTempMuted);
+    }
     setStatusPlaceholder();
     if (wasCanceledByMute) {
         wasCanceledByMute = false;

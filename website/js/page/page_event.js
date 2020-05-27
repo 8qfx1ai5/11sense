@@ -9,7 +9,7 @@
         if (isDesktopMode()) {
             return;
         }
-        isDebugMode && console.log("current location hash: '" + window.location.hash + "'");
+        log("new location hash: '" + window.location.hash + "'");
 
         switch (window.location.hash) {
             case "":

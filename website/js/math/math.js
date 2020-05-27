@@ -23,6 +23,7 @@ function toggleDecimalPlacesMode() {
 }
 
 function activateDecimalPlacesMode() {
+    log("activate decimal places");
     isDecimalPlacesMode = true;
     localStorage.setItem('isDecimalPlacesModeActive', true);
     decimalPlacesButtonLabelOn.classList.remove("hidden");
@@ -30,6 +31,7 @@ function activateDecimalPlacesMode() {
 }
 
 function deactivateDecimalPlacesMode() {
+    log("deactivate decimal places");
     isDecimalPlacesMode = false;
     localStorage.setItem('isDecimalPlacesModeActive', false);
     decimalPlacesButtonLabelOn.classList.add("hidden");
@@ -191,6 +193,7 @@ function sumFlat(s) {
 }
 
 function newTask(setFocus = true) {
+    log("start new task");
     if (setFocus) {
         hideNav();
         currentSolution.focus();
@@ -231,7 +234,8 @@ function newTask(setFocus = true) {
     resetInput()
     calculateFractions()
     remuteVoice();
-    //startDictation();
+
+    log("new task created. f1='" + factor1 + "' f2='" + factor2 + "' res='" + result + "'");
 }
 
 function arrayIncludesCombination(a, f1, f2) {

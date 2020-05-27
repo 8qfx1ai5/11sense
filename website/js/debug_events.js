@@ -1,15 +1,16 @@
 (function() {
-    debugButton = document.getElementById('button-debug');
-    debugButtonOn = document.getElementById('debug-button-on');
-    debugButtonOff = document.getElementById('debug-button-off');
+    loggingButton = document.getElementById('button-logging');
+    loggingButtonOn = document.getElementById('logging-button-on');
+    loggingButtonOff = document.getElementById('logging-button-off');
+    headerDebug = document.getElementById("header");
+    headerMainDebug = document.getElementById("header-main");
 
     // localStorage.setItem("debugLog", "");
-    isDebugMode = localStorage.getItem('isDebugMode') != "true";
-    toggleDebugMode();
+    isLoggingMode = localStorage.getItem('isLoggingMode') != "true";
+    toggleLoggingMode();
     isDeveloperMode = localStorage.getItem('isDeveloperMode') != "true";
     toggleDeveloperMode();
 
-    let headerDebug = document.getElementById("header");
     headerDebug.addEventListener('click', function(e) {
         if (e.detail >= 8) {
             toggleDeveloperMode();
@@ -17,21 +18,37 @@
         }
     });
 
-    debugButton.addEventListener('click', function(e) {
-        toggleDebugMode();
+    headerDebug.addEventListener('touchstart', function(e) {
+        let now = performance.now();
+        if (!devModeClickCounterStart || now - devModeClickCounterStart > 3000) {
+            devModeClickCounterStart = now;
+            devModeClickCounter = 1;
+            return;
+        }
+        devModeClickCounter++;
+        if (8 <= devModeClickCounter) {
+            toggleDeveloperMode();
+            alert('Mode switched.');
+            devModeClickCounter = 0;
+            devModeClickCounterStart = 0;
+        }
     });
 
-    window.onsecuritypolicyviolation = function(error, url, line) {
-        if (isDebugMode) {
-            let issue = 'ERR:' + error + ' URL:' + url + ' L:' + line;
-            localStorage.setItem("debugLog", localStorage.getItem("debugLog") + "\n" + issue);
-        }
-    };
+    loggingButton.addEventListener('click', function(e) {
+        toggleLoggingMode();
+    });
 
-    window.onerror = function(error, url, line) {
-        if (isDebugMode) {
-            let issue = 'ERR:' + error + ' URL:' + url + ' L:' + line;
-            localStorage.setItem("debugLog", localStorage.getItem("debugLog") + "\n" + issue);
-        }
-    };
+    // window.onsecuritypolicyviolation = function(error, url, line) {
+    //     if (isLoggingMode) {
+    //         let issue = 'ERR:' + error + ' URL:' + url + ' L:' + line;
+    //         localStorage.setItem("debugLog", localStorage.getItem("debugLog") + "\n" + issue);
+    //     }
+    // };
+
+    // window.onerror = function(error, url, line) {
+    //     if (isLoggingMode) {
+    //         let issue = 'ERR:' + error + ' URL:' + url + ' L:' + line;
+    //         localStorage.setItem("debugLog", localStorage.getItem("debugLog") + "\n" + issue);
+    //     }
+    // };
 })();

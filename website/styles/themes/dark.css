@@ -12,6 +12,7 @@ header {
 
 .debugging {
     color: darkred;
+    opacity: 1 !important;
 }
 
 button {
