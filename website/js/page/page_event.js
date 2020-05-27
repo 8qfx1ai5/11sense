@@ -22,15 +22,6 @@
                 break;
         }
     });
-
-    if (!isDesktopMode()) {
-        window.addEventListener('touch', function(e) {
-            if (firstClick) {
-                firstClick = false;
-                window.location.assign("#welcome");
-            }
-        });
-    }
 })();
 
 
@@ -42,6 +33,14 @@ function getTouches(evt) {
 }
 
 function handleTouchStart(evt) {
+    if (clickCount == 0) {
+        clickCount++;
+        window.location.assign("#welcome");
+        return
+    } else if (clickCount == 1) {
+        window.location.replace('#');
+        clickCount++;
+    }
     const firstTouch = getTouches(evt)[0];
     xDown = firstTouch.clientX;
     yDown = firstTouch.clientY;

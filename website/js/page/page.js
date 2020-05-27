@@ -1,6 +1,6 @@
 let settingsImage;
 let headerMain;
-let firstClick = true;
+let clickCount = 0;
 
 function isDesktopMode() {
     return 1100 <= screen.width
