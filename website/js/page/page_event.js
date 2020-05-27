@@ -25,8 +25,7 @@
         window.addEventListener('click', function(e) {
             if (firstClick) {
                 firstClick = false;
-                clickNavPage();
-                clickMainPage();
+                window.location.assign("#welcome");
             }
         });
     }
