@@ -66,11 +66,11 @@ function onClickNavPage() {
 }
 
 function setMainPageLocation() {
-    //log("set main page location");
+    log("set main page location", 3);
     window.location.replace('#');
 }
 
 function setNavPageLocation() {
-    //log("set nav page location");
+    log("set nav page location", 3);
     window.location.assign("#nav");
 }

@@ -5,7 +5,8 @@ let loggingButtonOn;
 let loggingButtonOff;
 let headerDebug;
 let headerMainDebug;
-let loggingMax = 2000;
+let loggingMax = 10000;
+let logLevel = 2
 let devModeClickCounter = 0;
 let devModeClickCounterStart;
 
@@ -57,8 +58,8 @@ function deactivateLoggingMode() {
     loggingButtonOff.classList.remove("hidden");
 }
 
-function log(s) {
-    if (isLoggingMode) {
+function log(s, l = 2) {
+    if (isLoggingMode && l <= logLevel) {
         console.log(s);
         let currentLog = localStorage.getItem("debugLog");
         if (!currentLog) {

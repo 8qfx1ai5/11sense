@@ -20,7 +20,7 @@
 
     headerDebug.addEventListener('touchstart', function(e) {
         let now = performance.now();
-        if (!devModeClickCounterStart || now - devModeClickCounterStart > 3000) {
+        if (!devModeClickCounterStart || now - devModeClickCounterStart > 2000) {
             devModeClickCounterStart = now;
             devModeClickCounter = 1;
             return;

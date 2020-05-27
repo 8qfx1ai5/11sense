@@ -9,7 +9,7 @@
         if (isDesktopMode()) {
             return;
         }
-        log("new location hash: '" + window.location.hash + "'");
+        log("new location hash: '" + window.location.hash + "'", 3);
 
         switch (window.location.hash) {
             case "":
