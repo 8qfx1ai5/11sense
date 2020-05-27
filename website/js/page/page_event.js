@@ -5,6 +5,18 @@
     document.addEventListener('touchstart', handleTouchStart, false);
     document.addEventListener('touchmove', handleTouchMove, false);
 
+    window.addEventListener('popstate', function(e) {
+        isDebugMode && console.log("current location hash: '" + window.location.hash + "'");
+        switch (window.location.hash) {
+            case "":
+                backToMainPage(true);
+                break;
+            case "#nav":
+                showNav(true);
+                break;
+        }
+    });
+
 })();
 
 

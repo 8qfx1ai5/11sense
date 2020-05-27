@@ -9,37 +9,48 @@ function toggleNav() {
     }
 }
 
-function showNav() {
-    navigation.classList.remove("hidden");
-    hideSolution();
-    settingsImage.classList.remove("inactive-page-icon");
-    if (screen.width < 1100) {
-        hideMainPage();
-    }
-    navigation.focus();
-}
-
-function hideNav() {
-    navigation.classList.add("hidden")
-    settingsImage.classList.add("inactive-page-icon");
-    if (screen.width < 1100) {
-        showMainPage();
+function showNav(action = false) {
+    if (action) {
+        navigation.classList.remove("hidden");
+        hideSolution();
+        settingsImage.classList.remove("inactive-page-icon");
+        if (screen.width < 1100) {
+            hideMainPage(true);
+        }
+        navigation.focus();
+    } else {
+        window.location.assign("#nav");
     }
 }
 
-function backToMainPage() {
-    showMainPage();
-    if (screen.width < 1100) {
-        hideNav();
+function hideNav(action = false) {
+    if (action) {
+        navigation.classList.add("hidden")
+        settingsImage.classList.add("inactive-page-icon");
+    } else {
+        window.location.replace('#');
     }
 }
 
-function showMainPage() {
-    headerMain.classList.remove("inactive-page-icon");
-    currentSolution.focus();
+function backToMainPage(action = false) {
+    if (action) {
+        showMainPage(true);
+        hideNav(true);
+    } else {
+        window.location.replace('#');
+    }
 }
 
-function hideMainPage() {
-    headerMain.classList.add("inactive-page-icon");
-    currentSolution.blur();
+function showMainPage(action = true) {
+    if (action) {
+        headerMain.classList.remove("inactive-page-icon");
+        currentSolution.focus();
+    }
+}
+
+function hideMainPage(action = true) {
+    if (action) {
+        headerMain.classList.add("inactive-page-icon");
+        currentSolution.blur();
+    }
 }

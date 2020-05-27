@@ -9,7 +9,8 @@
     isDeveloperMode = localStorage.getItem('isDeveloperMode') != "true";
     toggleDeveloperMode();
 
-    header.addEventListener('click', function(e) {
+    let headerDebug = document.getElementById("header");
+    headerDebug.addEventListener('click', function(e) {
         if (e.detail >= 8) {
             toggleDeveloperMode();
             alert('Mode switched.');
