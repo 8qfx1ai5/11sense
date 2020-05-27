@@ -6,7 +6,6 @@ function toggleNav() {
         showNav();
     } else {
         hideNav();
-        currentSolution.focus();
     }
 }
 
@@ -37,8 +36,10 @@ function backToMainPage() {
 
 function showMainPage() {
     headerMain.classList.remove("inactive-page-icon");
+    currentSolution.focus();
 }
 
 function hideMainPage() {
     headerMain.classList.add("inactive-page-icon");
+    currentSolution.blur();
 }
