@@ -24,7 +24,7 @@
     });
 
     if (!isDesktopMode()) {
-        window.addEventListener('click', function(e) {
+        window.addEventListener('touch', function(e) {
             if (firstClick) {
                 firstClick = false;
                 window.location.assign("#welcome");
@@ -42,12 +42,6 @@ function getTouches(evt) {
 }
 
 function handleTouchStart(evt) {
-    window.addEventListener('click', function(e) {
-        if (firstClick) {
-            firstClick = false;
-            window.location.assign("#welcome");
-        }
-    });
     const firstTouch = getTouches(evt)[0];
     xDown = firstTouch.clientX;
     yDown = firstTouch.clientY;
