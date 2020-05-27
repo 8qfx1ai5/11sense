@@ -21,6 +21,9 @@
         }
     });
 
+    if (!isDesktopMode()) {
+        clickMainPage();
+    }
 })();
 
 
