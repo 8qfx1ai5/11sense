@@ -195,7 +195,6 @@ function sumFlat(s) {
 function newTask(setFocus = true) {
     log("start new task");
     if (setFocus) {
-        hideNav();
         currentSolution.focus();
         window.scrollTo(0, 0);
         if (wasSolved && !isVoiceModeActive) {

@@ -46,7 +46,6 @@ function validateResult() {
             currentSolution.style.backgroundSize = ((now - endTime) * 125 / interval) + "%";
             if (2000 <= now - endTime && now - endTime < 2010) {
                 !isVoiceModeActive && enterFullscreen();
-                hideNav();
                 currentSolution.focus();
                 window.scrollTo(0, 0);
             }
@@ -216,7 +215,6 @@ function formatNumberForDisplay(n) {
 
 function saveTempSolutionPro() {
     currentSolution.focus();
-    hideNav();
     if (currentSolution.value == "") {
         if (!isVoiceModeActive) {
             let smiley;
@@ -255,7 +253,6 @@ function saveTempSolutionPro() {
 
 function saveTempSolutionBeginner() {
     currentSolution.focus();
-    hideNav();
     if (currentSolution.value == "") {
         if (!isVoiceModeActive) {
             let smiley;

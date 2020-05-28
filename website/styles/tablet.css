@@ -96,11 +96,10 @@ body {
     margin: 10px auto;
 }
 
-#control {
-    /* width: 350px; */
+.subpage {
     margin: auto;
-    overflow: auto;
     height: calc(100% - 5em);
+    overflow: auto;
 }
 
 .hidden {
