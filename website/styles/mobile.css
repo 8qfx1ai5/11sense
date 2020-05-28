@@ -56,26 +56,6 @@ body {
     user-select: none;
 }
 
-.config {
-    width: 20%;
-    display: inline-block;
-    padding: 0;
-    border: none;
-    height: 2em;
-    text-align: center;
-    vertical-align: middle;
-    border-radius: 25px;
-}
-
-.config-label {
-    display: inline-block;
-    width: 50%;
-}
-
-.config:focus {
-    outline: none !important;
-}
-
 #trainer-page {
     /* display: none; */
     height: calc(100% - 5.5em);
@@ -99,10 +79,6 @@ body {
     margin: auto;
     height: calc(100% - 5em);
     overflow: auto;
-}
-
-.hidden {
-    display: none;
 }
 
 .page {

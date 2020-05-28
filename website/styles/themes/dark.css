@@ -15,7 +15,7 @@ header {
     opacity: 1 !important;
 }
 
-button {
+.option-item {
     background-color: dimgrey;
     color: #d7ba7d;
     font-family: inherit;
@@ -48,9 +48,15 @@ body {
 }
 
 .config {
-    background-color: darkgrey;
-    color: #6e270b;
+    background-color: dimgrey;
     font-family: inherit;
+    color: #d7ba7d;
+}
+
+#f1::placeholder,
+#f2::placeholder,
+#autoTaskInput::placeholder {
+    color: #252526;
 }
 
 .subpage {

@@ -29,6 +29,10 @@ header p {
     z-index: 100;
 }
 
+.hidden {
+    display: none !important;
+}
+
 #settings-image {
     height: 2.5em;
     margin: 1em;
@@ -62,7 +66,17 @@ header p {
     text-align: left;
 }
 
-button {
+#control {
+    list-style-type: none;
+    padding: 0px;
+}
+
+#control li {
+    width: 95%;
+    margin: auto;
+}
+
+.option-item {
     line-height: 0.9em;
     border: none;
     /* padding: 15px 32px; */
@@ -71,12 +85,38 @@ button {
     display: inline-block;
     font-size: 1.5em;
     cursor: pointer;
-    width: 95%;
+    width: 100%;
     margin-top: 5px;
     /* height: 3em; */
     vertical-align: top;
     padding: 0.4em 1em 0.4em 1em;
     position: relative;
+}
+
+input.config {
+    width: 2em;
+    font-size: 1em;
+    text-align: right;
+    height: 1em;
+}
+
+.config {
+    width: 20%;
+    display: inline-block;
+    padding: 0;
+    border: none;
+    height: 2em;
+    text-align: center;
+    /* vertical-align: middle; */
+    /* border-radius: 25px; */
+}
+
+.config-label {
+    display: inline-block;
+}
+
+.config:focus {
+    outline: none !important;
 }
 
 h2 {
@@ -90,6 +130,17 @@ h2 {
     position: relative;
     /* display: inline-block; */
     float: right;
+    text-align: right;
+}
+
+input#f1,
+input#f2 {
+    width: 1em;
+    height: 1em;
+}
+
+input#f1 {
+    padding-right: 0.6em;
 }
 
 .button-sub {
