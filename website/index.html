@@ -11,10 +11,10 @@
     <link rel="stylesheet" type="text/css" href="styles/desktop.css" media='screen and (min-width: 1100px)' />
     <link rel="stylesheet" type="text/css" href="styles/global.css" />
     <link rel="stylesheet" type="text/css" href="styles/themes/dark.css" />
-    <script src="js/debug.js"></script>
-    <script src="js/default.js"></script>
-    <script src="js/voice.js"></script>
-    <script src="js/sound.js"></script>
+    <script src="js/debug/debug.js"></script>
+    <script src="js/main/main.js"></script>
+    <script src="js/voice/voice.js"></script>
+    <script src="js/sound/sound.js"></script>
     <script src="js/math/math.js"></script>
     <script src="js/page/page.js"></script>
     <!-- production -->
@@ -30,7 +30,7 @@
                 <h1 id="mainPageTrigger" onclick="onClickMainPage()">Dorie</h1>
                 <p onclick="onClickMainPage()">Agile Math Training</p>
             </div>
-            <div id="header-left">
+            <div id="header-left" onclick="onClickStatsPage()">
                 <img id="stats-image" src="img/stats_100x100.png" class="inactive-page-icon" />
             </div>
             <div id="header-right" onclick="onClickNavPage()">
@@ -43,9 +43,9 @@
                 <h3 id="Solution-task"></h3>
                 <p id="partial-solutions"></p>
             </div>
-            <div id="nav" class="hidden">
+            <div id="nav" class="hidden page">
                 <h2>Options</h2>
-                <div id="control">
+                <div id="control" class="subpage">
                     <button id="button-logging" title="Switch between debug mode and default." class="hidden debugging">Logging is  <span class="hidden b-label-status" id="logging-button-on">ON</span><span id="logging-button-off" class="b-label-status">OFF</span><br/><span></span></button>
                     <button id="howToUse" title="Get an introduction about the navigation and features.">How to use<br /><span
                         class="button-sub">(Manual)</span></button>
@@ -69,6 +69,15 @@
                     </div>
                 </div>
             </div>
+            <div id="stats" class="hidden page">
+                <h2>Statistics</h2>
+                <div class="subpage" id="history">
+                    <p>Your last results:</p>
+                    <ul id="history-list">
+
+                    </ul>
+                </div>
+            </div>
             <div id="trainer-page">
                 <section id="task">
                     <p id="current-task" onclick="newTask()"></p>
@@ -84,11 +93,11 @@
             </div>
         </div>
     </div>
-    <script src="js/debug_events.js"></script>
+    <script src="js/debug/debug_events.js"></script>
     <script src="js/page/page_event.js"></script>
-    <script src="js/default_events.js"></script>
-    <script src="js/voice_events.js"></script>
-    <script src="js/sound_events.js"></script>
+    <script src="js/main/main_events.js"></script>
+    <script src="js/voice/voice_events.js"></script>
+    <script src="js/sound/sound_events.js"></script>
     <script src="js/math/math_event.js"></script>
 </body>
 

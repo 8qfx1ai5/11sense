@@ -1,6 +1,8 @@
 (function() {
     settingsImage = document.getElementById("settings-image");
+    statsImage = document.getElementById("stats-image");
     headerMain = document.getElementById("header-main");
+    stats = document.getElementById("stats");
 
     document.addEventListener('touchstart', handleTouchStart, false);
     document.addEventListener('touchmove', handleTouchMove, false);
@@ -17,6 +19,9 @@
                 break;
             case "#nav":
                 showNav();
+                break;
+            case "#stats":
+                showStats();
                 break;
         }
     });
@@ -49,9 +54,19 @@ function handleTouchMove(evt) {
 
     if (Math.abs(xDiff) > Math.abs(yDiff)) { /*most significant*/
         if (xDiff > 0) {
-            clickNavPage();
+            /* left swipe */
+            if (isMainPageActive()) {
+                clickNavPage();
+            } else {
+                clickMainPage();
+            }
         } else {
-            clickMainPage();
+            /* right swipe */
+            if (isMainPageActive()) {
+                clickStatsPage();
+            } else {
+                clickMainPage();
+            }
         }
     } else {
         if (yDiff > 0) {

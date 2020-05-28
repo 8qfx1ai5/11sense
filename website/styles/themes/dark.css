@@ -53,11 +53,11 @@ body {
     font-family: inherit;
 }
 
-#control {
+.subpage {
     border-color: #d7ba7d;
 }
 
-#nav {
+.page {
     background-color: #252526;
 }
 

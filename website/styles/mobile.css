@@ -158,16 +158,12 @@ body {
     display: none;
 }
 
-#nav {
-    /* padding: 10px 10px 40px 10px; */
-    width: 100%;
-    min-width: 330px;
-    position: absolute;
-    left: 0px;
-    z-index: 10;
-    /* border: 1px solid; */
-    /* top: 0px; */
+.page {
     height: calc(100% - 6em);
+    z-index: 10;
+    position: absolute;
+    min-width: 330px;
+    width: 100%;
 }
 
 #input {

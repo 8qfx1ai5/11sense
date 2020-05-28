@@ -57,3 +57,7 @@ header p {
 .inactive-page-icon {
     opacity: 0.3;
 }
+
+#history {
+    text-align: left;
+}

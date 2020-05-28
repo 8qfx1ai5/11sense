@@ -147,11 +147,17 @@ body {
 }
 
 #control {
-    /* width: 350px; */
+    border-left: 1px solid;
+}
+
+#history {
+    border-right: 1px solid;
+}
+
+.subpage {
     margin: auto;
     overflow: auto;
     height: calc(100% - 3em);
-    border-left: 1px solid;
 }
 
 .hidden {
@@ -159,15 +165,22 @@ body {
 }
 
 #nav {
+    right: 10px;
+}
+
+#stats {
+    left: 10px;
+}
+
+.page {
+    margin-top: 15px;
+    width: 45%;
+    max-width: 30%;
+    height: calc(100% - 9em);
+    z-index: 40;
     padding: 10px 10px 40px 10px;
     min-width: 300px;
     position: absolute;
-    right: 10px;
-    z-index: 40;
-    height: calc(100% - 9em);
-    max-width: 30%;
-    width: 45%;
-    margin-top: 15px;
 }
 
 #input {
