@@ -110,3 +110,11 @@ button:focus {
     width: 90%;
     margin: auto;
 }
+
+#history-list li span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 90%;
+    display: block;
+}
