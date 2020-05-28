@@ -46,6 +46,10 @@ function setMainPageLocation() {
 
 // all about nav page
 
+function isNavPageActive() {
+    return !settingsImage.classList.contains("inactive-page-icon");
+}
+
 function toggleNav() {
     if (navigation.classList.contains("hidden")) {
         showNav();
@@ -88,6 +92,10 @@ function setNavPageLocation() {
 }
 
 // all about stats page
+
+function isStatsPageActive() {
+    return !statsImage.classList.contains("inactive-page-icon");
+}
 
 function setStatsPageLocation() {
     log("set stats page location", 3);

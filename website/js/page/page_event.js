@@ -55,17 +55,17 @@ function handleTouchMove(evt) {
     if (Math.abs(xDiff) > Math.abs(yDiff)) { /*most significant*/
         if (xDiff > 0) {
             /* left swipe */
-            if (isMainPageActive()) {
-                clickNavPage();
-            } else {
+            if (isStatsPageActive()) {
                 clickMainPage();
+            } else if (isMainPageActive()) {
+                clickNavPage();
             }
         } else {
             /* right swipe */
-            if (isMainPageActive()) {
-                clickStatsPage();
-            } else {
+            if (isNavPageActive()) {
                 clickMainPage();
+            } else if (isMainPageActive()) {
+                clickStatsPage();
             }
         }
     } else {

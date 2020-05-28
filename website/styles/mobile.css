@@ -20,49 +20,6 @@ input[type=number] {
     z-index: 20;
 }
 
-button {
-    line-height: 0.9em;
-    border: none;
-    /* padding: 15px 32px; */
-    text-align: left;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 1.5em;
-    cursor: pointer;
-    width: 95%;
-    margin-top: 5px;
-    /* height: 3em; */
-    vertical-align: top;
-    padding: 0.4em 1em 0.4em 1em;
-    position: relative;
-}
-
-h2 {
-    font-size: 1.8em;
-    margin: 0em;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-}
-
-.b-label-status {
-    position: relative;
-    /* display: inline-block; */
-    float: right;
-}
-
-.button-sub {
-    font-size: 0.6em;
-}
-
-h1 {
-    margin: 0em;
-    margin-top: 0.2em;
-}
-
-button:focus {
-    outline: none !important;
-}
-
 #solution {
     border: none;
     text-align: center;
