@@ -91,9 +91,8 @@ function getAutoTaskInterval() {
 }
 
 function updateView() {
-    currentTask.innerText = factor1.toString().replace(".", ",") + " ⋅ " + factor2.toString().replace(".", ",")
+    currentTask.innerHTML = formatNumberForDisplay(factor1) + " <span class='mainColor'>⋅</span> " + formatNumberForDisplay(factor2);
     speak(formatToSpeakableNumber(factor1) + " mal " + formatToSpeakableNumber(factor2), 1.1);
-    //currentSolution.focus();
 }
 
 function updateViewSolution() {

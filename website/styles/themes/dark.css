@@ -50,7 +50,7 @@ body {
 .config {
     background-color: dimgrey;
     font-family: inherit;
-    color: #d7ba7d;
+    color: cyan;
 }
 
 #f1::placeholder,
@@ -73,6 +73,10 @@ body {
 
 #task {
     color: darkcyan;
+}
+
+.b-label-status {
+    color: cyan;
 }
 
 .mainColor {
