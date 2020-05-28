@@ -72,3 +72,11 @@ body {
 .mainColor {
     color: #d7ba7d;
 }
+
+#history-list {
+    color: darkcyan;
+}
+
+#history-list li span {
+    color: #d7ba7d;
+}

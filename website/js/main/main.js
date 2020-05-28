@@ -29,7 +29,8 @@ function validateResult() {
     //console.log(endTime);
     wasSolved = true;
 
-    updateViewSolution()
+    updateViewSolution();
+    pushToStatistics(factor1, factor2, result, endTime - startTime);
 
     let interval = getAutoTaskInterval();
     if (0 < interval) {
