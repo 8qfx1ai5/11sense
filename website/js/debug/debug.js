@@ -5,10 +5,14 @@ let loggingButtonOn;
 let loggingButtonOff;
 let headerDebug;
 let headerMainDebug;
-let loggingMax = 10000;
-let logLevel = 2
+let loggingMax = 99;
+let logLevel = 3
 let devModeClickCounter = 0;
 let devModeClickCounterStart;
+let displayOptionLoggings;
+let displaySelector;
+let loggingListId = "logging-list";
+let loggingLocalStorageKey = "debugLog";
 
 function toggleDeveloperMode() {
     if (isDeveloperMode) {
@@ -24,6 +28,8 @@ function activateDeveloperMode() {
     localStorage.setItem('isDeveloperMode', true);
     loggingButton.classList.remove("hidden");
     headerMainDebug.classList.add("debugging");
+    displayOptionLoggings.classList.remove("hidden");
+    displaySelector.classList.add("debugging");
 }
 
 function deactivateDeveloperMode() {
@@ -32,6 +38,9 @@ function deactivateDeveloperMode() {
     localStorage.setItem('isDeveloperMode', false);
     loggingButton.classList.add("hidden");
     headerMainDebug.classList.remove("debugging");
+    displayOptionLoggings.classList.add("hidden");
+    displaySelector.classList.remove("debugging");
+    document.getElementById(displaySelectorId).value = "history";
 }
 
 function toggleLoggingMode() {
@@ -58,16 +67,68 @@ function deactivateLoggingMode() {
     loggingButtonOff.classList.remove("hidden");
 }
 
-function log(s, l = 2) {
-    if (isLoggingMode && l <= logLevel) {
-        console.log(s);
-        let currentLog = localStorage.getItem("debugLog");
-        if (!currentLog) {
-            currentLog = "";
+/*
+    log levels:
+    1. log absolutely everything
+    2. default (most useful steps)
+    3. only verry important things
+*/
+function log(s, l = 3, onlySingleLog = false) {
+    if (isLoggingMode && logLevel <= l) {
+        switch (onlySingleLog) {
+            case "console":
+                console.log(s);
+                break;
+            case "app":
+                saveLogInLocalStorage(s);
+                updateLoggingsBasedOnLocalStorage();
+                break;
+            default:
+                console.log(s);
+                saveLogInLocalStorage(s);
+                updateLoggingsBasedOnLocalStorage();
+                break;
         }
-        if (loggingMax < currentLog.length) {
-            currentLog = currentLog.substr(currentLog.length - loggingMax);
+    }
+}
+
+function getLoggingsFromLocalStorage() {
+    let oldLoggings = localStorage.getItem(loggingLocalStorageKey);
+    if (!oldLoggings) {
+        oldLoggings = [];
+    } else {
+        try {
+            oldLoggings = JSON.parse(oldLoggings)
+        } catch (e) {
+            oldLoggings = [];
         }
-        localStorage.setItem("debugLog", currentLog + "|||" + new Date().toLocaleString() + ": " + s);
+    }
+    return oldLoggings;
+}
+
+function saveLogInLocalStorage(s) {
+    let oldLoggings = getLoggingsFromLocalStorage();
+    if (loggingMax < oldLoggings.length) {
+        oldLoggings.splice(0, oldLoggings.length - loggingMax);
+    }
+    oldLoggings.push(new Date().toLocaleString() + ": " + s);
+    localStorage.setItem(loggingLocalStorageKey, JSON.stringify(oldLoggings));
+}
+
+function updateLoggingsBasedOnLocalStorage() {
+    if (!isDeveloperMode) {
+        return;
+    }
+    let loggingList = document.getElementById(loggingListId);
+    loggingList.innerHTML = "";
+    let oldLoggings = getLoggingsFromLocalStorage();
+    for (let i = oldLoggings.length - 1; 0 <= i; i--) {
+        let entry = document.createElement('li');
+        entry.setAttribute("title", oldLoggings[i]);
+        let content = document.createElement('span');
+        let text = oldLoggings[i].substring(oldLoggings[i].indexOf(",") + 1);
+        content.appendChild(document.createTextNode(text));
+        entry.appendChild(content);
+        loggingList.append(entry);
     }
 }

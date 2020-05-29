@@ -11,7 +11,7 @@
         if (isDesktopMode()) {
             return;
         }
-        log("new location hash: '" + window.location.hash + "'", 3);
+        log("new location hash: '" + window.location.hash + "'", 1);
 
         switch (window.location.hash) {
             case "":
@@ -25,6 +25,8 @@
                 break;
         }
     });
+
+    changeDisplaySubpage();
 })();
 
 

@@ -92,7 +92,7 @@ function getAutoTaskInterval() {
 
 function updateView() {
     currentTask.innerHTML = formatNumberForDisplay(factor1) + " <span class='mainColor'>⋅</span> " + formatNumberForDisplay(factor2);
-    speak(formatToSpeakableNumber(factor1) + " mal " + formatToSpeakableNumber(factor2), 1.1);
+    speak(formatToSpeakableNumber(factor1) + " mal " + formatToSpeakableNumber(factor2), 1);
 }
 
 function updateViewSolution() {
@@ -270,7 +270,7 @@ function saveTempSolutionBeginner() {
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
-        speak(c + "?");
+        speak(formatToSpeakableNumber(c) + "?");
         //startDictation();
     } else if (c == result) {
         tempSolutions.innerHTML = "<span style='color: green'>" + formatNumberForDisplay(c) + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
@@ -282,7 +282,7 @@ function saveTempSolutionBeginner() {
         tempSolutions.innerHTML = "<span style='color: green'>" + formatNumberForDisplay(c) + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         let x = c * 100 / result
         currentSolution.placeholder = x.toFixed(1) + "%"
-        speak(c + ", die Richtung stimmt");
+        speak(formatToSpeakableNumber(c) + ", die Richtung stimmt");
         //startDictation();
     }
     currentSolution.value = ""

@@ -2,6 +2,7 @@ let settingsImage;
 let statsImage;
 let headerMain;
 let stats;
+let displaySelectorId = "display-selector";
 
 function isDesktopMode() {
     return 1100 <= screen.width
@@ -40,7 +41,7 @@ function onClickMainPage() {
 }
 
 function setMainPageLocation() {
-    log("set main page location", 3);
+    log("set main page location", 1);
     window.location.replace('#');
 }
 
@@ -87,7 +88,7 @@ function onClickNavPage() {
 }
 
 function setNavPageLocation() {
-    log("set nav page location", 3);
+    log("set nav page location", 1);
     window.location.assign("#nav");
 }
 
@@ -98,7 +99,7 @@ function isStatsPageActive() {
 }
 
 function setStatsPageLocation() {
-    log("set stats page location", 3);
+    log("set stats page location", 1);
     window.location.assign("#stats");
 }
 

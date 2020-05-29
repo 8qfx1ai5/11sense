@@ -17,6 +17,7 @@
     <script src="js/sound/sound.js"></script>
     <script src="js/math/math.js"></script>
     <script src="js/page/page.js"></script>
+    <script src="js/page/subpage.js"></script>
     <script src="js/statistics/statistics.js"></script>
     <!-- production -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
@@ -47,7 +48,7 @@
             <div id="nav" class="hidden page">
                 <h2>Options</h2>
                 <ul id="control" class="subpage">
-                    <li><button class="option-item" id="button-logging" title="Switch between debug mode and default." class="hidden debugging">Logging is  <span class="hidden b-label-status" id="logging-button-on">ON</span><span id="logging-button-off" class="b-label-status">OFF</span><br/><span></span></button>
+                    <li><button class="option-item debugging" id="button-logging" title="Switch between debug mode and default." class="hidden debugging">Logging is  <span class="hidden b-label-status" id="logging-button-on">ON</span><span id="logging-button-off" class="b-label-status">OFF</span><br/><span></span></button>
                     </li>
                     <li><button class="option-item" id="howToUse" title="Get an introduction about the navigation and features.">How to use<br /><span
                         class="button-sub">(Manual)</span></button>
@@ -84,10 +85,19 @@
                 </ul>
             </div>
             <div id="stats" class="hidden page">
-                <h2>Statistics</h2>
+                <h2><select name="display-selector" id="display-selector" onchange="changeDisplaySubpage()">
+                    <option value="history">History</option>
+                    <option value="loggings" class="hidden" id="display-option-loggings" >Loggings</option>
+                </select></h2>
                 <div class="subpage" id="history">
                     <h3>Your last results:</h3>
                     <ol reversed id="history-list">
+
+                    </ol>
+                </div>
+                <div class="subpage" id="loggings">
+                    <h3>The last logging entries:</h3>
+                    <ol reversed id="logging-list">
 
                     </ol>
                 </div>

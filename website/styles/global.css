@@ -62,10 +62,6 @@ header p {
     opacity: 0.3;
 }
 
-#history {
-    text-align: left;
-}
-
 #control {
     list-style-type: none;
     padding: 0px;
@@ -156,12 +152,13 @@ button:focus {
     outline: none !important;
 }
 
-#history h3,
-#history ul {
+.subpage h3,
+.subpage ol {
     width: 90%;
     margin: auto;
 }
 
+#logging-list li span,
 #history-list li span {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -177,4 +174,20 @@ button:focus {
     position: fixed;
     left: 0px;
     z-index: 60;
+}
+
+#display-selector {
+    color: inherit;
+    font-family: inherit;
+    background-color: inherit;
+    font-size: inherit;
+    border: none;
+}
+
+#display-selector:focus {
+    outline: none;
+}
+
+.subpage {
+    text-align: left;
 }

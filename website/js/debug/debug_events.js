@@ -4,8 +4,11 @@
     loggingButtonOff = document.getElementById('logging-button-off');
     headerDebug = document.getElementById("header");
     headerMainDebug = document.getElementById("header-main");
+    displayOptionLoggings = document.getElementById("display-option-loggings");
+    displaySelector = document.getElementById("display-selector");
 
     // localStorage.setItem("debugLog", "");
+    localStorage.setItem('isLoggingMode', "true");
     isLoggingMode = localStorage.getItem('isLoggingMode') != "true";
     toggleLoggingMode();
     isDeveloperMode = localStorage.getItem('isDeveloperMode') != "true";

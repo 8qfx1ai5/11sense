@@ -11,7 +11,7 @@ header {
 }
 
 .debugging {
-    color: darkred;
+    color: darkred !important;
     opacity: 1 !important;
 }
 
@@ -83,10 +83,12 @@ body {
     color: #d7ba7d;
 }
 
+#logging-list,
 #history-list {
     color: darkcyan;
 }
 
+#logging-list li span,
 #history-list li span {
     color: #d7ba7d;
 }

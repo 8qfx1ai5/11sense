@@ -234,7 +234,7 @@ function newTask(setFocus = true) {
     calculateFractions()
     remuteVoice();
 
-    log("new task created. f1='" + factor1 + "' f2='" + factor2 + "' res='" + result + "'");
+    log("task created: " + factor1 + "*" + factor2 + "=" + result + "");
 }
 
 function arrayIncludesCombination(a, f1, f2) {

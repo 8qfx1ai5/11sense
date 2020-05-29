@@ -36,9 +36,9 @@ function startDictation() {
         }
 
         recognition.onresult = function(e) {
-            log(e.results);
+            log(e.results, 2, "console");
             if (isVoiceModeTempMuted) {
-                log("muted.. dictation restart");
+                log("muted.. dictation abort");
                 wasCanceledByMute = true;
                 recognition.abort();
             } else {
@@ -52,41 +52,43 @@ function startDictation() {
                 if (currentResult == "stop") {
                     toggleVoiceMode();
                 }
-
+                let detected = e.results[e.results.length - 1][0].transcript;
                 if (e.results[e.results.length - 1].isFinal) {
-                    if (["neue Aufgabe", "neu", "next", "weiter"].includes(e.results[e.results.length - 1][0].transcript.trim())) {
+                    if (["neue Aufgabe", "neu", "next", "weiter"].includes(detected.trim())) {
                         newTask(false);
                         return;
                     }
                     if (!wasSolved) {
-                        let tempInput = e.results[e.results.length - 1][0].transcript.replace("Uhr", "").replace(",", ".").trim();
-                        let c = parseFloat(tempInput);
-                        if (c) {
-                            currentSolution.value = c;
+                        let foundNumber = guessFinalVoiceInput(detected);
+                        log("final vr='" + detected + "' => '" + foundNumber + "'");
+                        if (foundNumber) {
+                            currentSolution.value = foundNumber;
                             saveTempSolution();
                             setStatusPlaceholder()
-                            log("ok.. dictation restart");
+                            log("ok.. dictation restart", 1);
                             recognition.stop();
                             return;
                         }
                     }
                 } else {
-                    let input = e.results[e.results.length - 1][0].transcript.replace("Uhr", "");
+                    let input = detected.replace("Uhr", "");
                     input = input.replace("/", " ");
-                    if (guessVoiceInput(input.replace(/ /g, "").replace(/[/]/g, ""))) {
-                        log("ok.. dictation restart");
+                    let inputTogether = input.replace(/ /g, "").replace(/[/]/g, "");
+                    let parts = input.split(" ");
+                    log("vr='" + detected + "' => (t: '" + inputTogether + "' p: '" + parts.join("|") + "')");
+                    if (guessVoiceInput(inputTogether)) {
+                        log("ok.. dictation restart", 1);
                         recognition.stop();
                         return;
                     }
-                    let parts = input.split(" ");
                     for (let i = 0; i < parts.length; i++) {
-                        log(parts[i]);
+                        log(parts[i], 1);
                         if (guessVoiceInput(parts[i])) {
-                            log("ok.. dictation restart");
+                            log("ok.. dictation restart", 1);
                             recognition.stop();
                             return;
                         }
-                        log("invalid");
+                        log("invalid", 1);
                     }
                 }
             }
@@ -94,13 +96,13 @@ function startDictation() {
 
         recognition.onerror = function(e) {
             currentSolution.placeholder = "🙉";
-            log("uppps.. dictation interrupted");
+            log("uppps.. dictation interrupted", 1);
             recognition.stop();
         }
 
         recognition.onend = function(e) {
             currentSolution.placeholder = "🙉";
-            log("dictation finished");
+            log("dictation finished", 1);
             if (!wasCanceledByMute) {
                 startDictation();
             }
@@ -127,6 +129,15 @@ function guessInput() {
     if (currentSolution.value.length >= result.toString().length) {
         saveTempSolution()
     }
+}
+
+function guessFinalVoiceInput(s) {
+    let tempInput = s.replace("Uhr", "").replace(",", ".").trim();
+    let c = parseFloat(tempInput);
+    if (c) {
+        return c;
+    }
+    return false;
 }
 
 function guessVoiceInput(s) {
@@ -191,7 +202,7 @@ function toggleVoiceMute() {
 function muteVoice() {
     isVoiceModeTempMuted = true;
     if (isVoiceModeActive) {
-        log("muted = " + isVoiceModeTempMuted);
+        log("muted = " + isVoiceModeTempMuted, 2);
     }
     setStatusPlaceholder();
     if (typeof recognition == "object") {
@@ -204,7 +215,7 @@ function muteVoice() {
 function remuteVoice() {
     isVoiceModeTempMuted = false;
     if (isVoiceModeActive) {
-        log("muted = " + isVoiceModeTempMuted);
+        log("muted = " + isVoiceModeTempMuted, 2);
     }
     setStatusPlaceholder();
     if (wasCanceledByMute) {
