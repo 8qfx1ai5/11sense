@@ -132,7 +132,7 @@ function guessInput() {
 }
 
 function guessFinalVoiceInput(s) {
-    let tempInput = s.replace("Uhr", "").replace(",", ".").trim();
+    let tempInput = s.replace("Uhr", "").replace(",", ".").replace(/ /g, "");
     let c = parseFloat(tempInput);
     if (c) {
         return c;
