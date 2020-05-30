@@ -131,6 +131,10 @@ function guessInput() {
     }
 }
 
+// TODO: unit tests
+// "0, 366" => "0.366"
+// "8 Uhr" => "8"
+// "drei" => "3"
 function guessFinalVoiceInput(s) {
     let tempInput = s.replace("Uhr", "").replace(",", ".").replace(/ /g, "");
     let c = parseFloat(tempInput);

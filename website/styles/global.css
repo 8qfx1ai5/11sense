@@ -18,6 +18,7 @@ header p {
     left: 0px;
     width: 33%;
     text-align: left;
+    margin-left: 1.5em;
 }
 
 #header-right {
@@ -27,6 +28,7 @@ header p {
     width: 33%;
     text-align: right;
     z-index: 100;
+    margin-right: 1.5em;
 }
 
 .hidden {
@@ -35,7 +37,7 @@ header p {
 
 #settings-image {
     height: 2.5em;
-    margin: 1em;
+    /* margin: 1em; */
     /* padding-top: 1em; */
     display: inline-block;
     /* vertical-align: sub; */
@@ -43,7 +45,7 @@ header p {
 
 #stats-image {
     height: 2.5em;
-    margin: 1em;
+    /* margin: 1em; */
     /* padding-top: 1em; */
     display: inline-block;
     /* vertical-align: sub; */

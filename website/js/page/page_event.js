@@ -38,6 +38,9 @@ function getTouches(evt) {
 }
 
 function handleTouchStart(evt) {
+    if (isDesktopMode()) {
+        return;
+    }
     const firstTouch = getTouches(evt)[0];
     xDown = firstTouch.clientX;
     yDown = firstTouch.clientY;

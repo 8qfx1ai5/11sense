@@ -32,12 +32,14 @@
                 <h1 id="mainPageTrigger" onclick="onClickMainPage()">Dorie</h1>
                 <p onclick="onClickMainPage()">Agile Math Training</p>
             </div>
-            <div id="header-left" onclick="onClickStatsPage()">
-                <img id="stats-image" src="img/stats_100x100.png" class="inactive-page-icon" />
-            </div>
-            <div id="header-right" onclick="onClickNavPage()">
-                <img id="settings-image" src="img/settings_100x100.png" class="inactive-page-icon" />
-            </div>
+            <figure id="header-left" onclick="onClickStatsPage()" class="inactive-page-icon">
+                <img id="stats-image" alt="Statistics" src="img/stats_100x100.png" />
+                <!-- <figcaption>Stats</figcaption> -->
+            </figure>
+            <figure id="header-right" onclick="onClickNavPage()" class="inactive-page-icon">
+                <img id="settings-image" alt="Options" src="img/settings_100x100.png" />
+                <!-- <figcaption>Options</figcaption> -->
+            </figure>
         </header>
         <div id="content">
             <div id="Solution" style="display: none;" onclick="toggleSolution()">

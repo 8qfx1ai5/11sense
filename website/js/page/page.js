@@ -3,6 +3,8 @@ let statsImage;
 let headerMain;
 let stats;
 let displaySelectorId = "display-selector";
+let tagIdHeaderRight = "header-right"
+let tagIdHeaderLeft = "header-left"
 
 function isDesktopMode() {
     return 1100 <= screen.width
@@ -48,21 +50,21 @@ function setMainPageLocation() {
 // all about nav page
 
 function isNavPageActive() {
-    return !settingsImage.classList.contains("inactive-page-icon");
+    return !document.getElementById(tagIdHeaderRight).classList.contains("inactive-page-icon");
 }
 
 function toggleNav() {
-    if (navigation.classList.contains("hidden")) {
-        showNav();
-    } else {
+    if (isNavPageActive()) {
         hideNav();
+    } else {
+        showNav();
     }
 }
 
 function showNav() {
     navigation.classList.remove("hidden");
     hideSolution();
-    settingsImage.classList.remove("inactive-page-icon");
+    document.getElementById(tagIdHeaderRight).classList.remove("inactive-page-icon");
     if (!isDesktopMode()) {
         hideMainPage();
         hideStats();
@@ -71,12 +73,12 @@ function showNav() {
 }
 
 function hideNav() {
-    navigation.classList.add("hidden")
-    settingsImage.classList.add("inactive-page-icon");
+    navigation.classList.add("hidden");
+    document.getElementById(tagIdHeaderRight).classList.add("inactive-page-icon");
 }
 
 function clickNavPage() {
-    document.getElementById('header-right').click();
+    document.getElementById(tagIdHeaderRight).click();
 }
 
 function onClickNavPage() {
@@ -95,7 +97,7 @@ function setNavPageLocation() {
 // all about stats page
 
 function isStatsPageActive() {
-    return !statsImage.classList.contains("inactive-page-icon");
+    return !document.getElementById(tagIdHeaderLeft).classList.contains("inactive-page-icon");
 }
 
 function setStatsPageLocation() {
@@ -104,17 +106,17 @@ function setStatsPageLocation() {
 }
 
 function toggleStats() {
-    if (stats.classList.contains("hidden")) {
-        showStats();
-    } else {
+    if (isStatsPageActive()) {
         hideStats();
+    } else {
+        showStats();
     }
 }
 
 function showStats() {
     stats.classList.remove("hidden");
     hideSolution();
-    statsImage.classList.remove("inactive-page-icon");
+    document.getElementById(tagIdHeaderLeft).classList.remove("inactive-page-icon");
     if (!isDesktopMode()) {
         hideMainPage();
         hideNav();
@@ -124,11 +126,11 @@ function showStats() {
 
 function hideStats() {
     stats.classList.add("hidden")
-    statsImage.classList.add("inactive-page-icon");
+    document.getElementById(tagIdHeaderLeft).classList.add("inactive-page-icon");
 }
 
 function clickStatsPage() {
-    document.getElementById('header-left').click();
+    document.getElementById(tagIdHeaderLeft).click();
 }
 
 function onClickStatsPage() {

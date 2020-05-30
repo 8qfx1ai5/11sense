@@ -79,8 +79,11 @@ body {
     border-left: 1px solid;
 }
 
-.subpage {
+#history {
     border-right: 1px solid;
+}
+
+.subpage {
     margin: auto;
     overflow: auto;
     height: calc(100% - 3em);
