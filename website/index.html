@@ -19,10 +19,6 @@
     <script src="js/page/page.js"></script>
     <script src="js/page/subpage.js"></script>
     <script src="js/statistics/statistics.js"></script>
-    <!-- production -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
-    <!-- development -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
 </head>
 
 <body>
@@ -34,11 +30,9 @@
             </div>
             <figure id="header-left" onclick="onClickStatsPage()" class="inactive-page-icon">
                 <img id="stats-image" alt="Statistics" src="img/stats_100x100.png" />
-                <!-- <figcaption>Stats</figcaption> -->
             </figure>
             <figure id="header-right" onclick="onClickNavPage()" class="inactive-page-icon">
                 <img id="settings-image" alt="Settings" src="img/settings3_100x100.png" />
-                <!-- <figcaption>Settings</figcaption> -->
             </figure>
         </header>
         <div id="content">
@@ -76,7 +70,7 @@
                                     class="button-sub">(random)</span></button>
                         </li>
                         <li><button class="option-item" id="voiceMode" title="Use voice recognition instead of keyboard input." onclick="enterFullscreen();toggleVoiceMode()">Dorie listens<span class="hidden b-label-status" id="voice-button-on">ON</span><span id="voice-button-off" class="b-label-status">OFF</span><br /><span
-                            class="button-sub">(talk to Dorie with our voice)</span></button>
+                            class="button-sub">(talk to Dorie with your voice)</span></button>
                         </li>
                         <li><button class="option-item" id="soundMode" title="Use audio output for tasks and status feedback." onclick="toggleSoundMode();">Dorie speaks<span class="hidden b-label-status" id="sound-button-on">ON</span><span id="sound-button-off" class="b-label-status">OFF</span><br /><span class="button-sub">(get audio feedback for tasks)</span></button>
                         </li>
