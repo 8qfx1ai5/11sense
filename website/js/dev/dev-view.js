@@ -30,6 +30,9 @@ let dev = {
         Array.prototype.forEach.call(document.getElementsByClassName("dev-hidden"), function(element) {
             element.classList.remove("hidden");
         });
+
+        // update logging view
+        this.updateLoggingsBasedOnLocalStorage();
     },
 
     deactivateDeveloperMode: function() {
