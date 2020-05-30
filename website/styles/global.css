@@ -64,12 +64,12 @@ header p {
     opacity: 0.3;
 }
 
-#control {
+.subpage ul {
     list-style-type: none;
     padding: 0px;
 }
 
-#control li {
+.subpage li {
     width: 95%;
     margin: auto;
 }
@@ -154,6 +154,10 @@ button:focus {
     outline: none !important;
 }
 
+button:disabled {
+    color: black;
+}
+
 .subpage h3,
 .subpage ol {
     width: 90%;
@@ -178,7 +182,7 @@ button:focus {
     z-index: 60;
 }
 
-#display-selector {
+.selector {
     color: inherit;
     font-family: inherit;
     background-color: inherit;
@@ -186,7 +190,7 @@ button:focus {
     border: none;
 }
 
-#display-selector:focus {
+.selector:focus {
     outline: none;
 }
 

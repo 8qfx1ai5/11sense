@@ -2,7 +2,8 @@ let settingsImage;
 let statsImage;
 let headerMain;
 let stats;
-let displaySelectorId = "display-selector";
+let tagIdDisplaySelector = "display-selector";
+let tagIdSettingsSelector = "settings-selector";
 let tagIdHeaderRight = "header-right"
 let tagIdHeaderLeft = "header-left"
 

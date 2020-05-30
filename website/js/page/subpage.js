@@ -1,43 +1,56 @@
-let registeredDisplaySubpages = ["history", "loggings"]
+let registeredDisplaySubpages = ["history", "loggings"];
+let registeredSettingsSubpages = ["basicSettings", "advancedSettings", "devSettings"];
+
+// all about the display page
 
 function changeDisplaySubpage() {
-    let selectionObject = document.getElementById(displaySelectorId);
+    let selectionObject = document.getElementById(tagIdDisplaySelector);
     let currentSelection = selectionObject.value;
     log("change display subpage to '" + currentSelection + "'", 2);
     let pageFound = false;
     registeredDisplaySubpages.forEach(subpage => {
         if (currentSelection == subpage) {
-            window["show" + subpage.charAt(0).toUpperCase() + subpage.slice(1) + "Subpage"]();
+            let subpageElement = document.getElementById(subpage);
+            subpageElement.classList.remove("hidden");
             pageFound = true;
         } else {
-            window["hide" + subpage.charAt(0).toUpperCase() + subpage.slice(1) + "Subpage"]();
+            let subpageElement = document.getElementById(subpage);
+            subpageElement.classList.add("hidden");
         }
     });
     if (!pageFound) {
-        showHistorySubpage();
+        changeDisplaySubpageToDefault();
     }
 }
 
-function showHistorySubpage() {
-    log("showHistorySubpage()", 1);
-    let subpage = document.getElementById("history");
-    subpage.classList.remove("hidden");
+function changeDisplaySubpageToDefault() {
+    document.getElementById(registeredDisplaySubpages[0]).classList.remove("hidden");
+    document.getElementById(tagIdDisplaySelector) = registeredDisplaySubpages[0];
 }
 
-function hideHistorySubpage() {
-    log("hideHistorySubpage()", 1);
-    let subpage = document.getElementById("history");
-    subpage.classList.add("hidden");
+// all about the settings page
+
+function changeSettingsSubpage() {
+    let selectionObject = document.getElementById(tagIdSettingsSelector);
+    let currentSelection = selectionObject.value;
+    log("change settings subpage to '" + currentSelection + "'", 2);
+    let pageFound = false;
+    registeredSettingsSubpages.forEach(subpage => {
+        if (currentSelection == subpage) {
+            let subpageElement = document.getElementById(subpage);
+            subpageElement.classList.remove("hidden");
+            pageFound = true;
+        } else {
+            let subpageElement = document.getElementById(subpage);
+            subpageElement.classList.add("hidden");
+        }
+    });
+    if (!pageFound) {
+        changeSettingsSubpageToDefault();
+    }
 }
 
-function showLoggingsSubpage() {
-    log("showLoggingsSubpage()", 1);
-    let subpage = document.getElementById("loggings");
-    subpage.classList.remove("hidden");
-}
-
-function hideLoggingsSubpage() {
-    log("hideLoggingsSubpage()", 1);
-    let subpage = document.getElementById("loggings");
-    subpage.classList.add("hidden");
+function changeSettingsSubpageToDefault() {
+    document.getElementById(registeredSettingsSubpages[0]).classList.remove("hidden");
+    document.getElementById(tagIdSettingsSelector) = registeredSettingsSubpages[0];
 }

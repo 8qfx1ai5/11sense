@@ -27,6 +27,7 @@
     });
 
     changeDisplaySubpage();
+    changeSettingsSubpage();
 })();
 
 

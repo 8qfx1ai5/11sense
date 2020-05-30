@@ -11,8 +11,8 @@
     <link rel="stylesheet" type="text/css" href="styles/desktop.css" media='screen and (min-width: 1100px)' />
     <link rel="stylesheet" type="text/css" href="styles/global.css" />
     <link rel="stylesheet" type="text/css" href="styles/themes/dark.css" />
-    <script src="js/debug/debug.js"></script>
     <script src="js/main/main.js"></script>
+    <script src="js/main/system.js"></script>
     <script src="js/voice/voice.js"></script>
     <script src="js/sound/sound.js"></script>
     <script src="js/math/math.js"></script>
@@ -28,7 +28,7 @@
 <body>
     <div id="wrapper">
         <header id="header">
-            <div id="header-main">
+            <div id="header-main" class="dev-change">
                 <h1 id="mainPageTrigger" onclick="onClickMainPage()">Dorie</h1>
                 <p onclick="onClickMainPage()">Agile Math Training</p>
             </div>
@@ -37,8 +37,8 @@
                 <!-- <figcaption>Stats</figcaption> -->
             </figure>
             <figure id="header-right" onclick="onClickNavPage()" class="inactive-page-icon">
-                <img id="settings-image" alt="Options" src="img/settings3_100x100.png" />
-                <!-- <figcaption>Options</figcaption> -->
+                <img id="settings-image" alt="Settings" src="img/settings3_100x100.png" />
+                <!-- <figcaption>Settings</figcaption> -->
             </figure>
         </header>
         <div id="content">
@@ -48,48 +48,70 @@
                 <p id="partial-solutions"></p>
             </div>
             <div id="nav" class="hidden page">
-                <h2>Options</h2>
-                <ul id="control" class="subpage">
-                    <li><button class="option-item debugging" id="button-logging" title="Switch between debug mode and default." class="hidden debugging">Logging is  <span class="hidden b-label-status" id="logging-button-on">ON</span><span id="logging-button-off" class="b-label-status">OFF</span><br/><span></span></button>
-                    </li>
-                    <li><button class="option-item" id="howToUse" title="Get an introduction about the navigation and features.">How to use<br /><span
-                        class="button-sub">(Manual)</span></button>
-                    </li>
-                    <li><button class="option-item" id="voiceMode" title="Use voice recognition instead of keyboard input." onclick="enterFullscreen();toggleVoiceMode()">Dorie listens<span class="hidden b-label-status" id="voice-button-on">ON</span><span id="voice-button-off" class="b-label-status">OFF</span><br /><span
-                            class="button-sub">(beta)</span></button>
-                    </li>
-                    <li><button class="option-item" id="soundMode" title="Use audio output for tasks and status feedback." onclick="toggleSoundMode();">Dorie speaks<span class="hidden b-label-status" id="sound-button-on">ON</span><span id="sound-button-off" class="b-label-status">OFF</span><br /><span class="button-sub">(beta)</span></button>
-                    </li>
-                    <li><button class="option-item" id="button-decimalPlaces" title="Allow randomly decimal places in the task.">Decimal Places <span
-                                class="hidden b-label-status" id="decimalPlaces-button-on">ON</span><span
-                                id="decimalPlaces-button-off" class="b-label-status">OFF</span><br /><span
-                                class="button-sub">(random)</span></button>
-                    </li>
-                    <li>
-                        <button class="option-item">
-                            <span class="config-label">New Task After:</span><span class="b-label-status"><input class="config" type="number" id="autoTaskInput" name="autoTaskInput" placeholder="-" value="5" oninput="saveAutoTaskInterval()" /></span><br /><span
-                            class="button-sub">(time to wait in sec.)</span></button>
-                        </button>
-                    </li>
-                    <li>
-                        <button class="option-item">
-                            <span class="config-label">Number Sizes:</span><span class="b-label-status"><input class="config" type="number" id="f1" name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};"
-                            oninput="newTask(false)" />⋅<input class="config" type="number" id="f2" name="factor2" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};"
-                            oninput="newTask(false)" /></span><br /><span
-                            class="button-sub">(2⋅3=xx⋅yyy)</span>
-                        </button>
-                    </li>
-                    <li><button class="option-item" id="impress" title="Print legal information and credits.">Legal Notice<br /><span
-                                    class="button-sub">(Imprint)</span></button>
-                    </li>
-                    <li><button class="option-item" id="impress" title="Get information about how to contact." onclick="window.open('https://paypal.me/pools/c/8pfcrOnyif')">Feedback, Bugs<br />& Support..</button>
-                    </li>
-                </ul>
+                <h2><select name="settings-selector" id="settings-selector" class="selector dev-change" onchange="changeSettingsSubpage()">
+                    <option value="basicSettings">Basic Settings</option>
+                    <option value="advancedSettings" >More Settings</option>
+                    <option value="devSettings" class="dev-hidden" >Dev Settings</option>
+                </select></h2>
+                <div class="subpage" id="basicSettings">
+                    <ul id="basic-settings-list">
+                        <li><button disabled class="option-item" id="levelModeButton" title="Select your experience level.">Level<span id="level-button-status" class="b-label-status">1</span><br /><span
+                            class="button-sub">(select difficulty)</span></button>
+                        </li>
+                        <li><button disabled class="option-item" id="conversationMode" title="Talk with Dorie.">Conversation<span
+                            class="hidden b-label-status" id="conversation-button-on">ON</span><span
+                            id="conversation-button-off" class="b-label-status">OFF</span><br /><span
+                            class="button-sub">(talk with Dorie)</span></button>
+                        </li>
+                        <li><button type="button" disabled class="option-item" id="howToUse" title="Get an introduction about the navigation and features.">How to use<br /><span
+                            class="button-sub">(Manual)</span></button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="subpage" id="advancedSettings">
+                    <ul id="advanced-settings-list">
+                        <li><button class="option-item" id="button-decimalPlaces" title="Allow randomly decimal places in the task.">Decimal Places <span
+                                    class="hidden b-label-status" id="decimalPlaces-button-on">ON</span><span
+                                    id="decimalPlaces-button-off" class="b-label-status">OFF</span><br /><span
+                                    class="button-sub">(random)</span></button>
+                        </li>
+                        <li><button class="option-item" id="voiceMode" title="Use voice recognition instead of keyboard input." onclick="enterFullscreen();toggleVoiceMode()">Dorie listens<span class="hidden b-label-status" id="voice-button-on">ON</span><span id="voice-button-off" class="b-label-status">OFF</span><br /><span
+                            class="button-sub">(talk to Dorie with our voice)</span></button>
+                        </li>
+                        <li><button class="option-item" id="soundMode" title="Use audio output for tasks and status feedback." onclick="toggleSoundMode();">Dorie speaks<span class="hidden b-label-status" id="sound-button-on">ON</span><span id="sound-button-off" class="b-label-status">OFF</span><br /><span class="button-sub">(get audio feedback for tasks)</span></button>
+                        </li>
+                        <li>
+                            <button class="option-item">
+                                <span class="config-label">New Task After:</span><span class="b-label-status"><input class="config" type="number" id="autoTaskInput" name="autoTaskInput" placeholder="-" value="5" oninput="saveAutoTaskInterval()" /></span><br /><span
+                                class="button-sub">(time to wait in sec.)</span></button>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="option-item">
+                                <span class="config-label">Number Sizes:</span><span class="b-label-status"><input class="config" type="number" id="f1" name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};"
+                                oninput="newTask(false)" />⋅<input class="config" type="number" id="f2" name="factor2" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};"
+                                oninput="newTask(false)" /></span><br /><span
+                                class="button-sub">(2⋅3=xx⋅yyy)</span>
+                            </button>
+                        </li>
+                        <li><button disabled class="option-item" id="impress" title="Print legal information and credits.">Legal Notice<br /><span
+                                        class="button-sub">(Imprint)</span></button>
+                        </li>
+                        <li><button class="option-item" id="impress" title="Get information about how to contact." onclick="window.open('https://paypal.me/pools/c/8pfcrOnyif')">Feedback, Bugs<br />& Support..</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="subpage hidden" id="devSettings">
+                    <ul id="dev-settings-list" class="subpage">
+                        <li><button class="option-item debugging dev-hidden" id="button-logging" title="Switch between debug mode and default." class="hidden debugging">Logging is  <span class="hidden b-label-status" id="button-logging-on">ON</span><span id="button-logging-off" class="b-label-status">OFF</span><br/><span></span></button>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div id="stats" class="hidden page">
-                <h2><select name="display-selector" id="display-selector" onchange="changeDisplaySubpage()">
+                <h2><select name="display-selector" id="display-selector" class="selector dev-change" onchange="changeDisplaySubpage()">
                     <option value="history">History</option>
-                    <option value="loggings" class="hidden" id="display-option-loggings" >Loggings</option>
+                    <option value="loggings" class="hidden dev-hidden" >Loggings</option>
                 </select></h2>
                 <div class="subpage" id="history">
                     <h3>Your last results:</h3>
@@ -119,13 +141,13 @@
             </div>
         </div>
     </div>
-    <script src="js/debug/debug_events.js"></script>
     <script src="js/page/page_event.js"></script>
     <script src="js/main/main_events.js"></script>
     <script src="js/voice/voice_events.js"></script>
     <script src="js/sound/sound_events.js"></script>
     <script src="js/math/math_event.js"></script>
     <script src="js/statistics/statistics_event.js"></script>
+    <script src="js/dev/dev-view.js"></script>
 </body>
 
 </html>
