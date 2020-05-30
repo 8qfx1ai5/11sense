@@ -43,6 +43,8 @@ function clickMainPage() {
 function onClickMainPage() {
     if (!isDesktopMode()) {
         setMainPageLocation();
+    } else {
+        showMainPage();
     }
 }
 
