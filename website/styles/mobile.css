@@ -38,7 +38,7 @@ input[type=number] {
     font-size: xx-large;
 }
 
-#current-task {
+#task p {
     border-radius: 25px;
     line-height: 2em;
     display: inline-block;
@@ -59,7 +59,6 @@ body {
 #trainer-page {
     /* display: none; */
     height: calc(100% - 5.5em);
-    overflow: auto;
     /* position: absolute; */
     width: 100%;
     min-width: 330px;

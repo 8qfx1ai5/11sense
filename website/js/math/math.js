@@ -235,6 +235,13 @@ function newTask(setFocus = true) {
     remuteVoice();
 
     log("task created: " + factor1 + "*" + factor2 + "=" + result + "");
+    system.events.dispatchEvent(new CustomEvent('new-task-created', {
+        detail: {
+            factor1: factor1,
+            factor2: factor2,
+            result: result
+        }
+    }));
 }
 
 function arrayIncludesCombination(a, f1, f2) {

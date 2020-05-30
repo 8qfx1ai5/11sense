@@ -1,7 +1,6 @@
 (function() {
     currentTask = document.getElementById('current-task');
     currentSolution = document.getElementById('solution');
-    tempSolutions = document.getElementById('temp-solutions')
     f1input = document.getElementById('f1')
     f2input = document.getElementById('f2')
     navigation = document.getElementById('nav')

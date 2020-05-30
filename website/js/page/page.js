@@ -6,6 +6,7 @@ let tagIdDisplaySelector = "display-selector";
 let tagIdSettingsSelector = "settings-selector";
 let tagIdHeaderRight = "header-right"
 let tagIdHeaderLeft = "header-left"
+let tagIdMainPage = "trainer-page"
 
 function isDesktopMode() {
     return 1100 <= screen.width
@@ -25,11 +26,13 @@ function isMainPageActive() {
 
 function showMainPage() {
     headerMain.classList.remove("inactive-page-icon");
+    document.getElementById(tagIdMainPage).classList.remove("hidden");
     currentSolution.focus();
 }
 
 function hideMainPage() {
     headerMain.classList.add("inactive-page-icon");
+    document.getElementById(tagIdMainPage).classList.add("hidden");
     currentSolution.blur();
 }
 

@@ -120,16 +120,15 @@
                     </ol>
                 </div>
             </div>
-            <div id="trainer-page">
+            <div id="trainer-page" class="page">
                 <section id="task">
-                    <p id="current-task" onclick="newTask()"></p>
+                    <p><span id="current-task" onclick="newTask()"></span></p>
                 </section>
                 <section id="input" class="speech">
                     <img id="mic-image" class="hidden" src="img/32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
                     <input type="number" id="solution" name="solution" placeholder="=" onkeyup="guessInput()" onselect="return false;" onfocus="return false;" />
                 </section>
-                <section>
-                    <p id="temp-solutions" onclick="toggleSolution()"></p>
+                <section id="clipboard" onclick="toggleSolution()">
                 </section>
             </div>
         </div>
@@ -141,6 +140,7 @@
     <script src="js/math/math_event.js"></script>
     <script src="js/statistics/statistics_event.js"></script>
     <script src="js/dev/dev-view.js"></script>
+    <script src="js/solution/solution-view.js"></script>
 </body>
 
 </html>

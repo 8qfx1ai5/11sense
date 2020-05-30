@@ -1,6 +1,5 @@
 let currentTask;
 let currentSolution;
-let tempSolutions;
 let f1input;
 let f2input;
 let navigation;
@@ -24,7 +23,7 @@ let autoTaskTimer;
 function validateResult() {
     muteVoice();
     //currentSolution.disabled = true;
-    solution = currentSolution.value
+    let solution = currentSolution.value
     endTime = performance.now();
     //console.log(endTime);
     wasSolved = true;
@@ -103,7 +102,6 @@ function updateViewSolution() {
     if (endTime) {
         currentSolution.placeholder = ((endTime - startTime).toFixed(0) / 1000).toString() + " sec."
     }
-    //currentSolution.focus();
 }
 
 // function creates and sets the content of the solution page for Pro mode
@@ -202,8 +200,7 @@ function resetInput() {
     currentSolution.style.backgroundSize = "0%";
     currentTask.classList.remove("valid");
     currentTask.classList.remove("invalid");
-    tempSolutions.innerHTML = ""
-        //currentSolution.focus();
+    //currentSolution.focus();
     currentSolution.disabled = false;
     Solution.style.display = "none";
 }
@@ -228,24 +225,40 @@ function saveTempSolutionPro() {
     let c = parseFloat(currentSolution.value.replace(",", "."))
     let analizationResult = analizeTempSolution(c)
     if (analizationResult == "") {
-        tempSolutions.innerHTML = formatNumberForDisplay(c) + " ?<br/>" + tempSolutions.innerHTML
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
         speak(formatToSpeakableNumber(c) + "?");
-        //startDictation();
+        system.events.dispatchEvent(new CustomEvent('no-solution-found', {
+            detail: {
+                input: c,
+                expected: result,
+                parts: analizationResult
+            }
+        }));
     } else if (c == result) {
-        tempSolutions.innerHTML = "<span style='color: green'>" + formatNumberForDisplay(c) + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         validateResult();
         if (0 == getAutoTaskInterval()) {
             newTask();
         }
+        system.events.dispatchEvent(new CustomEvent('solution-found', {
+            detail: {
+                input: c,
+                expected: result,
+                parts: analizationResult
+            }
+        }));
     } else {
-        tempSolutions.innerHTML = "<span style='color: green'>" + formatNumberForDisplay(c) + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         let x = c * 100 / result
         currentSolution.placeholder = x.toFixed(1) + "%";
         speak(formatToSpeakableNumber(c) + ", die Richtung stimmt");
-        //startDictation();
+        system.events.dispatchEvent(new CustomEvent('partial-solution-found', {
+            detail: {
+                input: c,
+                expected: result,
+                parts: analizationResult
+            }
+        }));
     }
     currentSolution.value = ""
 }
@@ -266,24 +279,40 @@ function saveTempSolutionBeginner() {
     let c = parseFloat(currentSolution.value)
     let analizationResult = analizeTempSolution(c)
     if (analizationResult == "") {
-        tempSolutions.innerHTML = formatNumberForDisplay(c) + " ?<br/>" + tempSolutions.innerHTML
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
         speak(formatToSpeakableNumber(c) + "?");
-        //startDictation();
+        system.events.dispatchEvent(new CustomEvent('no-solution-found', {
+            detail: {
+                input: c,
+                expected: result,
+                parts: analizationResult
+            }
+        }));
     } else if (c == result) {
-        tempSolutions.innerHTML = "<span style='color: green'>" + formatNumberForDisplay(c) + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         validateResult();
         if (0 == getAutoTaskInterval()) {
             newTask();
         }
+        system.events.dispatchEvent(new CustomEvent('solution-found', {
+            detail: {
+                input: c,
+                expected: result,
+                parts: analizationResult
+            }
+        }));
     } else {
-        tempSolutions.innerHTML = "<span style='color: green'>" + formatNumberForDisplay(c) + "</span> (" + analizationResult + ")<br/>" + tempSolutions.innerHTML
         let x = c * 100 / result
         currentSolution.placeholder = x.toFixed(1) + "%"
         speak(formatToSpeakableNumber(c) + ", die Richtung stimmt");
-        //startDictation();
+        system.events.dispatchEvent(new CustomEvent('partial-solution-found', {
+            detail: {
+                input: c,
+                expected: result,
+                parts: analizationResult
+            }
+        }));
     }
     currentSolution.value = ""
 }
@@ -311,9 +340,4 @@ function analizeTempSolution(s) {
         keys[i] = keys[i].replace(/[.]/g, ",");
     }
     return keys.join("+")
-}
-
-function clearSolutions() {
-    tempSolutions.innerHTML = ""
-    currentSolution.focus();
 }

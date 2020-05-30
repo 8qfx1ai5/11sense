@@ -38,10 +38,9 @@ input[type=number] {
     font-size: xx-large;
 }
 
-#current-task {
+#task p {
     border-radius: 25px;
     line-height: 2em;
-    display: inline-block;
 }
 
 body {
@@ -63,6 +62,7 @@ body {
     display: inline-block;
     margin: 10px;
     vertical-align: top;
+    position: relative;
 }
 
 #config {

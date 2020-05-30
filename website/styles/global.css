@@ -55,9 +55,42 @@ header p {
     height: 4em;
 }
 
-#current-task {
-    margin-top: 1.5em;
+#task p {
     margin-bottom: 0em;
+    margin-top: 1.5em;
+}
+
+#current-task {
+    display: inline-block;
+    /* width: 100%; */
+    /* position: absolute; */
+}
+
+.hint {
+    /* display: inline-block; */
+    margin-left: 0.5em;
+    /* margin-top: 0em; */
+    /* font-weight: bolder; */
+    /* border: 1px solid black; */
+    padding: 0em 1em;
+    border: 1px solid;
+    border-radius: 20px 20px 3px 20px;
+    /* float: right; */
+    /* position: absolute; */
+}
+
+#clipboard p {
+    margin: 0.3em;
+    font-size: 1.5em;
+}
+
+#clipboard {
+    overflow: auto;
+    height: calc(100% - 10em);
+}
+
+#trainer-page {
+    overflow: auto;
 }
 
 .inactive-page-icon {
