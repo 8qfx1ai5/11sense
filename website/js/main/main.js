@@ -95,7 +95,6 @@ function updateView() {
 
 function updateViewSolution() {
     currentTask.innerHTML = "<span class='mainColor'>" + formatNumberForDisplay(factor1) + " ⋅ " + formatNumberForDisplay(factor2) + " =</span> <span class='valid'>" + formatNumberForDisplay(result) + " ✓</span>"
-    speak(getRandomElement(successMessages), 1);
     currentSolution.value = ""
     currentSolution.placeholder = ""
     if (endTime) {
@@ -227,7 +226,6 @@ function saveTempSolutionPro() {
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
-        speak(formatToSpeakableNumber(c) + "?");
         system.events.dispatchEvent(new CustomEvent('no-solution-found', {
             detail: {
                 input: c,
@@ -250,7 +248,6 @@ function saveTempSolutionPro() {
     } else {
         let x = c * 100 / result
         currentSolution.placeholder = x.toFixed(1) + "%";
-        speak(formatToSpeakableNumber(c) + ", die Richtung stimmt");
         system.events.dispatchEvent(new CustomEvent('partial-solution-found', {
             detail: {
                 input: c,
@@ -281,7 +278,6 @@ function saveTempSolutionBeginner() {
         if (!isVoiceModeActive) {
             currentSolution.placeholder = "="
         }
-        speak(formatToSpeakableNumber(c) + "?");
         system.events.dispatchEvent(new CustomEvent('no-solution-found', {
             detail: {
                 input: c,
@@ -304,7 +300,6 @@ function saveTempSolutionBeginner() {
     } else {
         let x = c * 100 / result
         currentSolution.placeholder = x.toFixed(1) + "%"
-        speak(formatToSpeakableNumber(c) + ", die Richtung stimmt");
         system.events.dispatchEvent(new CustomEvent('partial-solution-found', {
             detail: {
                 input: c,

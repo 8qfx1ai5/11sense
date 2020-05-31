@@ -22,4 +22,23 @@
             speak(formatToSpeakableNumber(factor1) + " mal " + formatToSpeakableNumber(factor2), 1);
         }
     });
+
+    system.events.addEventListener('partial-solution-found', function(e) {
+        if (isSoundModeActive) {
+            speak(formatToSpeakableNumber(e.detail.input) + ", die Richtung stimmt");
+        }
+    });
+
+    system.events.addEventListener('no-solution-found', function(e) {
+        if (isSoundModeActive) {
+            speak(formatToSpeakableNumber(e.detail.input) + "?");
+        }
+    });
+
+    system.events.addEventListener('solution-found', function(e) {
+        if (isSoundModeActive) {
+            speak("ist gleich " + formatToSpeakableNumber(e.detail.input) + "! ");
+            speak(getRandomElement(successMessages));
+        }
+    });
 })();
