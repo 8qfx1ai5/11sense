@@ -55,7 +55,12 @@ function startDictation() {
                 let detected = e.results[e.results.length - 1][0].transcript;
                 if (e.results[e.results.length - 1].isFinal) {
                     if (["neue Aufgabe", "neu", "next", "weiter"].includes(detected.trim())) {
+                        system.events.dispatchEvent(new CustomEvent('create-new-task'));
                         newTask(false);
+                        return;
+                    }
+                    if (["wiederhole", "wiederholen", "noch mal", "erneut", "wie bitte", "was"].includes(detected.trim())) {
+                        system.events.dispatchEvent(new CustomEvent('repeat-task'));
                         return;
                     }
                     if (!wasSolved) {
@@ -172,14 +177,25 @@ function toggleVoiceMode() {
 }
 
 function activateVoiceMode() {
-    localStorage.setItem('isVoiceModeActive', true);
-    micImage.classList.remove("hidden");
-    voiceButtonLabelOn.classList.remove("hidden");
-    voiceButtonLabelOff.classList.add("hidden");
-    currentSolution.setAttribute("readonly", "readonly");
-    isVoiceModeActive = true;
-    isVoiceModeTempMuted = false;
-    startDictation();
+    if (!isVoiceModeActive) {
+        localStorage.setItem('isVoiceModeActive', true);
+        micImage.classList.remove("hidden");
+        voiceButtonLabelOn.classList.remove("hidden");
+        voiceButtonLabelOff.classList.add("hidden");
+        currentSolution.setAttribute("readonly", "readonly");
+        isVoiceModeActive = true;
+        isVoiceModeTempMuted = false;
+        startDictation();
+    } else {
+        localStorage.setItem('isVoiceModeActive', true);
+        micImage.classList.remove("hidden");
+        voiceButtonLabelOn.classList.remove("hidden");
+        voiceButtonLabelOff.classList.add("hidden");
+        currentSolution.setAttribute("readonly", "readonly");
+        isVoiceModeActive = true;
+        isVoiceModeTempMuted = false;
+    }
+    system.events.dispatchEvent(new CustomEvent('voice-mode-start-after'));
 }
 
 function deactivateVoiceMode() {
@@ -193,6 +209,7 @@ function deactivateVoiceMode() {
     isVoiceModeActive = false;
     isVoiceModeTempMuted = true;
     micImage.classList.add("hidden");
+    system.events.dispatchEvent(new CustomEvent('voice-mode-end-after'));
 }
 
 function toggleVoiceMute() {

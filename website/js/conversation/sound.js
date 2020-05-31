@@ -34,17 +34,26 @@ function formatToSpeakableNumber(n) {
 
 function toggleSoundMode() {
     if (isSoundModeActive) {
-        // deactivate sound mode
-        isSoundModeActive = false;
-        soundButtonLabelOn.classList.add("hidden");
-        soundButtonLabelOff.classList.remove("hidden");
-        localStorage.setItem('isSoundModeActive', false);
+        appSound.deactivateSoundMode();
     } else {
-        // activate sound mode
+        appSound.acitvateSoundMode();
+    }
+}
+
+let appSound = {
+    acitvateSoundMode: function() {
         isSoundModeActive = true;
         soundButtonLabelOn.classList.remove("hidden");
         soundButtonLabelOff.classList.add("hidden");
         localStorage.setItem('isSoundModeActive', true);
-        speak("Hallo. Ja, ich kann auch sprechen. Lass uns üben.", 1);
+        system.events.dispatchEvent(new CustomEvent('sound-mode-start-after'));
+    },
+
+    deactivateSoundMode: function() {
+        isSoundModeActive = false;
+        soundButtonLabelOn.classList.add("hidden");
+        soundButtonLabelOff.classList.remove("hidden");
+        localStorage.setItem('isSoundModeActive', false);
+        system.events.dispatchEvent(new CustomEvent('sound-mode-end-after'));
     }
 }

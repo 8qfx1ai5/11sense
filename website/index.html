@@ -13,8 +13,8 @@
     <link rel="stylesheet" type="text/css" href="styles/themes/dark.css" />
     <script src="js/main/main.js"></script>
     <script src="js/main/system.js"></script>
-    <script src="js/voice/voice.js"></script>
-    <script src="js/sound/sound.js"></script>
+    <script src="js/conversation/voice.js"></script>
+    <script src="js/conversation/sound.js"></script>
     <script src="js/math/math.js"></script>
     <script src="js/page/page.js"></script>
     <script src="js/page/subpage.js"></script>
@@ -52,9 +52,9 @@
                         <li><button disabled class="option-item" id="levelModeButton" title="Select your experience level.">Level<span id="level-button-status" class="b-label-status">1</span><br /><span
                             class="button-sub">(select difficulty)</span></button>
                         </li>
-                        <li><button disabled class="option-item" id="conversationMode" title="Talk with Dorie.">Conversation<span
-                            class="hidden b-label-status" id="conversation-button-on">ON</span><span
-                            id="conversation-button-off" class="b-label-status">OFF</span><br /><span
+                        <li><button class="option-item" id="button-conversation" title="Talk with Dorie." onclick="appConversation.toggleConversation()">Conversation<span
+                            class="hidden b-label-status" id="button-conversation-on">ON</span><span
+                            id="button-conversation-off" class="b-label-status">OFF</span><br /><span
                             class="button-sub">(talk with Dorie)</span></button>
                         </li>
                         <li><button type="button" disabled class="option-item" id="howToUse" title="Get an introduction about the navigation and features.">How to use<br /><span
@@ -135,8 +135,9 @@
     </div>
     <script src="js/page/page_event.js"></script>
     <script src="js/main/main_events.js"></script>
-    <script src="js/voice/voice_events.js"></script>
-    <script src="js/sound/sound_events.js"></script>
+    <script src="js/conversation/voice_events.js"></script>
+    <script src="js/conversation/sound_events.js"></script>
+    <script src="js/conversation/conversation.js"></script>
     <script src="js/math/math_event.js"></script>
     <script src="js/statistics/statistics_event.js"></script>
     <script src="js/dev/dev-view.js"></script>
