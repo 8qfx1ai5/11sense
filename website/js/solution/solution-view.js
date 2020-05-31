@@ -15,7 +15,7 @@ let solution = {
         });
 
         system.events.addEventListener('no-solution-found', function(e) {
-            let text = formatNumberForDisplay(e.detail.input) + " <span class='hint'>?</span>";
+            let text = formatNumberForDisplay(e.detail.input) + " <span class='hint' onclick='toggleSolution()'>?</span>";
             let entry = document.createElement('p');
             entry.innerHTML = text;
             document.getElementById(solution.tagIdClipboard).prepend(entry);
