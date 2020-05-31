@@ -207,7 +207,12 @@ function formatNumberForDisplay(n) {
     return n.toString().replace(".", ",");
 }
 
-function saveTempSolutionPro() {
+function saveTempSolution() {
+    if (wasSolved && !isVoiceModeActive) {
+        newTask();
+        return;
+    }
+
     currentSolution.focus();
     if (currentSolution.value == "") {
         if (!isVoiceModeActive) {
@@ -256,71 +261,7 @@ function saveTempSolutionPro() {
             }
         }));
     }
-    currentSolution.value = ""
-}
-
-function saveTempSolutionBeginner() {
-    currentSolution.focus();
-    if (currentSolution.value == "") {
-        if (!isVoiceModeActive) {
-            let smiley;
-            do {
-                smiley = getRandomElement(funnySmilies);
-            } while (currentSolution.placeholder == smiley);
-            currentSolution.placeholder = smiley;
-        }
-
-        return
-    }
-    let c = parseFloat(currentSolution.value)
-    let analizationResult = analizeTempSolution(c)
-    if (analizationResult == "") {
-        if (!isVoiceModeActive) {
-            currentSolution.placeholder = "="
-        }
-        system.events.dispatchEvent(new CustomEvent('no-solution-found', {
-            detail: {
-                input: c,
-                expected: result,
-                parts: analizationResult
-            }
-        }));
-    } else if (c == result) {
-        validateResult();
-        if (0 == getAutoTaskInterval()) {
-            newTask();
-        }
-        system.events.dispatchEvent(new CustomEvent('solution-found', {
-            detail: {
-                input: c,
-                expected: result,
-                parts: analizationResult
-            }
-        }));
-    } else {
-        let x = c * 100 / result
-        currentSolution.placeholder = x.toFixed(1) + "%"
-        system.events.dispatchEvent(new CustomEvent('partial-solution-found', {
-            detail: {
-                input: c,
-                expected: result,
-                parts: analizationResult
-            }
-        }));
-    }
-    currentSolution.value = ""
-}
-
-function saveTempSolution() {
-    if (wasSolved && !isVoiceModeActive) {
-        newTask();
-        return;
-    }
-    if (isBeginnerModeActive) {
-        saveTempSolutionBeginner();
-    } else {
-        saveTempSolutionPro();
-    }
+    currentSolution.value = "";
 }
 
 function analizeTempSolution(s) {

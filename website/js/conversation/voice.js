@@ -50,17 +50,25 @@ function startDictation() {
                 }
 
                 if (currentResult == "stop") {
-                    toggleVoiceMode();
+                    appConversation.deactivateConversationMode();
                 }
                 let detected = e.results[e.results.length - 1][0].transcript;
                 if (e.results[e.results.length - 1].isFinal) {
-                    if (["neue Aufgabe", "neu", "next", "weiter"].includes(detected.trim())) {
+                    if (["neue aufgabe", "neu", "next", "weiter"].includes(detected.trim().toLowerCase())) {
                         system.events.dispatchEvent(new CustomEvent('create-new-task'));
                         newTask(false);
                         return;
                     }
-                    if (["wiederhole", "wiederholen", "noch mal", "erneut", "wie bitte", "was"].includes(detected.trim())) {
+                    if (["wiederhole", "wiederhole bitte", "bitte wiederhole", "bitte wiederholen", "kannst du das bitte wiederholen", "bitte wiederhole die aufgabe", "wiederholen", "noch mal", "bitte noch mal", "erneut", "erneut sagen", "wie bitte"].includes(detected.trim().toLowerCase())) {
                         system.events.dispatchEvent(new CustomEvent('repeat-task'));
+                        return;
+                    }
+                    if (["dorie", "dori", "bist du noch da"].includes(detected.trim().toLowerCase())) {
+                        system.events.dispatchEvent(new CustomEvent('give-status-answer-yes'));
+                        return;
+                    }
+                    if (["hallo", "hi", "guten tag"].includes(detected.trim().toLowerCase())) {
+                        system.events.dispatchEvent(new CustomEvent('give-status-answer-hallo'));
                         return;
                     }
                     if (!wasSolved) {

@@ -23,6 +23,12 @@
         }
     });
 
+    system.events.addEventListener('voice-mode-end-after', function(e) {
+        if (isSoundModeActive) {
+            speak("Bis zum nächsten Mal.", 1);
+        }
+    });
+
     system.events.addEventListener('partial-solution-found', function(e) {
         if (isSoundModeActive) {
             speak(formatToSpeakableNumber(e.detail.input) + ", die Richtung stimmt");
@@ -39,6 +45,18 @@
         if (isSoundModeActive) {
             speak("ist gleich " + formatToSpeakableNumber(e.detail.input) + "! ");
             speak(getRandomElement(successMessages));
+        }
+    });
+
+    system.events.addEventListener('give-status-answer-hallo', function(e) {
+        if (isSoundModeActive) {
+            speak("hallo");
+        }
+    });
+
+    system.events.addEventListener('give-status-answer-yes', function(e) {
+        if (isSoundModeActive) {
+            speak("ja, ich hoeree dir zu", 1);
         }
     });
 })();
