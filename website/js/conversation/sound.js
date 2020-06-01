@@ -54,6 +54,7 @@ let appSound = {
     },
 
     deactivateSoundMode: function() {
+        speechSynthesis.cancel();
         isSoundModeActive = false;
         soundButtonLabelOn.classList.add("hidden");
         soundButtonLabelOff.classList.remove("hidden");

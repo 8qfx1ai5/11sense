@@ -57,7 +57,7 @@ body {
 
 #trainer-page {
     width: 45%;
-    max-width: 400px;
+    max-width: 380px;
     margin: auto;
     display: inline-block;
     margin: 10px;
@@ -79,7 +79,8 @@ body {
     border-left: 1px solid;
 }
 
-#history {
+#history,
+#loggings {
     border-right: 1px solid;
 }
 
