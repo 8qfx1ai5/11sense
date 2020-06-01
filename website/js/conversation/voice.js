@@ -294,7 +294,7 @@ let appVoice = {
                 } else {
                     appVoice.stopPseudoRecognition();
                 }
-            }, 6000);
+            }, 4000);
         }
     }
 };
