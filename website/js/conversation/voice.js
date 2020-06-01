@@ -169,7 +169,8 @@ let appVoice = {
         }
     },
 
-    recognitionOResult: function() {
+    recognitionOResult: function(e) {
+        log(e.results, 2, "console");
         if (!appVoice.isActive) {
             log("recognition inactive, abborting..");
             appVoice.wasCanceledByMute = true;
