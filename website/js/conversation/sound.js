@@ -20,7 +20,7 @@ function speak(s, r = 1) {
 }
 
 function hasPendingSoundOutput() {
-    return speechSynthesis.pending;
+    return speechSynthesis.pending || speechSynthesis.speaking;
 }
 
 function formatToSpeakableNumber(n) {
