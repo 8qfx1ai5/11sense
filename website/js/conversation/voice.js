@@ -13,7 +13,7 @@ let appVoice = {
     lastInputs: [],
 
     startRecognition: function() {
-        if (false && isDesktopMode()) {
+        if (true || isDesktopMode()) {
             this.startRecognitionDesktop();
         } else {
             this.startRecognitionMobile();
