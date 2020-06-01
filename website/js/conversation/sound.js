@@ -10,10 +10,10 @@ function speak(s, r = 1) {
         statement.rate = r;
         statement.pitch = 0.6
         statement.onstart = function(event) {
-            muteVoice();
+            appVoice.muteVoice();
         }
         statement.onend = function(event) {
-            remuteVoice();
+            appVoice.remuteVoice();
         }
         speechSynthesis.speak(statement);
     }

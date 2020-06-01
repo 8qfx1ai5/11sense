@@ -3,7 +3,7 @@ let appConversation = {
     tagIdConversationButton: "button-conversation",
 
     toggleConversation: function() {
-        if (isSoundModeActive && isVoiceModeActive) {
+        if (isSoundModeActive && appVoice.isActive) {
             this.deactivateConversationMode();
         } else {
             this.activateConversationMode();
@@ -11,17 +11,17 @@ let appConversation = {
     },
 
     activateConversationMode: function() {
-        activateVoiceMode();
+        appVoice.activateVoiceMode();
         appSound.acitvateSoundMode();
     },
 
     deactivateConversationMode: function() {
-        deactivateVoiceMode();
+        appVoice.deactivateVoiceMode();
         appSound.deactivateSoundMode();
     },
 
     updateConversationButton: function() {
-        if (isSoundModeActive && isVoiceModeActive) {
+        if (isSoundModeActive && appVoice.isActive) {
             document.getElementById(this.tagIdConversationButton + "-on").classList.remove("hidden");
             document.getElementById(this.tagIdConversationButton + "-off").classList.add("hidden");
         } else {

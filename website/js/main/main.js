@@ -20,8 +20,16 @@ let endTime;
 let autoTaskTimer;
 // let recognition;
 
+function guessInput() {
+    if (appVoice.isActive) {
+        return;
+    }
+    if (currentSolution.value.length >= result.toString().length) {
+        saveTempSolution()
+    }
+}
+
 function validateResult() {
-    muteVoice();
     //currentSolution.disabled = true;
     let solution = currentSolution.value
     endTime = performance.now();
@@ -44,7 +52,7 @@ function validateResult() {
             //console.log(now - endTime)
             currentSolution.style.backgroundSize = ((now - endTime) * 125 / interval) + "%";
             if (2000 <= now - endTime && now - endTime < 2010) {
-                !isVoiceModeActive && enterFullscreen();
+                // !appVoice.isActive && enterFullscreen();
                 currentSolution.focus();
                 window.scrollTo(0, 0);
             }
@@ -192,9 +200,9 @@ function updateSolution() {
 function resetInput() {
     currentSolution.value = "";
     currentSolution.placeholder = "="
-    if (isVoiceModeActive) {
-        currentSolution.placeholder = "..."
-    }
+        // if (appVoice.isActive) {
+        //     currentSolution.placeholder = "..."
+        // }
     currentSolution.style.backgroundSize = "0%";
     currentTask.classList.remove("valid");
     currentTask.classList.remove("invalid");
@@ -208,29 +216,29 @@ function formatNumberForDisplay(n) {
 }
 
 function saveTempSolution() {
-    if (wasSolved && !isVoiceModeActive) {
-        newTask();
-        return;
-    }
+    // if (wasSolved && !appVoice.isActive) {
+    //     newTask();
+    //     return;
+    // }
 
     currentSolution.focus();
     if (currentSolution.value == "") {
-        if (!isVoiceModeActive) {
-            let smiley;
-            do {
-                smiley = getRandomElement(funnySmilies);
-            } while (currentSolution.placeholder == smiley);
-            currentSolution.placeholder = smiley;
-        }
+        // if (!appVoice.isActive) {
+        //     let smiley;
+        //     do {
+        //         smiley = getRandomElement(funnySmilies);
+        //     } while (currentSolution.placeholder == smiley);
+        //     currentSolution.placeholder = smiley;
+        // }
 
         return
     }
     let c = parseFloat(currentSolution.value.replace(",", "."))
     let analizationResult = analizeTempSolution(c)
     if (analizationResult == "") {
-        if (!isVoiceModeActive) {
-            currentSolution.placeholder = "="
-        }
+        // if (!appVoice.isActive) {
+        //     currentSolution.placeholder = "="
+        // }
         system.events.dispatchEvent(new CustomEvent('no-solution-found', {
             detail: {
                 input: c,

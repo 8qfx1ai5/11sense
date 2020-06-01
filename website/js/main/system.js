@@ -1,6 +1,6 @@
 let isLoggingMode = false;
 let loggingMax = 99;
-let logLevel = 3;
+let logLevel = 1;
 let loggingLocalStorageKey = "debugLog";
 
 /*

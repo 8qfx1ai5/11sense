@@ -197,7 +197,7 @@ function newTask(setFocus = true) {
     if (setFocus) {
         currentSolution.focus();
         window.scrollTo(0, 0);
-        if (wasSolved && !isVoiceModeActive) {
+        if (wasSolved && !appVoice.isActive) {
             enterFullscreen();
         }
     }
@@ -232,7 +232,6 @@ function newTask(setFocus = true) {
     updateView()
     resetInput()
     calculateFractions()
-    remuteVoice();
 
     log("task created: " + factor1 + "*" + factor2 + "=" + result + "");
     system.events.dispatchEvent(new CustomEvent('new-task-created', {
