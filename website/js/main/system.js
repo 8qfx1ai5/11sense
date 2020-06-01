@@ -50,20 +50,6 @@ function saveLogInLocalStorage(s) {
     system.events.dispatchEvent(new Event('custom-log-changed'));
 }
 
-// window.onsecuritypolicyviolation = function(error, url, line) {
-//     if (isLoggingMode) {
-//         let issue = 'ERR:' + error + ' URL:' + url + ' L:' + line;
-//         localStorage.setItem("debugLog", localStorage.getItem("debugLog") + "\n" + issue);
-//     }
-// };
-
-// window.onerror = function(error, url, line) {
-//     if (isLoggingMode) {
-//         let issue = 'ERR:' + error + ' URL:' + url + ' L:' + line;
-//         localStorage.setItem("debugLog", localStorage.getItem("debugLog") + "\n" + issue);
-//     }
-// };
-
 var SysEvents = function(options) {
     // Create a DOM EventTarget object
     var target = document.createTextNode(null);
@@ -76,6 +62,27 @@ var SysEvents = function(options) {
 
 let system = {
 
-    events: new SysEvents()
+    events: new SysEvents(),
 
+    registerEventListeners: function() {
+        // log all errors
+        window.onerror = function(errorMsg, url, lineNumber, column, errorObj) {
+            log('ERR: ' + errorMsg +
+                ' URL: ' + url +
+                ' LINE: ' + lineNumber +
+                ' COLUMN: ' + column +
+                ' STACKTRACE: ' + errorObj, 3, "app");
+        };
+
+        document.addEventListener("securitypolicyviolation", (e) => {
+            log('SEC-ERR: ' + e.violatedDirective +
+                ' URL: ' + e.blockedURI +
+                ' POLICY: ' + e.originalPolicy
+            );
+        });
+    },
 };
+
+(function() {
+    system.registerEventListeners();
+})();
