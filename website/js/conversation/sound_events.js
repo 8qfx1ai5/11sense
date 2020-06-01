@@ -43,8 +43,7 @@
 
     system.events.addEventListener('solution-found', function(e) {
         if (isSoundModeActive) {
-            speak("ist gleich " + formatToSpeakableNumber(e.detail.input) + "! ");
-            speak(getRandomElement(successMessages));
+            speak("ist gleich " + formatToSpeakableNumber(e.detail.input) + "!, " + getRandomElement(successMessages));
         }
     });
 

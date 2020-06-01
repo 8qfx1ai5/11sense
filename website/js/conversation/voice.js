@@ -2,6 +2,7 @@ let appVoice = {
 
     isActive: false,
     isMuted: false,
+    isBetweenTasks: false,
     wasCanceledByMute: false,
     recognitionObject: null,
     mediaStreamObject: null,
@@ -13,6 +14,22 @@ let appVoice = {
     lastInputs: [],
 
     startRecognition: function() {
+        if (this.isRecognitionRunning()) {
+            log("rc start omitted, already exists", 1);
+            return;
+        }
+        if (this.isMuted) {
+            log("rc start omitted, muted", 1);
+            return;
+        }
+        if (isAutoTaskActive() && this.isBetweenTasks) {
+            log("rc start omitted, between tasks", 1);
+            return;
+        }
+        if (hasPendingSoundOutput()) {
+            log("rc start omitted, has pending sound", 1);
+            return;
+        }
         if (true || isDesktopMode()) {
             this.startRecognitionDesktop();
         } else {
@@ -59,10 +76,10 @@ let appVoice = {
             appVoice.recognitionObject.onend = function(e) {
                 currentSolution.placeholder = "🙉";
                 log("dictation finished", 1);
+                appVoice.recognitionObject = null;
                 if (!appVoice.wasCanceledByMute) {
                     appVoice.startRecognition();
                 }
-                appVoice.recognitionObject = null;
                 appVoice.lastInputs = [];
             }
         }
@@ -381,8 +398,20 @@ let appVoice = {
         }
         currentSolution.placeholder = "=";
     },
+
+    registerEventListener: function() {
+
+        system.events.addEventListener('solution-found', function(e) {
+            // workaround to omit mobile beeps as mutch as possible
+            appVoice.isBetweenTasks = true;
+        });
+
+        system.events.addEventListener('new-task-created', function(e) {
+            appVoice.isBetweenTasks = false;
+        });
+    }
 };
 
 (function() {
-
+    appVoice.registerEventListener();
 })();

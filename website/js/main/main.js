@@ -29,6 +29,10 @@ function guessInput() {
     }
 }
 
+function isAutoTaskActive() {
+    return 0 < getAutoTaskInterval();
+}
+
 function validateResult() {
     //currentSolution.disabled = true;
     let solution = currentSolution.value

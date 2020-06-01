@@ -19,6 +19,10 @@ function speak(s, r = 1) {
     }
 }
 
+function hasPendingSoundOutput() {
+    return speechSynthesis.pending;
+}
+
 function formatToSpeakableNumber(n) {
     let nS = n.toString();
     let nSsplit = nS.split(".");
