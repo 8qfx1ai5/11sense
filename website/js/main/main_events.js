@@ -16,7 +16,7 @@
 
         if (e.keyCode == '13' || e.keyCode == '32') {
             // enter or space
-            saveTempSolution();
+            processInput();
         } else if (e.keyCode == '78') {
             // n
             newTask();

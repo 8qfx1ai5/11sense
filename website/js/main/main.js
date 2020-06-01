@@ -25,7 +25,7 @@ function guessInput() {
         return;
     }
     if (currentSolution.value.length >= result.toString().length) {
-        saveTempSolution()
+        processInput()
     }
 }
 
@@ -215,7 +215,7 @@ function formatNumberForDisplay(n) {
     return n.toString().replace(".", ",");
 }
 
-function saveTempSolution() {
+function processInput() {
     // if (wasSolved && !appVoice.isActive) {
     //     newTask();
     //     return;

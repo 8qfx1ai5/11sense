@@ -197,6 +197,10 @@ button:disabled {
     margin: auto;
 }
 
+#logging-list {
+    font-family: monospace;
+}
+
 #logging-list li span,
 #history-list li span {
     text-overflow: ellipsis;
