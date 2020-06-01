@@ -194,6 +194,7 @@ function activateVoiceMode() {
         isVoiceModeActive = true;
         isVoiceModeTempMuted = false;
         startDictation();
+        appVoice.keepMicrophoneOpen();
     } else {
         localStorage.setItem('isVoiceModeActive', true);
         micImage.classList.remove("hidden");
@@ -218,6 +219,7 @@ function deactivateVoiceMode() {
     isVoiceModeTempMuted = true;
     micImage.classList.add("hidden");
     system.events.dispatchEvent(new CustomEvent('voice-mode-end-after'));
+    appVoice.stopPseudoRecognition();
 }
 
 function toggleVoiceMute() {
@@ -252,3 +254,47 @@ function remuteVoice() {
         startDictation();
     }
 }
+
+let appVoice = {
+
+    recognitionQueue: [],
+
+    startPseudoRecognition: function() {
+        if (window.hasOwnProperty('webkitSpeechRecognition')) {
+            log("start pseudo recognition");
+            let newRecognition = new webkitSpeechRecognition();
+            newRecognition.continuous = true;
+            newRecognition.interimResults = false;
+
+            newRecognition.start();
+            this.recognitionQueue.push(newRecognition);
+        }
+    },
+
+    stopPseudoRecognition: function() {
+        log("stop pseudo recognition");
+        clearInterval(appVoice.microphoneOpenerTimer);
+        this.recognitionQueue.forEach(r => {
+            r.abort();
+        });
+        this.recognitionQueue = [];
+    },
+
+    microphoneOpenerTimer: null,
+
+    // workaround feature to omit the microphone on/off sound on mobile
+    // function just starts a new recognition in the background every x seconds
+    // to keep the mic open
+    keepMicrophoneOpen: function() {
+        if (!isDesktopMode()) {
+            this.recognitionQueue = [];
+            this.microphoneOpenerTimer = setInterval(function() {
+                if (isVoiceModeActive) {
+                    appVoice.startPseudoRecognition();
+                } else {
+                    appVoice.stopPseudoRecognition();
+                }
+            }, 6000);
+        }
+    }
+};
