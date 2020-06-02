@@ -211,6 +211,12 @@ button:disabled {
     display: block;
 }
 
+#solution-guide-selector {
+    width: 3em;
+    position: relative;
+    right: -0.2em;
+}
+
 #Solution {
     margin-bottom: 15px;
     padding-bottom: 20px;

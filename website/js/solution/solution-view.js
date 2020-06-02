@@ -1,7 +1,7 @@
 let solution = {
     tagIdClipboard: "clipboard",
     localStorageKeySolutionGuideInterval: "solution-guide-interval",
-    tagIdSolutionGuideInput: "solutionGuideInput",
+    tagIdSolutionGuideInput: "solution-guide-selector",
     solutionGuideInterval: -1,
 
     solutionGuideIntervalObject: false,
@@ -22,33 +22,33 @@ let solution = {
 
     saveSolutionGuideInterval: function() {
         let v = document.getElementById(this.tagIdSolutionGuideInput).value;
-        if (v === "" || v == "-") {
+        if (v == "" || v == "-" || v == "OFF") {
             // localStorage.setItem(this.localStorageKeySolutionGuideInterval, -1)
             this.solutionGuideInterval = -1;
             return;
         }
-        v = Math.max(0, v)
-        v = Math.min(100, v)
-            // localStorage.setItem(this.localStorageKeySolutionGuideInterval, v * 1000);
+        // v = Math.max(0, v)
+        // v = Math.min(180, v)
+        // localStorage.setItem(this.localStorageKeySolutionGuideInterval, v * 1000);
         this.solutionGuideInterval = v * 1000;
-        document.getElementById(this.tagIdSolutionGuideInput).value = v;
+        this.startNewSolutionGuideLoop();
     },
 
     stopSolutionGuideLoop: function() {
-        if (this.solutionGuideIntervalObject) {
-            clearInterval(this.solutionGuideIntervalObject);
+        log("stop solution guide loop", 1);
+        if (solution.solutionGuideIntervalObject) {
+            clearTimeout(solution.solutionGuideIntervalObject);
         }
-        this.solutionGuideIntervalObject = false;
+        solution.solutionGuideIntervalObject = false;
     },
 
     startNewSolutionGuideLoop: function() {
         this.stopSolutionGuideLoop();
         let interval = this.getSolutionGuideInterval();
         log("start new solution guide loop: '" + interval + "'", 2);
-        this.solutionGuideIntervalObject = setInterval(function() {
+        solution.solutionGuideIntervalObject = setTimeout(function() {
             system.events.dispatchEvent(new CustomEvent('solution-timed-out'));
-            solution.stopSolutionGuideLoop();
-        }, this.getSolutionGuideInterval());
+        }, interval);
     },
 
     onDocumentReadyEvent: function() {
@@ -78,17 +78,13 @@ let solution = {
             }
         });
 
-        document.getElementById(this.tagIdSolutionGuideInput).addEventListener("keydown", function(e) {
-            if (!e) { var e = window.event; }
-            // Enter is pressed
-            if (e.keyCode == 13) { solution.saveSolutionGuideInterval(); }
-        }, false);
+        // system.events.addEventListener('speak-after', function(e) {
+        //     if (solution.isSolutionGuideActive()) {
+        //         solution.startNewSolutionGuideLoop();
+        //     }
+        // });
 
-        system.events.addEventListener('speak-after', function(e) {
-            if (solution.isSolutionGuideActive()) {
-                solution.startNewSolutionGuideLoop();
-            }
-        });
+        solution.saveSolutionGuideInterval();
     }
 };
 

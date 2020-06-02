@@ -80,8 +80,18 @@
                         </li>
                         <li>
                             <button class="option-item">
-                                <span class="config-label">Solution Guide:</span><span class="b-label-status"><input class="config" type="number" id="solutionGuideInput" name="solutionGuideInput" placeholder="-" value="" /></span><br /><span
-                                class="button-sub">(time to wait in sec.)</span></button>
+                                <span class="config-label">Solution Guide</span><span class="b-label-status"><select name="solution-guide-selector" id="solution-guide-selector" class="selector config" dir="rtl" onchange="solution.saveSolutionGuideInterval()">
+                                    <option value="off">OFF</option>
+                                    <!-- <option value="5" >  5</option> -->
+                                    <option value="10" > 10</option>
+                                    <option value="15" > 15</option>
+                                    <option value="20" > 20</option>
+                                    <option value="30" selected="selected" > 30</option>
+                                    <option value="60" > 60</option>
+                                    <option value="120" >120</option>
+                                    <option value="180" >180</option>
+                                </select></span><br /><span
+                                class="button-sub">(solution after sec.)</span></button>
                             </button>
                         </li>
                         <li>

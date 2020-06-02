@@ -57,7 +57,13 @@ var SysEvents = function(options) {
     // Pass EventTarget interface calls to DOM EventTarget object
     this.addEventListener = target.addEventListener.bind(target);
     this.removeEventListener = target.removeEventListener.bind(target);
-    this.dispatchEvent = target.dispatchEvent.bind(target);
+    this.dispatchEvent = function(e) {
+        if (e.type != 'custom-log-changed') {
+            log(e, 2, "console");
+            log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
+        }
+        return target.dispatchEvent.bind(target)(e);
+    }
 }
 
 let system = {
