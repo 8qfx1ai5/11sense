@@ -53,9 +53,7 @@ body {
     color: cyan;
 }
 
-#f1::placeholder,
-#f2::placeholder,
-#autoTaskInput::placeholder {
+#nav input::placeholder {
     color: #252526;
 }
 

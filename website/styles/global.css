@@ -199,6 +199,7 @@ button:disabled {
 
 #logging-list {
     font-family: monospace;
+    font-size: 0.7em;
 }
 
 #logging-list li span,

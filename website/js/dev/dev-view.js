@@ -78,8 +78,8 @@ let dev = {
         log("deactivate logging");
         isLoggingMode = false;
         localStorage.setItem('isLoggingMode', false);
-        document.getElementById(tagIdLoggingButton + "-on").classList.add("hidden");
-        document.getElementById(tagIdLoggingButton + "-off").classList.remove("hidden");
+        document.getElementById(this.tagIdLoggingButton + "-on").classList.add("hidden");
+        document.getElementById(this.tagIdLoggingButton + "-off").classList.remove("hidden");
     },
 
     updateLoggingsBasedOnLocalStorage: function() {

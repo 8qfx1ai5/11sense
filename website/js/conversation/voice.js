@@ -8,6 +8,10 @@ let appVoice = {
     mediaStreamObject: null,
     mobileSoundDetectionInterval: null,
 
+    isVoiceTechEndless: true,
+    voiceTechLocalStorageKey: "voice-tech",
+    tagIdButtonVoiceTech: "button-voice-tech",
+
     tagIdButtonVoice: "button-voice",
     tagIdMicrophoneImage: "mic-image",
 
@@ -30,14 +34,15 @@ let appVoice = {
             log("rc start omitted, has pending sound", 1);
             return;
         }
-        if (true || isDesktopMode()) {
-            this.startRecognitionDesktop();
+
+        if (this.isVoiceTechEndless) {
+            this.startRecognitionEndless();
         } else {
-            this.startRecognitionMobile();
+            this.startRecognitionNoise();
         }
     },
 
-    startRecognitionDesktop: function() {
+    startRecognitionEndless: function() {
         if (!appVoice.isActive) {
             return;
         }
@@ -59,7 +64,7 @@ let appVoice = {
             }
 
             appVoice.recognitionObject.onstart = function() {
-                log("start recognition");
+                log("start recognition endless");
                 appVoice.setStatusPlaceholder();
                 appVoice.lastInputs = [];
             }
@@ -85,7 +90,7 @@ let appVoice = {
         }
     },
 
-    startRecognitionMobile: function() {
+    startRecognitionNoise: function() {
         if (!appVoice.isActive) {
             return;
         }
@@ -109,7 +114,7 @@ let appVoice = {
                     return;
                 }
                 if (!appVoice.isRecognitionRunning()) {
-                    // log("try to find noice");
+                    // log("try to find noise");
                     // let silence_delay = 500;
                     // let min_decibels = -90;
                     let min_decibels = -99;
@@ -131,8 +136,8 @@ let appVoice = {
                     analyser.getByteFrequencyData(data); // get current data
                     log(data);
                     if (data.some(v => v)) { // if there is data above the given db limit
-                        log("noice found, start recognition");
-                        appVoice.handleRecognitionMobile();
+                        log("noise found, start recognition");
+                        appVoice.handleRecognitionNoise();
                         clearInterval(appVoice.mobileSoundDetectionInterval);
                         // silence_start = time; // set it to now
                     }
@@ -146,7 +151,7 @@ let appVoice = {
         return typeof appVoice.recognitionObject == "object" && typeof appVoice.recognitionObject !== 'undefined' && appVoice.recognitionObject !== null;
     },
 
-    handleRecognitionMobile: function() {
+    handleRecognitionNoise: function() {
         appVoice.recognitionObject = new webkitSpeechRecognition();
         appVoice.recognitionObject.continuous = false;
         appVoice.recognitionObject.interimResults = true;
@@ -160,7 +165,7 @@ let appVoice = {
         }
 
         appVoice.recognitionObject.onstart = function() {
-            log("start recognition");
+            log("start recognition noise");
             appVoice.setStatusPlaceholder();
             appVoice.lastInputs = [];
         }
@@ -399,6 +404,30 @@ let appVoice = {
         currentSolution.placeholder = "=";
     },
 
+    toggleVoiceTech: function() {
+        if (this.isVoiceTechEndless) {
+            this.setVoiceTechNoise();
+        } else {
+            this.setVoiceTechEndless();
+        }
+    },
+
+    setVoiceTechEndless: function() {
+        this.isVoiceTechEndless = true;
+        localStorage.setItem(this.voiceTechIsEndlessLocalStorageKey, true);
+        document.getElementById(this.tagIdButtonVoiceTech + "-endless").classList.remove("hidden");
+        document.getElementById(this.tagIdButtonVoiceTech + "-noise").classList.add("hidden");
+        this.deactivateVoiceMode();
+    },
+
+    setVoiceTechNoise: function() {
+        this.isVoiceTechEndless = false;
+        localStorage.setItem(this.voiceTechIsEndlessLocalStorageKey, false);
+        document.getElementById(this.tagIdButtonVoiceTech + "-endless").classList.add("hidden");
+        document.getElementById(this.tagIdButtonVoiceTech + "-noise").classList.remove("hidden");
+        this.deactivateVoiceMode();
+    },
+
     registerEventListener: function() {
 
         system.events.addEventListener('solution-found', function(e) {
@@ -409,7 +438,19 @@ let appVoice = {
         system.events.addEventListener('new-task-created', function(e) {
             appVoice.isBetweenTasks = false;
         });
-    }
+
+        document.getElementById(this.tagIdButtonVoiceTech).addEventListener('click', function(e) {
+            appVoice.toggleVoiceTech();
+        });
+
+        // if (localStorage.getItem(appVoice.voiceTechIsEndlessLocalStorageKey)) {
+        //     appVoice.isVoiceTechEndless = !localStorage.getItem(appVoice.voiceTechIsEndlessLocalStorageKey);
+        // } else {
+        //     appVoice.isVoiceTechEndless = !isDesktopMode();
+        // }
+        appVoice.isVoiceTechEndless = false;
+        appVoice.toggleVoiceTech();
+    },
 };
 
 (function() {

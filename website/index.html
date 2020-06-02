@@ -67,7 +67,7 @@
                                     id="decimalPlaces-button-off" class="b-label-status">OFF</span><br /><span
                                     class="button-sub">(random)</span></button>
                         </li>
-                        <li><button class="option-item" id="button-voice" title="Use voice appVoice.recognitionObject instead of keyboard input." onclick="enterFullscreen();toggleVoiceMode()">Dorie listens<span class="hidden b-label-status" id="button-voice-on">ON</span><span id="button-voice-off" class="b-label-status">OFF</span><br /><span
+                        <li><button class="option-item" id="button-voice" title="Use voice appVoice.recognitionObject instead of keyboard input." onclick="enterFullscreen();appVoice.toggleVoiceMode()">Dorie listens<span class="hidden b-label-status" id="button-voice-on">ON</span><span id="button-voice-off" class="b-label-status">OFF</span><br /><span
                             class="button-sub">(talk to Dorie with your voice)</span></button>
                         </li>
                         <li><button class="option-item" id="soundMode" title="Use audio output for tasks and status feedback." onclick="toggleSoundMode();">Dorie speaks<span class="hidden b-label-status" id="sound-button-on">ON</span><span id="sound-button-off" class="b-label-status">OFF</span><br /><span class="button-sub">(get audio feedback for tasks)</span></button>
@@ -75,6 +75,12 @@
                         <li>
                             <button class="option-item">
                                 <span class="config-label">New Task After:</span><span class="b-label-status"><input class="config" type="number" id="autoTaskInput" name="autoTaskInput" placeholder="-" value="5" oninput="saveAutoTaskInterval()" /></span><br /><span
+                                class="button-sub">(time to wait in sec.)</span></button>
+                            </button>
+                        </li>
+                        <li>
+                            <button class="option-item">
+                                <span class="config-label">Solution Guide:</span><span class="b-label-status"><input class="config" type="number" id="solutionGuideInput" name="solutionGuideInput" placeholder="-" value="" /></span><br /><span
                                 class="button-sub">(time to wait in sec.)</span></button>
                             </button>
                         </li>
@@ -96,6 +102,8 @@
                 <div class="subpage hidden" id="devSettings">
                     <ul id="dev-settings-list" class="subpage">
                         <li><button class="option-item debugging dev-hidden" id="button-logging" title="Switch between debug mode and default." class="hidden debugging">Logging is  <span class="hidden b-label-status" id="button-logging-on">ON</span><span id="button-logging-off" class="b-label-status">OFF</span><br/><span></span></button>
+                        </li>
+                        <li><button class="option-item debugging dev-hidden" id="button-voice-tech" title="Switch between types of speech recognition loop." class="hidden debugging">Voice Rec.: <span class="hidden b-label-status" id="button-voice-tech-endless">ENDLESS</span><span id="button-voice-tech-noise" class="b-label-status">NOISE</span><br/><span></span></button>
                         </li>
                     </ul>
                 </div>

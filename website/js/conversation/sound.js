@@ -10,9 +10,11 @@ function speak(s, r = 1) {
         statement.rate = r;
         statement.pitch = 0.6
         statement.onstart = function(event) {
+            system.events.dispatchEvent(new CustomEvent('speak-before'));
             appVoice.muteVoice();
         }
         statement.onend = function(event) {
+            system.events.dispatchEvent(new CustomEvent('speak-after'));
             appVoice.remuteVoice();
         }
         speechSynthesis.speak(statement);

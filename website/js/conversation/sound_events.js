@@ -48,6 +48,12 @@
         }
     });
 
+    system.events.addEventListener('solution-timed-out', function(e) {
+        if (isSoundModeActive) {
+            speak("ist " + formatToSpeakableNumber(result) + "! ");
+        }
+    });
+
     system.events.addEventListener('give-status-answer-hallo', function(e) {
         if (isSoundModeActive) {
             speak("hallo");

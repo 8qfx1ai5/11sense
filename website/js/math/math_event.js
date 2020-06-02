@@ -12,4 +12,8 @@
     toggleDecimalPlacesMode();
 
     newTask();
+
+    system.events.addEventListener('solution-timed-out', function() {
+        newTask();
+    });
 })();
