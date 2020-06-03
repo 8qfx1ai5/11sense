@@ -7,7 +7,7 @@ let Solution;
 let psolutions;
 
 let SolutionTask;
-let autoTaskInput;
+let autoTaskSelector;
 let trainerPage;
 let header;
 

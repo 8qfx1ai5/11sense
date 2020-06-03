@@ -2,16 +2,18 @@ let solution = {
     tagIdClipboard: "clipboard",
     localStorageKeySolutionGuideInterval: "solution-guide-interval",
     tagIdSolutionGuideInput: "solution-guide-selector",
-    solutionGuideInterval: -1,
+    solutionGuideInterval: false,
 
     solutionGuideIntervalObject: false,
 
+    tagIdAutoTaskSelector: "auto-task-selector",
+    localStorageAutoTaskInterval: "autoTaskInterval",
     startTime: false,
     endTime: false,
     autoTaskTimer: false,
 
     isSolutionGuideActive: function() {
-        return 0 < this.getSolutionGuideInterval();
+        return this.getSolutionGuideInterval();
     },
 
     getSolutionGuideInterval: function() {
@@ -21,14 +23,12 @@ let solution = {
     saveSolutionGuideInterval: function() {
         let v = document.getElementById(this.tagIdSolutionGuideInput).value;
         if (v == "" || v == "-" || v == "off") {
-            // localStorage.setItem(this.localStorageKeySolutionGuideInterval, -1)
-            this.solutionGuideInterval = -1;
+            localStorage.setItem(this.localStorageKeySolutionGuideInterval, false);
+            this.solutionGuideInterval = false;
             this.stopSolutionGuideLoop();
             return;
         }
-        // v = Math.max(0, v)
-        // v = Math.min(180, v)
-        // localStorage.setItem(this.localStorageKeySolutionGuideInterval, v * 1000);
+        localStorage.setItem(this.localStorageKeySolutionGuideInterval, v * 1000);
         this.solutionGuideInterval = v * 1000;
         this.startNewSolutionGuideLoop();
     },
@@ -43,6 +43,9 @@ let solution = {
 
     startNewSolutionGuideLoop: function() {
         this.stopSolutionGuideLoop();
+        if (!this.isSolutionGuideActive()) {
+            return;
+        }
         let interval = this.getSolutionGuideInterval();
         log("start new solution guide loop: '" + interval + "'", 2);
         solution.solutionGuideIntervalObject = setTimeout(function() {
@@ -59,7 +62,7 @@ let solution = {
         if (0 < interval) {
             solution.autoTaskTimer = setInterval(function() {
                 if (!solution.endTime) {
-                    clearInterval(solution.autoTaskTimer);
+                    solution.stopAutoTask();
                     currentSolution.style.backgroundSize = "0%";
                     return
                 }
@@ -77,13 +80,13 @@ let solution = {
                     // more than 2 seconds are passed (omit fullscreen error)
                     if (interval < now - solution.endTime) {
                         currentTask.click();
-                        clearInterval(solution.autoTaskTimer);
+                        solution.stopAutoTask();
                     }
                 } else {
                     // less than 2 seconds are passed
                     if (interval < now - solution.endTime) {
                         currentTask.click();
-                        clearInterval(solution.autoTaskTimer);
+                        solution.stopAutoTask();
                     }
                 }
 
@@ -91,23 +94,26 @@ let solution = {
         }
     },
 
+    stopAutoTask: function() {
+        clearInterval(solution.autoTaskTimer);
+    },
+
     saveAutoTaskInterval: function() {
-        let v = autoTaskInput.value;
-        if (v === "" || v == "-") {
-            localStorage.setItem("autoTaskInterval", -1)
+        let v = document.getElementById(solution.tagIdAutoTaskSelector).value;
+        solution.stopAutoTask()
+        if (v == "∞") {
+            localStorage.setItem(solution.localStorageAutoTaskInterval, -1)
             return;
         }
-        v = Math.max(0, v)
-        v = Math.min(100, v)
-        localStorage.setItem("autoTaskInterval", v * 1000);
-        autoTaskInput.value = v;
+        localStorage.setItem(solution.localStorageAutoTaskInterval, v * 1000);
+        solution.startNewSolutionGuideLoop()
     },
 
     getAutoTaskInterval: function() {
-        let i = localStorage.getItem("autoTaskInterval");
+        let i = localStorage.getItem(solution.localStorageAutoTaskInterval);
         if (!i || i == "") {
             solution.saveAutoTaskInterval()
-            i = localStorage.getItem("autoTaskInterval");
+            i = localStorage.getItem(solution.localStorageAutoTaskInterval);
         }
         return i;
     },
@@ -256,19 +262,36 @@ let solution = {
 
         system.events.addEventListener('new-task-created', function(e) {
             document.getElementById(solution.tagIdClipboard).innerHTML = "";
-            if (solution.isSolutionGuideActive()) {
-                solution.startNewSolutionGuideLoop();
-            }
+            solution.startNewSolutionGuideLoop();
             solution.updateSolution()
-            clearInterval(solution.autoTaskTimer);
+            solution.stopAutoTask()
             solution.startTime = performance.now();
             solution.endTime = false;
         });
+    },
 
+    setDefaultValues: function() {
+        let i = localStorage.getItem(solution.localStorageAutoTaskInterval)
+        if (i) {
+            if (0 <= i) {
+                document.getElementById(solution.tagIdAutoTaskSelector).value = i / 1000
+            } else {
+                document.getElementById(solution.tagIdAutoTaskSelector).value = "∞"
+            }
+            solution.saveAutoTaskInterval();
+        }
+
+        let ii = localStorage.getItem(solution.localStorageKeySolutionGuideInterval)
+        if (ii == "false") {
+            document.getElementById(solution.tagIdSolutionGuideInput).value = "off"
+        } else if (Number(ii)) {
+            document.getElementById(solution.tagIdSolutionGuideInput).value = ii / 1000
+        }
         solution.saveSolutionGuideInterval();
     }
 };
 
 (function() {
-    solution.onDocumentReadyEvent();
-})();
+    solution.onDocumentReadyEvent()
+    solution.setDefaultValues()
+})()

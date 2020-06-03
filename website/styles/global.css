@@ -211,6 +211,7 @@ button:disabled {
     display: block;
 }
 
+#auto-task-selector,
 #solution-guide-selector {
     width: 3em;
     position: relative;

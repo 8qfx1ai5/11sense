@@ -212,6 +212,8 @@ function newTask(setFocus = true) {
     f2 = f2 % 10;
     let f1x = Math.max(1, f1)
     let f2x = Math.max(1, f2)
+    f1x = Math.min(4, f1x)
+    f2x = Math.min(4, f2x)
     if (f1 != f1x) {
         f1input.value = f1x
     }

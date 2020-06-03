@@ -10,6 +10,4 @@
     // set current decimal places mode
     isDecimalPlacesMode = localStorage.getItem('isDecimalPlacesModeActive') != "true";
     toggleDecimalPlacesMode();
-
-    newTask();
 })();
