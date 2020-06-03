@@ -26,7 +26,7 @@ let appVoice = {
             log("rc start omitted, muted", 1);
             return;
         }
-        if (isAutoTaskActive() && this.isBetweenTasks) {
+        if (solution.isAutoTaskActive() && this.isBetweenTasks) {
             log("rc start omitted, between tasks", 1);
             return;
         }

@@ -38,7 +38,7 @@ header {
 }
 
 .invalid {
-    color: red;
+    color: yellow;
 }
 
 body {

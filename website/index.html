@@ -74,7 +74,7 @@
                         </li>
                         <li>
                             <button class="option-item">
-                                <span class="config-label">New Task After:</span><span class="b-label-status"><input class="config" type="number" id="autoTaskInput" name="autoTaskInput" placeholder="-" value="5" oninput="saveAutoTaskInterval()" /></span><br /><span
+                                <span class="config-label">New Task After:</span><span class="b-label-status"><input class="config" type="number" id="autoTaskInput" name="autoTaskInput" placeholder="-" value="5" oninput="solution.saveAutoTaskInterval()" /></span><br /><span
                                 class="button-sub">(time to wait in sec.)</span></button>
                             </button>
                         </li>
@@ -82,11 +82,10 @@
                             <button class="option-item">
                                 <span class="config-label">Solution Guide</span><span class="b-label-status"><select name="solution-guide-selector" id="solution-guide-selector" class="selector config" dir="rtl" onchange="solution.saveSolutionGuideInterval()">
                                     <option value="off">OFF</option>
-                                    <!-- <option value="5" >  5</option> -->
                                     <option value="10" > 10</option>
                                     <option value="15" > 15</option>
-                                    <option value="20" > 20</option>
-                                    <option value="30" selected="selected" > 30</option>
+                                    <option value="20" selected="selected" > 20</option>
+                                    <option value="30" > 30</option>
                                     <option value="60" > 60</option>
                                     <option value="120" >120</option>
                                     <option value="180" >180</option>
@@ -150,6 +149,7 @@
         </div>
     </div>
     <script src="js/main/system.js"></script>
+    <script src="js/task/task-view.js"></script>
     <script src="js/page/page_event.js"></script>
     <script src="js/main/main_events.js"></script>
     <script src="js/conversation/sound_events.js"></script>
@@ -158,7 +158,7 @@
     <script src="js/math/math_event.js"></script>
     <script src="js/statistics/statistics_event.js"></script>
     <script src="js/dev/dev-view.js"></script>
-    <script src="js/solution/solution-view.js"></script>
+    <script src="js/task/solution-view.js"></script>
 </body>
 
 </html>

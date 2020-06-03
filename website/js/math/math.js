@@ -99,7 +99,6 @@ function calculateFractions() {
     for (let i = 0; i < fractionsTemp.length; i++) {
         fractions.set(fractionsTemp[i][0] + "⋅" + fractionsTemp[i][1], fractionsTemp[i][2])
     }
-    updateSolution()
 }
 
 const findFractions = (x, y) => {
@@ -226,11 +225,8 @@ function newTask(setFocus = true) {
 
     isBeginnerModeActive = (f1x == 1 && f2x == 1);
     wasSolved = false;
-    clearInterval(autoTaskTimer);
 
     calculateTask(f1x, f2x)
-    updateView()
-    resetInput()
     calculateFractions()
 
     log("task created: " + factor1 + "*" + factor2 + "=" + result + "");
@@ -299,8 +295,6 @@ function calculateTask(a, b) {
     lastTasks.unshift([factor1, factor2]);
 
     result = multiplyDecimal(factor1, factor2)
-    startTime = performance.now();
-    endTime = null;
 }
 
 // module.exports = { findFractions }
