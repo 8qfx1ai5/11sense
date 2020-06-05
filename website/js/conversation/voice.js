@@ -204,20 +204,28 @@ let appVoice = {
             let detected = e.results[e.results.length - 1][0].transcript;
             if (e.results[e.results.length - 1].isFinal) {
                 let lang = getSelectedLanguage()
-                if (appVoice.isCommandNewTask(lang, detected.trim().toLowerCase())) {
+                let command = detected.trim().toLowerCase();
+                if (!appVoice.lastInputs.includes(foundNumber.toString())) {
+                    return;
+                }
+                if (appVoice.isCommandNewTask(lang, command)) {
                     system.events.dispatchEvent(new CustomEvent('create-new-task'));
+                    appVoice.lastInputs.push(command)
                     newTask(false);
                     return;
                 }
-                if (appVoice.isCommandRepeatTask(lang, detected.trim().toLowerCase())) {
+                if (appVoice.isCommandRepeatTask(lang, command)) {
+                    appVoice.lastInputs.push(command)
                     system.events.dispatchEvent(new CustomEvent('repeat-task'));
                     return;
                 }
-                if (appVoice.isCommandAreYouThere(lang, detected.trim().toLowerCase())) {
+                if (appVoice.isCommandAreYouThere(lang, command)) {
+                    appVoice.lastInputs.push(command)
                     system.events.dispatchEvent(new CustomEvent('give-status-answer-yes'));
                     return;
                 }
-                if (appVoice.isCommandHello(lang, detected.trim().toLowerCase())) {
+                if (appVoice.isCommandHello(lang, command)) {
+                    appVoice.lastInputs.push(command)
                     system.events.dispatchEvent(new CustomEvent('give-status-answer-hallo'));
                     return;
                 }
