@@ -309,22 +309,14 @@ let appVoice = {
     },
 
     activateVoiceMode: function() {
-        if (!appVoice.isActive) {
-            localStorage.setItem('appVoice.isActive', true);
-            document.getElementById(this.tagIdMicrophoneImage).classList.remove("hidden");
-            document.getElementById(this.tagIdButtonVoice + "-on").classList.remove("hidden");
-            document.getElementById(this.tagIdButtonVoice + "-off").classList.add("hidden");
-            currentSolution.setAttribute("readonly", "readonly");
-            appVoice.isActive = true;
-            appVoice.startRecognition();
-        } else {
-            localStorage.setItem('appVoice.isActive', true);
-            document.getElementById(this.tagIdMicrophoneImage).classList.remove("hidden");
-            document.getElementById(this.tagIdButtonVoice + "-on").classList.remove("hidden");
-            document.getElementById(this.tagIdButtonVoice + "-off").classList.add("hidden");
-            currentSolution.setAttribute("readonly", "readonly");
-            appVoice.isActive = true;
-        }
+        appVoice.deactivateVoiceMode();
+        localStorage.setItem('appVoice.isActive', true);
+        document.getElementById(this.tagIdMicrophoneImage).classList.remove("hidden");
+        document.getElementById(this.tagIdButtonVoice + "-on").classList.remove("hidden");
+        document.getElementById(this.tagIdButtonVoice + "-off").classList.add("hidden");
+        currentSolution.setAttribute("readonly", "readonly");
+        appVoice.isActive = true;
+        appVoice.startRecognition();
         system.events.dispatchEvent(new CustomEvent('voice-mode-start-after'));
     },
 
