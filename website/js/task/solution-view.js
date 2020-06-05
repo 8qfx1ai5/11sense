@@ -128,7 +128,7 @@ let solution = {
     },
 
     updateViewSolutionGuide: function() {
-        currentTask.innerHTML = "<span class='mainColor'>" + formatNumberForDisplay(factor1) + " ⋅ " + formatNumberForDisplay(factor2) + " = </span>" + formatNumberForDisplay(result)
+        currentTask.innerHTML = "<span class='mainColor'>" + formatNumberForDisplay(factor1) + " ⋅ " + formatNumberForDisplay(factor2) + "</span> = <span class='mainColor'>" + formatNumberForDisplay(result) + "</span>"
         currentSolution.value = ""
         currentSolution.placeholder = ""
     },
