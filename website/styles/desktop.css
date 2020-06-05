@@ -25,6 +25,17 @@ input[type=number] {
     outline: none !important;
 }
 
+#header img {
+    max-width: 4em;
+    height: auto;
+}
+
+#header figure {
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    margin-top: 0.5em;
+}
+
 #wrapper {
     width: 100%;
     min-width: 330px;

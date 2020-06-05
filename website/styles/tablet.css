@@ -65,6 +65,15 @@ body {
     vertical-align: top;
 }
 
+#header img {
+    max-width: 4em;
+    height: auto;
+}
+
+#header figure {
+    margin: 0.5em;
+}
+
 #config {
     margin: 10px auto;
     /* width: 350px; */

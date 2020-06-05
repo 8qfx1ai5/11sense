@@ -80,6 +80,17 @@ body {
     overflow: auto;
 }
 
+#header img {
+    max-width: 4em;
+    width: 55%;
+    height: auto;
+    min-width: 3em;
+}
+
+#header figure {
+    margin: 0.5em;
+}
+
 .page {
     height: calc(100% - 6em);
     z-index: 10;
