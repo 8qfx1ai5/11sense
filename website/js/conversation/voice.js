@@ -375,11 +375,11 @@ let appVoice = {
 
     setStatusPlaceholder: function() {
         if (appVoice.isActive) {
-            if (hasPendingSoundOutput()) {
-                currentSolution.placeholder = "🙉";
+            if (appVoice.isRecognitionRunning()) {
+                currentSolution.placeholder = "...";
                 return;
             }
-            currentSolution.placeholder = "...";
+            currentSolution.placeholder = "🙉";
             return;
         }
         currentSolution.placeholder = "=";
@@ -423,6 +423,7 @@ let appVoice = {
 
         system.events.addEventListener('new-task-created', function(e) {
             appVoice.isBetweenTasks = false;
+            appVoice.setStatusPlaceholder();
         });
 
         document.getElementById(this.tagIdButtonVoiceTech).addEventListener('click', function(e) {

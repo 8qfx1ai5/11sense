@@ -6,10 +6,6 @@ let appTask = {
 
     resetInput: function() {
         currentSolution.value = "";
-        currentSolution.placeholder = "="
-            // if (appVoice.isActive) {
-            //     currentSolution.placeholder = "..."
-            // }
         currentSolution.style.backgroundSize = "0%";
         currentTask.classList.remove("valid");
         currentTask.classList.remove("invalid");
