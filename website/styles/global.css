@@ -1,3 +1,22 @@
+/* start hide google translation tooltips */
+
+.goog-tooltip {
+    display: none !important;
+}
+
+.goog-tooltip:hover {
+    display: none !important;
+}
+
+.goog-text-highlight {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+
+/* end hide google translation tooltips */
+
 header {
     height: 5em;
     position: relative;
