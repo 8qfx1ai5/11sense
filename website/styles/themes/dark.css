@@ -47,6 +47,10 @@ body {
     font-family: cursive;
 }
 
+#button-language-selection {
+    background-color: white;
+}
+
 .config {
     background-color: dimgrey;
     font-family: inherit;

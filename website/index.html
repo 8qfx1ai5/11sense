@@ -19,7 +19,7 @@
     <script src="js/statistics/statistics.js"></script>
 </head>
 
-<body>
+<body translate="yes">
     <div id="wrapper">
         <header id="header">
             <div id="header-main" class="dev-change">
@@ -36,8 +36,8 @@
         <div id="content">
             <div id="Solution" style="display: none;" onclick="toggleSolution()">
                 <h2>Solutions</h2>
-                <h3 id="Solution-task"></h3>
-                <p id="partial-solutions"></p>
+                <h3 id="Solution-task" translate="no" class="notranslate"></h3>
+                <p id="partial-solutions" translate="no" class="notranslate"></p>
             </div>
             <div id="nav" class="hidden page">
                 <h2><select name="settings-selector" id="settings-selector" class="selector dev-change" onchange="changeSettingsSubpage()">
@@ -58,6 +58,9 @@
                         <li><button type="button" disabled class="option-item" id="howToUse" title="Get an introduction about the navigation and features.">How to use<br /><span
                             class="button-sub">(Manual)</span></button>
                         </li>
+                        <!-- <li>
+                            <button disabled class="option-item" id="button-language-selection" title="Select your language."><div id="google_translate_element"></div></button>
+                        </li> -->
                     </ul>
                 </div>
                 <div class="subpage" id="advancedSettings">
@@ -147,7 +150,7 @@
                 </div>
             </div>
             <div id="trainer-page" class="page">
-                <section id="task">
+                <section id="task" translate="no" class="notranslate">
                     <p><span id="current-task" onclick="newTask()"></span></p>
                 </section>
                 <section id="input" class="speech">
@@ -173,6 +176,27 @@
     <script>
         newTask();
     </script>
+
+    <!-- <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en'
+            }, 'google_translate_element');
+        }
+    </script>
+
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
+
+    <!-- <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script> -->
+
+    <!-- <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
 </body>
 
 </html>
