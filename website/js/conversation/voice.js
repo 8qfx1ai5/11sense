@@ -203,20 +203,21 @@ let appVoice = {
             }
             let detected = e.results[e.results.length - 1][0].transcript;
             if (e.results[e.results.length - 1].isFinal) {
-                if (["neue aufgabe", "neu", "next", "weiter"].includes(detected.trim().toLowerCase())) {
+                let lang = getSelectedLanguage()
+                if (appVoice.isCommandNewTask(lang, detected.trim().toLowerCase())) {
                     system.events.dispatchEvent(new CustomEvent('create-new-task'));
                     newTask(false);
                     return;
                 }
-                if (["wiederhole", "wiederhole bitte", "bitte wiederhole", "bitte wiederholen", "kannst du das bitte wiederholen", "bitte wiederhole die aufgabe", "wiederholen", "noch mal", "bitte noch mal", "erneut", "erneut sagen", "wie bitte"].includes(detected.trim().toLowerCase())) {
+                if (appVoice.isCommandRepeatTask(lang, detected.trim().toLowerCase())) {
                     system.events.dispatchEvent(new CustomEvent('repeat-task'));
                     return;
                 }
-                if (["dorie", "dori", "bist du noch da"].includes(detected.trim().toLowerCase())) {
+                if (appVoice.isCommandAreYouThere(lang, detected.trim().toLowerCase())) {
                     system.events.dispatchEvent(new CustomEvent('give-status-answer-yes'));
                     return;
                 }
-                if (["hallo", "hi", "guten tag"].includes(detected.trim().toLowerCase())) {
+                if (appVoice.isCommandHello(lang, detected.trim().toLowerCase())) {
                     system.events.dispatchEvent(new CustomEvent('give-status-answer-hallo'));
                     return;
                 }
@@ -257,6 +258,34 @@ let appVoice = {
                 }
             }
         }
+    },
+
+    isCommandNewTask(lang, input) {
+        if (lang == "de-DE") {
+            return ["neue aufgabe", "neu", "next", "weiter"].includes(input)
+        }
+        return ["new task", "new", "next", "continue"].includes(input)
+    },
+
+    isCommandRepeatTask(lang, input) {
+        if (lang == "de-DE") {
+            return ["wiederhole", "wiederhole bitte", "bitte wiederhole", "bitte wiederholen", "kannst du das bitte wiederholen", "bitte wiederhole die aufgabe", "wiederholen", "noch mal", "bitte noch mal", "erneut", "erneut sagen", "wie bitte"].includes(input)
+        }
+        return ["repeat", "repeat please", "please repeat", "can you please repeat", "please repeat the task", "again", "please one more time", "what did you say"].includes(input)
+    },
+
+    isCommandAreYouThere(lang, input) {
+        if (lang == "de-DE") {
+            return ["dorie", "dori", "bist du noch da"].includes(input)
+        }
+        return ["dorie", "dori", "are you there"].includes(input)
+    },
+
+    isCommandHello(lang, input) {
+        if (lang == "de-DE") {
+            return ["hallo", "hi", "guten tag"].includes(input)
+        }
+        return ["hello", "hi", "good day"].includes(input)
     },
 
     stopRecognition: function() {
@@ -404,7 +433,9 @@ let appVoice = {
 
         system.events.addEventListener('speak-after', function(e) {
             if (appVoice.isActive) {
-                appVoice.startRecognition();
+                setTimeout(function() {
+                    appVoice.startRecognition();
+                }, 100)
             }
             appVoice.setStatusPlaceholder();
         });

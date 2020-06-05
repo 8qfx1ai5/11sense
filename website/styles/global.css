@@ -218,26 +218,14 @@ button:disabled {
     right: -0.2em;
 }
 
-
-/* div.skiptranslate {
-    display: none !important;
-} */
-
 body {
+    /* hack to hide google translation top area */
     top: 0px !important;
 }
 
 body>.skiptranslate {
     display: none;
-    /* height: 0em;
-    line-height: 0em;
-    position: absolute; */
 }
-
-
-/* .goog-te-banner-frame {
-    display: none;
-} */
 
 #Solution {
     margin-bottom: 15px;

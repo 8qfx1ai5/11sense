@@ -1,7 +1,15 @@
 let isSoundModeActive = false;
-let successMessages = ["richtig", "sehr gut", "hervorragend", "gut gemacht", "genau so", "weiter so", "bravo", "ja"];
+let successMessagesDE = ["richtig", "sehr gut", "hervorragend", "gut gemacht", "genau so", "weiter so", "bravo", "ja"];
+let successMessagesEN = ["right", "very good", "excellent", "well done", "that's it", "keep it up", "good job", "yes"];
 let soundButtonLabelOn;
 let soundButtonLabelOff;
+
+function getSuccessMessages() {
+    if (getSelectedLanguage() == "de-DE") {
+        return successMessagesDE
+    }
+    return successMessagesEN
+}
 
 function speak(s, r = 1) {
     if (isSoundModeActive) {
@@ -24,16 +32,20 @@ function hasPendingSoundOutput() {
 }
 
 function formatToSpeakableNumber(n) {
-    let nS = n.toString();
-    let nSsplit = nS.split(".");
-    if (nSsplit.length < 2) {
-        return nS;
+    if (getSelectedLanguage() == "de-DE") {
+        let nS = n.toString();
+        let nSsplit = nS.split(".");
+        if (nSsplit.length < 2) {
+            return nS;
+        }
+        let output = nSsplit[0] + ",";
+        for (let i = 0; i < nSsplit[1].length; i++) {
+            output += nSsplit[1][i] + " "
+        }
+        return output;
     }
-    let output = nSsplit[0] + ",";
-    for (let i = 0; i < nSsplit[1].length; i++) {
-        output += nSsplit[1][i] + " "
-    }
-    return output;
+
+    return n.toString();
 }
 
 function toggleSoundMode() {

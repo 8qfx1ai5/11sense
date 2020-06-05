@@ -2,7 +2,6 @@ function googleTranslateElementInit() {
     new google.translate.TranslateElement({
         pageLanguage: 'en',
         includedLanguages: "de,en",
-        defaultLanguage: 'en',
     }, 'google_translate_element');
 }
 
@@ -30,4 +29,38 @@ function setSelectedLanguage(l) {
 
 function getBrowserLanguage() {
     return (navigator.language || navigator.userLanguage).split('-', 1)[0]
+}
+
+let translationTable = {
+    "multiplied by": {
+        "de-DE": "mal"
+    },
+    "is": {
+        "de-DE": "ist"
+    },
+    "hello": {
+        "de-DE": "hallo"
+    },
+    "yes, I can hear you": {
+        "de-DE": "ja, ich hoeree dir zu"
+    },
+    "that's the direction": {
+        "de-DE": "die Richtung stimmt"
+    },
+    "See you next time.": {
+        "de-DE": "Bis zum nächsten Mal."
+    },
+    "Hello, let's train.": {
+        "de-DE": "Hallo. Lass uns üben."
+    }
+}
+
+function translateForSoundOutput(key) {
+    if (key in translationTable) {
+        let lang = getSelectedLanguage()
+        if (lang in translationTable[key]) {
+            return translationTable[key][lang]
+        }
+    }
+    return key
 }
