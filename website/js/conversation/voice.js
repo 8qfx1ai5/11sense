@@ -205,7 +205,7 @@ let appVoice = {
             if (e.results[e.results.length - 1].isFinal) {
                 let lang = getSelectedLanguage()
                 let command = detected.trim().toLowerCase();
-                if (!appVoice.lastInputs.includes(foundNumber.toString())) {
+                if (appVoice.lastInputs.includes(command)) {
                     return;
                 }
                 if (appVoice.isCommandNewTask(lang, command)) {
