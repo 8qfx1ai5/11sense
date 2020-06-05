@@ -408,6 +408,11 @@ let appVoice = {
             appVoice.isBetweenTasks = true;
         });
 
+        system.events.addEventListener('solution-timed-out', function(e) {
+            // workaround to omit mobile beeps as mutch as possible
+            appVoice.isBetweenTasks = true;
+        });
+
         system.events.addEventListener('new-task-created', function(e) {
             appVoice.isBetweenTasks = false;
         });
