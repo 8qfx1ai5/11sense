@@ -19,7 +19,8 @@
     system.events.addEventListener('sound-mode-start-after', function(e) {
         if (isSoundModeActive) {
             speak(translateForSoundOutput("Hello, let's train."), 1);
-            speak(formatToSpeakableNumber(factor1) + " " + translateForSoundOutput("multiplied by") + " " + formatToSpeakableNumber(factor2), 1);
+            newTask();
+            // speak(formatToSpeakableNumber(factor1) + " " + translateForSoundOutput("multiplied by") + " " + formatToSpeakableNumber(factor2), 1);
         }
     });
 

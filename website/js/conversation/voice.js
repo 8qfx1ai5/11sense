@@ -423,6 +423,11 @@ let appVoice = {
 
         system.events.addEventListener('new-task-created', function(e) {
             appVoice.isBetweenTasks = false;
+            if (appVoice.isActive) {
+                setTimeout(function() {
+                    appVoice.startRecognition();
+                }, 100)
+            }
             appVoice.setStatusPlaceholder();
         });
 
