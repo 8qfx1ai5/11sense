@@ -1,9 +1,7 @@
 let appVoice = {
 
     isActive: false,
-    isMuted: false,
     isBetweenTasks: false,
-    wasCanceledByMute: false,
     recognitionObject: null,
     mediaStreamObject: null,
     mobileSoundDetectionInterval: null,
@@ -18,12 +16,12 @@ let appVoice = {
     lastInputs: [],
 
     startRecognition: function() {
-        if (this.isRecognitionRunning()) {
-            log("rc start omitted, already exists", 1);
+        if (!this.isActive) {
+            log("rc start omitted, voice not active", 1);
             return;
         }
-        if (this.isMuted) {
-            log("rc start omitted, muted", 1);
+        if (this.isRecognitionRunning()) {
+            log("rc start omitted, already exists", 1);
             return;
         }
         if (solution.isAutoTaskActive() && this.isBetweenTasks) {
@@ -53,7 +51,7 @@ let appVoice = {
                 appVoice.recognitionObject = new webkitSpeechRecognition();
                 appVoice.recognitionObject.continuous = true;
                 appVoice.recognitionObject.interimResults = true;
-                appVoice.recognitionObject.lang = "de-DE";
+                appVoice.recognitionObject.lang = getSelectedLanguage();
             }
 
             // appVoice.recognitionObject.lang = "en-US";
@@ -82,9 +80,7 @@ let appVoice = {
                 currentSolution.placeholder = "🙉";
                 log("dictation finished", 1);
                 appVoice.recognitionObject = null;
-                if (!appVoice.wasCanceledByMute) {
-                    appVoice.startRecognition();
-                }
+                appVoice.startRecognition();
                 appVoice.lastInputs = [];
             }
         }
@@ -155,7 +151,7 @@ let appVoice = {
         appVoice.recognitionObject = new webkitSpeechRecognition();
         appVoice.recognitionObject.continuous = false;
         appVoice.recognitionObject.interimResults = true;
-        appVoice.recognitionObject.lang = "de-DE";
+        appVoice.recognitionObject.lang = getSelectedLanguage();
 
         // appVoice.recognitionObject.lang = "en-US";
         try { // calling it twice will throw...
@@ -185,9 +181,7 @@ let appVoice = {
             appVoice.recognitionObject = null;
             appVoice.lastInputs = [];
 
-            if (!appVoice.wasCanceledByMute) {
-                // appVoice.startRecognition();
-            }
+            // appVoice.startRecognition();
         }
     },
 
@@ -195,11 +189,6 @@ let appVoice = {
         log(e.results, 2, "console");
         if (!appVoice.isActive) {
             log("recognition inactive, abborting..");
-            appVoice.wasCanceledByMute = true;
-            appVoice.abortRecognition();
-        } else if (appVoice.isMuted) {
-            log("muted.. abort recognition..");
-            appVoice.wasCanceledByMute = true;
             appVoice.abortRecognition();
         } else {
             let currentResult = e.results[e.results.length - 1][0].transcript.trim();
@@ -298,7 +287,6 @@ let appVoice = {
             document.getElementById(this.tagIdButtonVoice + "-off").classList.add("hidden");
             currentSolution.setAttribute("readonly", "readonly");
             appVoice.isActive = true;
-            appVoice.isMuted = false;
             appVoice.startRecognition();
         } else {
             localStorage.setItem('appVoice.isActive', true);
@@ -307,14 +295,12 @@ let appVoice = {
             document.getElementById(this.tagIdButtonVoice + "-off").classList.add("hidden");
             currentSolution.setAttribute("readonly", "readonly");
             appVoice.isActive = true;
-            appVoice.isMuted = false;
         }
         system.events.dispatchEvent(new CustomEvent('voice-mode-start-after'));
     },
 
     deactivateVoiceMode: function() {
         appVoice.isActive = false;
-        appVoice.isMuted = true;
         appVoice.stopRecognition();
         localStorage.setItem('appVoice.isActive', false);
         currentSolution.removeAttribute("readonly");
@@ -324,40 +310,6 @@ let appVoice = {
         document.getElementById(this.tagIdMicrophoneImage).classList.add("hidden");
         system.events.dispatchEvent(new CustomEvent('voice-mode-end-after'));
         this.mobileSoundDetectionInterval = null;
-    },
-
-    toggleVoiceMute: function() {
-        if (appVoice.isMuted) {
-            this.remuteVoice();
-        } else {
-            this.muteVoice();
-        }
-    },
-
-    muteVoice: function() {
-        appVoice.isMuted = true;
-        if (!appVoice.isActive) {
-            return;
-        }
-        log("muted = " + appVoice.isMuted, 2);
-        appVoice.setStatusPlaceholder();
-        if (typeof appVoice.recognitionObject == "object") {
-            log("recognition aborted by mute");
-            appVoice.wasCanceledByMute = true;
-            appVoice.abortRecognition();
-        }
-    },
-
-    remuteVoice: function() {
-        appVoice.isMuted = false;
-        if (appVoice.isActive) {
-            log("muted = " + appVoice.isMuted, 2);
-        }
-        appVoice.setStatusPlaceholder();
-        if (appVoice.wasCanceledByMute) {
-            appVoice.wasCanceledByMute = false;
-            this.startRecognition();
-        }
     },
 
     // TODO: unit tests
@@ -394,7 +346,7 @@ let appVoice = {
 
     setStatusPlaceholder: function() {
         if (appVoice.isActive) {
-            if (appVoice.isMuted) {
+            if (hasPendingSoundOutput()) {
                 currentSolution.placeholder = "🙉";
                 return;
             }
@@ -441,6 +393,20 @@ let appVoice = {
 
         document.getElementById(this.tagIdButtonVoiceTech).addEventListener('click', function(e) {
             appVoice.toggleVoiceTech();
+        });
+
+        system.events.addEventListener('speak-before', function(e) {
+            if (appVoice.isActive) {
+                appVoice.abortRecognition();
+            }
+            appVoice.setStatusPlaceholder();
+        });
+
+        system.events.addEventListener('speak-after', function(e) {
+            if (appVoice.isActive) {
+                appVoice.startRecognition();
+            }
+            appVoice.setStatusPlaceholder();
         });
 
         // if (localStorage.getItem(appVoice.voiceTechIsEndlessLocalStorageKey)) {

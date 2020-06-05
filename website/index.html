@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-language" content="en" />
     <title>Dorie Agile Math</title>
     <link rel="shortcut icon" type="image/png" href="img/settings.png" />
     <link rel="stylesheet" type="text/css" href="styles/mobile.css" media="screen and (max-width: 649px)" />
@@ -58,9 +59,9 @@
                         <li><button type="button" disabled class="option-item" id="howToUse" title="Get an introduction about the navigation and features.">How to use<br /><span
                             class="button-sub">(Manual)</span></button>
                         </li>
-                        <!-- <li>
+                        <li>
                             <button disabled class="option-item" id="button-language-selection" title="Select your language."><div id="google_translate_element"></div></button>
-                        </li> -->
+                        </li>
                     </ul>
                 </div>
                 <div class="subpage" id="advancedSettings">
@@ -144,7 +145,7 @@
                 </div>
                 <div class="subpage" id="loggings">
                     <h3>The last logging entries:</h3>
-                    <ol reversed id="logging-list">
+                    <ol reversed id="logging-list" translate="no" class="notranslate">
 
                     </ol>
                 </div>
@@ -162,6 +163,8 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="js/language/translation.js"></script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script src="js/main/system.js"></script>
     <script src="js/page/page_event.js"></script>
     <script src="js/dev/dev-view.js"></script>
@@ -175,28 +178,11 @@
     <script src="js/task/solution-view.js"></script>
     <script>
         newTask();
+
+        setTimeout(function() {
+            setSelectedLanguage(getBrowserLanguage())
+        }, 1000)
     </script>
-
-    <!-- <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en'
-            }, 'google_translate_element');
-        }
-    </script>
-
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
-
-    <!-- <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-            }, 'google_translate_element');
-        }
-    </script> -->
-
-    <!-- <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
 </body>
 
 </html>
