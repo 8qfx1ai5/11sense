@@ -13,6 +13,8 @@ let appVoice = {
     tagIdButtonVoice: "button-voice",
     tagIdMicrophoneImage: "mic-image",
 
+    wasMaybeInterruptedByScreenSaver: false,
+
     lastInputs: [],
 
     startRecognition: function() {
@@ -31,6 +33,10 @@ let appVoice = {
         if (hasPendingSoundOutput()) {
             log("rc start omitted, has pending sound", 1);
             return;
+        }
+        if (this.wasMaybeInterruptedByScreenSaver) {
+            this.wasMaybeInterruptedByScreenSaver = false;
+            alert(translateForScreenOutput("The Voice mode may require you to disable your screen saver to work as expected."));
         }
 
         if (this.isVoiceTechEndless) {
@@ -77,9 +83,12 @@ let appVoice = {
                         log("dictation hint: " + e.error, 1);
                         appVoice.stopRecognition();
                         break;
+                    case "not-allowed":
+                        if (!isDesktopMode()) {
+                            wasMaybeInterruptedByScreenSaver = true;
+                        }
                     case "audio-capture":
                     case "network":
-                    case "not-allowed":
                     case "service-not-allowed":
                     case "bad-grammar":
                     case "language-not-supported":

@@ -32,7 +32,7 @@ function getBrowserLanguage() {
     return (navigator.language || navigator.userLanguage).split('-', 1)[0]
 }
 
-let translationTable = {
+let translationTableSound = {
     "multiplied by": {
         "de-DE": "mal"
     },
@@ -57,10 +57,26 @@ let translationTable = {
 }
 
 function translateForSoundOutput(key) {
-    if (key in translationTable) {
+    if (key in translationTableSound) {
         let lang = getSelectedLanguage()
-        if (lang in translationTable[key]) {
-            return translationTable[key][lang]
+        if (lang in translationTableSound[key]) {
+            return translationTableSound[key][lang]
+        }
+    }
+    return key
+}
+
+let translationTableScreen = {
+    "The Voice mode may require you to disable your screen saver to work as expected.": {
+        "de-DE": "Im Sprachmodus müssen Sie möglicherweise Ihren Bildschirmschoner deaktivieren, damit er wie erwartet funktioniert."
+    }
+}
+
+function translateForScreenOutput(key) {
+    if (key in translationTableSound) {
+        let lang = getSelectedLanguage()
+        if (lang in translationTableSound[key]) {
+            return translationTableSound[key][lang]
         }
     }
     return key

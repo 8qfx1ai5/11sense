@@ -68,7 +68,7 @@ let solution = {
                 }
                 // Get today's date and time
                 let now = performance.now();
-                currentSolution.style.backgroundSize = ((now - solution.endTime) * 125 / interval) + "%";
+                currentSolution.style.backgroundSize = ((now - solution.endTime) * 100 / interval) + "%";
                 // if (2000 <= now - solution.endTime && now - solution.endTime < 2010) {
                 //     currentSolution.focus();
                 //     window.scrollTo(0, 0);
