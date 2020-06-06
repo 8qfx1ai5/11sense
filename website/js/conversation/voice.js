@@ -3,6 +3,7 @@ let appVoice = {
     isActive: false,
     isBetweenTasks: false,
     recognitionObject: null,
+    recognitionKillTimout: false,
     mediaStreamObject: null,
     mobileSoundDetectionInterval: null,
 
@@ -68,7 +69,8 @@ let appVoice = {
                 log("start recognition endless");
                 appVoice.setStatusPlaceholder();
                 appVoice.lastInputs = [];
-                setTimeout(function() {
+                clearTimeout(appVoice.recognitionKillTimout)
+                appVoice.recognitionKillTimout = setTimeout(function() {
                     appVoice.stopRecognition();
                 }, 6000)
             }
@@ -77,6 +79,7 @@ let appVoice = {
 
             appVoice.recognitionObject.onerror = function(e) {
                 currentSolution.placeholder = "🙉";
+                clearTimeout(appVoice.recognitionKillTimout)
                 switch (e.error) {
                     case "no-speech":
                     case "aborted":
@@ -106,6 +109,7 @@ let appVoice = {
                 currentSolution.placeholder = "🙉";
                 log("dictation finished", 1);
                 appVoice.recognitionObject = null;
+                clearTimeout(appVoice.recognitionKillTimout)
                 appVoice.startRecognition();
                 appVoice.lastInputs = [];
             }
@@ -113,6 +117,7 @@ let appVoice = {
             appVoice.recognitionObject.onaudioend = function(e) {
                 currentSolution.placeholder = "🙉";
                 log("dictation audio ended", 1);
+                clearTimeout(appVoice.recognitionKillTimout)
                 appVoice.stopRecognition();
                 appVoice.recognitionObject = null;
                 appVoice.lastInputs = [];
