@@ -71,8 +71,9 @@ let appVoice = {
                 appVoice.lastInputs = [];
                 clearTimeout(appVoice.recognitionKillTimout)
                 appVoice.recognitionKillTimout = setTimeout(function() {
+                    log("dictation timeout stop")
                     appVoice.stopRecognition();
-                }, 4000)
+                }, 3000)
             }
 
             appVoice.recognitionObject.onresult = appVoice.recognitionOResult;
