@@ -68,6 +68,9 @@ let appVoice = {
                 log("start recognition endless");
                 appVoice.setStatusPlaceholder();
                 appVoice.lastInputs = [];
+                setTimeout(function() {
+                    appVoice.stopRecognition();
+                }, 6000)
             }
 
             appVoice.recognitionObject.onresult = appVoice.recognitionOResult;
