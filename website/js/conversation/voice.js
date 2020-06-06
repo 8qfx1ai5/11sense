@@ -72,7 +72,7 @@ let appVoice = {
                 clearTimeout(appVoice.recognitionKillTimout)
                 appVoice.recognitionKillTimout = setTimeout(function() {
                     appVoice.stopRecognition();
-                }, 6000)
+                }, 4000)
             }
 
             appVoice.recognitionObject.onresult = appVoice.recognitionOResult;
