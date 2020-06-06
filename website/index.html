@@ -52,8 +52,8 @@
                             class="button-sub">(select difficulty)</span></button>
                         </li>
                         <li><button class="option-item" id="button-conversation" title="Talk with Dorie." onclick="appConversation.toggleConversation()">Conversation<span
-                            class="hidden  b-label-status notranslate" translate="no" id="button-conversation-on">ON</span><span
-                            id="button-conversation-off" class=" b-label-status notranslate" translate="no">OFF</span><br /><span
+                            class="hidden  b-label-status" id="button-conversation-on">on</span><span
+                            id="button-conversation-off" class=" b-label-status">off</span><br /><span
                             class="button-sub">(talk with Dorie)</span></button>
                         </li>
                         <li><button type="button" disabled class="option-item" id="howToUse" title="Get an introduction about the navigation and features.">How to use<br /><span
@@ -67,14 +67,14 @@
                 <div class="subpage" id="advancedSettings">
                     <ul id="advanced-settings-list">
                         <li><button class="option-item" id="button-decimalPlaces" title="Allow randomly decimal places in the task.">Decimal Places <span
-                                    class="hidden  b-label-status notranslate" translate="no" id="decimalPlaces-button-on">ON</span><span
-                                    id="decimalPlaces-button-off" class=" b-label-status notranslate" translate="no">OFF</span><br /><span
+                                    class="hidden  b-label-status" id="decimalPlaces-button-on">on</span><span
+                                    id="decimalPlaces-button-off" class=" b-label-status">off</span><br /><span
                                     class="button-sub">(random)</span></button>
                         </li>
-                        <li><button class="option-item" id="button-voice" title="Use voice recognition instead of keyboard input." onclick="enterFullscreen();appVoice.toggleVoiceMode()">Dorie listens<span class="hidden  b-label-status notranslate" translate="no" id="button-voice-on">ON</span><span id="button-voice-off" class=" b-label-status notranslate" translate="no">OFF</span><br /><span
+                        <li><button class="option-item" id="button-voice" title="Use voice recognition instead of keyboard input." onclick="enterFullscreen();appVoice.toggleVoiceMode()">Dorie listens<span class="hidden  b-label-status" id="button-voice-on">on</span><span id="button-voice-off" class=" b-label-status">off</span><br /><span
                             class="button-sub">(talk to Dorie with your voice)</span></button>
                         </li>
-                        <li><button class="option-item" id="soundMode" title="Use audio output for tasks and status feedback." onclick="toggleSoundMode();">Dorie speaks<span class="hidden  b-label-status notranslate" translate="no" id="sound-button-on">ON</span><span id="sound-button-off" class=" b-label-status notranslate" translate="no">OFF</span><br /><span class="button-sub">(get audio feedback for tasks)</span></button>
+                        <li><button class="option-item" id="soundMode" title="Use audio output for tasks and status feedback." onclick="toggleSoundMode();">Dorie speaks<span class="hidden  b-label-status" id="sound-button-on">on</span><span id="sound-button-off" class=" b-label-status">off</span><br /><span class="button-sub">(get audio feedback for tasks)</span></button>
                         </li>
                         <li>
                             <button class="option-item">
@@ -94,16 +94,16 @@
                         </li>
                         <li>
                             <button class="option-item">
-                                <span class="config-label">Solution Guide</span><span class=" b-label-status notranslate" translate="no"><select name="solution-guide-selector" id="solution-guide-selector" class="selector config" dir="rtl" onchange="solution.saveSolutionGuideInterval()">
-                                    <option value="off">OFF</option>
-                                    <option value="5">5</option>
-                                    <option value="10">10</option>
-                                    <option value="15" selected="selected">15</option>
-                                    <option value="20">20</option>
-                                    <option value="30">30</option>
-                                    <option value="60">60</option>
-                                    <option value="120">120</option>
-                                    <option value="180">180</option>
+                                <span class="config-label">Solution Guide</span><span class=" b-label-status"><select name="solution-guide-selector" id="solution-guide-selector" class="selector config" dir="rtl" onchange="solution.saveSolutionGuideInterval()">
+                                    <option value="off" translate="yes">off</option>
+                                    <option value="5" class="notranslate" translate="no">5</option>
+                                    <option value="10" class="notranslate" translate="no">10</option>
+                                    <option value="15" class="notranslate" translate="no" selected="selected">15</option>
+                                    <option value="20" class="notranslate" translate="no">20</option>
+                                    <option value="30" class="notranslate" translate="no">30</option>
+                                    <option value="60" class="notranslate" translate="no">60</option>
+                                    <option value="120" class="notranslate" translate="no">120</option>
+                                    <option value="180" class="notranslate" translate="no">180</option>
                                 </select></span><br /><span
                                 class="button-sub">(solution after sec.)</span></button>
                             </button>
@@ -125,7 +125,7 @@
                 </div>
                 <div class="subpage hidden" id="devSettings">
                     <ul id="dev-settings-list" class="subpage notranslate" translate="no">
-                        <li><button class="option-item debugging dev-hidden" id="button-logging" title="Switch between debug mode and default." class="hidden debugging">Logging is  <span class="hidden  b-label-status notranslate" translate="no" id="button-logging-on">ON</span><span id="button-logging-off" class=" b-label-status notranslate" translate="no">OFF</span><br/><span></span></button>
+                        <li><button class="option-item debugging dev-hidden" id="button-logging" title="Switch between debug mode and default." class="hidden debugging">Logging is  <span class="hidden  b-label-status" id="button-logging-on">on</span><span id="button-logging-off" class=" b-label-status">off</span><br/><span></span></button>
                         </li>
                         <li><button class="option-item debugging dev-hidden" id="button-voice-tech" title="Switch between types of speech recognition loop." class="hidden debugging">Voice Rec.: <span class="hidden  b-label-status notranslate" translate="no" id="button-voice-tech-endless">ENDLESS</span><span id="button-voice-tech-noise" class=" b-label-status notranslate" translate="no">NOISE</span><br/><span></span></button>
                         </li>
