@@ -49,10 +49,12 @@ let appVoice = {
             return;
         }
 
-        if (window.hasOwnProperty('webkitSpeechRecognition')) {
+        const speechRecognition = window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition || window.oSpeechRecognition || window.SpeechRecognition;
+
+        if (speechRecognition !== undefined) {
 
             if (typeof appVoice.recognitionObject !== "object" || typeof appVoice.recognitionObject === 'undefined' || appVoice.recognitionObject === null) {
-                appVoice.recognitionObject = new webkitSpeechRecognition();
+                appVoice.recognitionObject = new speechRecognition();
                 appVoice.recognitionObject.continuous = true;
                 appVoice.recognitionObject.interimResults = true;
                 appVoice.recognitionObject.lang = getSelectedLanguage();
@@ -72,8 +74,16 @@ let appVoice = {
                 clearTimeout(appVoice.recognitionKillTimout)
                 appVoice.recognitionKillTimout = setTimeout(function() {
                     log("dictation timeout stop")
-                    appVoice.recognitionObject.dispatchEvent(new SpeechRecognitionResult());
-                }, 3000)
+                    appVoice.recognitionObject.dispatchEvent(new Event("speechstart"));
+                }, 5000)
+            }
+
+            appVoice.recognitionObject.onsoundstart = function() {
+                log("vr on sound start", 1);
+            }
+
+            appVoice.recognitionObject.onspeechstart = function() {
+                log("vr on speech start", 1);
             }
 
             appVoice.recognitionObject.onresult = appVoice.recognitionOResult;
@@ -123,6 +133,8 @@ let appVoice = {
                 appVoice.recognitionObject = null;
                 appVoice.lastInputs = [];
             }
+        } else {
+            alert("voice recognition is not supported in your browser");
         }
     },
 
