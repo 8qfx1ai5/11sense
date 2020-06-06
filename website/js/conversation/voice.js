@@ -85,7 +85,7 @@ let appVoice = {
                         break;
                     case "not-allowed":
                         if (!isDesktopMode()) {
-                            wasMaybeInterruptedByScreenSaver = true;
+                            appVoice.wasMaybeInterruptedByScreenSaver = true;
                         }
                     case "audio-capture":
                     case "network":
