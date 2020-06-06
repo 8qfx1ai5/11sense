@@ -44,6 +44,8 @@ let appVoice = {
         }
     },
 
+    speechRecognitionEvent: (webkitSpeechRecognitionEvent || SpeechRecognitionEvent),
+
     startRecognitionEndless: function() {
         if (!appVoice.isActive) {
             return;
@@ -71,20 +73,27 @@ let appVoice = {
                 log("start recognition endless");
                 appVoice.setStatusPlaceholder();
                 appVoice.lastInputs = [];
-                clearTimeout(appVoice.recognitionKillTimout)
-                appVoice.recognitionKillTimout = setTimeout(function() {
-                    log("dictation timeout stop")
-                    appVoice.recognitionObject.dispatchEvent(new Event("speechstart"));
-                }, 5000)
+                // clearTimeout(appVoice.recognitionKillTimout)
+                // appVoice.recognitionKillTimout = setInterval(function() {
+                //     // log("dictation fake events")
+                //     appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("voicestart"));
+                //     appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("speechstart"));
+                //     appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("result"));
+                // }, 500)
             }
 
-            appVoice.recognitionObject.onsoundstart = function() {
-                log("vr on sound start", 1);
-            }
+            // appVoice.recognitionObject.onsoundstart = function() {
+            //     log("vr on sound start", 1);
+            // }
 
-            appVoice.recognitionObject.onspeechstart = function() {
-                log("vr on speech start", 1);
-            }
+            // appVoice.recognitionObject.onspeechstart = function(e) {
+            //     log("vr on speech start", 1);
+            // }
+
+            // appVoice.recognitionObject.onspeechend = function(e) {
+            //     log("vr on speech end", 1);
+            //     log(e, 1, "console");
+            // }
 
             appVoice.recognitionObject.onresult = appVoice.recognitionOResult;
 
@@ -120,7 +129,7 @@ let appVoice = {
                 currentSolution.placeholder = "🙉";
                 log("dictation finished", 1);
                 appVoice.recognitionObject = null;
-                clearTimeout(appVoice.recognitionKillTimout)
+                // clearTimeout(appVoice.recognitionKillTimout)
                 appVoice.startRecognition();
                 appVoice.lastInputs = [];
             }
@@ -128,9 +137,9 @@ let appVoice = {
             appVoice.recognitionObject.onaudioend = function(e) {
                 currentSolution.placeholder = "🙉";
                 log("dictation audio ended", 1);
-                clearTimeout(appVoice.recognitionKillTimout)
-                appVoice.stopRecognition();
                 appVoice.recognitionObject = null;
+                // clearTimeout(appVoice.recognitionKillTimout)
+                // appVoice.stopRecognition();
                 appVoice.lastInputs = [];
             }
         } else {
@@ -239,6 +248,9 @@ let appVoice = {
 
     recognitionOResult: function(e) {
         log(e.results, 2, "console");
+        if (!e.isTrusted) {
+            return;
+        }
         if (!appVoice.isActive) {
             log("recognition inactive, abborting..");
             appVoice.abortRecognition();
