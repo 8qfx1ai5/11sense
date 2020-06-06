@@ -67,16 +67,16 @@ function translateForSoundOutput(key) {
 }
 
 let translationTableScreen = {
-    "The Voice mode may require you to disable your screen saver to work as expected.": {
+    "The voice mode may require you to disable your screen saver to work as expected.": {
         "de-DE": "Im Sprachmodus müssen Sie möglicherweise Ihren Bildschirmschoner deaktivieren, damit er wie erwartet funktioniert."
     }
 }
 
 function translateForScreenOutput(key) {
-    if (key in translationTableSound) {
+    if (key in translationTableScreen) {
         let lang = getSelectedLanguage()
-        if (lang in translationTableSound[key]) {
-            return translationTableSound[key][lang]
+        if (lang in translationTableScreen[key]) {
+            return translationTableScreen[key][lang]
         }
     }
     return key

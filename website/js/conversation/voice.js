@@ -34,10 +34,7 @@ let appVoice = {
             log("rc start omitted, has pending sound", 1);
             return;
         }
-        if (this.wasMaybeInterruptedByScreenSaver) {
-            this.wasMaybeInterruptedByScreenSaver = false;
-            alert(translateForScreenOutput("The Voice mode may require you to disable your screen saver to work as expected."));
-        }
+        appNotification.sendMessageIfRequired("voiceScreenSaverConflictHint");
 
         if (this.isVoiceTechEndless) {
             this.startRecognitionEndless();
@@ -85,7 +82,7 @@ let appVoice = {
                         break;
                     case "not-allowed":
                         if (!isDesktopMode()) {
-                            appVoice.wasMaybeInterruptedByScreenSaver = true;
+                            appNotification.requireMessage("voiceScreenSaverConflictHint");
                         }
                     case "audio-capture":
                     case "network":
