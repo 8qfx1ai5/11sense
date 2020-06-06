@@ -83,6 +83,14 @@ let appVoice = {
                 appVoice.startRecognition();
                 appVoice.lastInputs = [];
             }
+
+            appVoice.recognitionObject.onaudioend = function(e) {
+                // currentSolution.placeholder = "🙉";
+                log("dictation audio ended", 1);
+                // appVoice.recognitionObject = null;
+                // appVoice.startRecognition();
+                // appVoice.lastInputs = [];
+            }
         }
     },
 
