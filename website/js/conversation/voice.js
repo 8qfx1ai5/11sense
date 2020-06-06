@@ -74,13 +74,13 @@ let appVoice = {
                 appVoice.setStatusPlaceholder();
                 appVoice.lastInputs = [];
                 clearTimeout(appVoice.recognitionKillTimout)
-                appVoice.recognitionKillTimout = setInterval(function() {
-                    speechSynthesis.speak(new SpeechSynthesisUtterance("w"));
+                    // appVoice.recognitionKillTimout = setInterval(function() {
+                    // speechSynthesis.speak(new SpeechSynthesisUtterance("w"));
                     // log("dictation fake events")
                     // appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("voicestart"));
                     // appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("speechstart"));
                     // appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("result"));
-                }, 3000)
+                    // }, 3000)
             }
 
             // appVoice.recognitionObject.onsoundstart = function() {
