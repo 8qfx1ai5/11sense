@@ -71,8 +71,25 @@ let appVoice = {
 
             appVoice.recognitionObject.onerror = function(e) {
                 currentSolution.placeholder = "🙉";
-                log("uppps.. dictation interrupted", 1);
-                appVoice.stopRecognition();
+                switch (e.error) {
+                    case "no-speech":
+                    case "aborted":
+                        log("dictation hint: " + e.error, 1);
+                        appVoice.stopRecognition();
+                        break;
+                    case "audio-capture":
+                    case "network":
+                    case "not-allowed":
+                    case "service-not-allowed":
+                    case "bad-grammar":
+                    case "language-not-supported":
+                    default:
+                        log("dictation critical error: " + e.error, 3, "app")
+                        log(e, 3, "console");
+                        appVoice.abortRecognition();
+                        break;
+                }
+                appVoice.recognitionObject = null;
                 appVoice.lastInputs = [];
             }
 
@@ -85,11 +102,11 @@ let appVoice = {
             }
 
             appVoice.recognitionObject.onaudioend = function(e) {
-                // currentSolution.placeholder = "🙉";
+                currentSolution.placeholder = "🙉";
                 log("dictation audio ended", 1);
-                // appVoice.recognitionObject = null;
-                // appVoice.startRecognition();
-                // appVoice.lastInputs = [];
+                appVoice.stopRecognition();
+                appVoice.recognitionObject = null;
+                appVoice.lastInputs = [];
             }
         }
     },
