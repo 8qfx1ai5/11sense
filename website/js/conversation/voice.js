@@ -73,13 +73,14 @@ let appVoice = {
                 log("start recognition endless");
                 appVoice.setStatusPlaceholder();
                 appVoice.lastInputs = [];
-                // clearTimeout(appVoice.recognitionKillTimout)
-                // appVoice.recognitionKillTimout = setInterval(function() {
-                //     // log("dictation fake events")
-                //     appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("voicestart"));
-                //     appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("speechstart"));
-                //     appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("result"));
-                // }, 500)
+                clearTimeout(appVoice.recognitionKillTimout)
+                appVoice.recognitionKillTimout = setInterval(function() {
+                    speechSynthesis.speak(new SpeechSynthesisUtterance("w"));
+                    // log("dictation fake events")
+                    // appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("voicestart"));
+                    // appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("speechstart"));
+                    // appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("result"));
+                }, 3000)
             }
 
             // appVoice.recognitionObject.onsoundstart = function() {
@@ -129,7 +130,7 @@ let appVoice = {
                 currentSolution.placeholder = "🙉";
                 log("dictation finished", 1);
                 appVoice.recognitionObject = null;
-                // clearTimeout(appVoice.recognitionKillTimout)
+                clearTimeout(appVoice.recognitionKillTimout)
                 appVoice.startRecognition();
                 appVoice.lastInputs = [];
             }
@@ -138,8 +139,8 @@ let appVoice = {
                 currentSolution.placeholder = "🙉";
                 log("dictation audio ended", 1);
                 appVoice.recognitionObject = null;
-                // clearTimeout(appVoice.recognitionKillTimout)
-                // appVoice.stopRecognition();
+                clearTimeout(appVoice.recognitionKillTimout)
+                    // appVoice.stopRecognition();
                 appVoice.lastInputs = [];
             }
         } else {
