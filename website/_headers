@@ -1,5 +1,9 @@
 # headers file
 
-# force https without preload
+# rules for all paths and files
 /*
+  # force https without preload
   Strict-Transport-Security: max-age=63072000; includeSubDomains
+
+  # prevent coockies to be sended to other sites with js
+  Set-Cookie: "HttpOnly;Secure;SameSite=Strict"
