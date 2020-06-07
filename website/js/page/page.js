@@ -12,6 +12,18 @@ function isDesktopMode() {
     return 1100 <= screen.width
 }
 
+function switchToNextRightPage() {
+    let allSubpages = registeredDisplaySubpages.concat([""]).concat(registeredSettingsSubpages)
+    let currentSubpageIndex = allSubpages.indexOf(window.location.hash.substr(1))
+    window.location.assign("#" + allSubpages[Math.min(currentSubpageIndex + 1, allSubpages.length - 1)]);
+}
+
+function switchToNextLeftPage() {
+    let allSubpages = registeredDisplaySubpages.concat([""]).concat(registeredSettingsSubpages)
+    let currentSubpageIndex = allSubpages.indexOf(window.location.hash.substr(1))
+    window.location.assign("#" + allSubpages[Math.max(currentSubpageIndex - 1, 0)]);
+}
+
 // all about main page
 
 function backToMainPage() {
@@ -67,7 +79,7 @@ function toggleNav() {
     }
 }
 
-function showNav() {
+function showNav(subpage = "settings-basic") {
     navigation.classList.remove("hidden");
     hideSolution();
     document.getElementById(tagIdHeaderRight).classList.remove("inactive-page-icon");
@@ -76,6 +88,7 @@ function showNav() {
         hideStats();
     }
     navigation.focus();
+    changeSettingsSubpageTo(subpage);
 }
 
 function hideNav() {
@@ -97,7 +110,7 @@ function onClickNavPage() {
 
 function setNavPageLocation() {
     log("set nav page location", 1);
-    window.location.assign("#nav");
+    window.location.assign("#settings-basic");
 }
 
 // all about stats page
@@ -108,7 +121,7 @@ function isStatsPageActive() {
 
 function setStatsPageLocation() {
     log("set stats page location", 1);
-    window.location.assign("#stats");
+    window.location.assign("#stats-history");
 }
 
 function toggleStats() {
@@ -119,7 +132,7 @@ function toggleStats() {
     }
 }
 
-function showStats() {
+function showStats(subpage = "stats-history") {
     stats.classList.remove("hidden");
     hideSolution();
     document.getElementById(tagIdHeaderLeft).classList.remove("inactive-page-icon");
@@ -128,6 +141,7 @@ function showStats() {
         hideNav();
     }
     stats.focus();
+    changeDisplaySubpageTo(subpage);
 }
 
 function hideStats() {

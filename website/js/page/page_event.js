@@ -8,27 +8,28 @@
     document.addEventListener('touchmove', handleTouchMove, false);
 
     window.addEventListener('popstate', function(e) {
-        if (isDesktopMode()) {
-            return;
-        }
-        log("new location hash: '" + window.location.hash + "'", 1);
-
-        switch (window.location.hash) {
-            case "":
-                backToMainPage();
-                break;
-            case "#nav":
-                showNav();
-                break;
-            case "#stats":
-                showStats();
-                break;
-        }
+        handlePageStatus()
     });
 
-    changeDisplaySubpage();
-    changeSettingsSubpage();
+    handlePageStatus()
 })();
+
+function handlePageStatus() {
+    if (isDesktopMode()) {
+        return;
+    }
+    log("new location hash: '" + window.location.hash + "'", 1);
+
+    if (window.location.hash == "") {
+        backToMainPage();
+    } else if (window.location.hash.startsWith("#settings-")) {
+        showNav(window.location.hash.substr(1));
+    } else if (window.location.hash.startsWith("#stats-")) {
+        showStats(window.location.hash.substr(1));
+    } else {
+        window.location.replace('#');
+    }
+}
 
 
 var xDown = null;
@@ -61,18 +62,10 @@ function handleTouchMove(evt) {
     if (Math.abs(xDiff) > Math.abs(yDiff)) { /*most significant*/
         if (xDiff > 0) {
             /* left swipe */
-            if (isStatsPageActive()) {
-                clickMainPage();
-            } else if (isMainPageActive()) {
-                clickNavPage();
-            }
+            switchToNextRightPage();
         } else {
             /* right swipe */
-            if (isNavPageActive()) {
-                clickMainPage();
-            } else if (isMainPageActive()) {
-                clickStatsPage();
-            }
+            switchToNextLeftPage();
         }
     } else {
         if (yDiff > 0) {

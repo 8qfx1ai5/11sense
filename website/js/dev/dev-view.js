@@ -33,6 +33,9 @@ let dev = {
 
         // update logging view
         this.updateLoggingsBasedOnLocalStorage();
+
+        registeredSettingsSubpages.push("settings-dev");
+        registeredDisplaySubpages.unshift("stats-loggings");
     },
 
     deactivateDeveloperMode: function() {
@@ -56,6 +59,9 @@ let dev = {
             e.selectedIndex = 0;
             e.dispatchEvent(new Event('change'));
         });
+
+        registeredSettingsSubpages = registeredSettingsSubpages.filter(function(value, index, arr) { return value != "settings-dev" })
+        registeredDisplaySubpages = registeredDisplaySubpages.filter(function(value, index, arr) { return value != "stats-loggings" })
     },
 
     toggleLoggingMode: function() {

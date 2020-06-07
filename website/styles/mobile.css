@@ -78,6 +78,7 @@ body {
     margin: auto;
     height: calc(100% - 5em);
     overflow: auto;
+    min-height: 8em;
 }
 
 #header img {
