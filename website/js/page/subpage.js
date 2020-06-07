@@ -25,7 +25,7 @@ function changeDisplaySubpageTo(targetpage = "stats-history") {
     });
     if (!hasPageFound) {
         log("subpage not found '" + targetpage + "'", 2);
-        window.location.assign("#")
+        window.location.replace('#');
     }
 }
 
@@ -54,6 +54,6 @@ function changeSettingsSubpageTo(targetpage = "settings-basic") {
     });
     if (!hasPageFound) {
         log("subpage not found '" + targetpage + "'", 2);
-        window.location.assign("#")
+        window.location.replace('#');
     }
 }

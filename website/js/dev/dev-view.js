@@ -43,25 +43,8 @@ let dev = {
         isDeveloperMode = false;
         localStorage.setItem('isDeveloperMode', false);
 
-        // set color back at dev related elements
-        Array.prototype.forEach.call(document.getElementsByClassName("dev-change"), function(element) {
-            element.classList.remove("debugging");
-        });
-
-        // hide all dev elements
-        Array.prototype.forEach.call(document.getElementsByClassName("dev-hidden"), function(element) {
-            element.classList.add("hidden");
-        });
-
-        // reset subpage navigations
-        Array.prototype.forEach.call(document.getElementsByClassName("selector"), function(element) {
-            let e = document.getElementById(tagIdDisplaySelector);
-            e.selectedIndex = 0;
-            e.dispatchEvent(new Event('change'));
-        });
-
-        registeredSettingsSubpages = registeredSettingsSubpages.filter(function(value, index, arr) { return value != "settings-dev" })
-        registeredDisplaySubpages = registeredDisplaySubpages.filter(function(value, index, arr) { return value != "stats-loggings" })
+        window.location.replace('#');
+        window.location.reload();
     },
 
     toggleLoggingMode: function() {
@@ -113,8 +96,10 @@ let dev = {
         localStorage.setItem('isLoggingMode', "true");
         isLoggingMode = localStorage.getItem('isLoggingMode') != "true";
         this.toggleLoggingMode();
-        isDeveloperMode = localStorage.getItem('isDeveloperMode') != "true";
-        this.toggleDeveloperMode();
+        isDeveloperMode = false;
+        if (localStorage.getItem('isDeveloperMode') == "true") {
+            dev.activateDeveloperMode();
+        }
 
         let headerMain = document.getElementById(this.tagIdHeaderMain);
         headerMain.addEventListener('click', function(e) {
