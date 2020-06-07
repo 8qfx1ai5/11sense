@@ -15,13 +15,19 @@ function isDesktopMode() {
 function switchToNextRightPage() {
     let allSubpages = registeredDisplaySubpages.concat([""]).concat(registeredSettingsSubpages)
     let currentSubpageIndex = allSubpages.indexOf(window.location.hash.substr(1))
-    window.location.assign("#" + allSubpages[Math.min(currentSubpageIndex + 1, allSubpages.length - 1)]);
+    if (currentSubpageIndex == allSubpages.length - 1) {
+        return
+    }
+    window.location.assign("#" + allSubpages[currentSubpageIndex + 1]);
 }
 
 function switchToNextLeftPage() {
     let allSubpages = registeredDisplaySubpages.concat([""]).concat(registeredSettingsSubpages)
     let currentSubpageIndex = allSubpages.indexOf(window.location.hash.substr(1))
-    window.location.assign("#" + allSubpages[Math.max(currentSubpageIndex - 1, 0)]);
+    if (currentSubpageIndex == 0) {
+        return
+    }
+    window.location.assign("#" + allSubpages[currentSubpageIndex - 1]);
 }
 
 // all about main page
