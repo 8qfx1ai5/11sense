@@ -15,20 +15,20 @@
 })();
 
 function handlePageStatus() {
-    if (isDesktopMode()) {
-        return;
-    }
     log("new location hash: '" + window.location.hash + "'", 1);
 
     if (window.location.hash == "") {
         backToMainPage();
-    } else if (window.location.hash.startsWith("#settings-")) {
-        showNav(window.location.hash.substr(1));
-    } else if (window.location.hash.startsWith("#stats-")) {
-        showStats(window.location.hash.substr(1));
-    } else {
-        window.location.replace('#');
+        return;
     }
+    let currentSubpages = window.location.hash.substr(1).split("/")
+    currentSubpages.forEach(function(page) {
+        if (page.startsWith("settings-")) {
+            showNav(page);
+        } else if (page.startsWith("stats-")) {
+            showStats(page);
+        }
+    })
 }
 
 

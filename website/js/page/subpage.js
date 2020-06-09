@@ -3,12 +3,6 @@ let registeredSettingsSubpages = ["settings-basic", "settings-advanced"];
 
 // all about the display page
 
-function changeDisplaySubpage() {
-    let selectionObject = document.getElementById(tagIdDisplaySelector);
-    let currentSelection = selectionObject.value;
-    window.location.assign("#" + currentSelection)
-}
-
 function changeDisplaySubpageTo(targetpage = "stats-history") {
     log("change display subpage to '" + targetpage + "'", 1);
     document.getElementById(tagIdDisplaySelector).value = targetpage
@@ -30,12 +24,6 @@ function changeDisplaySubpageTo(targetpage = "stats-history") {
 }
 
 // all about the settings page
-
-function changeSettingsSubpage() {
-    let selectionObject = document.getElementById(tagIdSettingsSelector)
-    let currentSelection = selectionObject.value
-    window.location.assign("#" + currentSelection)
-}
 
 function changeSettingsSubpageTo(targetpage = "settings-basic") {
     log("change settings subpage to '" + targetpage + "'", 1);

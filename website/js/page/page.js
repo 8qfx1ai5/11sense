@@ -109,14 +109,27 @@ function clickNavPage() {
 function onClickNavPage() {
     if (isDesktopMode()) {
         toggleNav();
-    } else {
-        setNavPageLocation();
     }
+    setNavPageLocation();
 }
 
 function setNavPageLocation() {
     log("set nav page location", 1);
-    window.location.assign("#settings-basic");
+    if (isDesktopMode()) {
+        let currentSubpages = []
+        let dispaySelector = document.getElementById(tagIdDisplaySelector)
+        if (dispaySelector.value && isStatsPageActive()) {
+            currentSubpages.push(dispaySelector.value)
+        }
+        let settingsSelector = document.getElementById(tagIdSettingsSelector)
+        if (settingsSelector.value && isNavPageActive()) {
+            currentSubpages.push(settingsSelector.value)
+        }
+        window.location.assign("#" + currentSubpages.join("/"));
+    } else {
+        let settingsSelector = document.getElementById(tagIdSettingsSelector)
+        window.location.assign("#" + settingsSelector.value);
+    }
 }
 
 // all about stats page
@@ -127,7 +140,21 @@ function isStatsPageActive() {
 
 function setStatsPageLocation() {
     log("set stats page location", 1);
-    window.location.assign("#stats-history");
+    if (isDesktopMode()) {
+        let currentSubpages = []
+        let dispaySelector = document.getElementById(tagIdDisplaySelector)
+        if (dispaySelector.value && isStatsPageActive()) {
+            currentSubpages.push(dispaySelector.value)
+        }
+        let settingsSelector = document.getElementById(tagIdSettingsSelector)
+        if (settingsSelector.value && isNavPageActive()) {
+            currentSubpages.push(settingsSelector.value)
+        }
+        window.location.assign("#" + currentSubpages.join("/"));
+    } else {
+        let dispaySelector = document.getElementById(tagIdDisplaySelector)
+        window.location.assign("#" + dispaySelector.value);
+    }
 }
 
 function toggleStats() {
@@ -162,9 +189,8 @@ function clickStatsPage() {
 function onClickStatsPage() {
     if (isDesktopMode()) {
         toggleStats();
-    } else {
-        setStatsPageLocation();
     }
+    setStatsPageLocation();
 }
 
 // all about solution pages

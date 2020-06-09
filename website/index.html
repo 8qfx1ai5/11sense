@@ -41,7 +41,7 @@
                 <p id="partial-solutions" translate="no" class="notranslate"></p>
             </div>
             <div id="nav" class="hidden page">
-                <h2><select name="settings-selector" id="settings-selector" class="selector dev-change" onchange="changeSettingsSubpage()">
+                <h2><select name="settings-selector" id="settings-selector" class="selector dev-change" onchange="setNavPageLocation()">
                     <option value="settings-basic">Basic Settings</option>
                     <option value="settings-advanced" >More Settings</option>
                     <option value="settings-dev" class="hidden dev-hidden" >Development</option>
@@ -133,7 +133,7 @@
                 </div>
             </div>
             <div id="stats" class="hidden page">
-                <h2><select name="display-selector" id="display-selector" class="selector dev-change" onchange="changeDisplaySubpage()">
+                <h2><select name="display-selector" id="display-selector" class="selector dev-change" onchange="setStatsPageLocation()">
                     <option value="stats-history">History</option>
                     <option value="stats-loggings" class="hidden dev-hidden" >Loggings</option>
                 </select></h2>
