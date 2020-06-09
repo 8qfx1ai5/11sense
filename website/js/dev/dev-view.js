@@ -78,22 +78,30 @@ let dev = {
         loggingList = document.getElementById(dev.tagIdloggingList);
         loggingList.innerHTML = "";
         oldLoggings = getLoggingsFromLocalStorage();
-        for (i = oldLoggings.length - 1; 0 <= i; i--) {
-            entry = document.createElement('li');
-            content = document.createElement('span');
-            entry.setAttribute('class', 'tooltip')
-            entry.addEventListener('click', function() {
-                this.firstChild.firstChild.classList.toggle("tooltipvisible")
-            })
-            text = oldLoggings[i].substring(oldLoggings[i].indexOf(",") + 1);
-            tooltipText = document.createElement("span")
-            tooltipText.classList.add("tooltiptext")
-            tooltipText.innerHTML = text
-            content.append(tooltipText)
-            content.appendChild(document.createTextNode(text));
-            entry.append(content);
-            loggingList.append(entry);
+        for (i = 0; i < oldLoggings.length; i++) {
+            this.updateLoggingAddSingleLine(oldLoggings[i])
         }
+    },
+
+    updateLoggingAddSingleLine: function(s) {
+        if (!isDeveloperMode) {
+            return;
+        }
+        loggingList = document.getElementById(dev.tagIdloggingList);
+        entry = document.createElement('li');
+        content = document.createElement('span');
+        entry.setAttribute('class', 'tooltip')
+        entry.addEventListener('click', function() {
+            this.firstChild.firstChild.classList.toggle("tooltipvisible")
+        })
+        text = s.substring(s.indexOf(",") + 1);
+        tooltipText = document.createElement("span")
+        tooltipText.classList.add("tooltiptext")
+        tooltipText.innerHTML = text
+        content.append(tooltipText)
+        content.appendChild(document.createTextNode(text));
+        entry.append(content);
+        loggingList.prepend(entry);
     },
 
     onDocumentReadyEvent: function() {
@@ -136,8 +144,8 @@ let dev = {
             dev.toggleLoggingMode();
         });
 
-        system.events.addEventListener("custom-log-changed", function() {
-            dev.updateLoggingsBasedOnLocalStorage();
+        system.events.addEventListener("custom-log-changed", function(e) {
+            dev.updateLoggingAddSingleLine(e.detail.log);
         });
     }
 };

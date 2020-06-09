@@ -45,9 +45,10 @@ function saveLogInLocalStorage(s) {
     if (loggingMax < oldLoggings.length) {
         oldLoggings.splice(0, oldLoggings.length - loggingMax);
     }
-    oldLoggings.push(new Date().toLocaleString() + ": " + s);
+    let logEntry = new Date().toLocaleString() + ": " + s
+    oldLoggings.push(logEntry);
     localStorage.setItem(loggingLocalStorageKey, JSON.stringify(oldLoggings));
-    system.events.dispatchEvent(new Event('custom-log-changed'));
+    system.events.dispatchEvent(new CustomEvent('custom-log-changed', { detail: { log: logEntry } }));
 }
 
 var SysEvents = function(options) {
