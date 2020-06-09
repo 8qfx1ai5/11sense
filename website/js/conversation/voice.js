@@ -44,8 +44,6 @@ let appVoice = {
         }
     },
 
-    speechRecognitionEvent: (webkitSpeechRecognitionEvent || SpeechRecognitionEvent),
-
     startRecognitionEndless: function() {
         if (!appVoice.isActive) {
             return;
@@ -77,9 +75,6 @@ let appVoice = {
                     // appVoice.recognitionKillTimout = setInterval(function() {
                     // speechSynthesis.speak(new SpeechSynthesisUtterance("w"));
                     // log("dictation fake events")
-                    // appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("voicestart"));
-                    // appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("speechstart"));
-                    // appVoice.recognitionObject.dispatchEvent(new appVoice.speechRecognitionEvent("result"));
                     // }, 3000)
             }
 
