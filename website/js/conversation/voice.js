@@ -377,7 +377,7 @@ let appVoice = {
     },
 
     activateVoiceMode: function() {
-        appVoice.deactivateVoiceMode();
+        appVoice.deactivateVoiceMode(true);
         localStorage.setItem('appVoice.isActive', true);
         document.getElementById(this.tagIdMicrophoneImage).classList.remove("hidden");
         document.getElementById(this.tagIdButtonVoice + "-on").classList.remove("hidden");
@@ -388,17 +388,19 @@ let appVoice = {
         system.events.dispatchEvent(new CustomEvent('voice-mode-start-after'));
     },
 
-    deactivateVoiceMode: function() {
-        appVoice.isActive = false;
+    deactivateVoiceMode: function(isJustARestart = false) {
         appVoice.stopRecognition();
-        localStorage.setItem('appVoice.isActive', false);
-        currentSolution.removeAttribute("readonly");
-        document.getElementById(this.tagIdButtonVoice + "-on").classList.add("hidden");
-        document.getElementById(this.tagIdButtonVoice + "-off").classList.remove("hidden");
         clearInterval(appVoice.mobileSoundDetectionInterval);
-        document.getElementById(this.tagIdMicrophoneImage).classList.add("hidden");
-        system.events.dispatchEvent(new CustomEvent('voice-mode-end-after'));
         this.mobileSoundDetectionInterval = null;
+        if (!isJustARestart) {
+            document.getElementById(this.tagIdMicrophoneImage).classList.add("hidden");
+            document.getElementById(this.tagIdButtonVoice + "-on").classList.add("hidden");
+            document.getElementById(this.tagIdButtonVoice + "-off").classList.remove("hidden");
+            appVoice.isActive = false;
+            localStorage.setItem('appVoice.isActive', false);
+            currentSolution.removeAttribute("readonly");
+            system.events.dispatchEvent(new CustomEvent('voice-mode-end-after'));
+        }
     },
 
     // TODO: unit tests
