@@ -212,7 +212,7 @@ button:disabled {
 
 .subpage h3,
 .subpage ol {
-    width: 90%;
+    width: 85%;
     margin: auto;
 }
 
@@ -273,13 +273,11 @@ body>.skiptranslate {
 
 #logging-list li.tooltip {
     position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
 }
 
 #logging-list li.tooltip .tooltiptext {
     visibility: hidden;
-    width: 100%;
+    width: 90%;
     background-color: #555;
     color: #fff;
     text-align: center;
@@ -292,6 +290,7 @@ body>.skiptranslate {
     transition: opacity 0.3s;
     text-overflow: unset;
     white-space: normal;
+    font-size: 2em;
 }
 
 #logging-list li.tooltip span.tooltiptext::after {
