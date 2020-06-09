@@ -270,3 +270,40 @@ body>.skiptranslate {
 .subpage {
     text-align: left;
 }
+
+#logging-list li.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+#logging-list li.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 100%;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    opacity: 0;
+    transition: opacity 0.3s;
+    text-overflow: unset;
+    white-space: normal;
+}
+
+#logging-list li.tooltip span.tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.tooltipvisible {
+    visibility: visible !important;
+    opacity: 1 !important;
+}

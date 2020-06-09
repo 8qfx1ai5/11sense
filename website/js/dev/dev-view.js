@@ -80,11 +80,18 @@ let dev = {
         oldLoggings = getLoggingsFromLocalStorage();
         for (i = oldLoggings.length - 1; 0 <= i; i--) {
             entry = document.createElement('li');
-            entry.setAttribute("title", oldLoggings[i]);
             content = document.createElement('span');
+            entry.setAttribute('class', 'tooltip')
+            entry.addEventListener('click', function() {
+                this.firstChild.firstChild.classList.toggle("tooltipvisible")
+            })
             text = oldLoggings[i].substring(oldLoggings[i].indexOf(",") + 1);
+            tooltipText = document.createElement("span")
+            tooltipText.classList.add("tooltiptext")
+            tooltipText.innerHTML = text
+            content.append(tooltipText)
             content.appendChild(document.createTextNode(text));
-            entry.appendChild(content);
+            entry.append(content);
             loggingList.append(entry);
         }
     },
