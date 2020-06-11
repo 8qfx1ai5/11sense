@@ -1,4 +1,4 @@
-let isLoggingMode = false;
+export let isLoggingMode = false;
 let loggingMax = 99;
 let logLevel = 1;
 let loggingLocalStorageKey = "debugLog";
@@ -9,7 +9,7 @@ let loggingLocalStorageKey = "debugLog";
     2. default (most useful steps)
     3. only verry important things
 */
-function log(s, l = 3, onlySingleLog = false) {
+export function log(s, l = 3, onlySingleLog = false) {
     if (isLoggingMode && logLevel <= l) {
         switch (onlySingleLog) {
             case "console":
@@ -26,7 +26,7 @@ function log(s, l = 3, onlySingleLog = false) {
     }
 }
 
-function getLoggingsFromLocalStorage() {
+export function getLoggingsFromLocalStorage() {
     oldLoggings = localStorage.getItem(loggingLocalStorageKey);
     if (!oldLoggings) {
         oldLoggings = [];
@@ -51,7 +51,7 @@ function saveLogInLocalStorage(s) {
     system.events.dispatchEvent(new CustomEvent('custom-log-changed', { detail: { log: logEntry } }));
 }
 
-var SysEvents = function(options) {
+let SysEvents = function(options) {
     // Create a DOM EventTarget object
     var target = document.createTextNode(null);
 
@@ -67,29 +67,22 @@ var SysEvents = function(options) {
     }
 }
 
-let system = {
+export let events = new SysEvents()
 
-    events: new SysEvents(),
+export function init() {
+    // log all errors
+    window.onerror = function(errorMsg, url, lineNumber, column, errorObj) {
+        log('ERR: ' + errorMsg +
+            ' URL: ' + url +
+            ' LINE: ' + lineNumber +
+            ' COLUMN: ' + column +
+            ' STACKTRACE: ' + errorObj, 3, "app");
+    };
 
-    registerEventListeners: function() {
-        // log all errors
-        window.onerror = function(errorMsg, url, lineNumber, column, errorObj) {
-            log('ERR: ' + errorMsg +
-                ' URL: ' + url +
-                ' LINE: ' + lineNumber +
-                ' COLUMN: ' + column +
-                ' STACKTRACE: ' + errorObj, 3, "app");
-        };
-
-        document.addEventListener("securitypolicyviolation", (e) => {
-            log('SEC-ERR: ' + e.violatedDirective +
-                ' URL: ' + e.blockedURI +
-                ' POLICY: ' + e.originalPolicy
-            );
-        });
-    },
-};
-
-(function() {
-    system.registerEventListeners();
-})();
+    document.addEventListener("securitypolicyviolation", (e) => {
+        log('SEC-ERR: ' + e.violatedDirective +
+            ' URL: ' + e.blockedURI +
+            ' POLICY: ' + e.originalPolicy
+        );
+    });
+}

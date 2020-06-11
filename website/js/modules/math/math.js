@@ -1,17 +1,20 @@
-let decimalPlacesButtonLabelOn;
-let decimalPlacesButtonLabelOff;
-let isDecimalPlacesMode = false;
+import * as appSystem from '../main/system.js'
+import * as Main from '../main/main.js'
+import { appTask } from '../task/task-view.js'
 
-let factor1 = 0;
+export let isDecimalPlacesMode = false;
+let tagIdDecimalPlaces = 'button-decimal-places'
+
+export let factor1 = 0;
 let factor1StringJoined = "";
-let factor1Decimals = 0;
-let factor2 = 0;
+export let factor1Decimals = 0;
+export let factor2 = 0;
 let factor2StringJoined = "";
-let factor2Decimals = 0;
-let result = 0;
+export let factor2Decimals = 0;
+export let result = 0;
 let resultStringJoined = "";
 let resultDecimals = 0;
-let fractions = new Map();
+export let fractions = new Map();
 let lastTasks = [];
 
 function toggleDecimalPlacesMode() {
@@ -23,22 +26,22 @@ function toggleDecimalPlacesMode() {
 }
 
 function activateDecimalPlacesMode() {
-    log("activate decimal places");
+    appSystem.log("activate decimal places");
     isDecimalPlacesMode = true;
     localStorage.setItem('isDecimalPlacesModeActive', true);
-    decimalPlacesButtonLabelOn.classList.remove("hidden");
-    decimalPlacesButtonLabelOff.classList.add("hidden");
+    document.getElementById(tagIdDecimalPlaces + "-on").classList.remove("hidden");
+    document.getElementById(tagIdDecimalPlaces + "-off").classList.add("hidden");
 }
 
 function deactivateDecimalPlacesMode() {
-    log("deactivate decimal places");
+    appSystem.log("deactivate decimal places");
     isDecimalPlacesMode = false;
     localStorage.setItem('isDecimalPlacesModeActive', false);
-    decimalPlacesButtonLabelOn.classList.add("hidden");
-    decimalPlacesButtonLabelOff.classList.remove("hidden");
+    document.getElementById(tagIdDecimalPlaces + "-on").classList.add("hidden");
+    document.getElementById(tagIdDecimalPlaces + "-off").classList.remove("hidden");
 }
 
-function multiplyDecimal(x, y) {
+export function multiplyDecimal(x, y) {
     let xSplit = x.toString().split(".");
     let ySplit = y.toString().split(".");
     let xs = parseInt(xSplit.join(""), 10)
@@ -54,7 +57,7 @@ function multiplyDecimal(x, y) {
     return divideBy10(p, decimals);
 }
 
-function addDecimal(x, y) {
+export function addDecimal(x, y) {
     let xSplit = x.toString().split(".");
     let ySplit = y.toString().split(".");
     let maxDecimal = 0;
@@ -101,15 +104,14 @@ function calculateFractions() {
     }
 }
 
-const findFractions = (x, y) => {
-    xs = x.toString();
-    s1d = getNumberOfDecimals(x);
-    s1s = xs.split(".").join("");
-    ys = y.toString();
-    s2d = getNumberOfDecimals(y);
-    s2s = ys.split(".").join("");
-    //console.log(xs, s1d, s1s);
-    //console.log(ys, s2d, s2s);
+// function is unit tested with jest
+export function findFractions(x, y) {
+    let xs = x.toString();
+    let s1d = getNumberOfDecimals(x);
+    let s1s = xs.split(".").join("");
+    let ys = y.toString();
+    let s2d = getNumberOfDecimals(y);
+    let s2s = ys.split(".").join("");
     let f = [];
 
     for (let i = 0; i < s1s.length; i++) {
@@ -132,20 +134,20 @@ const findFractions = (x, y) => {
     return f;
 }
 
-function getNumberOfDecimals(n) {
-    ns = n.toString();
-    decimals = ns.length - ns.indexOf(".") - 1;
+export function getNumberOfDecimals(n) {
+    let ns = n.toString();
+    let decimals = ns.length - ns.indexOf(".") - 1;
     if (decimals == ns.length) {
         decimals = 0;
     }
     return decimals;
 }
 
-function getRandomElement(array) {
+export function getRandomElement(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
 
-function sumRecursive(i, c, s) {
+export function sumRecursive(i, c, s) {
     let keys = Array.from(fractions.keys());
     for (let j = i; j < keys.length; j++) {
         let newCurrent = addDecimal(c, fractions.get(keys[j]));
@@ -164,7 +166,7 @@ function sumRecursive(i, c, s) {
     return []
 }
 
-function sumFlat(s) {
+export function sumFlat(s) {
     let keys = Array();
     let tempProd = 0;
     let tempFactor1 = 0;
@@ -191,23 +193,23 @@ function sumFlat(s) {
     return []
 }
 
-function newTask(setFocus = true) {
-    log("start new task");
+export function newTask(setFocus = true) {
+    appSystem.log("start new task");
     if (setFocus) {
-        currentSolution.focus();
+        Main.currentSolution.focus();
         window.scrollTo(0, 0);
-        if (wasSolved && !appVoice.isActive) {
-            enterFullscreen();
+        if (appTask.wasSolved && !appVoice.isActive) {
+            appPage.enterFullscreen();
         }
     }
-    let f1 = parseInt(f1input.value, 10);
+    let f1 = parseInt(Main.f1input.value, 10);
     if (isNaN(f1)) {
-        f1 = parseInt(f1input.placeholder, 10);
+        f1 = parseInt(Main.f1input.placeholder, 10);
     }
     f1 = f1 % 10;
-    let f2 = parseInt(f2input.value, 10);
+    let f2 = parseInt(Main.f2input.value, 10);
     if (isNaN(f2)) {
-        f2 = parseInt(f2input.placeholder, 10);
+        f2 = parseInt(Main.f2input.placeholder, 10);
     }
     f2 = f2 % 10;
     let f1x = Math.max(1, f1)
@@ -215,24 +217,21 @@ function newTask(setFocus = true) {
     f1x = Math.min(4, f1x)
     f2x = Math.min(4, f2x)
     if (f1 != f1x) {
-        f1input.value = f1x
+        Main.f1input.value = f1x
     }
     if (f2 != f2x) {
-        f2input.value = f2x
+        Main.f2input.value = f2x
     }
     localStorage.setItem('f1', f1x)
     localStorage.setItem('f2', f2x)
-    f1input.value = f1x;
-    f2input.value = f2x;
-
-    isBeginnerModeActive = (f1x == 1 && f2x == 1);
-    wasSolved = false;
+    Main.f1input.value = f1x;
+    Main.f2input.value = f2x;
 
     calculateTask(f1x, f2x)
     calculateFractions()
 
-    log("task created: " + factor1 + "*" + factor2 + "=" + result + "");
-    system.events.dispatchEvent(new CustomEvent('new-task-created', {
+    appSystem.log("task created: " + factor1 + "*" + factor2 + "=" + result + "");
+    appSystem.events.dispatchEvent(new CustomEvent('new-task-created', {
         detail: {
             factor1: factor1,
             factor2: factor2,
@@ -299,4 +298,12 @@ function calculateTask(a, b) {
     result = multiplyDecimal(factor1, factor2)
 }
 
-// module.exports = { findFractions }
+export function init() {
+    document.getElementById(tagIdDecimalPlaces).addEventListener('click', function(e) {
+        appMath.toggleDecimalPlacesMode();
+    });
+
+    // set current decimal places mode
+    isDecimalPlacesMode = localStorage.getItem('isDecimalPlacesModeActive') != "true";
+    toggleDecimalPlacesMode();
+}

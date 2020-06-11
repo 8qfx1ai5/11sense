@@ -1,9 +1,13 @@
-let appConversation = {
+import { appVoice } from '../conversation/voice.js'
+import * as appSound from '../conversation/sound.js'
+import * as appSystem from '../main/system.js'
+
+export let appConversation = {
 
     tagIdConversationButton: "button-conversation",
 
     toggleConversation: function() {
-        if (isSoundModeActive && appVoice.isActive) {
+        if (appSound.isSoundModeActive && appVoice.isActive) {
             this.deactivateConversationMode();
         } else {
             this.activateConversationMode();
@@ -20,8 +24,13 @@ let appConversation = {
         appSound.deactivateSoundMode();
     },
 
+    init: function() {
+        appConversation.updateConversationButton()
+        appConversation.registerEvents()
+    },
+
     updateConversationButton: function() {
-        if (isSoundModeActive && appVoice.isActive) {
+        if (appSound.isSoundModeActive && appVoice.isActive) {
             document.getElementById(this.tagIdConversationButton + "-on").classList.remove("hidden");
             document.getElementById(this.tagIdConversationButton + "-off").classList.add("hidden");
         } else {
@@ -31,25 +40,20 @@ let appConversation = {
     },
 
     registerEvents: function() {
-        system.events.addEventListener('voice-mode-start-after', function(e) {
+        appSystem.events.addEventListener('voice-mode-start-after', function(e) {
             appConversation.updateConversationButton();
         });
 
-        system.events.addEventListener('voice-mode-end-after', function(e) {
+        appSystem.events.addEventListener('voice-mode-end-after', function(e) {
             appConversation.updateConversationButton();
         });
 
-        system.events.addEventListener('sound-mode-start-after', function(e) {
+        appSystem.events.addEventListener('sound-mode-start-after', function(e) {
             appConversation.updateConversationButton();
         });
 
-        system.events.addEventListener('sound-mode-end-after', function(e) {
+        appSystem.events.addEventListener('sound-mode-end-after', function(e) {
             appConversation.updateConversationButton();
         });
     }
 };
-
-(function() {
-    appConversation.registerEvents();
-    appConversation.updateConversationButton();
-})();

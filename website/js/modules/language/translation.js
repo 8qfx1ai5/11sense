@@ -1,12 +1,4 @@
-function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-        // pageLanguage: 'en',
-        includedLanguages: "de,en",
-        defaultlanguage: "en"
-    }, 'google_translate_element');
-}
-
-function getSelectedLanguage() {
+export function getSelectedLanguage() {
     let languageSelector = document.getElementsByClassName("goog-te-combo");
     if (0 < languageSelector.length) {
         if (languageSelector[0].value == "de") {
@@ -16,7 +8,7 @@ function getSelectedLanguage() {
     return "en-US"
 }
 
-function setSelectedLanguage(l) {
+export function setSelectedLanguage(l) {
     let languageSelector = document.getElementsByClassName("goog-te-combo");
     if (0 < languageSelector.length) {
         if (l == 'de' || l == "de-DE") {
@@ -28,7 +20,7 @@ function setSelectedLanguage(l) {
     }
 }
 
-function getBrowserLanguage() {
+export function getBrowserLanguage() {
     return (navigator.language || navigator.userLanguage).split('-', 1)[0]
 }
 
@@ -56,7 +48,7 @@ let translationTableSound = {
     }
 }
 
-function translateForSoundOutput(key) {
+export function translateForSoundOutput(key) {
     if (key in translationTableSound) {
         let lang = getSelectedLanguage()
         if (lang in translationTableSound[key]) {
@@ -72,7 +64,7 @@ let translationTableScreen = {
     }
 }
 
-function translateForScreenOutput(key) {
+export function translateForScreenOutput(key) {
     if (key in translationTableScreen) {
         let lang = getSelectedLanguage()
         if (lang in translationTableScreen[key]) {
@@ -80,4 +72,12 @@ function translateForScreenOutput(key) {
         }
     }
     return key
+}
+
+export function init() {
+    setTimeout(function() {
+        // hacks to ignore strange behavior of google translate
+        setSelectedLanguage(getBrowserLanguage())
+        document.getElementsByTagName('body')[0].removeAttribute("style");
+    }, 500)
 }

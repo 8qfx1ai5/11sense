@@ -1,19 +1,22 @@
+import * as appSystem from '../main/system.js'
+import * as Main from '../main/main.js';
+
 let settingsImage;
 let statsImage;
 let headerMain;
 let stats;
-let tagIdDisplaySelector = "display-selector";
-let tagIdSettingsSelector = "settings-selector";
+export let tagIdDisplaySelector = "display-selector";
+export let tagIdSettingsSelector = "settings-selector";
 let tagIdHeaderRight = "header-right"
 let tagIdHeaderLeft = "header-left"
 let tagIdMainPage = "trainer-page"
 
-function isDesktopMode() {
+export function isDesktopMode() {
     return 1100 <= screen.width
 }
 
 function switchToNextRightPage() {
-    let allSubpages = registeredDisplaySubpages.concat([""]).concat(registeredSettingsSubpages)
+    let allSubpages = appSubpage.registeredDisplaySubpages.concat([""]).concat(appSubpage.registeredSettingsSubpages)
     let currentSubpageIndex = allSubpages.indexOf(window.location.hash.substr(1))
     if (currentSubpageIndex == allSubpages.length - 1) {
         return
@@ -22,7 +25,7 @@ function switchToNextRightPage() {
 }
 
 function switchToNextLeftPage() {
-    let allSubpages = registeredDisplaySubpages.concat([""]).concat(registeredSettingsSubpages)
+    let allSubpages = appSubpage.registeredDisplaySubpages.concat([""]).concat(appSubpage.registeredSettingsSubpages)
     let currentSubpageIndex = allSubpages.indexOf(window.location.hash.substr(1))
     if (currentSubpageIndex == 0) {
         return
@@ -45,20 +48,20 @@ function isMainPageActive() {
 function showMainPage() {
     headerMain.classList.remove("inactive-page-icon");
     document.getElementById(tagIdMainPage).classList.remove("hidden");
-    currentSolution.focus();
+    Main.currentSolution.focus();
 }
 
 function hideMainPage() {
     headerMain.classList.add("inactive-page-icon");
     document.getElementById(tagIdMainPage).classList.add("hidden");
-    currentSolution.blur();
+    Main.currentSolution.blur();
 }
 
 function clickMainPage() {
     document.getElementById('mainPageTrigger').click();
 }
 
-function onClickMainPage() {
+export function onClickMainPage() {
     if (!isDesktopMode()) {
         setMainPageLocation();
     } else {
@@ -67,7 +70,7 @@ function onClickMainPage() {
 }
 
 function setMainPageLocation() {
-    log("set main page location", 1);
+    appSystem.log("set main page location", 1);
     window.location.replace('#');
 }
 
@@ -77,7 +80,7 @@ function isNavPageActive() {
     return !document.getElementById(tagIdHeaderRight).classList.contains("inactive-page-icon");
 }
 
-function toggleNav() {
+export function toggleNav() {
     if (isNavPageActive()) {
         hideNav();
     } else {
@@ -86,35 +89,35 @@ function toggleNav() {
 }
 
 function showNav(subpage = "settings-basic") {
-    navigation.classList.remove("hidden");
+    Main.navigation.classList.remove("hidden");
     hideSolution();
     document.getElementById(tagIdHeaderRight).classList.remove("inactive-page-icon");
     if (!isDesktopMode()) {
         hideMainPage();
         hideStats();
     }
-    navigation.focus();
-    changeSettingsSubpageTo(subpage);
+    Main.navigation.focus();
+    appSubpage.changeSettingsSubpageTo(subpage);
 }
 
 function hideNav() {
-    navigation.classList.add("hidden");
+    Main.navigation.classList.add("hidden");
     document.getElementById(tagIdHeaderRight).classList.add("inactive-page-icon");
 }
 
-function clickNavPage() {
+export function clickNavPage() {
     document.getElementById(tagIdHeaderRight).click();
 }
 
-function onClickNavPage() {
+export function onClickNavPage() {
     if (isDesktopMode()) {
         toggleNav();
     }
     setNavPageLocation();
 }
 
-function setNavPageLocation() {
-    log("set nav page location", 1);
+export function setNavPageLocation() {
+    appSystem.log("set nav page location", 1);
     if (isDesktopMode()) {
         let currentSubpages = []
         let dispaySelector = document.getElementById(tagIdDisplaySelector)
@@ -138,8 +141,8 @@ function isStatsPageActive() {
     return !document.getElementById(tagIdHeaderLeft).classList.contains("inactive-page-icon");
 }
 
-function setStatsPageLocation() {
-    log("set stats page location", 1);
+export function setStatsPageLocation() {
+    appSystem.log("set stats page location", 1);
     if (isDesktopMode()) {
         let currentSubpages = []
         let dispaySelector = document.getElementById(tagIdDisplaySelector)
@@ -174,7 +177,7 @@ function showStats(subpage = "stats-history") {
         hideNav();
     }
     stats.focus();
-    changeDisplaySubpageTo(subpage);
+    appSubpage.changeDisplaySubpageTo(subpage);
 }
 
 function hideStats() {
@@ -186,7 +189,7 @@ function clickStatsPage() {
     document.getElementById(tagIdHeaderLeft).click();
 }
 
-function onClickStatsPage() {
+export function onClickStatsPage() {
     if (isDesktopMode()) {
         toggleStats();
     }
@@ -195,28 +198,28 @@ function onClickStatsPage() {
 
 // all about solution pages
 
-function toggleSolution() {
-    if (Solution.style.display === "none") {
+export function toggleSolution() {
+    if (Main.Solution.style.display === "none") {
         showSolution()
     } else {
         hideSolution()
-        currentSolution.focus();
+        Main.currentSolution.focus();
     }
 }
 
 function showSolution() {
-    Solution.style.display = "block";
+    Main.Solution.style.display = "block";
     hideNav();
-    Solution.focus();
+    Main.Solution.focus();
 }
 
 function hideSolution() {
-    Solution.style.display = "none";
+    Main.Solution.style.display = "none";
 }
 
 // all about fullscreen
 
-function toggleFullScreen() {
+export function toggleFullScreen() {
     let element = document.documentElement
     if (!document.fullscreen && !document.mozFullScreen && !document.webkitFullScreen && !document.msRequestFullscreen) {
         enterFullscreen()
@@ -224,10 +227,10 @@ function toggleFullScreen() {
         exitFullscreen()
     }
     hideNav();
-    currentSolution.focus();
+    Main.currentSolution.focus();
 }
 
-function enterFullscreen() {
+export function enterFullscreen() {
     // try {
     //     let element = document.documentElement
     //     if (element.requestFullscreen) {
@@ -252,4 +255,84 @@ function exitFullscreen() {
             document.webkitExitFullscreen();
         }
     } catch (e) {} finally {}
+}
+
+function handlePageStatus() {
+    appSystem.log("new location hash: '" + window.location.hash + "'", 1);
+
+    if (window.location.hash == "") {
+        backToMainPage();
+        return;
+    }
+    let currentSubpages = window.location.hash.substr(1).split("/")
+    currentSubpages.forEach(function(page) {
+        if (page.startsWith("settings-")) {
+            showNav(page);
+        } else if (page.startsWith("stats-")) {
+            showStats(page);
+        }
+    })
+}
+
+var xDown = null;
+var yDown = null;
+
+function getTouches(evt) {
+    return evt.touches // browser API
+}
+
+function handleTouchStart(evt) {
+    if (isDesktopMode()) {
+        return;
+    }
+    const firstTouch = getTouches(evt)[0];
+    xDown = firstTouch.clientX;
+    yDown = firstTouch.clientY;
+};
+
+function handleTouchMove(evt) {
+    if (!xDown || !yDown) {
+        return;
+    }
+
+    var xUp = evt.touches[0].clientX;
+    var yUp = evt.touches[0].clientY;
+
+    var xDiff = xDown - xUp;
+    var yDiff = yDown - yUp;
+
+    if (Math.abs(xDiff) > Math.abs(yDiff)) { /*most significant*/
+        if (xDiff > 0) {
+            /* left swipe */
+            switchToNextRightPage();
+        } else {
+            /* right swipe */
+            switchToNextLeftPage();
+        }
+    } else {
+        if (yDiff > 0) {
+            /* up swipe */
+        } else {
+            /* down swipe */
+        }
+    }
+    /* reset values */
+    xDown = null;
+    yDown = null;
+};
+
+export function init() {
+    settingsImage = document.getElementById("settings-image");
+    statsImage = document.getElementById("stats-image");
+    headerMain = document.getElementById("header-main");
+    stats = document.getElementById("stats");
+
+    document.addEventListener('touchstart', handleTouchStart, false);
+    document.addEventListener('touchmove', handleTouchMove, false);
+
+    window.addEventListener('popstate', function(e) {
+        handlePageStatus()
+    });
+
+    handlePageStatus()
 }

@@ -1,4 +1,4 @@
-let dev = {
+export let dev = {
     isDeveloperMode: false,
     tagIdLoggingButton: 'button-logging',
     tagIdHeaderMain: "header-main",
@@ -17,7 +17,7 @@ let dev = {
     },
 
     activateDeveloperMode: function() {
-        log("activate dev mode");
+        appSystem.log("activate dev mode");
         isDeveloperMode = true;
         localStorage.setItem('isDeveloperMode', true);
 
@@ -34,12 +34,12 @@ let dev = {
         // update logging view
         this.updateLoggingsBasedOnLocalStorage();
 
-        registeredSettingsSubpages.push("settings-dev");
-        registeredDisplaySubpages.unshift("stats-loggings");
+        appSubpage.registeredSettingsSubpages.push("settings-dev");
+        appSubpage.registeredDisplaySubpages.unshift("stats-loggings");
     },
 
     deactivateDeveloperMode: function() {
-        log("deactivate dev mode");
+        appSystem.log("deactivate dev mode");
         isDeveloperMode = false;
         localStorage.setItem('isDeveloperMode', false);
 
@@ -48,7 +48,7 @@ let dev = {
     },
 
     toggleLoggingMode: function() {
-        if (isLoggingMode) {
+        if (appSystem.isLoggingMode) {
             this.deactivateLoggingMode();
         } else {
             this.activateLoggingMode();
@@ -56,16 +56,16 @@ let dev = {
     },
 
     activateLoggingMode: function() {
-        isLoggingMode = true;
+        appSystem.isLoggingMode = true;
         localStorage.setItem('isLoggingMode', true);
         document.getElementById(this.tagIdLoggingButton + "-on").classList.remove("hidden");
         document.getElementById(this.tagIdLoggingButton + "-off").classList.add("hidden");
-        log("activate logging");
+        appSystem.log("activate logging");
     },
 
     deactivateLoggingMode: function() {
-        log("deactivate logging");
-        isLoggingMode = false;
+        appSystem.log("deactivate logging");
+        appSystem.isLoggingMode = false;
         localStorage.setItem('isLoggingMode', false);
         document.getElementById(this.tagIdLoggingButton + "-on").classList.add("hidden");
         document.getElementById(this.tagIdLoggingButton + "-off").classList.remove("hidden");
@@ -77,7 +77,7 @@ let dev = {
         }
         loggingList = document.getElementById(dev.tagIdloggingList);
         loggingList.innerHTML = "";
-        oldLoggings = getLoggingsFromLocalStorage();
+        oldLoggings = appSystem.getLoggingsFromLocalStorage();
         for (i = 0; i < oldLoggings.length; i++) {
             this.updateLoggingAddSingleLine(oldLoggings[i])
         }
@@ -104,12 +104,12 @@ let dev = {
         loggingList.prepend(entry);
     },
 
-    onDocumentReadyEvent: function() {
+    init: function() {
         displaySelector = document.getElementById(tagIdDisplaySelector);
 
         // localStorage.setItem("debugLog", "");
         localStorage.setItem('isLoggingMode', "true");
-        isLoggingMode = localStorage.getItem('isLoggingMode') != "true";
+        appSystem.isLoggingMode = localStorage.getItem('isLoggingMode') != "true";
         this.toggleLoggingMode();
         isDeveloperMode = false;
         if (localStorage.getItem('isDeveloperMode') == "true") {
@@ -144,12 +144,8 @@ let dev = {
             dev.toggleLoggingMode();
         });
 
-        system.events.addEventListener("custom-log-changed", function(e) {
+        appSystem.events.addEventListener("custom-log-changed", function(e) {
             dev.updateLoggingAddSingleLine(e.detail.log);
         });
     }
 };
-
-(function() {
-    dev.onDocumentReadyEvent();
-})();

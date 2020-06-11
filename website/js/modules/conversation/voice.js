@@ -1,4 +1,7 @@
-let appVoice = {
+import * as Main from '../main/main.js';
+import * as appSystem from '../main/system.js'
+
+export let appVoice = {
 
     isActive: false,
     isBetweenTasks: false,
@@ -20,19 +23,19 @@ let appVoice = {
 
     startRecognition: function() {
         if (!this.isActive) {
-            log("rc start omitted, voice not active", 1);
+            appSystem.log("rc start omitted, voice not active", 1);
             return;
         }
         if (this.isRecognitionRunning()) {
-            log("rc start omitted, already exists", 1);
+            appSystem.log("rc start omitted, already exists", 1);
             return;
         }
-        if (solution.isAutoTaskActive() && this.isBetweenTasks) {
-            log("rc start omitted, between tasks", 1);
+        if (appSolution.isAutoTaskActive() && this.isBetweenTasks) {
+            appSystem.log("rc start omitted, between tasks", 1);
             return;
         }
-        if (hasPendingSoundOutput()) {
-            log("rc start omitted, has pending sound", 1);
+        if (appSound.hasPendingSoundOutput()) {
+            appSystem.log("rc start omitted, has pending sound", 1);
             return;
         }
         appNotification.sendMessageIfRequired("voiceScreenSaverConflictHint");
@@ -57,7 +60,7 @@ let appVoice = {
                 appVoice.recognitionObject = new speechRecognition();
                 appVoice.recognitionObject.continuous = true;
                 appVoice.recognitionObject.interimResults = true;
-                appVoice.recognitionObject.lang = getSelectedLanguage();
+                appVoice.recognitionObject.lang = appTranslation.getSelectedLanguage();
             }
 
             // appVoice.recognitionObject.lang = "en-US";
@@ -68,42 +71,42 @@ let appVoice = {
             }
 
             appVoice.recognitionObject.onstart = function() {
-                log("start recognition endless");
+                appSystem.log("start recognition endless");
                 appVoice.setStatusPlaceholder();
                 appVoice.lastInputs = [];
                 clearTimeout(appVoice.recognitionKillTimout)
                     // appVoice.recognitionKillTimout = setInterval(function() {
                     // speechSynthesis.speak(new SpeechSynthesisUtterance("w"));
-                    // log("dictation fake events")
+                    // appSystem.log("dictation fake events")
                     // }, 3000)
             }
 
             // appVoice.recognitionObject.onsoundstart = function() {
-            //     log("vr on sound start", 1);
+            //     appSystem.log("vr on sound start", 1);
             // }
 
             // appVoice.recognitionObject.onspeechstart = function(e) {
-            //     log("vr on speech start", 1);
+            //     appSystem.log("vr on speech start", 1);
             // }
 
             // appVoice.recognitionObject.onspeechend = function(e) {
-            //     log("vr on speech end", 1);
-            //     log(e, 1, "console");
+            //     appSystem.log("vr on speech end", 1);
+            //     appSystem.log(e, 1, "console");
             // }
 
             appVoice.recognitionObject.onresult = appVoice.recognitionOResult;
 
             appVoice.recognitionObject.onerror = function(e) {
-                currentSolution.placeholder = "🙉";
+                Main.currentSolution.placeholder = "🙉";
                 clearTimeout(appVoice.recognitionKillTimout)
                 switch (e.error) {
                     case "no-speech":
                     case "aborted":
-                        log("dictation hint: " + e.error, 1);
+                        appSystem.log("dictation hint: " + e.error, 1);
                         appVoice.stopRecognition();
                         break;
                     case "not-allowed":
-                        if (!isDesktopMode()) {
+                        if (!appPage.isDesktopMode()) {
                             appNotification.requireMessage("voiceScreenSaverConflictHint");
                         }
                     case "audio-capture":
@@ -112,8 +115,8 @@ let appVoice = {
                     case "bad-grammar":
                     case "language-not-supported":
                     default:
-                        log("dictation critical error: " + e.error, 3, "app")
-                        log(e, 3, "console");
+                        appSystem.log("dictation critical error: " + e.error, 3, "app")
+                        appSystem.log(e, 3, "console");
                         appVoice.abortRecognition();
                         break;
                 }
@@ -122,8 +125,8 @@ let appVoice = {
             }
 
             appVoice.recognitionObject.onend = function(e) {
-                currentSolution.placeholder = "🙉";
-                log("dictation finished", 1);
+                Main.currentSolution.placeholder = "🙉";
+                appSystem.log("dictation finished", 1);
                 appVoice.recognitionObject = null;
                 clearTimeout(appVoice.recognitionKillTimout)
                 appVoice.startRecognition();
@@ -131,8 +134,8 @@ let appVoice = {
             }
 
             appVoice.recognitionObject.onaudioend = function(e) {
-                currentSolution.placeholder = "🙉";
-                log("dictation audio ended", 1);
+                Main.currentSolution.placeholder = "🙉";
+                appSystem.log("dictation audio ended", 1);
                 appVoice.recognitionObject = null;
                 clearTimeout(appVoice.recognitionKillTimout)
                     // appVoice.stopRecognition();
@@ -157,7 +160,7 @@ let appVoice = {
                 if (navigator.getUserMedia) {
                     navigator.getUserMedia({ audio: true },
                         function(stream) { appVoice.mediaStreamObject = stream },
-                        function(e) { log(e.message) }
+                        function(e) { appSystem.log(e.message) }
                     );
                 } else alert('getUserMedia not supported in this browser.');
             }
@@ -167,7 +170,7 @@ let appVoice = {
                     return;
                 }
                 if (!appVoice.isRecognitionRunning()) {
-                    // log("try to find noise");
+                    // appSystem.log("try to find noise");
                     // let silence_delay = 500;
                     // let min_decibels = -90;
                     let min_decibels = -99;
@@ -187,9 +190,9 @@ let appVoice = {
                     // let triggered = false; // trigger only once per silence event
 
                     analyser.getByteFrequencyData(data); // get current data
-                    log(data);
+                    appSystem.log(data);
                     if (data.some(v => v)) { // if there is data above the given db limit
-                        log("noise found, start recognition");
+                        appSystem.log("noise found, start recognition");
                         appVoice.handleRecognitionNoise();
                         clearInterval(appVoice.mobileSoundDetectionInterval);
                         // silence_start = time; // set it to now
@@ -208,7 +211,7 @@ let appVoice = {
         appVoice.recognitionObject = new webkitSpeechRecognition();
         appVoice.recognitionObject.continuous = false;
         appVoice.recognitionObject.interimResults = true;
-        appVoice.recognitionObject.lang = getSelectedLanguage();
+        appVoice.recognitionObject.lang = appTranslation.getSelectedLanguage();
 
         // appVoice.recognitionObject.lang = "en-US";
         try { // calling it twice will throw...
@@ -218,7 +221,7 @@ let appVoice = {
         }
 
         appVoice.recognitionObject.onstart = function() {
-            log("start recognition noise");
+            appSystem.log("start recognition noise");
             appVoice.setStatusPlaceholder();
             appVoice.lastInputs = [];
         }
@@ -226,15 +229,15 @@ let appVoice = {
         appVoice.recognitionObject.onresult = appVoice.recognitionOResult;
 
         appVoice.recognitionObject.onerror = function(e) {
-            currentSolution.placeholder = "🙉";
-            log("uppps.. dictation interrupted", 1);
+            Main.currentSolution.placeholder = "🙉";
+            appSystem.log("uppps.. dictation interrupted", 1);
             appVoice.stopRecognition();
             appVoice.lastInputs = [];
         }
 
         appVoice.recognitionObject.onend = function(e) {
-            currentSolution.placeholder = "🙉";
-            log("dictation finished", 1);
+            Main.currentSolution.placeholder = "🙉";
+            appSystem.log("dictation finished", 1);
             appVoice.recognitionObject = null;
             appVoice.lastInputs = [];
 
@@ -243,19 +246,19 @@ let appVoice = {
     },
 
     recognitionOResult: function(e) {
-        log(e.results, 2, "console");
+        appSystem.log(e.results, 2, "console");
         if (!e.isTrusted) {
             return;
         }
         if (!appVoice.isActive) {
-            log("recognition inactive, abborting..");
+            appSystem.log("recognition inactive, abborting..");
             appVoice.abortRecognition();
         } else {
             let currentResult = e.results[e.results.length - 1][0].transcript.trim();
             if (currentResult.length <= 10) {
-                currentSolution.placeholder = currentResult;
+                Main.currentSolution.placeholder = currentResult;
             } else {
-                currentSolution.placeholder = currentResult.substring(0, 8) + "..";
+                Main.currentSolution.placeholder = currentResult.substring(0, 8) + "..";
             }
 
             if (currentResult == "stop") {
@@ -263,41 +266,41 @@ let appVoice = {
             }
             let detected = e.results[e.results.length - 1][0].transcript;
             if (e.results[e.results.length - 1].isFinal) {
-                let lang = getSelectedLanguage()
+                let lang = appTranslation.getSelectedLanguage()
                 let command = detected.trim().toLowerCase();
                 if (appVoice.lastInputs.includes(command)) {
                     return;
                 }
                 if (appVoice.isCommandNewTask(lang, command)) {
-                    system.events.dispatchEvent(new CustomEvent('create-new-task'));
+                    appSystem.events.dispatchEvent(new CustomEvent('create-new-task'));
                     appVoice.lastInputs.push(command)
-                    newTask(false);
+                    appMath.newTask(false);
                     return;
                 }
                 if (appVoice.isCommandRepeatTask(lang, command)) {
                     appVoice.lastInputs.push(command)
-                    system.events.dispatchEvent(new CustomEvent('repeat-task'));
+                    appSystem.events.dispatchEvent(new CustomEvent('repeat-task'));
                     return;
                 }
                 if (appVoice.isCommandAreYouThere(lang, command)) {
                     appVoice.lastInputs.push(command)
-                    system.events.dispatchEvent(new CustomEvent('give-status-answer-yes'));
+                    appSystem.events.dispatchEvent(new CustomEvent('give-status-answer-yes'));
                     return;
                 }
                 if (appVoice.isCommandHello(lang, command)) {
                     appVoice.lastInputs.push(command)
-                    system.events.dispatchEvent(new CustomEvent('give-status-answer-hallo'));
+                    appSystem.events.dispatchEvent(new CustomEvent('give-status-answer-hallo'));
                     return;
                 }
-                if (!wasSolved) {
+                if (!appTask.wasSolved) {
                     let foundNumber = appVoice.guessFinalVoiceInput(detected);
-                    log("final vr='" + detected + "' => '" + foundNumber + "'");
+                    appSystem.log("final vr='" + detected + "' => '" + foundNumber + "'");
                     if (foundNumber && !appVoice.lastInputs.includes(foundNumber.toString())) {
                         appVoice.lastInputs.push(foundNumber.toString());
-                        currentSolution.value = foundNumber;
-                        processInput();
+                        Main.currentSolution.value = foundNumber;
+                        Main.processInput();
                         appVoice.setStatusPlaceholder()
-                        log("ok.. dictation restart", 1);
+                        appSystem.log("ok.. dictation restart", 1);
                         appVoice.stopRecognition();
                         return;
                     }
@@ -307,22 +310,22 @@ let appVoice = {
                 input = input.replace("/", " ");
                 let inputTogether = input.replace(/ /g, "").replace(/[/]/g, "");
                 let parts = input.split(" ");
-                log("vr='" + detected + "' => (t: '" + inputTogether + "' p: '" + parts.join("|") + "')");
+                appSystem.log("vr='" + detected + "' => (t: '" + inputTogether + "' p: '" + parts.join("|") + "')");
                 if (!appVoice.lastInputs.includes(inputTogether) && appVoice.guessVoiceInput(inputTogether)) {
                     appVoice.lastInputs.push(inputTogether);
-                    log("ok.. dictation restart", 1);
+                    appSystem.log("ok.. dictation restart", 1);
                     appVoice.stopRecognition();
                     return;
                 }
                 for (let i = 0; i < parts.length; i++) {
-                    log(parts[i], 1);
+                    appSystem.log(parts[i], 1);
                     if (!appVoice.lastInputs.includes(parts[i]) && appVoice.guessVoiceInput(parts[i])) {
                         appVoice.lastInputs.push(parts[i]);
-                        log("ok.. dictation restart", 1);
+                        appSystem.log("ok.. dictation restart", 1);
                         appVoice.stopRecognition();
                         return;
                     }
-                    log("invalid", 1);
+                    appSystem.log("invalid", 1);
                 }
             }
         }
@@ -382,10 +385,10 @@ let appVoice = {
         document.getElementById(this.tagIdMicrophoneImage).classList.remove("hidden");
         document.getElementById(this.tagIdButtonVoice + "-on").classList.remove("hidden");
         document.getElementById(this.tagIdButtonVoice + "-off").classList.add("hidden");
-        currentSolution.setAttribute("readonly", "readonly");
+        Main.currentSolution.setAttribute("readonly", "readonly");
         appVoice.isActive = true;
         appVoice.startRecognition();
-        system.events.dispatchEvent(new CustomEvent('voice-mode-start-after'));
+        appSystem.events.dispatchEvent(new CustomEvent('voice-mode-start-after'));
     },
 
     deactivateVoiceMode: function(isJustARestart = false) {
@@ -398,8 +401,8 @@ let appVoice = {
             document.getElementById(this.tagIdButtonVoice + "-off").classList.remove("hidden");
             appVoice.isActive = false;
             localStorage.setItem('appVoice.isActive', false);
-            currentSolution.removeAttribute("readonly");
-            system.events.dispatchEvent(new CustomEvent('voice-mode-end-after'));
+            Main.currentSolution.removeAttribute("readonly");
+            appSystem.events.dispatchEvent(new CustomEvent('voice-mode-end-after'));
         }
     },
 
@@ -418,17 +421,17 @@ let appVoice = {
 
     guessVoiceInput: function(s) {
         s = s.replace(",", ".");
-        if (s.length != result.toString().length) {
+        if (s.length != appMath.result.toString().length) {
             return false;
         }
         let c = parseFloat(s);
-        if (c == factor1 || c == factor2) {
+        if (c == appMath.factor1 || c == appMath.factor2) {
             return false;
         }
-        let analizationResult = analizeTempSolution(c);
-        if (c == result) {
-            currentSolution.value = s;
-            processInput();
+        let analizationResult = Main.analizeTempSolution(c);
+        if (c == appMath.result) {
+            Main.currentSolution.value = s;
+            Main.processInput();
             appVoice.setStatusPlaceholder()
             return true;
         }
@@ -438,13 +441,13 @@ let appVoice = {
     setStatusPlaceholder: function() {
         if (appVoice.isActive) {
             if (appVoice.isRecognitionRunning()) {
-                currentSolution.placeholder = "...";
+                Main.currentSolution.placeholder = "...";
                 return;
             }
-            currentSolution.placeholder = "🙉";
+            Main.currentSolution.placeholder = "🙉";
             return;
         }
-        currentSolution.placeholder = "=";
+        Main.currentSolution.placeholder = "=";
     },
 
     toggleVoiceTech: function() {
@@ -471,19 +474,19 @@ let appVoice = {
         this.deactivateVoiceMode();
     },
 
-    registerEventListener: function() {
+    init: function() {
 
-        system.events.addEventListener('solution-found', function(e) {
+        appSystem.events.addEventListener('solution-found', function(e) {
             // workaround to omit mobile beeps as mutch as possible
             appVoice.isBetweenTasks = true;
         });
 
-        system.events.addEventListener('solution-timed-out', function(e) {
+        appSystem.events.addEventListener('solution-timed-out', function(e) {
             // workaround to omit mobile beeps as mutch as possible
             appVoice.isBetweenTasks = true;
         });
 
-        system.events.addEventListener('new-task-created', function(e) {
+        appSystem.events.addEventListener('new-task-created', function(e) {
             appVoice.isBetweenTasks = false;
             if (appVoice.isActive) {
                 setTimeout(function() {
@@ -497,14 +500,14 @@ let appVoice = {
             appVoice.toggleVoiceTech();
         });
 
-        system.events.addEventListener('speak-before', function(e) {
+        appSystem.events.addEventListener('speak-before', function(e) {
             if (appVoice.isActive) {
                 appVoice.abortRecognition();
             }
             appVoice.setStatusPlaceholder();
         });
 
-        system.events.addEventListener('speak-after', function(e) {
+        appSystem.events.addEventListener('speak-after', function(e) {
             if (appVoice.isActive) {
                 setTimeout(function() {
                     appVoice.startRecognition();
@@ -516,13 +519,9 @@ let appVoice = {
         // if (localStorage.getItem(appVoice.voiceTechIsEndlessLocalStorageKey)) {
         //     appVoice.isVoiceTechEndless = !localStorage.getItem(appVoice.voiceTechIsEndlessLocalStorageKey);
         // } else {
-        //     appVoice.isVoiceTechEndless = !isDesktopMode();
+        //     appVoice.isVoiceTechEndless = !appPage.isDesktopMode();
         // }
         appVoice.isVoiceTechEndless = false;
         appVoice.toggleVoiceTech();
     },
 };
-
-(function() {
-    appVoice.registerEventListener();
-})();

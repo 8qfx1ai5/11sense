@@ -12,36 +12,36 @@
     <link rel="stylesheet" type="text/css" href="styles/desktop.css" media='screen and (min-width: 1100px)' />
     <link rel="stylesheet" type="text/css" href="styles/global.css" />
     <link rel="stylesheet" type="text/css" href="styles/themes/dark.css" />
-    <script src="js/main/main.js"></script>
-    <script src="js/conversation/sound.js"></script>
-    <script src="js/math/math.js"></script>
-    <script src="js/page/page.js"></script>
-    <script src="js/page/subpage.js"></script>
-    <script src="js/statistics/statistics.js"></script>
+    <!-- <script src="js/main/main.js"></script> -->
+    <!-- <script src="js/conversation/sound.js"></script> -->
+    <!-- <script src="js/math/math.js"></script> -->
+    <!-- <script src="js/page/page.js"></script> -->
+    <!-- <script src="js/page/subpage.js"></script> -->
+    <!-- <script src="js/statistics/statistics.js"></script> -->
 </head>
 
 <body translate="yes">
     <div id="wrapper">
         <header id="header">
             <div id="header-main" class="dev-change">
-                <h1 id="mainPageTrigger" onclick="onClickMainPage()">11. Sense</h1>
-                <p onclick="onClickMainPage()"><span class="notranslate">Discover</span> ♡ <span class="notranslate">Learning</span></p>
+                <h1 id="mainPageTrigger" onclick="appPage.onClickMainPage()">11. Sense</h1>
+                <p onclick="appPage.onClickMainPage()"><span class="notranslate">Discover</span> ♡ <span class="notranslate">Learning</span></p>
             </div>
-            <figure id="header-left" onclick="onClickStatsPage()" class="inactive-page-icon">
+            <figure id="header-left" onclick="appPage.onClickStatsPage()" class="inactive-page-icon">
                 <img id="stats-image" alt="Statistics" src="img/stats_100x100.png" />
             </figure>
-            <figure id="header-right" onclick="onClickNavPage()" class="inactive-page-icon">
+            <figure id="header-right" onclick="appPage.onClickNavPage()" class="inactive-page-icon">
                 <img id="settings-image" alt="Settings" src="img/settings_200x200b.png" />
             </figure>
         </header>
         <div id="content">
-            <div id="Solution" style="display: none;" onclick="toggleSolution()">
+            <div id="Solution" style="display: none;" onclick="appPage.toggleSolution()">
                 <h2>Solutions</h2>
                 <h3 id="Solution-task" translate="no" class="notranslate"></h3>
                 <p id="partial-solutions" translate="no" class="notranslate"></p>
             </div>
             <div id="nav" class="hidden page">
-                <h2><select name="settings-selector" id="settings-selector" class="selector dev-change" onchange="setNavPageLocation()">
+                <h2><select name="settings-selector" id="settings-selector" class="selector dev-change" onchange="appPage.setNavPageLocation()">
                     <option value="settings-basic">Basic Settings</option>
                     <option value="settings-advanced" >More Settings</option>
                     <option value="settings-dev" class="hidden dev-hidden" >Development</option>
@@ -66,19 +66,19 @@
                 </div>
                 <div class="subpage" id="settings-advanced">
                     <ul id="advanced-settings-list">
-                        <li><button class="option-item" id="button-decimalPlaces" title="Allow randomly decimal places in the task.">Decimal Places <span
-                                    class="hidden  b-label-status" id="decimalPlaces-button-on">on</span><span
-                                    id="decimalPlaces-button-off" class=" b-label-status">off</span><br /><span
+                        <li><button class="option-item" id="button-decimal-places" title="Allow randomly decimal places in the task.">Decimal Places <span
+                                    class="hidden  b-label-status" id="button-decimal-places-on">on</span><span
+                                    id="button-decimal-places-off" class=" b-label-status">off</span><br /><span
                                     class="button-sub">(random)</span></button>
                         </li>
-                        <li><button class="option-item" id="button-voice" title="Use voice recognition instead of keyboard input." onclick="enterFullscreen();appVoice.toggleVoiceMode()">Dorie listens<span class="hidden  b-label-status" id="button-voice-on">on</span><span id="button-voice-off" class=" b-label-status">off</span><br /><span
+                        <li><button class="option-item" id="button-voice" title="Use voice recognition instead of keyboard input." onclick="appPage.enterFullscreen();appVoice.toggleVoiceMode()">Dorie listens<span class="hidden  b-label-status" id="button-voice-on">on</span><span id="button-voice-off" class=" b-label-status">off</span><br /><span
                             class="button-sub">(talk to Dorie with your voice)</span></button>
                         </li>
-                        <li><button class="option-item" id="soundMode" title="Use audio output for tasks and status feedback." onclick="toggleSoundMode();">Dorie speaks<span class="hidden  b-label-status" id="sound-button-on">on</span><span id="sound-button-off" class=" b-label-status">off</span><br /><span class="button-sub">(get audio feedback for tasks)</span></button>
+                        <li><button class="option-item" id="soundMode" title="Use audio output for tasks and status feedback." onclick="appSound.toggleSoundMode();">Dorie speaks<span class="hidden  b-label-status" id="sound-button-on">on</span><span id="sound-button-off" class=" b-label-status">off</span><br /><span class="button-sub">(get audio feedback for tasks)</span></button>
                         </li>
                         <li>
                             <button class="option-item">
-                                <span class="config-label">Break Length</span><span class=" b-label-status notranslate" translate="no"><select name="auto-task-selector" id="auto-task-selector" class="selector config" dir="rtl" onchange="solution.saveAutoTaskInterval()">
+                                <span class="config-label">Break Length</span><span class=" b-label-status notranslate" translate="no"><select name="auto-task-selector" id="auto-task-selector" class="selector config" dir="rtl" onchange="appSolution.saveAutoTaskInterval()">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="5" selected="selected">5</option>
@@ -94,7 +94,7 @@
                         </li>
                         <li>
                             <button class="option-item">
-                                <span class="config-label">Solution Guide</span><span class=" b-label-status"><select name="solution-guide-selector" id="solution-guide-selector" class="selector config" dir="rtl" onchange="solution.saveSolutionGuideInterval()">
+                                <span class="config-label">Solution Guide</span><span class=" b-label-status"><select name="solution-guide-selector" id="solution-guide-selector" class="selector config" dir="rtl" onchange="appSolution.saveSolutionGuideInterval()">
                                     <option value="off" translate="yes">off</option>
                                     <option value="5" class="notranslate" translate="no">5</option>
                                     <option value="10" class="notranslate" translate="no">10</option>
@@ -111,8 +111,8 @@
                         <li>
                             <button class="option-item">
                                 <span class="config-label">Number Ranges:</span><span class=" b-label-status notranslate" translate="no"><input class="config" type="number" id="f1" name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};"
-                                oninput="newTask(false)" />⋅<input class="config" type="number" id="f2" name="factor2" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};"
-                                oninput="newTask(false)" /></span><br /><span
+                                oninput="appMath.newTask(false)" />⋅<input class="config" type="number" id="f2" name="factor2" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};"
+                                oninput="appMath.newTask(false)" /></span><br /><span
                                 class="button-sub">(2⋅3=xx⋅yyy)</span>
                             </button>
                         </li>
@@ -133,7 +133,7 @@
                 </div>
             </div>
             <div id="stats" class="hidden page">
-                <h2><select name="display-selector" id="display-selector" class="selector dev-change" onchange="setStatsPageLocation()">
+                <h2><select name="display-selector" id="display-selector" class="selector dev-change" onchange="appPage.setStatsPageLocation()">
                     <option value="stats-history">History</option>
                     <option value="stats-loggings" class="hidden dev-hidden" >Loggings</option>
                 </select></h2>
@@ -152,40 +152,41 @@
             </div>
             <div id="trainer-page" class="page">
                 <section id="task" translate="no" class="notranslate">
-                    <p><span id="current-task" onclick="newTask()"></span></p>
+                    <p><span id="current-task" onclick="appMath.newTask()"></span></p>
                 </section>
                 <section id="input" class="speech">
                     <img id="mic-image" class="hidden" src="img/32px-Font_Awesome_5_solid_microphone-alt.svg.png" />
-                    <input type="number" id="solution" name="solution" placeholder="=" onkeyup="guessInput()" onclick="appVoice.startRecognition()" onselect="return false;" onfocus="return false;" />
+                    <input type="number" id="solution" name="solution" placeholder="=" onkeyup="Main.guessInput()" onclick="appVoice.startRecognition()" onselect="return false;" onfocus="return false;" />
                 </section>
                 <section id="clipboard">
                 </section>
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="js/language/translation.js"></script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    <script src="js/main/system.js"></script>
-    <script src="js/dev/dev-view.js"></script>
-    <script src="js/main/main_events.js"></script>
-    <script src="js/task/task-view.js"></script>
-    <script src="js/conversation/sound_events.js"></script>
-    <script src="js/conversation/voice.js"></script>
-    <script src="js/conversation/conversation.js"></script>
-    <script src="js/math/math_event.js"></script>
-    <script src="js/statistics/statistics_event.js"></script>
-    <script src="js/task/solution-view.js"></script>
-    <script src="js/page/page_event.js"></script>
-    <script src="js/notification/onboarding.js"></script>
+    <script src="js/app.js" type="module"></script>
+    <!-- <script type="text/javascript" src="js/language/translation.js"></script> -->
     <script>
-        newTask();
-
-        setTimeout(function() {
-            // hacks to ignore strange behavior of google translate
-            setSelectedLanguage(getBrowserLanguage())
-            document.getElementsByTagName('body')[0].removeAttribute("style");
-        }, 500)
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                // pageLanguage: 'en',
+                includedLanguages: "de,en",
+                defaultlanguage: "en"
+            }, 'google_translate_element');
+        }
     </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <!-- <script src="js/main/system.js"></script> -->
+    <!-- <script src="js/dev/dev-view.js"></script> -->
+    <!-- <script src="js/main/main_events.js"></script> -->
+    <!-- <script src="js/task/task-view.js"></script> -->
+    <!-- <script src="js/conversation/sound_events.js"></script> -->
+    <!-- <script src="js/conversation/voice.js"></script> -->
+    <!-- <script src="js/conversation/conversation.js"></script> -->
+    <!-- <script src="js/math/math_event.js"></script> -->
+    <!-- <script src="js/statistics/statistics_event.js"></script> -->
+    <!-- <script src="js/task/solution-view.js"></script> -->
+    <!-- <script src="js/page/page_event.js"></script> -->
+    <!-- <script src="js/notification/onboarding.js"></script> -->
 </body>
 
 </html>

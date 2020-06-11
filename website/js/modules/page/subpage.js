@@ -1,11 +1,11 @@
-let registeredDisplaySubpages = ["stats-history"];
-let registeredSettingsSubpages = ["settings-basic", "settings-advanced"];
+export let registeredDisplaySubpages = ["stats-history"];
+export let registeredSettingsSubpages = ["settings-basic", "settings-advanced"];
 
 // all about the display page
 
-function changeDisplaySubpageTo(targetpage = "stats-history") {
-    log("change display subpage to '" + targetpage + "'", 1);
-    document.getElementById(tagIdDisplaySelector).value = targetpage
+export function changeDisplaySubpageTo(targetpage = "stats-history") {
+    appSystem.log("change display subpage to '" + targetpage + "'", 1);
+    document.getElementById(appPage.tagIdDisplaySelector).value = targetpage
     let hasPageFound = false
     registeredDisplaySubpages.forEach(subpage => {
         if (targetpage == subpage) {
@@ -18,16 +18,16 @@ function changeDisplaySubpageTo(targetpage = "stats-history") {
         }
     });
     if (!hasPageFound) {
-        log("subpage not found '" + targetpage + "'", 2);
+        appSystem.log("subpage not found '" + targetpage + "'", 2);
         changeDisplaySubpageTo()
     }
 }
 
 // all about the settings page
 
-function changeSettingsSubpageTo(targetpage = "settings-basic") {
-    log("change settings subpage to '" + targetpage + "'", 1);
-    document.getElementById(tagIdSettingsSelector).value = targetpage
+export function changeSettingsSubpageTo(targetpage = "settings-basic") {
+    appSystem.log("change settings subpage to '" + targetpage + "'", 1);
+    document.getElementById(appPage.tagIdSettingsSelector).value = targetpage
     let hasPageFound = false
     registeredSettingsSubpages.forEach(subpage => {
         if (targetpage == subpage) {
@@ -41,7 +41,7 @@ function changeSettingsSubpageTo(targetpage = "settings-basic") {
         }
     });
     if (!hasPageFound) {
-        log("subpage not found '" + targetpage + "'", 2);
+        appSystem.log("subpage not found '" + targetpage + "'", 2);
         changeSettingsSubpageTo()
     }
 }
