@@ -1,6 +1,7 @@
 import * as appMath from '../math/math.js'
 import * as appVoice from '../conversation/voice.js'
 import * as appSystem from '../main/system.js'
+import * as appSolution from '../task/solution-view.js'
 
 export let currentTask;
 export let currentSolution;
@@ -26,6 +27,9 @@ export function guessInput() {
 }
 
 export function formatNumberForDisplay(n) {
+    if (!n) {
+        return ""
+    }
     return n.toString().replace(".", ",");
 }
 
@@ -54,7 +58,12 @@ export function processInput() {
             detail: {
                 input: c,
                 expected: appMath.result,
-                parts: analizationResult
+                parts: analizationResult,
+                startTime: appSolution.startTime,
+                endTime: performance.now(),
+                result: c,
+                factor1: appMath.factor1,
+                factor2: appMath.factor2
             }
         }));
     } else {

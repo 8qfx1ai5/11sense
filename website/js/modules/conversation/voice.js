@@ -1,6 +1,6 @@
 import * as Main from '../main/main.js'
 import * as appSystem from '../main/system.js'
-import { appSolution } from '../task/solution-view.js'
+import * as appSolution from '../task/solution-view.js'
 import * as appSound from '../conversation/sound.js'
 import * as appNotification from '../notification/onboarding.js'
 import * as appTranslation from '../language/translation.js'
@@ -470,6 +470,7 @@ export function init() {
     appSystem.events.addEventListener('solution-timed-out', function(e) {
         // workaround to omit mobile beeps as mutch as possible
         isBetweenTasks = true
+        stopRecognition()
     })
 
     appSystem.events.addEventListener('new-task-created', function(e) {

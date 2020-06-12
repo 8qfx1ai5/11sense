@@ -1,4 +1,5 @@
 import * as Main from '../main/main.js'
+import * as appSystem from '../main/system.js'
 
 let historyList;
 let historyLocalStorageKey = "resultHistory";
@@ -49,4 +50,8 @@ export function init() {
     historyList = document.getElementById("history-list");
 
     updateHistoryBasedOnLocalStorage();
+
+    appSystem.events.addEventListener('solution-found', function(e) {
+        pushToStatistics(e.detail.factor1, e.detail.factor2, e.detail.result, e.detail.endTime - e.detail.startTime)
+    })
 }
