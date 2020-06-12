@@ -1,5 +1,5 @@
 import * as appMath from '../math/math.js'
-import { appVoice } from '../conversation/voice.js'
+import * as appVoice from '../conversation/voice.js'
 import * as appSystem from '../main/system.js'
 
 export let currentTask;
@@ -122,7 +122,6 @@ export function init() {
             currentSolution.focus();
         } else if (e.keyCode == '86') {
             // V
-            toggleVoiceMode();
             appPage.enterFullscreen();
             currentSolution.focus();
         }

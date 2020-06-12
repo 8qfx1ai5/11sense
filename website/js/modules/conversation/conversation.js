@@ -1,4 +1,4 @@
-import { appVoice } from '../conversation/voice.js'
+import * as appVoice from '../conversation/voice.js'
 import * as appSound from '../conversation/sound.js'
 import * as appSystem from '../main/system.js'
 

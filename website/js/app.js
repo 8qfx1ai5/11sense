@@ -1,5 +1,5 @@
 import * as Main from './modules/main/main.js'
-import { appVoice } from './modules/conversation/voice.js'
+import * as appVoice from './modules/conversation/voice.js'
 import * as appSound from './modules/conversation/sound.js'
 import * as appConversation from './modules/conversation/conversation.js'
 import * as appStatistics from './modules/statistics/statistics.js'

@@ -54,7 +54,7 @@ function formatToSpeakableNumber(n) {
     return n.toString();
 }
 
-export function toggleSoundMode() {
+function toggleSoundMode() {
     if (isSoundModeActive) {
         deactivateSoundMode();
     } else {

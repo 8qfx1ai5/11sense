@@ -1,9 +1,7 @@
 import * as appSystem from '../main/system.js'
 import * as Main from '../main/main.js';
 import * as appMath from '../math/math.js'
-import { appVoice } from '../conversation/voice.js'
 import * as appSound from '../conversation/sound.js'
-import * as appTask from '../task/task-view.js'
 import * as appStatistics from '../statistics/statistics.js'
 import * as appPage from '../page/page.js'
 
@@ -247,7 +245,6 @@ export let appSolution = {
             appSolution.stopSolutionGuideLoop();
             appSolution.startAutoTask();
             appSolution.endTime = performance.now();
-            appTask.wasSolved = true;
 
             appSolution.updateViewSolution();
             appStatistics.pushToStatistics(appMath.factor1, appMath.factor2, appMath.result, appSolution.endTime - appSolution.startTime);
@@ -288,7 +285,6 @@ export let appSolution = {
         document.getElementById(appSolution.tagIdAutoTaskSelector).addEventListener('change', appSolution.saveAutoTaskInterval)
         document.getElementById(appSolution.tagIdSolutionGuideInput).addEventListener('change', appSolution.saveSolutionGuideInterval)
         document.getElementById('solution').addEventListener('keyup', Main.guessInput)
-        document.getElementById('solution').addEventListener('click', appVoice.startRecognition)
     },
 
     setDefaultValues: function() {

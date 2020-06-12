@@ -23,4 +23,8 @@ export function init() {
         resetInput()
         wasSolved = false
     })
+
+    appSystem.events.addEventListener('solution-found', function(e) {
+        wasSolved = true
+    })
 }
