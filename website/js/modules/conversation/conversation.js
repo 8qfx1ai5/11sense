@@ -8,9 +8,9 @@ export let appConversation = {
 
     toggleConversation: function() {
         if (appSound.isSoundModeActive && appVoice.isActive) {
-            this.deactivateConversationMode();
+            appConversation.deactivateConversationMode();
         } else {
-            this.activateConversationMode();
+            appConversation.activateConversationMode();
         }
     },
 
@@ -31,11 +31,11 @@ export let appConversation = {
 
     updateConversationButton: function() {
         if (appSound.isSoundModeActive && appVoice.isActive) {
-            document.getElementById(this.tagIdConversationButton + "-on").classList.remove("hidden");
-            document.getElementById(this.tagIdConversationButton + "-off").classList.add("hidden");
+            document.getElementById(appConversation.tagIdConversationButton + "-on").classList.remove("hidden");
+            document.getElementById(appConversation.tagIdConversationButton + "-off").classList.add("hidden");
         } else {
-            document.getElementById(this.tagIdConversationButton + "-on").classList.add("hidden");
-            document.getElementById(this.tagIdConversationButton + "-off").classList.remove("hidden");
+            document.getElementById(appConversation.tagIdConversationButton + "-on").classList.add("hidden");
+            document.getElementById(appConversation.tagIdConversationButton + "-off").classList.remove("hidden");
         }
     },
 
@@ -56,6 +56,6 @@ export let appConversation = {
             appConversation.updateConversationButton();
         });
 
-        document.getElementById(this.tagIdConversationButton).addEventListener('click', this.toggleConversation)
+        document.getElementById(appConversation.tagIdConversationButton).addEventListener('click', appConversation.toggleConversation)
     }
 };

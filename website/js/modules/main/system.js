@@ -1,7 +1,8 @@
 export let isLoggingMode = false;
 let loggingMax = 99;
 let logLevel = 1;
-let loggingLocalStorageKey = "debugLog";
+let loggingLocalStorageKey = "debugLog"
+let tagIdLoggingButton = 'button-logging'
 
 /*
     log levels:
@@ -27,7 +28,7 @@ export function log(s, l = 3, onlySingleLog = false) {
 }
 
 export function getLoggingsFromLocalStorage() {
-    oldLoggings = localStorage.getItem(loggingLocalStorageKey);
+    let oldLoggings = localStorage.getItem(loggingLocalStorageKey);
     if (!oldLoggings) {
         oldLoggings = [];
     } else {
@@ -41,14 +42,14 @@ export function getLoggingsFromLocalStorage() {
 }
 
 function saveLogInLocalStorage(s) {
-    oldLoggings = getLoggingsFromLocalStorage();
+    let oldLoggings = getLoggingsFromLocalStorage();
     if (loggingMax < oldLoggings.length) {
         oldLoggings.splice(0, oldLoggings.length - loggingMax);
     }
     let logEntry = new Date().toLocaleString() + ": " + s
     oldLoggings.push(logEntry);
     localStorage.setItem(loggingLocalStorageKey, JSON.stringify(oldLoggings));
-    system.events.dispatchEvent(new CustomEvent('custom-log-changed', { detail: { log: logEntry } }));
+    events.dispatchEvent(new CustomEvent('custom-log-changed', { detail: { log: logEntry } }));
 }
 
 let SysEvents = function(options) {
@@ -67,9 +68,35 @@ let SysEvents = function(options) {
     }
 }
 
+export function toggleLoggingMode() {
+    if (isLoggingMode) {
+        deactivateLoggingMode();
+    } else {
+        activateLoggingMode();
+    }
+}
+
+function activateLoggingMode() {
+    isLoggingMode = true;
+    localStorage.setItem('isLoggingMode', true);
+    document.getElementById(tagIdLoggingButton + "-on").classList.remove("hidden");
+    document.getElementById(tagIdLoggingButton + "-off").classList.add("hidden");
+    log("activate logging");
+}
+
+function deactivateLoggingMode() {
+    log("deactivate logging");
+    isLoggingMode = false;
+    localStorage.setItem('isLoggingMode', false);
+    document.getElementById(tagIdLoggingButton + "-on").classList.add("hidden");
+    document.getElementById(tagIdLoggingButton + "-off").classList.remove("hidden");
+}
+
 export let events = new SysEvents()
 
 export function init() {
+    isLoggingMode = localStorage.getItem('isLoggingMode') != "true";
+
     // log all errors
     window.onerror = function(errorMsg, url, lineNumber, column, errorObj) {
         log('ERR: ' + errorMsg +
@@ -84,5 +111,12 @@ export function init() {
             ' URL: ' + e.blockedURI +
             ' POLICY: ' + e.originalPolicy
         );
+    });
+
+    localStorage.setItem('isLoggingMode', "true");
+    toggleLoggingMode();
+
+    document.getElementById(tagIdLoggingButton).addEventListener('click', function(e) {
+        toggleLoggingMode();
     });
 }

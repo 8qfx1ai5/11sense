@@ -1,6 +1,8 @@
-export let dev = {
+import * as appSystem from '../main/system.js'
+import * as appPage from '../page/page.js'
+
+export let appDev = {
     isDeveloperMode: false,
-    tagIdLoggingButton: 'button-logging',
     tagIdHeaderMain: "header-main",
     devModeClickCounter: 0,
     devModeClickCounterStart: 0,
@@ -9,16 +11,16 @@ export let dev = {
     tagIdsettingsSelector: "settings-selector",
 
     toggleDeveloperMode: function() {
-        if (isDeveloperMode) {
-            this.deactivateDeveloperMode();
+        if (appDev.isDeveloperMode) {
+            appDev.deactivateDeveloperMode();
         } else {
-            this.activateDeveloperMode();
+            appDev.activateDeveloperMode();
         }
     },
 
     activateDeveloperMode: function() {
         appSystem.log("activate dev mode");
-        isDeveloperMode = true;
+        appDev.isDeveloperMode = true;
         localStorage.setItem('isDeveloperMode', true);
 
         // change color on dev related elements
@@ -32,70 +34,46 @@ export let dev = {
         });
 
         // update logging view
-        this.updateLoggingsBasedOnLocalStorage();
+        appDev.updateLoggingsBasedOnLocalStorage();
 
-        appSubpage.registeredSettingsSubpages.push("settings-dev");
-        appSubpage.registeredDisplaySubpages.unshift("stats-loggings");
+        appPage.registeredSettingsSubpages.push("settings-dev");
+        appPage.registeredDisplaySubpages.unshift("stats-loggings");
     },
 
     deactivateDeveloperMode: function() {
         appSystem.log("deactivate dev mode");
-        isDeveloperMode = false;
+        appDev.isDeveloperMode = false;
         localStorage.setItem('isDeveloperMode', false);
 
         window.location.replace('#');
         window.location.reload();
     },
 
-    toggleLoggingMode: function() {
-        if (appSystem.isLoggingMode) {
-            this.deactivateLoggingMode();
-        } else {
-            this.activateLoggingMode();
-        }
-    },
-
-    activateLoggingMode: function() {
-        appSystem.isLoggingMode = true;
-        localStorage.setItem('isLoggingMode', true);
-        document.getElementById(this.tagIdLoggingButton + "-on").classList.remove("hidden");
-        document.getElementById(this.tagIdLoggingButton + "-off").classList.add("hidden");
-        appSystem.log("activate logging");
-    },
-
-    deactivateLoggingMode: function() {
-        appSystem.log("deactivate logging");
-        appSystem.isLoggingMode = false;
-        localStorage.setItem('isLoggingMode', false);
-        document.getElementById(this.tagIdLoggingButton + "-on").classList.add("hidden");
-        document.getElementById(this.tagIdLoggingButton + "-off").classList.remove("hidden");
-    },
-
     updateLoggingsBasedOnLocalStorage: function() {
-        if (!isDeveloperMode) {
+        if (!appDev.isDeveloperMode) {
             return;
         }
-        loggingList = document.getElementById(dev.tagIdloggingList);
+        let loggingList = document.getElementById(appDev.tagIdloggingList);
         loggingList.innerHTML = "";
-        oldLoggings = appSystem.getLoggingsFromLocalStorage();
-        for (i = 0; i < oldLoggings.length; i++) {
-            this.updateLoggingAddSingleLine(oldLoggings[i])
+        let oldLoggings = appSystem.getLoggingsFromLocalStorage();
+        for (let i = 0; i < oldLoggings.length; i++) {
+            appDev.updateLoggingAddSingleLine(oldLoggings[i])
         }
     },
 
     updateLoggingAddSingleLine: function(s) {
-        if (!isDeveloperMode) {
+        if (!appDev.isDeveloperMode) {
             return;
         }
-        loggingList = document.getElementById(dev.tagIdloggingList);
-        entry = document.createElement('li');
-        content = document.createElement('span');
+        let loggingList = document.getElementById(appDev.tagIdloggingList);
+        let entry = document.createElement('li');
+        let content = document.createElement('span');
         entry.setAttribute('class', 'tooltip')
         entry.addEventListener('click', function() {
             this.firstChild.firstChild.classList.toggle("tooltipvisible")
         })
-        text = s.substring(s.indexOf(",") + 1);
-        tooltipText = document.createElement("span")
+        let text = s.substring(s.indexOf(",") + 1);
+        let tooltipText = document.createElement("span")
         tooltipText.classList.add("tooltiptext")
         tooltipText.innerHTML = text
         content.append(tooltipText)
@@ -105,47 +83,39 @@ export let dev = {
     },
 
     init: function() {
-        displaySelector = document.getElementById(tagIdDisplaySelector);
-
         // localStorage.setItem("debugLog", "");
-        localStorage.setItem('isLoggingMode', "true");
-        appSystem.isLoggingMode = localStorage.getItem('isLoggingMode') != "true";
-        this.toggleLoggingMode();
-        isDeveloperMode = false;
+
+        appDev.isDeveloperMode = false;
         if (localStorage.getItem('isDeveloperMode') == "true") {
-            dev.activateDeveloperMode();
+            appDev.activateDeveloperMode();
         }
 
-        let headerMain = document.getElementById(this.tagIdHeaderMain);
+        let headerMain = document.getElementById(appDev.tagIdHeaderMain);
         headerMain.addEventListener('click', function(e) {
             if (e.detail >= 8) {
-                dev.toggleDeveloperMode();
+                appDev.toggleDeveloperMode();
                 alert('Mode switched.');
             }
         });
 
         headerMain.addEventListener('touchstart', function(e) {
             let now = performance.now();
-            if (!dev.devModeClickCounterStart || now - dev.devModeClickCounterStart > 1500) {
-                dev.devModeClickCounterStart = now;
-                dev.devModeClickCounter = 1;
+            if (!appDev.devModeClickCounterStart || now - appDev.devModeClickCounterStart > 1500) {
+                appDev.devModeClickCounterStart = now;
+                appDev.devModeClickCounter = 1;
                 return;
             }
-            dev.devModeClickCounter++;
-            if (8 <= dev.devModeClickCounter) {
-                dev.toggleDeveloperMode();
+            appDev.devModeClickCounter++;
+            if (8 <= appDev.devModeClickCounter) {
+                appDev.toggleDeveloperMode();
                 alert('Mode switched.');
-                dev.devModeClickCounter = 0;
-                dev.devModeClickCounterStart = 0;
+                appDev.devModeClickCounter = 0;
+                appDev.devModeClickCounterStart = 0;
             }
-        });
-
-        document.getElementById(this.tagIdLoggingButton).addEventListener('click', function(e) {
-            dev.toggleLoggingMode();
         });
 
         appSystem.events.addEventListener("custom-log-changed", function(e) {
-            dev.updateLoggingAddSingleLine(e.detail.log);
+            appDev.updateLoggingAddSingleLine(e.detail.log);
         });
     }
 };
