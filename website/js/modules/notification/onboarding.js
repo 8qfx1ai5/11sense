@@ -1,27 +1,26 @@
-export let appNotification = {
+import * as appSystem from '../main/system.js'
 
-    list: {
-        "voiceScreenSaverConflictHint": "The voice mode may require you to disable your screen saver to work as expected."
-    },
+let list = {
+    "voiceScreenSaverConflictHint": "The voice mode may require you to disable your screen saver to work as expected."
+}
 
-    requireMessage: function(key) {
-        if (key in this.list) {
-            if (localStorage.getItem("notification-" + key) != "send") {
-                localStorage.setItem("notification-" + key, "required")
-            }
-        } else {
-            appSystem.log("require message failed, key unknown: '" + key + "'", 3)
+export function requireMessage(key) {
+    if (key in list) {
+        if (localStorage.getItem("notification-" + key) != "send") {
+            localStorage.setItem("notification-" + key, "required")
         }
-    },
-
-    sendMessageIfRequired: function(key) {
-        if (key in this.list) {
-            if (localStorage.getItem("notification-" + key) == "required") {
-                alert(appTranslation.translateForScreenOutput(this.list[key]));
-                localStorage.setItem("notification-" + key, "send")
-            }
-        } else {
-            appSystem.log("send message failed, key unknown: '" + key + "'", 3)
-        }
+    } else {
+        appSystem.log("require message failed, key unknown: '" + key + "'", 3)
     }
-};
+}
+
+export function sendMessageIfRequired(key) {
+    if (key in list) {
+        if (localStorage.getItem("notification-" + key) == "required") {
+            alert(appTranslation.translateForScreenOutput(list[key]));
+            localStorage.setItem("notification-" + key, "send")
+        }
+    } else {
+        appSystem.log("send message failed, key unknown: '" + key + "'", 3)
+    }
+}
