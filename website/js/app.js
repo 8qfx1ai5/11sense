@@ -1,7 +1,7 @@
 import * as Main from './modules/main/main.js'
 import { appVoice } from './modules/conversation/voice.js'
 import * as appSound from './modules/conversation/sound.js'
-import { appConversation } from './modules/conversation/conversation.js'
+import * as appConversation from './modules/conversation/conversation.js'
 import * as appStatistics from './modules/statistics/statistics.js'
 import * as appSystem from './modules/main/system.js'
 import * as appMath from './modules/math/math.js'

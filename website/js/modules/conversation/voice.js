@@ -268,7 +268,8 @@ export let appVoice = {
             }
 
             if (currentResult == "stop") {
-                appConversation.deactivateConversationMode();
+                appSystem.events.dispatchEvent(new CustomEvent('request-deactivate-conversation'));
+                return;
             }
             let detected = e.results[e.results.length - 1][0].transcript;
             if (e.results[e.results.length - 1].isFinal) {
