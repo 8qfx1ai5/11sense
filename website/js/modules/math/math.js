@@ -1,6 +1,6 @@
 import * as appSystem from '../main/system.js'
 import * as Main from '../main/main.js'
-import { appTask } from '../task/task-view.js'
+import * as appTask from '../task/task-view.js'
 import { appVoice } from '../conversation/voice.js'
 import * as appPage from '../page/page.js'
 

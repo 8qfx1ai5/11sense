@@ -3,7 +3,7 @@ import * as Main from '../main/main.js';
 import * as appMath from '../math/math.js'
 import { appVoice } from '../conversation/voice.js'
 import * as appSound from '../conversation/sound.js'
-import { appTask } from '../task/task-view.js'
+import * as appTask from '../task/task-view.js'
 import * as appStatistics from '../statistics/statistics.js'
 import * as appPage from '../page/page.js'
 
@@ -12,6 +12,7 @@ export let appSolution = {
     localStorageKeySolutionGuideInterval: "solution-guide-interval",
     tagIdSolutionGuideInput: "solution-guide-selector",
     solutionGuideInterval: false,
+    tagIdSolutionTable: 'Solution',
 
     solutionGuideIntervalObject: false,
 
@@ -281,6 +282,7 @@ export let appSolution = {
             appSolution.stopAutoTask()
             appSolution.startTime = performance.now();
             appSolution.endTime = false;
+            document.getElementById(appSolution.tagIdSolutionTable).style.display = "none";
         });
 
         document.getElementById(appSolution.tagIdAutoTaskSelector).addEventListener('change', appSolution.saveAutoTaskInterval)

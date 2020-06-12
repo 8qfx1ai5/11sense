@@ -5,7 +5,7 @@ import * as appSound from '../conversation/sound.js'
 import { appNotification } from '../notification/onboarding.js'
 import * as appTranslation from '../language/translation.js'
 import * as appMath from '../math/math.js'
-import { appTask } from '../task/task-view.js'
+import * as appTask from '../task/task-view.js'
 
 export let appVoice = {
 

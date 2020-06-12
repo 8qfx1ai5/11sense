@@ -1,30 +1,26 @@
 import * as appSystem from '../main/system.js'
 import * as Main from '../main/main.js'
-import * as appMath from '../math/math.js'
 
-export let appTask = {
+export let wasSolved = false
+let tagIdSolutionInput = 'solution'
+let tagIdCurrentTaskArea = 'current-task'
 
-    wasSolved: false,
+function updateView(factor1, factor2) {
+    document.getElementById(tagIdCurrentTaskArea).innerHTML = Main.formatNumberForDisplay(factor1) + " <span class='mainColor'>⋅</span> " + Main.formatNumberForDisplay(factor2);
+}
 
-    updateView: function() {
-        Main.currentTask.innerHTML = Main.formatNumberForDisplay(appMath.factor1) + " <span class='mainColor'>⋅</span> " + Main.formatNumberForDisplay(appMath.factor2);
-    },
+function resetInput() {
+    document.getElementById(tagIdSolutionInput).value = "";
+    document.getElementById(tagIdSolutionInput).style.backgroundSize = "0%";
+    document.getElementById(tagIdCurrentTaskArea).classList.remove("valid");
+    document.getElementById(tagIdCurrentTaskArea).classList.remove("invalid");
+    document.getElementById(tagIdSolutionInput).disabled = false;
+}
 
-    resetInput: function() {
-        Main.currentSolution.value = "";
-        Main.currentSolution.style.backgroundSize = "0%";
-        Main.currentTask.classList.remove("valid");
-        Main.currentTask.classList.remove("invalid");
-        //Main.currentSolution.focus();
-        Main.currentSolution.disabled = false;
-        Main.Solution.style.display = "none";
-    },
-
-    init: function() {
-        appSystem.events.addEventListener('new-task-created', function(e) {
-            appTask.updateView()
-            appTask.resetInput()
-            appTask.wasSolved = false
-        });
-    }
-};
+export function init() {
+    appSystem.events.addEventListener('new-task-created', function(e) {
+        updateView(e.detail.factor1, e.detail.factor2)
+        resetInput()
+        wasSolved = false
+    });
+}
