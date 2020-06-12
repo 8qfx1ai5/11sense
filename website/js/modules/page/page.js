@@ -16,7 +16,7 @@ export function isDesktopMode() {
 }
 
 function switchToNextRightPage() {
-    let allSubpages = registeredDisplaySubpages.concat([""]).concat(registeredSettingsSubpages)
+    let allSubpages = getRegisteredDisplaySubpages().concat([""]).concat(getRegisteredSettingsSubpages())
     let currentSubpageIndex = allSubpages.indexOf(window.location.hash.substr(1))
     if (currentSubpageIndex == allSubpages.length - 1) {
         return
@@ -25,7 +25,7 @@ function switchToNextRightPage() {
 }
 
 function switchToNextLeftPage() {
-    let allSubpages = registeredDisplaySubpages.concat([""]).concat(registeredSettingsSubpages)
+    let allSubpages = getRegisteredDisplaySubpages().concat([""]).concat(getRegisteredSettingsSubpages())
     let currentSubpageIndex = allSubpages.indexOf(window.location.hash.substr(1))
     if (currentSubpageIndex == 0) {
         return
@@ -347,8 +347,25 @@ export function init() {
 
 // subpage stuff
 
-export let registeredDisplaySubpages = ["stats-history"];
-export let registeredSettingsSubpages = ["settings-basic", "settings-advanced"];
+function getRegisteredDisplaySubpages() {
+    let output = []
+    Array.prototype.forEach.call(document.getElementById(tagIdDisplaySelector).options, function(element) {
+        if (!element.classList.contains('hidden')) {
+            output.unshift(element.value)
+        }
+    });
+    return output
+}
+
+function getRegisteredSettingsSubpages() {
+    let output = []
+    Array.prototype.forEach.call(document.getElementById(tagIdSettingsSelector).options, function(element) {
+        if (!element.classList.contains('hidden')) {
+            output.push(element.value)
+        }
+    });
+    return output
+}
 
 // all about the display page
 
@@ -356,7 +373,7 @@ function changeDisplaySubpageTo(targetpage = "stats-history") {
     appSystem.log("change display subpage to '" + targetpage + "'", 1);
     document.getElementById(tagIdDisplaySelector).value = targetpage
     let hasPageFound = false
-    registeredDisplaySubpages.forEach(subpage => {
+    getRegisteredDisplaySubpages().forEach(subpage => {
         if (targetpage == subpage) {
             let subpageElement = document.getElementById(subpage);
             subpageElement.classList.remove("hidden");
@@ -378,7 +395,7 @@ function changeSettingsSubpageTo(targetpage = "settings-basic") {
     appSystem.log("change settings subpage to '" + targetpage + "'", 1);
     document.getElementById(tagIdSettingsSelector).value = targetpage
     let hasPageFound = false
-    registeredSettingsSubpages.forEach(subpage => {
+    getRegisteredSettingsSubpages().forEach(subpage => {
         if (targetpage == subpage) {
             let subpageElement = document.getElementById(subpage);
             subpageElement.classList.remove("hidden");

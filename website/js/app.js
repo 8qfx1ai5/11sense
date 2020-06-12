@@ -8,7 +8,7 @@ import * as appMath from './modules/math/math.js'
 import { appNotification } from './modules/notification/onboarding.js'
 import { appTask } from './modules/task/task-view.js'
 import { appSolution } from './modules/task/solution-view.js'
-import { appDev } from './modules/dev/dev-view.js'
+import * as appDev from './modules/dev/dev-view.js'
 import * as appPage from './modules/page/page.js'
 import * as appTranslation from './modules/language/translation.js'
 
