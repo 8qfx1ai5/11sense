@@ -16,7 +16,7 @@ export function isDesktopMode() {
 }
 
 function switchToNextRightPage() {
-    let allSubpages = appSubpage.registeredDisplaySubpages.concat([""]).concat(appSubpage.registeredSettingsSubpages)
+    let allSubpages = registeredDisplaySubpages.concat([""]).concat(registeredSettingsSubpages)
     let currentSubpageIndex = allSubpages.indexOf(window.location.hash.substr(1))
     if (currentSubpageIndex == allSubpages.length - 1) {
         return
@@ -25,7 +25,7 @@ function switchToNextRightPage() {
 }
 
 function switchToNextLeftPage() {
-    let allSubpages = appSubpage.registeredDisplaySubpages.concat([""]).concat(appSubpage.registeredSettingsSubpages)
+    let allSubpages = registeredDisplaySubpages.concat([""]).concat(registeredSettingsSubpages)
     let currentSubpageIndex = allSubpages.indexOf(window.location.hash.substr(1))
     if (currentSubpageIndex == 0) {
         return
@@ -97,7 +97,7 @@ function showNav(subpage = "settings-basic") {
         hideStats();
     }
     Main.navigation.focus();
-    appSubpage.changeSettingsSubpageTo(subpage);
+    changeSettingsSubpageTo(subpage);
 }
 
 function hideNav() {
@@ -177,7 +177,7 @@ function showStats(subpage = "stats-history") {
         hideNav();
     }
     stats.focus();
-    appSubpage.changeDisplaySubpageTo(subpage);
+    changeDisplaySubpageTo(subpage);
 }
 
 function hideStats() {
@@ -334,5 +334,63 @@ export function init() {
         handlePageStatus()
     });
 
+    document.getElementById('Solution').addEventListener('click', toggleSolution)
+    document.getElementById('mainPageTrigger').addEventListener('click', onClickMainPage)
+    document.getElementById('mainPageTriggerSubheadding').addEventListener('click', onClickMainPage)
+    document.getElementById('header-right').addEventListener('click', onClickNavPage)
+    document.getElementById('header-left').addEventListener('click', onClickStatsPage)
+    document.getElementById(tagIdSettingsSelector).addEventListener('change', setNavPageLocation)
+    document.getElementById(tagIdDisplaySelector).addEventListener('change', setStatsPageLocation)
+
     handlePageStatus()
+}
+
+// subpage stuff
+
+export let registeredDisplaySubpages = ["stats-history"];
+export let registeredSettingsSubpages = ["settings-basic", "settings-advanced"];
+
+// all about the display page
+
+function changeDisplaySubpageTo(targetpage = "stats-history") {
+    appSystem.log("change display subpage to '" + targetpage + "'", 1);
+    document.getElementById(tagIdDisplaySelector).value = targetpage
+    let hasPageFound = false
+    registeredDisplaySubpages.forEach(subpage => {
+        if (targetpage == subpage) {
+            let subpageElement = document.getElementById(subpage);
+            subpageElement.classList.remove("hidden");
+            hasPageFound = true
+        } else {
+            let subpageElement = document.getElementById(subpage);
+            subpageElement.classList.add("hidden");
+        }
+    });
+    if (!hasPageFound) {
+        appSystem.log("subpage not found '" + targetpage + "'", 2);
+        changeDisplaySubpageTo()
+    }
+}
+
+// all about the settings page
+
+function changeSettingsSubpageTo(targetpage = "settings-basic") {
+    appSystem.log("change settings subpage to '" + targetpage + "'", 1);
+    document.getElementById(tagIdSettingsSelector).value = targetpage
+    let hasPageFound = false
+    registeredSettingsSubpages.forEach(subpage => {
+        if (targetpage == subpage) {
+            let subpageElement = document.getElementById(subpage);
+            subpageElement.classList.remove("hidden");
+            hasPageFound = true
+
+        } else {
+            let subpageElement = document.getElementById(subpage);
+            subpageElement.classList.add("hidden");
+        }
+    });
+    if (!hasPageFound) {
+        appSystem.log("subpage not found '" + targetpage + "'", 2);
+        changeSettingsSubpageTo()
+    }
 }

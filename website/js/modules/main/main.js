@@ -1,4 +1,6 @@
-import { factor1, factor2 } from "../math/math.js";
+import * as appMath from '../math/math.js'
+import { appVoice } from '../conversation/voice.js'
+import * as appSystem from '../main/system.js'
 
 export let currentTask;
 export let currentSolution;
@@ -70,7 +72,7 @@ export function processInput() {
 }
 
 export function isBeginnerModeActive() {
-    return (factor1 == 1 && factor2 == 1);
+    return (appMath.factor1 == 1 && appMath.factor2 == 1);
 }
 
 export function analizeTempSolution(s) {
@@ -132,6 +134,19 @@ export function init() {
     if (localStorage.getItem('f2')) {
         f2input.value = localStorage.getItem('f2');
     }
+
+    f1input.addEventListener('input', function() {
+        appMath.newTask(false)
+    })
+    f2input.addEventListener('input', function() {
+        appMath.newTask(false)
+    })
+    currentTask.addEventListener('click', function() {
+        appMath.newTask()
+    })
+    document.getElementById('button-feedback').addEventListener('click', function() {
+        window.open('https://paypal.me/pools/c/8pfcrOnyif')
+    })
 
     currentSolution.focus();
 }

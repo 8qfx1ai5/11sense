@@ -1,6 +1,11 @@
 import * as appSystem from '../main/system.js'
 import * as Main from '../main/main.js';
 import * as appMath from '../math/math.js'
+import { appVoice } from '../conversation/voice.js'
+import * as appSound from '../conversation/sound.js'
+import { appTask } from '../task/task-view.js'
+import * as appStatistics from '../statistics/statistics.js'
+import * as appPage from '../page/page.js'
 
 export let appSolution = {
     tagIdClipboard: "clipboard",
@@ -17,80 +22,80 @@ export let appSolution = {
     autoTaskTimer: false,
 
     isSolutionGuideActive: function() {
-        return this.getSolutionGuideInterval();
+        return appSolution.getSolutionGuideInterval();
     },
 
     getSolutionGuideInterval: function() {
-        return this.solutionGuideInterval;
+        return appSolution.solutionGuideInterval;
     },
 
     saveSolutionGuideInterval: function() {
-        let v = document.getElementById(this.tagIdSolutionGuideInput).value;
+        let v = document.getElementById(appSolution.tagIdSolutionGuideInput).value;
         if (v == "" || v == "-" || v == "off") {
-            localStorage.setItem(this.localStorageKeySolutionGuideInterval, false);
-            this.solutionGuideInterval = false;
-            this.stopSolutionGuideLoop();
+            localStorage.setItem(appSolution.localStorageKeySolutionGuideInterval, false);
+            appSolution.solutionGuideInterval = false;
+            appSolution.stopSolutionGuideLoop();
             return;
         }
-        localStorage.setItem(this.localStorageKeySolutionGuideInterval, v * 1000);
-        this.solutionGuideInterval = v * 1000;
-        this.startNewSolutionGuideLoop();
+        localStorage.setItem(appSolution.localStorageKeySolutionGuideInterval, v * 1000);
+        appSolution.solutionGuideInterval = v * 1000;
+        appSolution.startNewSolutionGuideLoop();
     },
 
     stopSolutionGuideLoop: function() {
         appSystem.log("stop solution guide loop", 1);
-        if (this.solutionGuideIntervalObject) {
-            clearTimeout(this.solutionGuideIntervalObject);
+        if (appSolution.solutionGuideIntervalObject) {
+            clearTimeout(appSolution.solutionGuideIntervalObject);
         }
-        this.solutionGuideIntervalObject = false;
+        appSolution.solutionGuideIntervalObject = false;
     },
 
     startNewSolutionGuideLoop: function() {
-        this.stopSolutionGuideLoop();
-        if (!this.isSolutionGuideActive()) {
+        appSolution.stopSolutionGuideLoop();
+        if (!appSolution.isSolutionGuideActive()) {
             return;
         }
-        let interval = this.getSolutionGuideInterval();
+        let interval = appSolution.getSolutionGuideInterval();
         appSystem.log("start new solution guide loop: '" + interval + "'", 2);
-        this.solutionGuideIntervalObject = setTimeout(function() {
+        appSolution.solutionGuideIntervalObject = setTimeout(function() {
             appSystem.events.dispatchEvent(new CustomEvent('solution-timed-out'));
         }, interval);
     },
 
     isAutoTaskActive: function() {
-        return 0 < this.getAutoTaskInterval();
+        return 0 < appSolution.getAutoTaskInterval();
     },
 
     startAutoTask: function() {
-        let interval = this.getAutoTaskInterval();
+        let interval = appSolution.getAutoTaskInterval();
         if (0 < interval) {
-            this.autoTaskTimer = setInterval(function() {
-                if (!this.endTime) {
-                    this.stopAutoTask();
+            appSolution.autoTaskTimer = setInterval(function() {
+                if (!appSolution.endTime) {
+                    appSolution.stopAutoTask();
                     Main.currentSolution.style.backgroundSize = "0%";
                     return
                 }
                 // Get today's date and time
                 let now = performance.now();
-                Main.currentSolution.style.backgroundSize = ((now - this.endTime) * 102 / interval) + "%";
-                // if (2000 <= now - this.endTime && now - this.endTime < 2010) {
+                Main.currentSolution.style.backgroundSize = ((now - appSolution.endTime) * 102 / interval) + "%";
+                // if (2000 <= now - appSolution.endTime && now - appSolution.endTime < 2010) {
                 //     Main.currentSolution.focus();
                 //     window.scrollTo(0, 0);
                 // }
                 if (appSound.hasPendingSoundOutput()) {
                     return;
                 }
-                if (2000 < now - this.endTime) {
+                if (2000 < now - appSolution.endTime) {
                     // more than 2 seconds are passed (omit fullscreen error)
-                    if (interval < now - this.endTime) {
+                    if (interval < now - appSolution.endTime) {
                         Main.currentTask.click();
-                        this.stopAutoTask();
+                        appSolution.stopAutoTask();
                     }
                 } else {
                     // less than 2 seconds are passed
-                    if (interval < now - this.endTime) {
+                    if (interval < now - appSolution.endTime) {
                         Main.currentTask.click();
-                        this.stopAutoTask();
+                        appSolution.stopAutoTask();
                     }
                 }
 
@@ -99,25 +104,25 @@ export let appSolution = {
     },
 
     stopAutoTask: function() {
-        clearInterval(this.autoTaskTimer);
+        clearInterval(appSolution.autoTaskTimer);
     },
 
     saveAutoTaskInterval: function() {
-        let v = document.getElementById(this.tagIdAutoTaskSelector).value;
-        this.stopAutoTask()
+        let v = document.getElementById(appSolution.tagIdAutoTaskSelector).value;
+        appSolution.stopAutoTask()
         if (v == "∞") {
-            localStorage.setItem(this.localStorageAutoTaskInterval, -1)
+            localStorage.setItem(appSolution.localStorageAutoTaskInterval, -1)
             return;
         }
-        localStorage.setItem(this.localStorageAutoTaskInterval, v * 1000);
-        this.startNewSolutionGuideLoop()
+        localStorage.setItem(appSolution.localStorageAutoTaskInterval, v * 1000);
+        appSolution.startNewSolutionGuideLoop()
     },
 
     getAutoTaskInterval: function() {
-        let i = localStorage.getItem(this.localStorageAutoTaskInterval);
+        let i = localStorage.getItem(appSolution.localStorageAutoTaskInterval);
         if (!i || i == "") {
-            this.saveAutoTaskInterval()
-            i = localStorage.getItem(this.localStorageAutoTaskInterval);
+            appSolution.saveAutoTaskInterval()
+            i = localStorage.getItem(appSolution.localStorageAutoTaskInterval);
         }
         return i;
     },
@@ -126,8 +131,8 @@ export let appSolution = {
         Main.currentTask.innerHTML = "<span class='mainColor'>" + Main.formatNumberForDisplay(appMath.factor1) + " ⋅ " + Main.formatNumberForDisplay(appMath.factor2) + " = </span> <span class='valid'>" + Main.formatNumberForDisplay(appMath.result) + " ✓</span>"
         Main.currentSolution.value = ""
         Main.currentSolution.placeholder = ""
-        if (this.endTime) {
-            Main.currentSolution.placeholder = ((this.endTime - this.startTime).toFixed(0) / 1000).toString() + " sec."
+        if (appSolution.endTime) {
+            Main.currentSolution.placeholder = ((appSolution.endTime - appSolution.startTime).toFixed(0) / 1000).toString() + " sec."
         }
     },
 
@@ -176,7 +181,7 @@ export let appSolution = {
             currentSum = appMath.addDecimal(currentSum, appMath.fractions.get(keys[i]));
             let factors = keys[i].split("⋅");
             //let x = currentSum * 100 / appMath.result
-            Main.psolutions.innerHTML = Main.psolutions.innerHTML + (i + 1).toString().padStart(2) + ". " + this.formatNumberForMonoLength(factors[0], f1Split[0].length, appMath.factor1Decimals) + " ⋅ " + this.formatNumberForMonoLength(factors[1], f2Split[0].length, appMath.factor2Decimals) + " = " + this.formatNumberForMonoLength(appMath.fractions.get(keys[i]), rSplit[0].length, rDecimals) + " | " + this.formatNumberForMonoLength(currentSum, rSplit[0].length, rDecimals) + "<br />"
+            Main.psolutions.innerHTML = Main.psolutions.innerHTML + (i + 1).toString().padStart(2) + ". " + appSolution.formatNumberForMonoLength(factors[0], f1Split[0].length, appMath.factor1Decimals) + " ⋅ " + appSolution.formatNumberForMonoLength(factors[1], f2Split[0].length, appMath.factor2Decimals) + " = " + appSolution.formatNumberForMonoLength(appMath.fractions.get(keys[i]), rSplit[0].length, rDecimals) + " | " + appSolution.formatNumberForMonoLength(currentSum, rSplit[0].length, rDecimals) + "<br />"
         }
     },
 
@@ -211,16 +216,16 @@ export let appSolution = {
         for (let i = 1; i <= iterations; i++) {
             currentF1 = appMath.multiplyDecimal(i, iterator);
             currentSum = appMath.multiplyDecimal(currentF1, appMath.factor2);
-            Main.psolutions.innerHTML = Main.psolutions.innerHTML + this.formatNumberForMonoLength(currentF1, f1Split[0].length, appMath.factor1Decimals) + " ⋅ " + this.formatNumberForMonoLength(appMath.factor2, f2Split[0].length, appMath.factor2Decimals) + " = " + this.formatNumberForMonoLength(currentSum, rSplit[0].length, rDecimals) + "<br />"
+            Main.psolutions.innerHTML = Main.psolutions.innerHTML + appSolution.formatNumberForMonoLength(currentF1, f1Split[0].length, appMath.factor1Decimals) + " ⋅ " + appSolution.formatNumberForMonoLength(appMath.factor2, f2Split[0].length, appMath.factor2Decimals) + " = " + appSolution.formatNumberForMonoLength(currentSum, rSplit[0].length, rDecimals) + "<br />"
         }
     },
 
     // function creates and sets the content of the solution page
     updateSolution: function() {
         if (Main.isBeginnerModeActive()) {
-            this.updateSolutionBeginner();
+            appSolution.updateSolutionBeginner();
         } else {
-            this.updateSolutionPro();
+            appSolution.updateSolutionPro();
         }
     },
 
@@ -258,9 +263,14 @@ export let appSolution = {
         });
 
         appSystem.events.addEventListener('no-solution-found', function(e) {
-            let text = Main.formatNumberForDisplay(e.detail.input) + " <span class='hint' onclick='appPage.toggleSolution()'>?</span>";
+            let solutionButton = document.createElement('span')
+            solutionButton.classList.add('hint')
+            solutionButton.addEventListener('click', appPage.toggleSolution)
+            solutionButton.innerText = '?'
+            let text = Main.formatNumberForDisplay(e.detail.input) + " ";
             let entry = document.createElement('p');
             entry.innerHTML = text;
+            entry.append(solutionButton)
             document.getElementById(appSolution.tagIdClipboard).prepend(entry);
         });
 
@@ -272,30 +282,35 @@ export let appSolution = {
             appSolution.startTime = performance.now();
             appSolution.endTime = false;
         });
+
+        document.getElementById(appSolution.tagIdAutoTaskSelector).addEventListener('change', appSolution.saveAutoTaskInterval)
+        document.getElementById(appSolution.tagIdSolutionGuideInput).addEventListener('change', appSolution.saveSolutionGuideInterval)
+        document.getElementById('solution').addEventListener('keyup', Main.guessInput)
+        document.getElementById('solution').addEventListener('click', appVoice.startRecognition)
     },
 
     setDefaultValues: function() {
-        let i = localStorage.getItem(this.localStorageAutoTaskInterval)
+        let i = localStorage.getItem(appSolution.localStorageAutoTaskInterval)
         if (i) {
             if (0 <= i) {
-                document.getElementById(this.tagIdAutoTaskSelector).value = i / 1000
+                document.getElementById(appSolution.tagIdAutoTaskSelector).value = i / 1000
             } else {
-                document.getElementById(this.tagIdAutoTaskSelector).value = "∞"
+                document.getElementById(appSolution.tagIdAutoTaskSelector).value = "∞"
             }
-            this.saveAutoTaskInterval();
+            appSolution.saveAutoTaskInterval();
         }
 
-        let ii = localStorage.getItem(this.localStorageKeySolutionGuideInterval)
+        let ii = localStorage.getItem(appSolution.localStorageKeySolutionGuideInterval)
         if (ii == "false") {
-            document.getElementById(this.tagIdSolutionGuideInput).value = "off"
+            document.getElementById(appSolution.tagIdSolutionGuideInput).value = "off"
         } else if (Number(ii)) {
-            document.getElementById(this.tagIdSolutionGuideInput).value = ii / 1000
+            document.getElementById(appSolution.tagIdSolutionGuideInput).value = ii / 1000
         }
-        this.saveSolutionGuideInterval();
+        appSolution.saveSolutionGuideInterval();
     },
 
     init: function() {
-        this.onDocumentReadyEvent()
-        this.setDefaultValues()
+        appSolution.onDocumentReadyEvent()
+        appSolution.setDefaultValues()
     }
 };

@@ -1,5 +1,11 @@
 import * as Main from '../main/main.js';
 import * as appSystem from '../main/system.js'
+import { appSolution } from '../task/solution-view.js'
+import * as appSound from '../conversation/sound.js'
+import { appNotification } from '../notification/onboarding.js'
+import * as appTranslation from '../language/translation.js'
+import * as appMath from '../math/math.js'
+import { appTask } from '../task/task-view.js'
 
 export let appVoice = {
 
@@ -22,15 +28,15 @@ export let appVoice = {
     lastInputs: [],
 
     startRecognition: function() {
-        if (!this.isActive) {
+        if (!appVoice.isActive) {
             appSystem.log("rc start omitted, voice not active", 1);
             return;
         }
-        if (this.isRecognitionRunning()) {
+        if (appVoice.isRecognitionRunning()) {
             appSystem.log("rc start omitted, already exists", 1);
             return;
         }
-        if (appSolution.isAutoTaskActive() && this.isBetweenTasks) {
+        if (appSolution.isAutoTaskActive() && appVoice.isBetweenTasks) {
             appSystem.log("rc start omitted, between tasks", 1);
             return;
         }
@@ -40,10 +46,10 @@ export let appVoice = {
         }
         appNotification.sendMessageIfRequired("voiceScreenSaverConflictHint");
 
-        if (this.isVoiceTechEndless) {
-            this.startRecognitionEndless();
+        if (appVoice.isVoiceTechEndless) {
+            appVoice.startRecognitionEndless();
         } else {
-            this.startRecognitionNoise();
+            appVoice.startRecognitionNoise();
         }
     },
 
@@ -373,18 +379,18 @@ export let appVoice = {
 
     toggleVoiceMode: function() {
         if (appVoice.isActive) {
-            this.deactivateVoiceMode();
+            appVoice.deactivateVoiceMode();
         } else {
-            this.activateVoiceMode();
+            appVoice.activateVoiceMode();
         }
     },
 
     activateVoiceMode: function() {
         appVoice.deactivateVoiceMode(true);
         localStorage.setItem('appVoice.isActive', true);
-        document.getElementById(this.tagIdMicrophoneImage).classList.remove("hidden");
-        document.getElementById(this.tagIdButtonVoice + "-on").classList.remove("hidden");
-        document.getElementById(this.tagIdButtonVoice + "-off").classList.add("hidden");
+        document.getElementById(appVoice.tagIdMicrophoneImage).classList.remove("hidden");
+        document.getElementById(appVoice.tagIdButtonVoice + "-on").classList.remove("hidden");
+        document.getElementById(appVoice.tagIdButtonVoice + "-off").classList.add("hidden");
         Main.currentSolution.setAttribute("readonly", "readonly");
         appVoice.isActive = true;
         appVoice.startRecognition();
@@ -394,11 +400,11 @@ export let appVoice = {
     deactivateVoiceMode: function(isJustARestart = false) {
         appVoice.stopRecognition();
         clearInterval(appVoice.mobileSoundDetectionInterval);
-        this.mobileSoundDetectionInterval = null;
+        appVoice.mobileSoundDetectionInterval = null;
         if (!isJustARestart) {
-            document.getElementById(this.tagIdMicrophoneImage).classList.add("hidden");
-            document.getElementById(this.tagIdButtonVoice + "-on").classList.add("hidden");
-            document.getElementById(this.tagIdButtonVoice + "-off").classList.remove("hidden");
+            document.getElementById(appVoice.tagIdMicrophoneImage).classList.add("hidden");
+            document.getElementById(appVoice.tagIdButtonVoice + "-on").classList.add("hidden");
+            document.getElementById(appVoice.tagIdButtonVoice + "-off").classList.remove("hidden");
             appVoice.isActive = false;
             localStorage.setItem('appVoice.isActive', false);
             Main.currentSolution.removeAttribute("readonly");
@@ -451,27 +457,27 @@ export let appVoice = {
     },
 
     toggleVoiceTech: function() {
-        if (this.isVoiceTechEndless) {
-            this.setVoiceTechNoise();
+        if (appVoice.isVoiceTechEndless) {
+            appVoice.setVoiceTechNoise();
         } else {
-            this.setVoiceTechEndless();
+            appVoice.setVoiceTechEndless();
         }
     },
 
     setVoiceTechEndless: function() {
-        this.isVoiceTechEndless = true;
-        localStorage.setItem(this.voiceTechIsEndlessLocalStorageKey, true);
-        document.getElementById(this.tagIdButtonVoiceTech + "-endless").classList.remove("hidden");
-        document.getElementById(this.tagIdButtonVoiceTech + "-noise").classList.add("hidden");
-        this.deactivateVoiceMode();
+        appVoice.isVoiceTechEndless = true;
+        localStorage.setItem(appVoice.voiceTechIsEndlessLocalStorageKey, true);
+        document.getElementById(appVoice.tagIdButtonVoiceTech + "-endless").classList.remove("hidden");
+        document.getElementById(appVoice.tagIdButtonVoiceTech + "-noise").classList.add("hidden");
+        appVoice.deactivateVoiceMode();
     },
 
     setVoiceTechNoise: function() {
-        this.isVoiceTechEndless = false;
-        localStorage.setItem(this.voiceTechIsEndlessLocalStorageKey, false);
-        document.getElementById(this.tagIdButtonVoiceTech + "-endless").classList.add("hidden");
-        document.getElementById(this.tagIdButtonVoiceTech + "-noise").classList.remove("hidden");
-        this.deactivateVoiceMode();
+        appVoice.isVoiceTechEndless = false;
+        localStorage.setItem(appVoice.voiceTechIsEndlessLocalStorageKey, false);
+        document.getElementById(appVoice.tagIdButtonVoiceTech + "-endless").classList.add("hidden");
+        document.getElementById(appVoice.tagIdButtonVoiceTech + "-noise").classList.remove("hidden");
+        appVoice.deactivateVoiceMode();
     },
 
     init: function() {
@@ -496,7 +502,7 @@ export let appVoice = {
             appVoice.setStatusPlaceholder();
         });
 
-        document.getElementById(this.tagIdButtonVoiceTech).addEventListener('click', function(e) {
+        document.getElementById(appVoice.tagIdButtonVoiceTech).addEventListener('click', function(e) {
             appVoice.toggleVoiceTech();
         });
 
@@ -515,6 +521,8 @@ export let appVoice = {
             }
             appVoice.setStatusPlaceholder();
         });
+
+        document.getElementById(appVoice.tagIdButtonVoice).addEventListener('click', appVoice.toggleVoiceMode)
 
         // if (localStorage.getItem(appVoice.voiceTechIsEndlessLocalStorageKey)) {
         //     appVoice.isVoiceTechEndless = !localStorage.getItem(appVoice.voiceTechIsEndlessLocalStorageKey);

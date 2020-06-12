@@ -1,10 +1,14 @@
 import * as appSystem from '../main/system.js'
+import * as appTranslation from '../language/translation.js'
+import * as appMath from '../math/math.js'
 
 export let isSoundModeActive = false;
 let successMessagesDE = ["richtig", "sehr gut", "hervorragend", "gut gemacht", "genau so", "weiter so", "bravo", "ja"];
 let successMessagesEN = ["right", "very good", "excellent", "well done", "that's it", "keep it up", "good job", "yes"];
 let soundButtonLabelOn;
 let soundButtonLabelOff;
+
+let tagIdButtonSound = "button-sound"
 
 function getSuccessMessages() {
     if (appTranslation.getSelectedLanguage() == "de-DE") {
@@ -52,9 +56,9 @@ function formatToSpeakableNumber(n) {
 
 export function toggleSoundMode() {
     if (isSoundModeActive) {
-        appSound.deactivateSoundMode();
+        deactivateSoundMode();
     } else {
-        appSound.acitvateSoundMode();
+        acitvateSoundMode();
     }
 }
 
@@ -143,4 +147,7 @@ export function init() {
             speak(appTranslation.translateForSoundOutput("yes, I can hear you"), 1);
         }
     });
+
+    document.getElementById(tagIdButtonSound).addEventListener('click', toggleSoundMode)
+
 }

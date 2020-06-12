@@ -55,5 +55,7 @@ export let appConversation = {
         appSystem.events.addEventListener('sound-mode-end-after', function(e) {
             appConversation.updateConversationButton();
         });
+
+        document.getElementById(this.tagIdConversationButton).addEventListener('click', this.toggleConversation)
     }
 };

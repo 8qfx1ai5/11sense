@@ -10,7 +10,6 @@ import { appTask } from './modules/task/task-view.js'
 import { appSolution } from './modules/task/solution-view.js'
 import { dev as appDev } from './modules/dev/dev-view.js'
 import * as appPage from './modules/page/page.js'
-import * as appSubpage from './modules/page/subpage.js'
 import * as appTranslation from './modules/language/translation.js'
 
 Main.init()
