@@ -51,7 +51,7 @@ input[type=number] {
 
 #task p {
     border-radius: 25px;
-    line-height: 2em;
+    margin-top: 1em;
 }
 
 body {

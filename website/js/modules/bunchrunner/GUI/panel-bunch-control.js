@@ -6,14 +6,16 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
-                    position: absolute;
                     width: 100%;
                     left: 0px;
                     margin-top: 0.3em;
+                    font-size: 1.2em;
+                    top: 10px;
+                    position: relative;
                 }
 
                 button {
-                    padding: 0.5em;
+                    padding: 0.3em 0em 0.3em 0em;
                     width: 4em;
                     font-size: 0.5em;
                     color: var(--theme-color-1);
