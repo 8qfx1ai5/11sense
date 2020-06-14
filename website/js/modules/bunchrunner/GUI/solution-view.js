@@ -1,9 +1,9 @@
-import * as appSystem from '../main/system.js'
-import * as Main from '../main/main.js'
-import * as appMath from '../math/math.js'
-import * as appSound from '../conversation/sound.js'
-import * as appStatistics from '../statistics/statistics.js'
-import * as appPage from '../page/page.js'
+import * as appSystem from '../../main/system.js'
+import * as Main from '../../main/main.js'
+import * as appMath from '../../math/math.js'
+import * as appSound from '../SUI/sound.js'
+import * as appPage from '../../page/page.js'
+import * as appRunner from '../bunchrunner.js'
 
 let tagIdClipboard = "clipboard"
 let localStorageKeySolutionGuideInterval = "solution-guide-interval"
@@ -53,6 +53,9 @@ function startNewSolutionGuideLoop() {
     if (!isSolutionGuideActive()) {
         return
     }
+    if (!appRunner.isRunning()) {
+        return
+    }
     let interval = getSolutionGuideInterval()
     appSystem.log("start new solution guide loop: '" + interval + "'", 2)
     solutionGuideIntervalObject = setTimeout(function() {
@@ -65,6 +68,10 @@ export function isAutoTaskActive() {
 }
 
 function startAutoTask() {
+    if (!appRunner.isRunning()) {
+        clearInterval(autoTaskTimer)
+        return
+    }
     let interval = getAutoTaskInterval()
     if (0 < interval) {
         autoTaskTimer = setInterval(function() {
@@ -86,13 +93,13 @@ function startAutoTask() {
             if (2000 < now - endTime) {
                 // more than 2 seconds are passed (omit fullscreen error)
                 if (interval < now - endTime) {
-                    Main.currentTask.click()
+                    appMath.newTask()
                     stopAutoTask()
                 }
             } else {
                 // less than 2 seconds are passed
                 if (interval < now - endTime) {
-                    Main.currentTask.click()
+                    appMath.newTask()
                     stopAutoTask()
                 }
             }
@@ -228,6 +235,15 @@ function updateSolution() {
 }
 
 function onDocumentReadyEvent() {
+
+    window.addEventListener('bunch-action-start', () => {
+        appMath.newTask()
+    })
+
+    window.addEventListener('bunch-action-pause', () => {
+        stopSolutionGuideLoop()
+        stopAutoTask()
+    })
 
     appSystem.events.addEventListener('solution-timed-out', function() {
         stopSolutionGuideLoop()

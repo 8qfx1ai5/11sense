@@ -1,7 +1,7 @@
 import * as appMath from '../math/math.js'
-import * as appVoice from '../conversation/voice.js'
+import * as appVoice from '../bunchrunner/SUI/voice.js'
 import * as appSystem from '../main/system.js'
-import * as appSolution from '../task/solution-view.js'
+import * as appSolution from '../bunchrunner/GUI/solution-view.js'
 
 export let currentTask;
 export let currentSolution;
@@ -149,9 +149,7 @@ export function init() {
     f2input.addEventListener('input', function() {
         appMath.newTask(false)
     })
-    currentTask.addEventListener('click', function() {
-        appMath.newTask()
-    })
+
     document.getElementById('button-feedback').addEventListener('click', function() {
         window.open('https://paypal.me/pools/c/8pfcrOnyif')
     })

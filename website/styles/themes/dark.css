@@ -45,6 +45,8 @@ body {
     background-color: #252526;
     color: #d7ba7d;
     font-family: sans-serif;
+    --theme-color-1: #d7ba7d;
+    --theme-color-2: #252526;
 }
 
 #button-language-selection {

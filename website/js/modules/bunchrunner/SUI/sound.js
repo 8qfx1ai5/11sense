@@ -1,6 +1,6 @@
-import * as appSystem from '../main/system.js'
-import * as appTranslation from '../language/translation.js'
-import * as appMath from '../math/math.js'
+import * as appSystem from '../../main/system.js'
+import * as appTranslation from '../../language/translation.js'
+import * as appMath from '../../math/math.js'
 
 export let isSoundModeActive = false;
 let successMessagesDE = ["richtig", "sehr gut", "hervorragend", "gut gemacht", "genau so", "weiter so", "bravo", "ja"];

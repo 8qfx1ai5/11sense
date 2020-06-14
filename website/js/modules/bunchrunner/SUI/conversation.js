@@ -1,6 +1,6 @@
-import * as appVoice from '../conversation/voice.js'
-import * as appSound from '../conversation/sound.js'
-import * as appSystem from '../main/system.js'
+import * as appVoice from './voice.js'
+import * as appSound from './sound.js'
+import * as appSystem from '../../main/system.js'
 
 let tagIdConversationButton = "button-conversation"
 

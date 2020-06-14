@@ -1,7 +1,7 @@
 import * as appSystem from '../main/system.js'
 import * as Main from '../main/main.js'
-import * as appTask from '../task/task-view.js'
-import * as appVoice from '../conversation/voice.js'
+import * as appTask from '../bunchrunner/GUI/task-runner.js'
+import * as appVoice from '../bunchrunner/SUI/voice.js'
 import * as appPage from '../page/page.js'
 
 export let isDecimalPlacesMode = false;
