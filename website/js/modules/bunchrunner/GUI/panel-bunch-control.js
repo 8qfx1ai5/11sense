@@ -7,20 +7,17 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
             <style>
                 :host {
                     width: 100%;
-                    left: 0px;
-                    margin-top: 0.3em;
-                    font-size: 1.2em;
-                    top: 10px;
+                    top: 15px;
                     position: relative;
                 }
 
                 button {
-                    padding: 0.3em 0em 0.3em 0em;
-                    width: 4em;
+                    width: 2.5em;
                     font-size: 0.5em;
                     color: var(--theme-color-1);
                     background-color: var(--theme-color-2);
                     border: 1px solid var(--theme-color-1);
+                    font-size: 1em;
                 }
 
                 button:disabled {
