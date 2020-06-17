@@ -235,8 +235,19 @@ button:disabled {
 }
 
 #auto-task-selector,
+#bunch-size-selector,
 #solution-guide-selector {
     width: 3em;
+    position: relative;
+    right: -0.2em;
+}
+
+select:disabled {
+    color: black;
+}
+
+#exercise-selector {
+    width: 4em;
     position: relative;
     right: -0.2em;
 }

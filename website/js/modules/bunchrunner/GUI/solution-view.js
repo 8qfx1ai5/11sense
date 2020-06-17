@@ -17,7 +17,8 @@ let tagIdAutoTaskSelector = "auto-task-selector"
 let localStorageAutoTaskInterval = "autoTaskInterval"
 export let startTime = false
 let endTime = false
-let autoTaskTimer = false
+let autoTaskStartTime = false
+let autoTaskIntervalTime = false
 
 function isSolutionGuideActive() {
     return getSolutionGuideInterval()
@@ -64,52 +65,39 @@ function startNewSolutionGuideLoop() {
 }
 
 export function isAutoTaskActive() {
-    return 0 < getAutoTaskInterval()
+    return startTime != false
 }
 
 function startAutoTask() {
     if (!appRunner.isRunning()) {
-        clearInterval(autoTaskTimer)
+        stopAutoTask()
         return
     }
     let interval = getAutoTaskInterval()
-    if (0 < interval) {
-        autoTaskTimer = setInterval(function() {
-            if (!endTime) {
-                stopAutoTask()
-                Main.currentSolution.style.backgroundSize = "0%"
-                return
-            }
-            // Get today's date and time
-            let now = performance.now()
-            Main.currentSolution.style.backgroundSize = ((now - endTime) * 102 / interval) + "%"
-                // if (2000 <= now - endTime && now - endTime < 2010) {
-                //     Main.currentSolution.focus()
-                //     window.scrollTo(0, 0)
-                // }
-            if (appSound.hasPendingSoundOutput()) {
-                return
-            }
-            if (2000 < now - endTime) {
-                // more than 2 seconds are passed (omit fullscreen error)
-                if (interval < now - endTime) {
-                    appMath.newTask()
-                    stopAutoTask()
-                }
-            } else {
-                // less than 2 seconds are passed
-                if (interval < now - endTime) {
-                    appMath.newTask()
-                    stopAutoTask()
-                }
-            }
+    if (interval <= 0) {
+        return
+    }
+    autoTaskStartTime = performance.now()
+    window.requestAnimationFrame(autoTaskStep);
+}
 
-        }, 10)
+function autoTaskStep(timestamp) {
+    if (!autoTaskStartTime) {
+        return
+    }
+    const elapsed = timestamp - autoTaskStartTime;
+    let interval = getAutoTaskInterval()
+    Main.currentSolution.style.backgroundSize = ((elapsed) * 102 / interval) + "%"
+    if (elapsed < interval || appSound.hasPendingSoundOutput()) { // Stop the animation after 2 seconds
+        window.requestAnimationFrame(autoTaskStep);
+    } else {
+        appMath.newTask()
+        stopAutoTask()
     }
 }
 
 function stopAutoTask() {
-    clearInterval(autoTaskTimer)
+    autoTaskStartTime = false
 }
 
 function saveAutoTaskInterval() {
@@ -117,19 +105,24 @@ function saveAutoTaskInterval() {
     stopAutoTask()
     if (v == "∞") {
         localStorage.setItem(localStorageAutoTaskInterval, -1)
+        autoTaskIntervalTime = -1
         return
     }
     localStorage.setItem(localStorageAutoTaskInterval, v * 1000)
-    startNewSolutionGuideLoop()
+    autoTaskIntervalTime = v * 1000
 }
 
 function getAutoTaskInterval() {
-    let i = localStorage.getItem(localStorageAutoTaskInterval)
-    if (!i || i == "") {
-        saveAutoTaskInterval()
-        i = localStorage.getItem(localStorageAutoTaskInterval)
+    if (!autoTaskIntervalTime) {
+        let i = localStorage.getItem(localStorageAutoTaskInterval)
+        if (!i || i == "") {
+            saveAutoTaskInterval()
+            i = localStorage.getItem(localStorageAutoTaskInterval)
+        }
+        autoTaskIntervalTime = i
     }
-    return i
+
+    return autoTaskIntervalTime
 }
 
 function updateViewSolution() {

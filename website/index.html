@@ -42,8 +42,15 @@
                 </select></h2>
                 <div class="subpage" id="settings-basic">
                     <ul id="basic-settings-list">
-                        <li><button disabled class="option-item" id="levelModeButton" title="Select your experience level.">Level<span id="level-button-status" class=" b-label-status notranslate" translate="no">1</span><br /><span
-                            class="button-sub">(select difficulty)</span></button>
+                        <li>
+                            <button disabled="true" class="option-item" title="Select your experience level.">
+                            <span class="config-label">Exercise</span><span class=" b-label-status"><select disabled="true" name="exercise-selector" id="exercise-selector" class="selector config" dir="rtl">
+                                <option value="-" selected="selected">-</option>
+                                <option value="level 1">level 1</option>
+                                <option value="level 2">level 2</option>
+                                <option value="sound">sound</option>
+                            </select></span><br /><span
+                            class="button-sub">(select configuration)</span></button>
                         </li>
                         <li><button class="option-item" id="button-conversation" title="Talk with Dorie.">Conversation<span
                             class="hidden  b-label-status" id="button-conversation-on">on</span><span
@@ -106,6 +113,20 @@
                             <button class="option-item">
                                 <span class="config-label">Number Ranges:</span><span class=" b-label-status notranslate" translate="no"><input class="config" type="number" id="f1" name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};" />⋅<input class="config" type="number" id="f2" name="factor2" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};" /></span><br /><span
                                 class="button-sub">(2⋅3=xx⋅yyy)</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button disabled class="option-item" titel="Select the number of tasks you need to solve together in an amount of time to succeed.">
+                                <span class="config-label">Bunch Size</span><span class=" b-label-status notranslate" translate="no"><select disabled name="bunch-size-selector" id="bunch-size-selector" class="selector config" dir="rtl">
+                                    <option value="1" selected="selected">1</option>
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="25">25</option>
+                                    <option value="30">30</option>
+                                </select></span><br /><span
+                                class="button-sub">(number of tasks)</span></button>
                             </button>
                         </li>
                         <li><button disabled class="option-item" id="button-impress" title="Print legal information and credits.">Legal Notice<br /><span
