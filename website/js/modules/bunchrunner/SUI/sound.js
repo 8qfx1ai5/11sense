@@ -91,16 +91,15 @@ export function init() {
         }
     });
 
-    appSystem.events.addEventListener('new-task-created', function(e) {
+    window.addEventListener('bunch-action-task-next', function(e) {
         if (isSoundModeActive) {
-            speak(formatToSpeakableNumber(appMath.factor1) + " " + appTranslation.translateForSoundOutput("multiplied by") + " " + formatToSpeakableNumber(appMath.factor2), 1);
+            speak(formatToSpeakableNumber(e.detail.task.a) + " " + appTranslation.translateForSoundOutput("multiplied by") + " " + formatToSpeakableNumber(e.detail.task.b), 1);
         }
     });
 
-    appSystem.events.addEventListener('sound-mode-start-after', function(e) {
+    appSystem.events.addEventListener('sound-mode-start-after', function() {
         if (isSoundModeActive) {
             speak(appTranslation.translateForSoundOutput("Hello, let's train."), 1);
-            appMath.newTask();
             // speak(formatToSpeakableNumber(appMath.factor1) + " " + appTranslation.translateForSoundOutput("multiplied by") + " " + formatToSpeakableNumber(appMath.factor2), 1);
         }
     });
@@ -111,19 +110,19 @@ export function init() {
         }
     });
 
-    appSystem.events.addEventListener('partial-solution-found', function(e) {
+    appSystem.events.addEventListener('bunch-action-solution-partial-found', function(e) {
         if (isSoundModeActive) {
             speak(formatToSpeakableNumber(e.detail.input) + ", " + appTranslation.translateForSoundOutput("that's the direction"));
         }
     });
 
-    appSystem.events.addEventListener('no-solution-found', function(e) {
+    appSystem.events.addEventListener('bunch-action-solution-invalid', function(e) {
         if (isSoundModeActive) {
             speak(formatToSpeakableNumber(e.detail.input) + "?");
         }
     });
 
-    appSystem.events.addEventListener('solution-found', function(e) {
+    appSystem.events.addEventListener('bunch-action-solution-found', function(e) {
         if (isSoundModeActive) {
             speak(appMath.getRandomElement(getSuccessMessages()));
             speak(appTranslation.translateForSoundOutput("is") + " " + formatToSpeakableNumber(e.detail.input) + "!");

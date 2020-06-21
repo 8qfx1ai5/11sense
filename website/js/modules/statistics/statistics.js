@@ -51,7 +51,7 @@ export function init() {
 
     updateHistoryBasedOnLocalStorage();
 
-    appSystem.events.addEventListener('solution-found', function(e) {
+    appSystem.events.addEventListener('bunch-action-solution-found', function(e) {
         pushToStatistics(e.detail.factor1, e.detail.factor2, e.detail.result, e.detail.endTime - e.detail.startTime)
     })
 }

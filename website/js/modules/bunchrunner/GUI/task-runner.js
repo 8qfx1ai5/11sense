@@ -1,7 +1,6 @@
 import * as appSystem from '../../main/system.js'
 import * as Main from '../../main/main.js'
 
-export let wasSolved = false
 let tagIdSolutionInput = 'solution'
 let tagIdCurrentTaskArea = 'current-task'
 
@@ -20,18 +19,17 @@ function resetInput() {
 }
 
 export function init() {
-    appSystem.events.addEventListener('new-task-created', function(e) {
-        updateView(e.detail.factor1, e.detail.factor2)
+    window.addEventListener('bunch-action-task-next', function(e) {
+        let currentTask = e.detail.state['taskList'][e.detail.state['currentTaskIndex']]
+        updateView(currentTask.values[0], currentTask.values[1])
         resetInput()
-        wasSolved = false
     })
 
-    appSystem.events.addEventListener('solution-found', function(e) {
-        wasSolved = true
+    appSystem.events.addEventListener('bunch-action-solution-found', function(e) {
         document.getElementById(tagIdSolutionInput).disabled = true
     })
 
-    appSystem.events.addEventListener('solution-timed-out', function() {
+    appSystem.events.addEventListener('bunch-action-solution-timed-out', function() {
         document.getElementById(tagIdSolutionInput).disabled = true
     })
 }

@@ -12,7 +12,7 @@ import * as panelBunchControl from './modules/bunchrunner/GUI/panel-bunch-contro
 import * as appDev from './modules/dev/dev-view.js'
 import * as appPage from './modules/page/page.js'
 import * as appTranslation from './modules/language/translation.js'
-import * as bunchrunner from './modules/bunchrunner/bunchrunner.js'
+import * as bunchrunner from './modules/bunchrunner/bunchRunner2.js'
 
 // TODO: rethink race conditons, currently init order matters
 appDev.init()
@@ -29,4 +29,4 @@ appPage.init()
 appTranslation.init()
 bunchrunner.init()
 
-appMath.newTask()
+window.dispatchEvent(new CustomEvent('bunch-request-new'))

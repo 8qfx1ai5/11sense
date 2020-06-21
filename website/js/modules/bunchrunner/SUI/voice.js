@@ -6,6 +6,7 @@ import * as appNotification from '../../notification/onboarding.js'
 import * as appTranslation from '../../language/translation.js'
 import * as appMath from '../../math/math.js'
 import * as appTask from '../GUI/task-runner.js'
+import * as autoTask from '../autoTask.js'
 
 export let isActive = false
 let isBetweenTasks = false
@@ -32,7 +33,7 @@ function startRecognition() {
         appSystem.log("rc start omitted, already exists", 1)
         return
     }
-    if (appSolution.isAutoTaskActive() && isBetweenTasks) {
+    if (autoTask.isAutoTaskRunning() && isBetweenTasks) {
         appSystem.log("rc start omitted, between tasks", 1)
         return
     }
@@ -260,7 +261,7 @@ function recognitionOnResult(e) {
             if (isCommandNewTask(lang, command)) {
                 appSystem.events.dispatchEvent(new CustomEvent('create-new-task'))
                 lastInputs.push(command)
-                appMath.newTask(false)
+                window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
                 return
             }
             if (isCommandRepeatTask(lang, command)) {
@@ -278,18 +279,22 @@ function recognitionOnResult(e) {
                 appSystem.events.dispatchEvent(new CustomEvent('give-status-answer-hallo'))
                 return
             }
-            if (!appTask.wasSolved) {
-                let foundNumber = guessFinalVoiceInput(detected)
-                appSystem.log("final vr='" + detected + "' => '" + foundNumber + "'")
-                if (foundNumber && !lastInputs.includes(foundNumber.toString())) {
-                    lastInputs.push(foundNumber.toString())
-                    Main.currentSolution.value = foundNumber
-                    Main.processInput()
-                    setStatusPlaceholder()
-                    appSystem.log("ok.. dictation restart", 1)
-                    stopRecognition()
-                    return
-                }
+
+            let foundNumber = guessFinalVoiceInput(detected)
+            appSystem.log("final vr='" + detected + "' => '" + foundNumber + "'")
+            if (foundNumber && !lastInputs.includes(foundNumber.toString())) {
+                lastInputs.push(foundNumber.toString())
+                Main.currentSolution.value = foundNumber
+                window.dispatchEvent(new CustomEvent('bunch-request-solution-input', {
+                    detail: {
+                        input: foundNumber,
+                        taskIndex: 0,
+                    }
+                }))
+                setStatusPlaceholder()
+                appSystem.log("ok.. dictation restart", 1)
+                stopRecognition()
+                return
             }
         } else {
             let input = detected.replace("Uhr", "")
@@ -414,10 +419,13 @@ function guessVoiceInput(s) {
     if (c == appMath.factor1 || c == appMath.factor2) {
         return false
     }
-    let analizationResult = Main.analizeTempSolution(c)
     if (c == appMath.result) {
         Main.currentSolution.value = s
-        Main.processInput()
+        window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
+            detail: {
+                input: s
+            }
+        }))
         setStatusPlaceholder()
         return true
     }
@@ -462,7 +470,7 @@ function setVoiceTechNoise() {
 
 export function init() {
 
-    appSystem.events.addEventListener('solution-found', function(e) {
+    appSystem.events.addEventListener('bunch-action-solution-found', function(e) {
         // workaround to omit mobile beeps as mutch as possible
         isBetweenTasks = true
     })
@@ -473,7 +481,7 @@ export function init() {
         stopRecognition()
     })
 
-    appSystem.events.addEventListener('new-task-created', function(e) {
+    window.addEventListener('bunch-action-task-next', function() {
         isBetweenTasks = false
         if (isActive) {
             setTimeout(function() {

@@ -21,9 +21,12 @@ export function guessInput() {
     if (appVoice.isActive) {
         return;
     }
-    if (currentSolution.value.length >= appMath.result.toString().length) {
-        processInput()
-    }
+    window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
+        detail: {
+            input: currentSolution.value,
+            taskIndex: 0,
+        }
+    }))
 }
 
 export function formatNumberForDisplay(n) {
@@ -31,70 +34,6 @@ export function formatNumberForDisplay(n) {
         return ""
     }
     return n.toString().replace(".", ",");
-}
-
-export function processInput() {
-
-    currentSolution.focus();
-    if (currentSolution.value == "") {
-
-        return
-    }
-    let c = parseFloat(currentSolution.value.replace(",", "."))
-    let analizationResult = analizeTempSolution(c)
-    if (analizationResult == "") {
-        // if (!appVoice.isActive) {
-        //     currentSolution.placeholder = "="
-        // }
-        appSystem.events.dispatchEvent(new CustomEvent('no-solution-found', {
-            detail: {
-                input: c,
-                expected: appMath.result,
-                parts: analizationResult
-            }
-        }));
-    } else if (c == appMath.result) {
-        appSystem.events.dispatchEvent(new CustomEvent('solution-found', {
-            detail: {
-                input: c,
-                expected: appMath.result,
-                parts: analizationResult,
-                startTime: appSolution.startTime,
-                endTime: performance.now(),
-                result: c,
-                factor1: appMath.factor1,
-                factor2: appMath.factor2
-            }
-        }));
-    } else {
-        let x = c * 100 / appMath.result
-        currentSolution.placeholder = x.toFixed(1) + "%";
-        appSystem.events.dispatchEvent(new CustomEvent('partial-solution-found', {
-            detail: {
-                input: c,
-                expected: appMath.result,
-                parts: analizationResult
-            }
-        }));
-    }
-    currentSolution.value = "";
-}
-
-export function isBeginnerModeActive() {
-    return (appMath.factor1 == 1 && appMath.factor2 == 1);
-}
-
-export function analizeTempSolution(s) {
-    let keys = [];
-    if (isBeginnerModeActive()) {
-        keys = appMath.sumFlat(s)
-    } else {
-        keys = appMath.sumRecursive(0, 0, s)
-    }
-    for (let i = 0; i < keys.length; i++) {
-        keys[i] = keys[i].replace(/[.]/g, ",");
-    }
-    return keys.join("+")
 }
 
 export function init() {
@@ -114,10 +53,15 @@ export function init() {
 
         if (e.keyCode == '13' || e.keyCode == '32') {
             // enter or space
-            processInput();
+            window.dispatchEvent(new CustomEvent('bunch-request-solution-input', {
+                detail: {
+                    input: currentSolution.value,
+                    taskIndex: 0,
+                }
+            }))
         } else if (e.keyCode == '78') {
             // n
-            appMath.newTask();
+            window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
         } else if (e.keyCode == '83') {
             // s              
             appPage.toggleSolution();
@@ -144,10 +88,10 @@ export function init() {
     }
 
     f1input.addEventListener('input', function() {
-        appMath.newTask(false)
+        window.dispatchEvent(new CustomEvent('bunch-request-new'))
     })
     f2input.addEventListener('input', function() {
-        appMath.newTask(false)
+        window.dispatchEvent(new CustomEvent('bunch-request-new'))
     })
 
     document.getElementById('button-feedback').addEventListener('click', function() {
