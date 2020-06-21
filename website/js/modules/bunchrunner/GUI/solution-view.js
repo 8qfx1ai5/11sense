@@ -3,7 +3,7 @@ import * as Main from '../../main/main.js'
 import * as appMath from '../../math/math.js'
 import * as appSound from '../SUI/sound.js'
 import * as appPage from '../../page/page.js'
-import * as appRunner from '../bunchRunner2.js'
+import * as appRunner from '../bunchRunner.js'
 
 let tagIdClipboard = "clipboard"
 let tagIdSolutionTable = 'Solution'

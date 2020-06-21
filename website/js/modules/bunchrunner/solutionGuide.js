@@ -1,5 +1,5 @@
 import * as appSystem from '../main/system.js'
-import * as bunchRunner from './bunchRunner2.js'
+import * as bunchRunner from './bunchRunner.js'
 
 let localStorageKeySolutionGuideInterval = "solution-guide-interval"
 let tagIdSolutionGuideInput = "solution-guide-selector"
