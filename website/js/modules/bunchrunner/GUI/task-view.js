@@ -25,6 +25,12 @@ export function init() {
         resetInput()
     })
 
+    window.addEventListener('bunch-action-task-previous', function(e) {
+        let currentTask = e.detail.state.taskList[e.detail.state.currentTaskIndex]
+        updateView(currentTask.values[0], currentTask.values[1], e.detail.state.currentTaskIndex)
+        resetInput()
+    })
+
     window.addEventListener('bunch-action-solution-found', function(e) {
         document.getElementById(tagIdSolutionInput).disabled = true
     })

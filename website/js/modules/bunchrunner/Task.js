@@ -6,6 +6,7 @@ let lastTasks = []
 
 export default class Task {
 
+    id
     questionGUI = '<span class="question"><span class="value">5,3</span> <span class="operation">⋅</span> <span class="value">6,8</span></span>'
     questionSUI = "5.3 multiplied by 6.8"
     answer = 36.04
@@ -14,8 +15,9 @@ export default class Task {
     possiblePartialAnswers = []
     answers = []
     wasPaused = false
+    wasSkipped = false
     isSolved = false
-    timedOut = false
+    wasTimedOut = false
     values = [5.3, 6.8]
     regex = "<0> ⋅ <1>"
     startTime = false

@@ -40,7 +40,8 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                 }
 
                 #button-display {
-                    width: 3.5em
+                    width: 3.5em;
+                    border-color: black;
                 }
 
                 .hidden {
@@ -135,13 +136,31 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
 
         events.forEach((event) => {
             window.addEventListener(event, function(e) {
+                let state = e.detail.state
+                let currentTask = state.taskList[state.currentTaskIndex]
                 let currentTaskIndex = "-"
-                if (e.detail.state.currentTaskIndex !== false) {
-                    currentTaskIndex = e.detail.state.currentTaskIndex + 1
+                if (state.currentTaskIndex !== false) {
+                    currentTaskIndex = state.currentTaskIndex + 1
+                    if (currentTask.wasSkipped || currentTask.wasTimeOut) {
+                        currentTaskIndex = "<span style='text-decoration: line-through;text-decoration-color: red;'>" + currentTaskIndex + '</span>'
+                    }
+                    if (0 < state.currentTaskIndex) {
+                        buttonPreviousTask.disabled = false
+                    } else {
+                        buttonPreviousTask.disabled = true
+                    }
+                    if (state.currentTaskIndex + 1 < state.taskList.length) {
+                        buttonNextTask.disabled = false
+                    } else {
+                        buttonNextTask.disabled = true
+                    }
+                } else {
+                    buttonNextTask.disabled = true
+                    buttonPreviousTask.disabled = true
                 }
                 let numberOfTasks = "-"
-                if (e.detail.state.taskList.length) {
-                    numberOfTasks = e.detail.state.taskList.length
+                if (state.taskList.length) {
+                    numberOfTasks = state.taskList.length
                 }
                 buttonDisplay.innerHTML = currentTaskIndex + "/" + numberOfTasks
             })

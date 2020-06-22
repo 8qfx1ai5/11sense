@@ -11,6 +11,7 @@ export function getState() {
 }
 
 let events = [
+    'bunch-action-new',
     'bunch-action-start',
     'bunch-action-pause',
     'bunch-action-task-next',
@@ -38,6 +39,10 @@ export function init() {
             return;
         }
         state.isRunningActive = false
+        if (!state.getTask().isSolved && !state.getTask().wasTimedOut) {
+            state.taskList[state.currentTaskIndex].wasPaused = true
+        }
+
         solutionGuide.stop()
         autoTask.stop()
         window.dispatchEvent(new CustomEvent('bunch-action-pause', { detail: { state: state } }))
@@ -52,8 +57,10 @@ export function init() {
         }
         state.isRunningActive = true
         window.dispatchEvent(new CustomEvent('bunch-action-start', { detail: { state: state } }))
-        if (!state.currentTaskIndex || state.getTask().isSolved) {
+        if (state.currentTaskIndex === false || state.getTask().isSolved || state.getTask().wasTimedOut) {
             window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
+        } else {
+            solutionGuide.start(state.currentTaskIndex)
         }
     })
 
@@ -72,6 +79,9 @@ export function init() {
             return
         } else {
             // display next task
+            if (!state.getTask().isSolved) {
+                state.taskList[state.currentTaskIndex].wasSkipped = true
+            }
             state.currentTaskIndex++
         }
 
@@ -92,14 +102,14 @@ export function init() {
             return
         } else {
             // display previous task
+            if (!state.getTask().isSolved) {
+                state.taskList[state.currentTaskIndex].wasSkipped = true
+            }
             state.currentTaskIndex--
         }
 
-        solutionGuide.start()
+        solutionGuide.start(state.currentTaskIndex)
         autoTask.stop()
-        if (!state.getTask()[startTime]) {
-            state.taskList[state.currentTaskIndex].startTime = performance.now()
-        }
 
         window.dispatchEvent(new CustomEvent('bunch-action-task-previous', { detail: { state: state } }))
     })
@@ -107,6 +117,8 @@ export function init() {
     window.addEventListener('bunch-request-new', function(e) {
         appSystem.log(e, 2, "console");
         appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
+
+        window.dispatchEvent(new CustomEvent('bunch-request-runner-pause'))
 
         state = new State()
 
@@ -164,11 +176,16 @@ export function init() {
             appSystem.log("SKIP: task is out of date")
             return
         }
-        if (state.getTask(e.detail.taskIndex).endTime) {
+        if (state.getTask(e.detail.taskIndex).endTime || state.getTask().isSolved) {
             appSystem.log("SKIP: task was already finished")
             return
         }
+        if (state.getTask().wasTimedOut) {
+            appSystem.log("SKIP: task was timed out")
+            return
+        }
         state.taskList[e.detail.taskIndex].endTime = performance.now()
+        state.taskList[e.detail.taskIndex].wasTimedOut = true
         solutionGuide.stop()
         autoTask.start()
         window.dispatchEvent(new CustomEvent('bunch-action-solution-timed-out', { detail: { state: state } }))
