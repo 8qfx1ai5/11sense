@@ -8,17 +8,17 @@ import * as appRunner from '../bunchRunner.js'
 let tagIdClipboard = "clipboard"
 let tagIdSolutionTable = 'Solution'
 
-function updateViewSolution() {
-    Main.currentTask.innerHTML = "<span class='mainColor'>" + Main.formatNumberForDisplay(appMath.factor1) + " ⋅ " + Main.formatNumberForDisplay(appMath.factor2) + " = </span> <span class='valid'>" + Main.formatNumberForDisplay(appMath.result) + " ✓</span>"
+function updateViewSolution(task) {
+    Main.currentTask.innerHTML = "<span class='mainColor'>" + Main.formatNumberForDisplay(task.values[0]) + " ⋅ " + Main.formatNumberForDisplay(task.values[1]) + " = </span> <span class='valid'>" + Main.formatNumberForDisplay(task.answer) + " ✓</span>"
     Main.currentSolution.value = ""
     Main.currentSolution.placeholder = ""
-    if (endTime) {
-        Main.currentSolution.placeholder = ((endTime - startTime).toFixed(0) / 1000).toString() + " sec."
+    if (task.endTime) {
+        Main.currentSolution.placeholder = ((task.endTime - task.startTime).toFixed(0) / 1000).toString() + " sec."
     }
 }
 
-function updateViewSolutionGuide() {
-    Main.currentTask.innerHTML = "<span class='mainColor'>" + Main.formatNumberForDisplay(appMath.factor1) + " ⋅ " + Main.formatNumberForDisplay(appMath.factor2) + "</span> = <span class='mainColor'>" + Main.formatNumberForDisplay(appMath.result) + "</span>"
+function updateViewSolutionGuide(task) {
+    Main.currentTask.innerHTML = "<span class='guided'>" + task.questionGUI + " <span class='equals-sign'>=</span> " + task.answerGUI + "</span>"
     Main.currentSolution.value = ""
     Main.currentSolution.placeholder = ""
 }
@@ -117,22 +117,26 @@ function updateSolution(task) {
 
 function onDocumentReadyEvent() {
 
-    appSystem.events.addEventListener('bunch-action-solution-timed-out', function() {
-        updateViewSolutionGuide()
+    window.addEventListener('bunch-action-solution-timed-out', function(e) {
+        let currentTask = e.detail.state.taskList[e.detail.state.currentTaskIndex]
+        updateViewSolutionGuide(currentTask)
     })
 
-    appSystem.events.addEventListener('bunch-action-solution-found', function(e) {
-        updateViewSolution()
+    window.addEventListener('bunch-action-solution-found', function(e) {
+        let currentTask = e.detail.state.taskList[e.detail.state.currentTaskIndex]
+        updateViewSolution(currentTask)
     })
 
-    appSystem.events.addEventListener('bunch-action-solution-partial-found', function(e) {
-        text = "<span style='color: green'>" + Main.formatNumberForDisplay(e.detail.input) + "</span> (" + e.detail.parts + ")"
+    window.addEventListener('bunch-action-solution-partial-found', function(e) {
+        let currentTask = e.detail.state.taskList[e.detail.state.currentTaskIndex]
+        let lastAnswer = currentTask.answers[currentTask.answers.length - 1]
+        let text = "<span style='color: green'>" + Main.formatNumberForDisplay(lastAnswer['input']) + "</span> (" + lastAnswer['analizationResult'] + ")"
         let entry = document.createElement('p')
         entry.innerHTML = text
         document.getElementById(tagIdClipboard).prepend(entry)
     })
 
-    appSystem.events.addEventListener('bunch-action-solution-invalid', function(e) {
+    window.addEventListener('bunch-action-solution-invalid', function(e) {
         let solutionButton = document.createElement('span')
         solutionButton.classList.add('hint')
         solutionButton.addEventListener('click', appPage.toggleSolution)
@@ -145,7 +149,7 @@ function onDocumentReadyEvent() {
     })
 
     window.addEventListener('bunch-action-task-next', function(e) {
-        let currentTask = e.detail.state['taskList'][e.detail.state['currentTaskIndex']]
+        let currentTask = e.detail.state.taskList[e.detail.state.currentTaskIndex]
         document.getElementById(tagIdClipboard).innerHTML = ""
         updateSolution(currentTask)
         document.getElementById(tagIdSolutionTable).style.display = "none"

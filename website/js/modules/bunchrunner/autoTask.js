@@ -1,24 +1,28 @@
+import * as appSound from './SUI/sound.js'
+
 let tagIdAutoTaskSelector = "auto-task-selector"
 let localStorageAutoTaskInterval = "autoTaskInterval"
 
 let autoTaskStartTime = false
 let autoTaskIntervalTime = false
 
-export function isAutoTaskRunning() {
-    return startTime != false
+export function isRunning() {
+    return autoTaskStartTime != false
 }
 
-export function startAutoTask() {
-    if (!appRunner.isRunning()) {
-        stopAutoTask()
+export function start() {
+    if (!isEnabled()) {
         return
     }
-    let interval = getAutoTaskInterval()
-    if (interval <= 0) {
-        return
+    if (isRunning()) {
+        stop()
     }
     autoTaskStartTime = performance.now()
     window.requestAnimationFrame(autoTaskStep);
+}
+
+export function isEnabled() {
+    return getAutoTaskInterval() > 0
 }
 
 function autoTaskStep(timestamp) {
@@ -27,22 +31,22 @@ function autoTaskStep(timestamp) {
     }
     const elapsed = timestamp - autoTaskStartTime;
     let interval = getAutoTaskInterval()
-    Main.currentSolution.style.backgroundSize = ((elapsed) * 102 / interval) + "%"
+    document.getElementById('solution').style.backgroundSize = ((elapsed) * 102 / interval) + "%"
     if (elapsed < interval || appSound.hasPendingSoundOutput()) { // Stop the animation after 2 seconds
         window.requestAnimationFrame(autoTaskStep);
     } else {
         window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
-        stopAutoTask()
+        stop()
     }
 }
 
-export function stopAutoTask() {
+export function stop() {
     autoTaskStartTime = false
 }
 
 function saveAutoTaskInterval() {
     let v = document.getElementById(tagIdAutoTaskSelector).value
-    stopAutoTask()
+    stop()
     if (v == "∞") {
         localStorage.setItem(localStorageAutoTaskInterval, -1)
         autoTaskIntervalTime = -1

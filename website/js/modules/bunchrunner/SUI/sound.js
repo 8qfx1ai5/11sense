@@ -129,7 +129,7 @@ export function init() {
         }
     });
 
-    appSystem.events.addEventListener('solution-timed-out', function(e) {
+    appSystem.events.addEventListener('bunch-action-solution-timed-out', function(e) {
         if (isSoundModeActive) {
             speak(appTranslation.translateForSoundOutput("is") + " " + formatToSpeakableNumber(appMath.result) + "!");
         }

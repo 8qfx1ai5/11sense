@@ -116,11 +116,11 @@
                             </button>
                         </li>
                         <li>
-                            <button disabled class="option-item" titel="Select the number of tasks you need to solve together in an amount of time to succeed.">
-                                <span class="config-label">Bunch Size</span><span class=" b-label-status notranslate" translate="no"><select disabled name="bunch-size-selector" id="bunch-size-selector" class="selector config" dir="rtl">
-                                    <option value="1" selected="selected">1</option>
+                            <button class="option-item" titel="Select the number of tasks you need to solve together in an amount of time to succeed.">
+                                <span class="config-label">Bunch Size</span><span class=" b-label-status notranslate" translate="no"><select name="bunch-size-selector" id="bunch-size-selector" class="selector config" dir="rtl">
+                                    <option value="1">1</option>
                                     <option value="5">5</option>
-                                    <option value="10">10</option>
+                                    <option value="10" selected="selected">10</option>
                                     <option value="15">15</option>
                                     <option value="20">20</option>
                                     <option value="25">25</option>
@@ -178,8 +178,7 @@
         </div>
     </div>
     <script src="js/app.js" type="module"></script>
-    <!-- <script type="text/javascript" src="js/language/translation.js"></script> -->
-    <!-- <script>
+    <script>
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 // pageLanguage: 'en',
@@ -187,8 +186,8 @@
                 defaultlanguage: "en"
             }, 'google_translate_element');
         }
-    </script> -->
-    <!-- <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 
 </html>

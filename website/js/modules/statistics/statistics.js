@@ -51,7 +51,8 @@ export function init() {
 
     updateHistoryBasedOnLocalStorage();
 
-    appSystem.events.addEventListener('bunch-action-solution-found', function(e) {
-        pushToStatistics(e.detail.factor1, e.detail.factor2, e.detail.result, e.detail.endTime - e.detail.startTime)
+    window.addEventListener('bunch-action-solution-found', function(e) {
+        let currentTask = e.detail.state.taskList[e.detail.state.currentTaskIndex]
+        pushToStatistics(currentTask.values[0], currentTask.values[1], currentTask.answer, currentTask.endTime - currentTask.startTime)
     })
 }

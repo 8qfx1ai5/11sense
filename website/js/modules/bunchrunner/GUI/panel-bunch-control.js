@@ -39,6 +39,10 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     border-radius: 20px 0px 0px 20px;
                 }
 
+                #button-display {
+                    width: 3.5em
+                }
+
                 .hidden {
                     display: none;
                 }
@@ -51,9 +55,10 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
             </style>
             <div id="panel-bunch-control">
                 <button id="button-previous-task" disabled="true">&#9668;&#9668;</button>
+                <button id="button-display"></button>
                 <button id="button-pause" class="hidden">&#x275A; &#x275A;</button>
                 <button id="button-play">&#9658;</button>
-                <button id="button-next-task">&#9658;&#9658;</button>
+                <button id="button-next-task" disabled="true">&#9658;&#9658;</button>
             </div>
         `
 
@@ -113,6 +118,33 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
             buttonPause.classList.add('hidden')
             buttonPlay.disabled = false
             buttonPlay.classList.remove('clicked')
+        })
+
+        let events = [
+            'bunch-action-start',
+            'bunch-action-pause',
+            'bunch-action-task-next',
+            'bunch-action-task-previous',
+            'bunch-action-solution-found',
+            'bunch-action-solution-partial-found',
+            'bunch-action-solution-invalid',
+            'bunch-action-solution-timed-out',
+            'bunch-action-new',
+        ]
+        let buttonDisplay = this.shadowRoot.getElementById('button-display')
+
+        events.forEach((event) => {
+            window.addEventListener(event, function(e) {
+                let currentTaskIndex = "-"
+                if (e.detail.state.currentTaskIndex !== false) {
+                    currentTaskIndex = e.detail.state.currentTaskIndex + 1
+                }
+                let numberOfTasks = "-"
+                if (e.detail.state.taskList.length) {
+                    numberOfTasks = e.detail.state.taskList.length
+                }
+                buttonDisplay.innerHTML = currentTaskIndex + "/" + numberOfTasks
+            })
         })
     }
 

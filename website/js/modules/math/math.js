@@ -147,10 +147,10 @@ export function sumRecursive(task, s, i, c) {
 export function sumFlat(task, s) {
     let tempProd = 0
     let tempFactor1 = 0
-    let f1s = task.values[0]
-    let f1 = parseFloat(f1s)
-    let f2s = task.values[1]
-    let f2 = parseFloat(f2s)
+    let f1 = task.values[0]
+    let f1s = f1.toString()
+    let f2 = task.values[1]
+    let f2s = f2.toString()
     let iterations = parseInt(f1s.replace(".", ""), 10);
     let iterator = f1 / iterations;
     do {

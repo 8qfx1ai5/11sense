@@ -5,7 +5,7 @@ import * as appSound from './sound.js'
 import * as appNotification from '../../notification/onboarding.js'
 import * as appTranslation from '../../language/translation.js'
 import * as appMath from '../../math/math.js'
-import * as appTask from '../GUI/task-runner.js'
+import * as appTask from '../GUI/task-view.js'
 import * as autoTask from '../autoTask.js'
 
 export let isActive = false
@@ -33,7 +33,7 @@ function startRecognition() {
         appSystem.log("rc start omitted, already exists", 1)
         return
     }
-    if (autoTask.isAutoTaskRunning() && isBetweenTasks) {
+    if (autoTask.isRunning() && isBetweenTasks) {
         appSystem.log("rc start omitted, between tasks", 1)
         return
     }
@@ -423,7 +423,7 @@ function guessVoiceInput(s) {
         Main.currentSolution.value = s
         window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
             detail: {
-                input: s
+                input: s,
             }
         }))
         setStatusPlaceholder()
@@ -470,12 +470,12 @@ function setVoiceTechNoise() {
 
 export function init() {
 
-    appSystem.events.addEventListener('bunch-action-solution-found', function(e) {
+    window.addEventListener('bunch-action-solution-found', function(e) {
         // workaround to omit mobile beeps as mutch as possible
         isBetweenTasks = true
     })
 
-    appSystem.events.addEventListener('solution-timed-out', function(e) {
+    window.addEventListener('bunch-action-solution-timed-out', function(e) {
         // workaround to omit mobile beeps as mutch as possible
         isBetweenTasks = true
         stopRecognition()
@@ -495,14 +495,14 @@ export function init() {
         toggleVoiceTech()
     })
 
-    appSystem.events.addEventListener('speak-before', function(e) {
+    window.addEventListener('speak-before', function(e) {
         if (isActive) {
             abortRecognition()
         }
         setStatusPlaceholder()
     })
 
-    appSystem.events.addEventListener('speak-after', function(e) {
+    window.addEventListener('speak-after', function(e) {
         if (isActive) {
             setTimeout(function() {
                 startRecognition()

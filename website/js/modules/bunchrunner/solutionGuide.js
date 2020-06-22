@@ -6,8 +6,8 @@ let tagIdSolutionGuideInput = "solution-guide-selector"
 let solutionGuideInterval = false
 let solutionGuideIntervalObject = false
 
-export function isSolutionGuideActive() {
-    return getSolutionGuideInterval()
+export function isActive() {
+    return getSolutionGuideInterval() !== false
 }
 
 function getSolutionGuideInterval() {
@@ -19,15 +19,14 @@ function saveSolutionGuideInterval() {
     if (v == "" || v == "-" || v == "off") {
         localStorage.setItem(localStorageKeySolutionGuideInterval, false)
         solutionGuideInterval = false
-        stopSolutionGuideLoop()
+        stop()
         return
     }
     localStorage.setItem(localStorageKeySolutionGuideInterval, v * 1000)
     solutionGuideInterval = v * 1000
-    startNewSolutionGuideLoop()
 }
 
-export function stopSolutionGuideLoop() {
+export function stop() {
     appSystem.log("stop solution guide loop", 1)
     if (solutionGuideIntervalObject) {
         clearTimeout(solutionGuideIntervalObject)
@@ -35,9 +34,9 @@ export function stopSolutionGuideLoop() {
     solutionGuideIntervalObject = false
 }
 
-export function startNewSolutionGuideLoop() {
-    stopSolutionGuideLoop()
-    if (!isSolutionGuideActive()) {
+export function start(taskIndex) {
+    stop()
+    if (!isActive()) {
         return
     }
     if (!bunchRunner.isRunning()) {
@@ -45,9 +44,11 @@ export function startNewSolutionGuideLoop() {
     }
     let interval = getSolutionGuideInterval()
     appSystem.log("start new solution guide loop: '" + interval + "'", 2)
-    solutionGuideIntervalObject = setTimeout(function() {
-        appSystem.events.dispatchEvent(new CustomEvent('solution-timed-out'))
-    }, interval)
+    solutionGuideIntervalObject = setTimeout(function(taskIndex) {
+        window.dispatchEvent(new CustomEvent('bunch-request-solution-timed-out', {
+            detail: { taskIndex: taskIndex }
+        }))
+    }, interval, taskIndex)
 }
 
 export function init() {

@@ -1,7 +1,4 @@
-import * as appMath from '../math/math.js'
 import * as appVoice from '../bunchrunner/SUI/voice.js'
-import * as appSystem from '../main/system.js'
-import * as appSolution from '../bunchrunner/GUI/solution-view.js'
 
 export let currentTask;
 export let currentSolution;
@@ -24,7 +21,7 @@ export function guessInput() {
     window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
         detail: {
             input: currentSolution.value,
-            taskIndex: 0,
+            taskIndex: currentTask.getAttribute("taskindex"),
         }
     }))
 }
@@ -56,7 +53,7 @@ export function init() {
             window.dispatchEvent(new CustomEvent('bunch-request-solution-input', {
                 detail: {
                     input: currentSolution.value,
-                    taskIndex: 0,
+                    taskIndex: currentTask.getAttribute("taskindex"),
                 }
             }))
         } else if (e.keyCode == '78') {
@@ -64,7 +61,7 @@ export function init() {
             window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
         } else if (e.keyCode == '83') {
             // s              
-            appPage.toggleSolution();
+            // appPage.toggleSolution();
             currentSolution.focus();
         } else if (e.keyCode == '79') {
             // o

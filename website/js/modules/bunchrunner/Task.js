@@ -1,28 +1,37 @@
 import * as appMath from '../math/math.js'
+import Config from './Config.js'
+import * as appTranslation from '../language/translation.js'
 
 let lastTasks = []
 
 export default class Task {
 
-    questionGUI = "3 ⋅ 6"
-    answer = "18"
+    questionGUI = '<span class="question"><span class="value">5,3</span> <span class="operation">⋅</span> <span class="value">6,8</span></span>'
+    questionSUI = "5.3 multiplied by 6.8"
+    answer = 36.04
+    answerGUI = "36,04"
+    answerSUI = "36.0 4"
     possiblePartialAnswers = []
     answers = []
     wasPaused = false
     isSolved = false
     timedOut = false
-    values = ["3", "6"]
+    values = [5.3, 6.8]
     regex = "<0> ⋅ <1>"
     startTime = false
     endTime = false
-    config = false
+    config = new Config()
 
-    constructor(config) {
+    constructor(config = new Config()) {
         this.config = config
-        let t = calculateTask(config.numberRanges[0], config.numberRanges[1], config.isDecimalPlacesMode)
-        this.values[0] = t.factor1.toString()
-        this.values[1] = t.factor2.toString()
-        this.answer = t.result.toString()
+        let t = calculateTask(this.config)
+        this.values[0] = t.factor1
+        this.values[1] = t.factor2
+        this.questionGUI = '<span class="question"><span class="value">' + formatNumberForGUI(this.values[0]) + '</span> <span class="operation">⋅</span> <span class="value">' + formatNumberForGUI(this.values[1]) + '</span></span>'
+        this.questionSUI = formatNumberForGUI(this.values[0]) + " " + appTranslation.translateForSoundOutput("multiplied by") + " " + formatNumberForGUI(this.values[1])
+        this.answer = t.result
+        this.answerGUI = '<span class="answer">' + formatNumberForGUI(t.result) + '</span>'
+        this.answerSUI = formatNumberForSUI(t.result)
         this.possiblePartialAnswers = calculateFractions(t.factor1, t.factor2)
     }
 
@@ -50,8 +59,32 @@ export default class Task {
     }
 
     isBeginnerMode() {
-        return (this.values[0] == 1 && this.values[1] == 1);
+        return (this.config.numberRanges[0] == 1 && this.config.numberRanges[1] == 1);
     }
+}
+
+function formatNumberForGUI(n) {
+    if (!n) {
+        return ""
+    }
+    return n.toString().replace(".", ",");
+}
+
+function formatNumberForSUI(n) {
+    if (appTranslation.getSelectedLanguage() == "de-DE") {
+        let nS = n.toString();
+        let nSsplit = nS.split(".");
+        if (nSsplit.length < 2) {
+            return nS;
+        }
+        let output = nSsplit[0] + ",";
+        for (let i = 0; i < nSsplit[1].length; i++) {
+            output += nSsplit[1][i] + " "
+        }
+        return output;
+    }
+
+    return n.toString();
 }
 
 function analizeSolution(task, possibleSolution) {
@@ -67,7 +100,10 @@ function analizeSolution(task, possibleSolution) {
     return keys.join("+")
 }
 
-function calculateTask(a, b, isDecimalPlacesMode = false) {
+function calculateTask(config) {
+    let a = config.numberRanges[0]
+    let b = config.numberRanges[1]
+
     a = Math.max(1, a)
     a = Math.min(10, a)
     b = Math.max(1, b)
@@ -87,7 +123,7 @@ function calculateTask(a, b, isDecimalPlacesMode = false) {
     let factor1Decimals = 0;
     let factor2Decimals = 0;
 
-    if (isDecimalPlacesMode) {
+    if (config.isDecimalPlacesMode) {
         for (let i = 0; i < a; i++) {
             if (0 < Math.round(Math.random())) {
                 factor1Decimals++;
