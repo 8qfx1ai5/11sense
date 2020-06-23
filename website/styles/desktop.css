@@ -86,10 +86,6 @@ body {
     margin: 5px 0px 2px 0px;
 }
 
-#nav .subpage {
-    border-left: 1px solid;
-}
-
 #history,
 #loggings {
     border-right: 1px solid;

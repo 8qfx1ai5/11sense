@@ -10,10 +10,11 @@ export function getState() {
     return state
 }
 
-let events = [
+export let events = [
     'bunch-action-new',
     'bunch-action-start',
     'bunch-action-pause',
+    'bunch-action-submit',
     'bunch-action-task-next',
     'bunch-action-task-previous',
     'bunch-action-solution-found',
@@ -24,7 +25,7 @@ let events = [
 let localStorageBunchSizeKey = 'bunchSize'
 
 export function isRunning() {
-    return state.isRunningActive
+    return state.isRunning
 }
 
 export function init() {
@@ -38,7 +39,7 @@ export function init() {
             appSystem.log("SKIP: bunch runner already pausing")
             return;
         }
-        state.isRunningActive = false
+        state.isRunning = false
         if (!state.getTask().isSolved && !state.getTask().wasTimedOut) {
             state.taskList[state.currentTaskIndex].wasPaused = true
         }
@@ -55,13 +56,24 @@ export function init() {
             appSystem.log("SKIP: bunch runner already running")
             return;
         }
-        state.isRunningActive = true
+        state.isRunning = true
         window.dispatchEvent(new CustomEvent('bunch-action-start', { detail: { state: state } }))
         if (state.currentTaskIndex === false || state.getTask().isSolved || state.getTask().wasTimedOut) {
             window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
         } else {
             solutionGuide.start(state.currentTaskIndex)
         }
+    })
+
+    window.addEventListener('bunch-request-submit', (e) => {
+        appSystem.log(e, 2, "console");
+        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
+
+        solutionGuide.stop()
+        autoTask.stop()
+
+        state.isFinished = true
+        window.dispatchEvent(new CustomEvent('bunch-action-submit', { detail: { state: state } }))
     })
 
     window.addEventListener('bunch-request-next-task', function(e) {
@@ -75,7 +87,8 @@ export function init() {
             state.currentTaskIndex = 0
         } else if (state.currentTaskIndex + 1 == state.taskList.length) {
             appSystem.log("SKIP: there is no next task")
-            window.dispatchEvent(new CustomEvent('bunch-request-new'))
+            window.dispatchEvent(new CustomEvent('bunch-request-submit'))
+                // window.dispatchEvent(new CustomEvent('bunch-request-new'))
             return
         } else {
             // display next task
@@ -85,7 +98,12 @@ export function init() {
             state.currentTaskIndex++
         }
 
-        solutionGuide.start(state.currentTaskIndex)
+        if (!state.isRunning && state.getTask().isNew()) {
+            window.dispatchEvent(new CustomEvent('bunch-request-runner-start'))
+        } else {
+            solutionGuide.start(state.currentTaskIndex)
+        }
+
         autoTask.stop()
         if (!state.getTask().startTime) {
             state.taskList[state.currentTaskIndex].startTime = performance.now()
@@ -108,7 +126,12 @@ export function init() {
             state.currentTaskIndex--
         }
 
-        solutionGuide.start(state.currentTaskIndex)
+        if (state.isRunning && !state.getTask().isNew()) {
+            window.dispatchEvent(new CustomEvent('bunch-request-runner-pause'))
+        } else {
+            solutionGuide.start(state.currentTaskIndex)
+        }
+
         autoTask.stop()
 
         window.dispatchEvent(new CustomEvent('bunch-action-task-previous', { detail: { state: state } }))

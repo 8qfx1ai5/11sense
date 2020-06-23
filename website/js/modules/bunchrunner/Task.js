@@ -63,6 +63,10 @@ export default class Task {
     isBeginnerMode() {
         return (this.config.numberRanges[0] == 1 && this.config.numberRanges[1] == 1);
     }
+
+    isNew() {
+        return !this.isSolved && !this.wasPaused && !this.wasSkipped && !this.wasTimedOut
+    }
 }
 
 function formatNumberForGUI(n) {

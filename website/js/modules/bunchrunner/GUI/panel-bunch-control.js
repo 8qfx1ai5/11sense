@@ -1,3 +1,5 @@
+import * as appRunner from '../bunchRunner.js'
+
 customElements.define('panel-bunch-control', class extends HTMLElement {
     constructor() {
         super()
@@ -12,12 +14,13 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                 }
 
                 button {
-                    width: 2.5em;
-                    font-size: 0.5em;
+                    width: 2em;
                     color: var(--theme-color-1);
                     background-color: var(--theme-color-2);
                     border: 1px solid var(--theme-color-1);
                     font-size: 1em;
+                    line-height: 1em;
+                    padding: 0.1em 0em 0em 0em;
                 }
 
                 button:disabled {
@@ -29,19 +32,27 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     outline: none;
                 }
 
-                #button-next-task {
-                    letter-spacing: -0.3em;
+                #button-submit {
                     border-radius: 0px 20px 20px 0px;
                 }
 
+                #button-next-task,
                 #button-previous-task {
-                    letter-spacing: -0.3em;
-                    border-radius: 20px 0px 0px 20px;
+                    letter-spacing: -0.2em;
+                    border-radius: 0px 20px 20px 0px;
                 }
 
                 #button-display {
-                    width: 3.5em;
+                    width: 3em;
                     border-color: black;
+                }
+
+                .rotate{
+                    -moz-transform: rotate(-180deg);
+                    -ms-transform: rotate(-180deg);
+                    -o-transform: rotate(-180deg);
+                    -webkit-transform: rotate(-180deg);
+                    transform: rotate(-180deg);
                 }
 
                 .hidden {
@@ -52,14 +63,24 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     background-color: var(--theme-color-1);
                 }
 
-                #button-pause
+                #button-pause {
+                    vertical-align: top;
+                    padding: 0.05em 0em 0.05em 0em;
+                }
+
+                #button-restart {
+                    padding: 0em 0em 0.1em 0em;
+                    vertical-align: top;
+                }
             </style>
             <div id="panel-bunch-control">
-                <button id="button-previous-task" disabled="true">&#9668;&#9668;</button>
+                <button id="button-previous-task" class="rotate" disabled="true">&#9654;&#9654;&nbsp;&nbsp;</button>
                 <button id="button-display"></button>
                 <button id="button-pause" class="hidden">&#x275A; &#x275A;</button>
-                <button id="button-play">&#9658;</button>
-                <button id="button-next-task" disabled="true">&#9658;&#9658;</button>
+                <button id="button-play">&#9654;</button>
+                <button id="button-restart">&#10227;</button>
+                <button id="button-next-task" disabled="true">&#9654;&#9654;&nbsp;&nbsp;</button>
+                <button id="button-submit" disabled="true" class="hidden">✓</button>
             </div>
         `
 
@@ -107,41 +128,34 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
             }))
         })
 
-        window.addEventListener('bunch-action-start', () => {
-            buttonPlay.classList.add('hidden')
-            buttonPause.classList.remove('hidden')
-            buttonPause.classList.remove('clicked')
-            buttonPause.disabled = false
+        let buttonSubmit = this.shadowRoot.getElementById('button-submit')
+        buttonSubmit.addEventListener('click', () => {
+            buttonSubmit.disabled = true
+            this.dispatchEvent(new CustomEvent('bunch-request-submit', {
+                bubbles: true,
+                composed: true
+            }))
         })
 
-        window.addEventListener('bunch-action-pause', () => {
-            buttonPlay.classList.remove('hidden')
-            buttonPause.classList.add('hidden')
-            buttonPlay.disabled = false
-            buttonPlay.classList.remove('clicked')
+        let buttonRestart = this.shadowRoot.getElementById('button-restart')
+        buttonRestart.addEventListener('click', () => {
+            buttonRestart.disabled = true
+            this.dispatchEvent(new CustomEvent('bunch-request-new', {
+                bubbles: true,
+                composed: true
+            }))
         })
 
-        let events = [
-            'bunch-action-start',
-            'bunch-action-pause',
-            'bunch-action-task-next',
-            'bunch-action-task-previous',
-            'bunch-action-solution-found',
-            'bunch-action-solution-partial-found',
-            'bunch-action-solution-invalid',
-            'bunch-action-solution-timed-out',
-            'bunch-action-new',
-        ]
         let buttonDisplay = this.shadowRoot.getElementById('button-display')
 
-        events.forEach((event) => {
+        appRunner.events.forEach((event) => {
             window.addEventListener(event, function(e) {
                 let state = e.detail.state
-                let currentTask = state.taskList[state.currentTaskIndex]
+                let currentTask = state.getTask()
                 let currentTaskIndex = "-"
                 if (state.currentTaskIndex !== false) {
                     currentTaskIndex = state.currentTaskIndex + 1
-                    if (currentTask.wasSkipped || currentTask.wasTimeOut) {
+                    if (currentTask.wasSkipped || currentTask.wasTimedOut || currentTask.wasPaused) {
                         currentTaskIndex = "<span style='text-decoration: line-through;text-decoration-color: red;'>" + currentTaskIndex + '</span>'
                     }
                     if (0 < state.currentTaskIndex) {
@@ -149,20 +163,59 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     } else {
                         buttonPreviousTask.disabled = true
                     }
-                    if (state.currentTaskIndex + 1 < state.taskList.length) {
+                    if (state.isFinished) {
+                        buttonSubmit.disabled = true
+                        buttonSubmit.classList.remove('hidden')
+                        buttonNextTask.disabled = true
+                        buttonNextTask.classList.add('hidden')
+                        buttonPreviousTask.disabled = true
+                    } else if (state.currentTaskIndex + 1 < state.taskList.length) {
                         buttonNextTask.disabled = false
+                        buttonNextTask.classList.remove('hidden')
+                        buttonSubmit.disabled = true
+                        buttonSubmit.classList.add('hidden')
                     } else {
                         buttonNextTask.disabled = true
+                        buttonNextTask.classList.add('hidden')
+                        buttonSubmit.disabled = false
+                        buttonSubmit.classList.remove('hidden')
                     }
                 } else {
                     buttonNextTask.disabled = true
+                    buttonNextTask.classList.remove('hidden')
                     buttonPreviousTask.disabled = true
+                    buttonSubmit.disabled = true
+                    buttonSubmit.classList.add('hidden')
                 }
                 let numberOfTasks = "-"
                 if (state.taskList.length) {
                     numberOfTasks = state.taskList.length
                 }
                 buttonDisplay.innerHTML = currentTaskIndex + "/" + numberOfTasks
+
+                if (state.isRunning && !state.isFinished) {
+                    buttonPlay.classList.add('hidden')
+                    buttonPause.classList.remove('hidden')
+                    buttonPause.classList.remove('clicked')
+                    buttonPause.disabled = false
+                } else {
+                    buttonPlay.classList.remove('hidden')
+                    buttonPause.classList.add('hidden')
+                    buttonPlay.disabled = false
+                    buttonPlay.classList.remove('clicked')
+                }
+
+                if (state.isFinished) {
+                    buttonRestart.classList.remove('hidden')
+                    buttonRestart.disabled = false
+                    buttonPlay.classList.add('hidden')
+                    buttonPlay.disabled = true
+                    buttonPause.classList.add('hidden')
+                    buttonPause.disabled = true
+                } else {
+                    buttonRestart.classList.add('hidden')
+                    buttonRestart.disabled = true
+                }
             })
         })
     }

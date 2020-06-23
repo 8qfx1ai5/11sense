@@ -7,7 +7,8 @@ export default class State {
     startTime = false
     endTime = false
     config = new Config()
-    isRunningActive = false
+    isRunning = false
+    isFinished = false
 
     getTask(index = false) {
         if (!index) {
