@@ -12,5 +12,6 @@ export default class Config {
         this.numberRanges[1] = parseInt(document.getElementById('f2').value, 10);
 
         this.bunchSize = parseInt(document.getElementById('bunch-size-selector').value, 10);
+        this.isDecimalPlacesMode = localStorage.getItem('isDecimalPlacesModeActive') == "true"
     }
 }

@@ -47,6 +47,14 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     border-color: black;
                 }
 
+                #button-stop {
+                    width: 3em;
+                }
+
+                #button-display:hover {
+                    border-color: inherit;
+                }
+
                 .rotate{
                     -moz-transform: rotate(-180deg);
                     -ms-transform: rotate(-180deg);
@@ -76,6 +84,7 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
             <div id="panel-bunch-control">
                 <button id="button-previous-task" class="rotate" disabled="true">&#9654;&#9654;&nbsp;&nbsp;</button>
                 <button id="button-display"></button>
+                <button id="button-stop" class="hidden">&#9724;</button>
                 <button id="button-pause" class="hidden">&#x275A; &#x275A;</button>
                 <button id="button-play">&#9654;</button>
                 <button id="button-restart">&#10227;</button>
@@ -147,6 +156,23 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
         })
 
         let buttonDisplay = this.shadowRoot.getElementById('button-display')
+        let buttonStop = this.shadowRoot.getElementById('button-stop')
+        buttonDisplay.addEventListener('click', () => {
+            buttonDisplay.classList.add('hidden')
+            buttonStop.classList.remove('hidden')
+            setTimeout(() => {
+                buttonDisplay.classList.remove('hidden')
+                buttonStop.classList.add('hidden')
+            }, 1500)
+        })
+
+        buttonStop.addEventListener('click', () => {
+            buttonStop.disabled = true
+            this.dispatchEvent(new CustomEvent('bunch-request-new', {
+                bubbles: true,
+                composed: true
+            }))
+        })
 
         appRunner.events.forEach((event) => {
             window.addEventListener(event, function(e) {
@@ -180,12 +206,14 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                         buttonSubmit.disabled = false
                         buttonSubmit.classList.remove('hidden')
                     }
+                    buttonStop.disabled = false
                 } else {
                     buttonNextTask.disabled = true
                     buttonNextTask.classList.remove('hidden')
                     buttonPreviousTask.disabled = true
                     buttonSubmit.disabled = true
                     buttonSubmit.classList.add('hidden')
+                    buttonStop.disabled = true
                 }
                 let numberOfTasks = "-"
                 if (state.taskList.length) {
@@ -212,6 +240,7 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     buttonPlay.disabled = true
                     buttonPause.classList.add('hidden')
                     buttonPause.disabled = true
+                    buttonStop.disabled = true
                 } else {
                     buttonRestart.classList.add('hidden')
                     buttonRestart.disabled = true

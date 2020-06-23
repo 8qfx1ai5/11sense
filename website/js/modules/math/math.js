@@ -66,7 +66,7 @@ export function addDecimal(x, y) {
     return divideBy10(sum, maxDecimal);
 }
 
-function divideBy10(x, i = 1) {
+export function divideBy10(x, i = 1) {
     let xs = x.toString();
     let result = "";
     if (i < 0) {
