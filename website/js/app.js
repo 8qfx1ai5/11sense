@@ -6,9 +6,10 @@ import * as appStatistics from './modules/statistics/statistics.js'
 import * as appSystem from './modules/main/system.js'
 import * as appMath from './modules/math/math.js'
 import * as appNotification from './modules/notification/onboarding.js'
-import * as appTask from './modules/bunchrunner/GUI/task-view.js'
+import * as appTask from './modules/bunchrunner/GUI/component-view-task.js'
+import * as appViewInput from './modules/bunchrunner/GUI/view-input.js'
 import * as appSolution from './modules/bunchrunner/GUI/solution-view.js'
-import * as panelBunchControl from './modules/bunchrunner/GUI/panel-bunch-control.js'
+import * as panelBunchControl from './modules/bunchrunner/GUI/component-panel-bunch-control.js'
 import * as appDev from './modules/dev/dev-view.js'
 import * as appPage from './modules/page/page.js'
 import * as appTranslation from './modules/language/translation.js'
@@ -23,7 +24,7 @@ appConversation.init()
 appStatistics.init()
 appSystem.init()
 appMath.init()
-appTask.init()
+appViewInput.init()
 appSolution.init()
 appPage.init()
 appTranslation.init()

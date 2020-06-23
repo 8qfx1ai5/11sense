@@ -79,12 +79,6 @@ header p {
     margin-top: 0.5em;
 }
 
-#current-task {
-    display: inline-block;
-    /* width: 100%; */
-    /* position: absolute; */
-}
-
 .hint {
     /* display: inline-block; */
     margin-left: 0.5em;

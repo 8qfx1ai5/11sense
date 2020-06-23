@@ -37,16 +37,14 @@ header {
     color: green;
 }
 
-.invalid {
-    color: yellow;
-}
-
 body {
     background-color: #252526;
     color: #d7ba7d;
     font-family: sans-serif;
     --theme-color-1: #d7ba7d;
     --theme-color-2: #252526;
+    --theme-color-3: darkcyan;
+    --theme-color-4: green;
 }
 
 #button-language-selection {
@@ -73,10 +71,6 @@ body {
 
 #partial-solutions {
     font-family: monospace;
-}
-
-#task {
-    color: darkcyan;
 }
 
 .b-label-status {

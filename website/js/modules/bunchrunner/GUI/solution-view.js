@@ -9,7 +9,6 @@ let tagIdClipboard = "clipboard"
 let tagIdSolutionTable = 'Solution'
 
 function updateViewSolution(task) {
-    Main.currentTask.innerHTML = "<span class='mainColor'>" + Main.formatNumberForDisplay(task.values[0]) + " ⋅ " + Main.formatNumberForDisplay(task.values[1]) + " = </span> <span class='valid'>" + Main.formatNumberForDisplay(task.answer) + " ✓</span>"
     Main.currentSolution.value = ""
     Main.currentSolution.placeholder = ""
     if (task.endTime) {
@@ -18,7 +17,6 @@ function updateViewSolution(task) {
 }
 
 function updateViewSolutionGuide(task) {
-    Main.currentTask.innerHTML = "<span class='guided'>" + task.questionGUI + " <span class='equals-sign'>=</span> " + task.answerGUI + "</span>"
     Main.currentSolution.value = ""
     Main.currentSolution.placeholder = ""
 }
@@ -156,6 +154,17 @@ function onDocumentReadyEvent() {
     })
 
     document.getElementById('solution').addEventListener('keyup', Main.guessInput)
+
+    appRunner.events.forEach((event) => {
+        window.addEventListener(event, function(e) {
+            let state = e.detail.state
+            let currentTask = state.getTask()
+
+            if (currentTask) {
+                Main.currentSolution.setAttribute("taskindex", state.currentTaskIndex)
+            }
+        })
+    })
 }
 
 export function init() {

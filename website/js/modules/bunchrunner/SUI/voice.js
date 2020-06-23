@@ -1,11 +1,9 @@
 import * as Main from '../../main/main.js'
 import * as appSystem from '../../main/system.js'
-import * as appSolution from '../GUI/solution-view.js'
 import * as appSound from './sound.js'
 import * as appNotification from '../../notification/onboarding.js'
 import * as appTranslation from '../../language/translation.js'
 import * as appMath from '../../math/math.js'
-import * as appTask from '../GUI/task-view.js'
 import * as autoTask from '../autoTask.js'
 
 export let isActive = false

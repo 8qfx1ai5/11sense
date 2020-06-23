@@ -21,7 +21,7 @@ export function guessInput() {
     window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
         detail: {
             input: currentSolution.value,
-            taskIndex: currentTask.getAttribute("taskindex"),
+            taskIndex: currentSolution.getAttribute("taskindex"),
         }
     }))
 }
@@ -53,7 +53,7 @@ export function init() {
             window.dispatchEvent(new CustomEvent('bunch-request-solution-input', {
                 detail: {
                     input: currentSolution.value,
-                    taskIndex: currentTask.getAttribute("taskindex"),
+                    taskIndex: currentSolution.getAttribute("taskindex"),
                 }
             }))
         } else if (e.keyCode == '78') {

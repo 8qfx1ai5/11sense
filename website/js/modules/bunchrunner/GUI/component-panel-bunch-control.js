@@ -80,6 +80,11 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     padding: 0em 0em 0.1em 0em;
                     vertical-align: top;
                 }
+
+                .invalid {
+                    text-decoration: line-through;
+                    text-decoration-color: var(--theme-color-3);
+                }
             </style>
             <div id="panel-bunch-control">
                 <button id="button-previous-task" class="rotate" disabled="true">&#9654;&#9654;&nbsp;&nbsp;</button>
@@ -182,7 +187,7 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                 if (state.currentTaskIndex !== false) {
                     currentTaskIndex = state.currentTaskIndex + 1
                     if (currentTask.wasSkipped || currentTask.wasTimedOut || currentTask.wasPaused) {
-                        currentTaskIndex = "<span style='text-decoration: line-through;text-decoration-color: red;'>" + currentTaskIndex + '</span>'
+                        currentTaskIndex = "<span class='invalid'>" + currentTaskIndex + '</span>'
                     }
                     if (0 < state.currentTaskIndex) {
                         buttonPreviousTask.disabled = false
