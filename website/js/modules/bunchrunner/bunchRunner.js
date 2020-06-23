@@ -58,11 +58,24 @@ export function init() {
         }
         state.isRunning = true
         window.dispatchEvent(new CustomEvent('bunch-action-start', { detail: { state: state } }))
-        if (state.currentTaskIndex === false || state.getTask().isSolved || state.getTask().wasTimedOut) {
-            window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
-        } else {
-            solutionGuide.start(state.currentTaskIndex)
+        let i = 0
+        for (; i < state.taskList.length; i++) {
+            // jump to next untouched task
+            if (state.taskList[i].isNew()) {
+                if (i === 0) {
+                    state.currentTaskIndex = false
+                } else {
+                    state.currentTaskIndex = i - 1
+                }
+                window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
+                break
+            }
         }
+        if (i === state.taskList.length) {
+            window.dispatchEvent(new CustomEvent('bunch-request-submit'))
+            return
+        }
+        solutionGuide.start(state.currentTaskIndex)
     })
 
     window.addEventListener('bunch-request-submit', (e) => {
@@ -172,6 +185,10 @@ export function init() {
         appSystem.log(e, 2, "console");
         appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
 
+        if (state.isFinished) {
+            appSystem.log("SKIP: you can not change a finished bunch")
+            return
+        }
         if (e.detail.taskIndex != state.currentTaskIndex) {
             appSystem.log("SKIP: you can only solve the current task")
             return

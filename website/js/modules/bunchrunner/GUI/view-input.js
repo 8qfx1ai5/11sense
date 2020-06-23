@@ -12,7 +12,12 @@ export function init() {
     window.addEventListener('bunch-action-task-next', function(e) {
         resetInput()
     })
-
+    window.addEventListener('bunch-action-start', function(e) {
+        document.getElementById(tagIdSolutionInput).focus()
+    })
+    window.addEventListener('bunch-action-pause', function(e) {
+        document.getElementById(tagIdSolutionInput).focus()
+    })
     window.addEventListener('bunch-action-task-previous', function(e) {
         resetInput()
     })

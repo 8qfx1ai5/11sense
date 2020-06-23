@@ -100,12 +100,10 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
 
         let buttonPlay = this.shadowRoot.getElementById('button-play')
         let buttonPause = this.shadowRoot.getElementById('button-pause')
-        let inputSolution = document.getElementById('solution')
 
         buttonPlay.addEventListener('click', () => {
             buttonPlay.disabled = true
             buttonPlay.classList.add('clicked')
-            inputSolution.focus()
             this.dispatchEvent(new CustomEvent('bunch-request-runner-start', {
                 bubbles: true,
                 composed: true
@@ -118,7 +116,6 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
 
         buttonPause.addEventListener('click', () => {
             buttonPause.disabled = true
-            inputSolution.focus()
             this.dispatchEvent(new CustomEvent('bunch-request-runner-pause', {
                 bubbles: true,
                 composed: true
@@ -127,7 +124,6 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
 
         let buttonNextTask = this.shadowRoot.getElementById('button-next-task')
         buttonNextTask.addEventListener('click', () => {
-            inputSolution.focus()
             this.dispatchEvent(new CustomEvent('bunch-request-next-task', {
                 bubbles: true,
                 composed: true
@@ -135,7 +131,6 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
         })
         let buttonPreviousTask = this.shadowRoot.getElementById('button-previous-task')
         buttonPreviousTask.addEventListener('click', () => {
-            inputSolution.focus()
             this.dispatchEvent(new CustomEvent('bunch-request-previous-task', {
                 bubbles: true,
                 composed: true
@@ -253,5 +248,4 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
             })
         })
     }
-
 })
