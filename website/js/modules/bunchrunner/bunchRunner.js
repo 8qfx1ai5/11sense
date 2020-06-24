@@ -85,6 +85,10 @@ export function init() {
         solutionGuide.stop()
         autoTask.stop()
 
+        if (state.getTask() && !state.getTask().isSolved && !state.getTask().wasTimedOut) {
+            state.taskList[state.currentTaskIndex].wasSkipped = true
+        }
+
         state.isFinished = true
         window.dispatchEvent(new CustomEvent('bunch-action-submit', { detail: { state: state } }))
     })
@@ -105,7 +109,7 @@ export function init() {
             return
         } else {
             // display next task
-            if (!state.getTask().isSolved) {
+            if (!state.getTask().isSolved && !state.getTask().wasTimedOut) {
                 state.taskList[state.currentTaskIndex].wasSkipped = true
             }
             state.currentTaskIndex++
@@ -154,8 +158,6 @@ export function init() {
         appSystem.log(e, 2, "console");
         appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
 
-        window.dispatchEvent(new CustomEvent('bunch-request-runner-pause'))
-
         state = new State()
 
         for (let i = 0; i < state.config.bunchSize; i++) {
@@ -175,6 +177,10 @@ export function init() {
         }
 
         if (state.getTask(e.detail.taskIndex).isValidSolution(e.detail.input)) {
+            if (state.getTask().answers[state.getTask().answers.length - 1] == e.detail.input) {
+                appSystem.log("SKIP: answer is a doublicate")
+                return
+            }
             window.dispatchEvent(new CustomEvent('bunch-request-solution-input', {
                 detail: e.detail
             }))
@@ -194,13 +200,18 @@ export function init() {
             return
         }
 
-        if (state.getTask().isValidSolution(e.detail.input)) {
-            solutionGuide.stop()
-            autoTask.start()
+        if (state.getTask().isValidSolution(e.detail.input, true)) {
             state.taskList[state.currentTaskIndex].endTime = performance.now()
             state.taskList[state.currentTaskIndex].isSolved = true
 
             window.dispatchEvent(new CustomEvent('bunch-action-solution-found', { detail: { state: state } }))
+            solutionGuide.stop()
+
+            if (state.currentTaskIndex === state.taskList.length - 1) {
+                window.dispatchEvent(new CustomEvent('bunch-request-submit'))
+                return
+            }
+            autoTask.start()
             return
         } else if (state.getTask(e.detail.taskIndex).isPartialSolution(e.detail.input)) {
             window.dispatchEvent(new CustomEvent('bunch-action-solution-partial-found', { detail: { state: state } }))
@@ -226,9 +237,13 @@ export function init() {
         }
         state.taskList[e.detail.taskIndex].endTime = performance.now()
         state.taskList[e.detail.taskIndex].wasTimedOut = true
-        solutionGuide.stop()
-        autoTask.start()
         window.dispatchEvent(new CustomEvent('bunch-action-solution-timed-out', { detail: { state: state } }))
+        solutionGuide.stop()
+        if (state.currentTaskIndex === state.taskList.length - 1) {
+            window.dispatchEvent(new CustomEvent('bunch-request-submit'))
+            return
+        }
+        autoTask.start()
     })
 
     events.forEach((event) => {

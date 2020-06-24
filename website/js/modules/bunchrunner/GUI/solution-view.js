@@ -8,19 +8,6 @@ import * as appRunner from '../bunchRunner.js'
 let tagIdClipboard = "clipboard"
 let tagIdSolutionTable = 'Solution'
 
-function updateViewSolution(task) {
-    Main.currentSolution.value = ""
-    Main.currentSolution.placeholder = ""
-    if (task.endTime) {
-        Main.currentSolution.placeholder = ((task.endTime - task.startTime).toFixed(0) / 1000).toString() + " sec."
-    }
-}
-
-function updateViewSolutionGuide(task) {
-    Main.currentSolution.value = ""
-    Main.currentSolution.placeholder = ""
-}
-
 // function creates and sets the content of the solution page for Pro mode
 function updateSolutionPro(task) {
     let keys = Array.from(task['possiblePartialAnswers'].keys())
@@ -115,16 +102,6 @@ function updateSolution(task) {
 
 function onDocumentReadyEvent() {
 
-    window.addEventListener('bunch-action-solution-timed-out', function(e) {
-        let currentTask = e.detail.state.taskList[e.detail.state.currentTaskIndex]
-        updateViewSolutionGuide(currentTask)
-    })
-
-    window.addEventListener('bunch-action-solution-found', function(e) {
-        let currentTask = e.detail.state.taskList[e.detail.state.currentTaskIndex]
-        updateViewSolution(currentTask)
-    })
-
     window.addEventListener('bunch-action-solution-partial-found', function(e) {
         let currentTask = e.detail.state.taskList[e.detail.state.currentTaskIndex]
         let lastAnswer = currentTask.answers[currentTask.answers.length - 1]
@@ -151,19 +128,6 @@ function onDocumentReadyEvent() {
         document.getElementById(tagIdClipboard).innerHTML = ""
         updateSolution(currentTask)
         document.getElementById(tagIdSolutionTable).style.display = "none"
-    })
-
-    document.getElementById('solution').addEventListener('keyup', Main.guessInput)
-
-    appRunner.events.forEach((event) => {
-        window.addEventListener(event, function(e) {
-            let state = e.detail.state
-            let currentTask = state.getTask()
-
-            if (currentTask) {
-                Main.currentSolution.setAttribute("taskindex", state.currentTaskIndex)
-            }
-        })
     })
 }
 

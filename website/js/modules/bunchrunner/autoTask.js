@@ -31,7 +31,8 @@ function autoTaskStep(timestamp) {
     }
     const elapsed = timestamp - autoTaskStartTime;
     let interval = getAutoTaskInterval()
-    document.getElementById('solution').style.backgroundSize = ((elapsed) * 102 / interval) + "%"
+        // TODO: implement own component
+        // document.getElementById('solution').style.backgroundSize = ((elapsed) * 102 / interval) + "%"
     if (elapsed < interval || appSound.hasPendingSoundOutput()) { // Stop the animation after 2 seconds
         window.requestAnimationFrame(autoTaskStep);
     } else {

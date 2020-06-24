@@ -48,13 +48,13 @@ function isMainPageActive() {
 function showMainPage() {
     headerMain.classList.remove("inactive-page-icon");
     document.getElementById(tagIdMainPage).classList.remove("hidden");
-    Main.currentSolution.focus();
+    // Main.currentSolution.focus();
 }
 
 function hideMainPage() {
     headerMain.classList.add("inactive-page-icon");
     document.getElementById(tagIdMainPage).classList.add("hidden");
-    Main.currentSolution.blur();
+    // Main.currentSolution.blur();
 }
 
 function clickMainPage() {
@@ -203,7 +203,7 @@ export function toggleSolution() {
         showSolution()
     } else {
         hideSolution()
-        Main.currentSolution.focus();
+            // Main.currentSolution.focus();
     }
 }
 
@@ -227,7 +227,7 @@ export function toggleFullScreen() {
         exitFullscreen()
     }
     hideNav();
-    Main.currentSolution.focus();
+    // Main.currentSolution.focus();
 }
 
 export function enterFullscreen() {

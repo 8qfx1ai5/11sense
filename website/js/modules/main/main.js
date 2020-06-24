@@ -1,7 +1,6 @@
 import * as appVoice from '../bunchrunner/SUI/voice.js'
 
 export let currentTask;
-export let currentSolution;
 export let f1input;
 export let f2input;
 export let navigation;
@@ -14,18 +13,6 @@ export let header;
 
 export let funnySmilies = ["😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🤫", "🤨", "😏", "🤯", "🤠", "🥳", "😎", "🤓", "🧐", "😲", "😳", "🥺", "😱", "😈", "😺", "😸", "😹", "😻", "😼", "😽", "🙀"];
 
-export function guessInput() {
-    if (appVoice.isActive) {
-        return;
-    }
-    window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
-        detail: {
-            input: currentSolution.value,
-            taskIndex: currentSolution.getAttribute("taskindex"),
-        }
-    }))
-}
-
 export function formatNumberForDisplay(n) {
     if (!n) {
         return ""
@@ -35,7 +22,6 @@ export function formatNumberForDisplay(n) {
 
 export function init() {
     currentTask = document.getElementById('current-task');
-    currentSolution = document.getElementById('solution');
     f1input = document.getElementById('f1')
     f2input = document.getElementById('f2')
     navigation = document.getElementById('nav')
@@ -48,32 +34,21 @@ export function init() {
 
     window.addEventListener("keydown", function(e) {
 
-        if (e.keyCode == '13' || e.keyCode == '32') {
-            // enter or space
-            window.dispatchEvent(new CustomEvent('bunch-request-solution-input', {
-                detail: {
-                    input: currentSolution.value,
-                    taskIndex: currentSolution.getAttribute("taskindex"),
-                }
-            }))
-        } else if (e.keyCode == '78') {
+        if (e.keyCode == '78') {
             // n
             window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
         } else if (e.keyCode == '83') {
             // s              
             // appPage.toggleSolution();
-            currentSolution.focus();
         } else if (e.keyCode == '79') {
             // o
             appPage.clickNavPage();
         } else if (e.keyCode == '70') {
             // f
             appPage.toggleFullScreen();
-            currentSolution.focus();
         } else if (e.keyCode == '86') {
             // V
             appPage.enterFullscreen();
-            currentSolution.focus();
         }
     });
 
@@ -94,6 +69,4 @@ export function init() {
     document.getElementById('button-feedback').addEventListener('click', function() {
         window.open('https://paypal.me/pools/c/8pfcrOnyif')
     })
-
-    currentSolution.focus();
 }

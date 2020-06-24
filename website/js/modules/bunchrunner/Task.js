@@ -37,9 +37,11 @@ export default class Task {
         this.possiblePartialAnswers = calculateFractions(t.factor1, t.factor2)
     }
 
-    isValidSolution(input) {
+    isValidSolution(input, doSave = false) {
         if (input == this.answer) {
-            this.answers.push({ input: input, time: performance.now(), isValid: true })
+            if (doSave) {
+                this.answers.push({ input: input, time: performance.now(), isValid: true })
+            }
             return true
         }
         return false
@@ -47,7 +49,6 @@ export default class Task {
 
     isPartialSolution(input) {
         if (input == this.answer) {
-            this.answers.push({ input: input, time: performance.now(), isValid: true })
             return true
         }
         let c = parseFloat(input.replace(",", "."))

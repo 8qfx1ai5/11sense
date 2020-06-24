@@ -18,7 +18,7 @@ let voiceTechIsEndlessLocalStorageKey = "voice-tech"
 let tagIdButtonVoiceTech = "button-voice-tech"
 
 let tagIdButtonVoice = "button-voice"
-let tagIdMicrophoneImage = "mic-image"
+    // let tagIdMicrophoneImage = "mic-image"
 
 let lastInputs = []
 
@@ -81,7 +81,7 @@ function startRecognitionEndless() {
         recognitionObject.onresult = recognitionOnResult
 
         recognitionObject.onerror = function(e) {
-            Main.currentSolution.placeholder = "🙉"
+            // Main.currentSolution.placeholder = "🙉"
             clearTimeout(recognitionKillTimout)
             switch (e.error) {
                 case "no-speech":
@@ -109,7 +109,7 @@ function startRecognitionEndless() {
         }
 
         recognitionObject.onend = function(e) {
-            Main.currentSolution.placeholder = "🙉"
+            // Main.currentSolution.placeholder = "🙉"
             appSystem.log("dictation finished", 1)
             recognitionObject = null
             clearTimeout(recognitionKillTimout)
@@ -118,7 +118,7 @@ function startRecognitionEndless() {
         }
 
         recognitionObject.onaudioend = function(e) {
-            Main.currentSolution.placeholder = "🙉"
+            // Main.currentSolution.placeholder = "🙉"
             appSystem.log("dictation audio ended", 1)
             recognitionObject = null
             clearTimeout(recognitionKillTimout)
@@ -213,14 +213,14 @@ function handleRecognitionNoise() {
     recognitionObject.onresult = recognitionOnResult
 
     recognitionObject.onerror = function(e) {
-        Main.currentSolution.placeholder = "🙉"
+        // Main.currentSolution.placeholder = "🙉"
         appSystem.log("uppps.. dictation interrupted", 1)
         stopRecognition()
         lastInputs = []
     }
 
     recognitionObject.onend = function(e) {
-        Main.currentSolution.placeholder = "🙉"
+        // Main.currentSolution.placeholder = "🙉"
         appSystem.log("dictation finished", 1)
         recognitionObject = null
         lastInputs = []
@@ -240,9 +240,9 @@ function recognitionOnResult(e) {
     } else {
         let currentResult = e.results[e.results.length - 1][0].transcript.trim()
         if (currentResult.length <= 10) {
-            Main.currentSolution.placeholder = currentResult
+            // Main.currentSolution.placeholder = currentResult
         } else {
-            Main.currentSolution.placeholder = currentResult.substring(0, 8) + ".."
+            // Main.currentSolution.placeholder = currentResult.substring(0, 8) + ".."
         }
 
         if (currentResult == "stop") {
@@ -282,7 +282,7 @@ function recognitionOnResult(e) {
             appSystem.log("final vr='" + detected + "' => '" + foundNumber + "'")
             if (foundNumber && !lastInputs.includes(foundNumber.toString())) {
                 lastInputs.push(foundNumber.toString())
-                Main.currentSolution.value = foundNumber
+                    // Main.currentSolution.value = foundNumber
                 window.dispatchEvent(new CustomEvent('bunch-request-solution-input', {
                     detail: {
                         input: foundNumber,
@@ -371,10 +371,10 @@ function toggleVoiceMode() {
 export function activateVoiceMode() {
     deactivateVoiceMode(true)
     localStorage.setItem('isActive', true)
-    document.getElementById(tagIdMicrophoneImage).classList.remove("hidden")
+        // document.getElementById(tagIdMicrophoneImage).classList.remove("hidden")
     document.getElementById(tagIdButtonVoice + "-on").classList.remove("hidden")
     document.getElementById(tagIdButtonVoice + "-off").classList.add("hidden")
-    Main.currentSolution.setAttribute("readonly", "readonly")
+        // Main.currentSolution.setAttribute("readonly", "readonly")
     isActive = true
     startRecognition()
     appSystem.events.dispatchEvent(new CustomEvent('voice-mode-start-after'))
@@ -385,12 +385,12 @@ export function deactivateVoiceMode(isJustARestart = false) {
     clearInterval(mobileSoundDetectionInterval)
     mobileSoundDetectionInterval = null
     if (!isJustARestart) {
-        document.getElementById(tagIdMicrophoneImage).classList.add("hidden")
+        // document.getElementById(tagIdMicrophoneImage).classList.add("hidden")
         document.getElementById(tagIdButtonVoice + "-on").classList.add("hidden")
         document.getElementById(tagIdButtonVoice + "-off").classList.remove("hidden")
         isActive = false
         localStorage.setItem('isActive', false)
-        Main.currentSolution.removeAttribute("readonly")
+            // Main.currentSolution.removeAttribute("readonly")
         appSystem.events.dispatchEvent(new CustomEvent('voice-mode-end-after'))
     }
 }
@@ -418,7 +418,7 @@ function guessVoiceInput(s) {
         return false
     }
     if (c == appMath.result) {
-        Main.currentSolution.value = s
+        // Main.currentSolution.value = s
         window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
             detail: {
                 input: s,
@@ -433,13 +433,13 @@ function guessVoiceInput(s) {
 function setStatusPlaceholder() {
     if (isActive) {
         if (isRecognitionRunning()) {
-            Main.currentSolution.placeholder = "..."
+            // Main.currentSolution.placeholder = "..."
             return
         }
-        Main.currentSolution.placeholder = "🙉"
+        // Main.currentSolution.placeholder = "🙉"
         return
     }
-    Main.currentSolution.placeholder = "="
+    // Main.currentSolution.placeholder = "="
 }
 
 function toggleVoiceTech() {
@@ -510,7 +510,7 @@ export function init() {
     })
 
     document.getElementById(tagIdButtonVoice).addEventListener('click', toggleVoiceMode)
-    document.getElementById('solution').addEventListener('click', startRecognition)
+        // document.getElementById('solution').addEventListener('click', startRecognition)
 
     // if (localStorage.getItem(voiceTechIsEndlessLocalStorageKey)) {
     //     isVoiceTechEndless = !localStorage.getItem(voiceTechIsEndlessLocalStorageKey)

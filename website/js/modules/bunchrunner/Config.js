@@ -15,3 +15,9 @@ export default class Config {
         this.isDecimalPlacesMode = localStorage.getItem('isDecimalPlacesModeActive') == "true"
     }
 }
+
+export function init() {
+    document.getElementById('bunch-size-selector').addEventListener('change', (e) => {
+        window.dispatchEvent(new CustomEvent('bunch-request-new'))
+    })
+}
