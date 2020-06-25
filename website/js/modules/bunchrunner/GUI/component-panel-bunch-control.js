@@ -79,6 +79,9 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                 .submit-sign {
                     width: 100%;
                     height: 100%;
+                    display: block;
+                    position: relative;
+                    top: -0.1em;
                 }
 
                 .next-sign {
