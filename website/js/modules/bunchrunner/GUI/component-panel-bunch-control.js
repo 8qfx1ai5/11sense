@@ -19,8 +19,10 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     background-color: var(--theme-color-2);
                     border: 1px solid var(--theme-color-1);
                     font-size: 1em;
-                    line-height: 1em;
-                    padding: 0.1em 0em 0em 0em;
+                    /* line-height: 1em; */
+                    /* padding: 0.1em 0em 0em 0em; */
+                    vertical-align: middle;
+                    height: 1.2em;
                 }
 
                 button:disabled {
@@ -32,6 +34,67 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     outline: none;
                 }
 
+                .play-sign {
+                    width: 0.8em;
+                    height: 0.8em;
+                    border-style: solid;
+                    border-color: transparent transparent transparent var(--theme-color-1);
+                    border-width: 0.4em 0em 0.4em 0.8em;
+                    box-sizing: border-box;
+                    margin: auto;
+                    display: block;
+                }
+
+                .stop-sign {
+                    width: 0.6em;
+                    height: 0.6em;
+                    border-style: solid;
+                    border-color: var(--theme-color-1);
+                    border-width: 0.3em;
+                    box-sizing: border-box;
+                    margin: auto;
+                    display: block;
+                }
+
+                .pause-sign {
+                    width: 0.8em;
+                    height: 0.8em;
+                    border-style: double;
+                    border-color: var(--theme-color-1);
+                    border-width: 0em 0em 0em 0.8em;
+                    margin: auto;
+                    display: block;
+                    box-sizing: border-box;
+                }
+
+                .restart-sign {
+                    width: 0.8em;
+                    height: 0.8em;
+                    position: relative;
+                    top: -0.25em;
+                }
+
+                .next-sign {
+                    width: 0.6em;
+                    height: 0.8em;
+                    border-style: solid;
+                    border-color: transparent transparent transparent var(--theme-color-1);
+                    border-width: 0.4em 0em 0.4em 0.6em;
+                    box-sizing: border-box;
+                    margin: auto;
+                    display: block;
+                    float: left;
+                }
+
+                button:disabled .stop-sign {
+                    border-color: black;
+                }
+
+                button:disabled .play-sign,
+                button:disabled .next-sign {
+                    border-color: transparent transparent transparent black;
+                }
+
                 #button-submit {
                     border-radius: 0px 20px 20px 0px;
                 }
@@ -40,6 +103,7 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                 #button-previous-task {
                     letter-spacing: -0.2em;
                     border-radius: 0px 20px 20px 0px;
+                    padding-left: 0.3em;
                 }
 
                 #button-display {
@@ -71,29 +135,19 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     background-color: var(--theme-color-1);
                 }
 
-                #button-pause {
-                    vertical-align: top;
-                    padding: 0.05em 0em 0.05em 0em;
-                }
-
-                #button-restart {
-                    padding: 0em 0em 0.1em 0em;
-                    vertical-align: top;
-                }
-
                 .invalid {
                     text-decoration: line-through;
                     text-decoration-color: var(--theme-color-3);
                 }
             </style>
             <div id="panel-bunch-control">
-                <button id="button-previous-task" class="rotate" disabled="true">&#9654;&#9654;&nbsp;&nbsp;</button>
+                <button id="button-previous-task" class="rotate" disabled="true"><span class="next-sign"></span><span class="next-sign"></span></button>
                 <button id="button-display">-/-</button>
-                <button id="button-stop" class="hidden">&#9724;</button>
-                <button id="button-pause" class="hidden">&#x275A; &#x275A;</button>
-                <button id="button-play">&#9654;</button>
-                <button id="button-restart" class="hidden">&#10227;</button>
-                <button id="button-next-task" disabled="true">&#9654;&#9654;&nbsp;&nbsp;</button>
+                <button id="button-stop" class="hidden"><span class="stop-sign"></span></button>
+                <button id="button-pause" class="hidden"><span class="pause-sign"></span></button>
+                <button id="button-play"><span class="play-sign"></span></button>
+                <button id="button-restart" class="hidden"><span class="restart-sign">&#10227;</span></button>
+                <button id="button-next-task" disabled="true"><span class="next-sign"></span><span class="next-sign"></span></button>
                 <button id="button-submit" disabled="true" class="hidden">✓</button>
             </div>
         `
