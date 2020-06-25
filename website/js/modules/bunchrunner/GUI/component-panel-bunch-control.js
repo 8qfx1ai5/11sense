@@ -74,6 +74,13 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     top: -0.25em;
                 }
 
+                .submit-sign {
+                    width: 0.8em;
+                    height: 0.8em;
+                    position: relative;
+                    top: -0.1em;
+                }
+
                 .next-sign {
                     width: 0.6em;
                     height: 0.8em;
@@ -148,7 +155,7 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                 <button id="button-play"><span class="play-sign"></span></button>
                 <button id="button-restart" class="hidden"><span class="restart-sign">&#10227;</span></button>
                 <button id="button-next-task" disabled="true"><span class="next-sign"></span><span class="next-sign"></span></button>
-                <button id="button-submit" disabled="true" class="hidden">✓</button>
+                <button id="button-submit" disabled="true" class="hidden"><span class="submit-sign">✓</span></button>
             </div>
         `
 
