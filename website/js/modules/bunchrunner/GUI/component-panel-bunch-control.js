@@ -23,6 +23,7 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                     /* padding: 0.1em 0em 0em 0em; */
                     vertical-align: middle;
                     height: 1.2em;
+                    padding: 0em;
                 }
 
                 button:disabled {
@@ -68,17 +69,16 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                 }
 
                 .restart-sign {
-                    width: 0.8em;
-                    height: 0.8em;
+                    width: 100%;
+                    height: 100%;
+                    display: block;
                     position: relative;
-                    top: -0.25em;
+                    top: -0.225em;
                 }
 
                 .submit-sign {
-                    width: 0.8em;
-                    height: 0.8em;
-                    position: relative;
-                    top: -0.1em;
+                    width: 100%;
+                    height: 100%;
                 }
 
                 .next-sign {
@@ -152,8 +152,8 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
                 <button id="button-display">-/-</button>
                 <button id="button-stop" class="hidden"><span class="stop-sign"></span></button>
                 <button id="button-pause" class="hidden"><span class="pause-sign"></span></button>
-                <button id="button-play"><span class="play-sign"></span></button>
-                <button id="button-restart" class="hidden"><span class="restart-sign">&#10227;</span></button>
+                <button id="button-play" class="hidden"><span class="play-sign"></span></button>
+                <button id="button-restart"><span class="restart-sign">&#10227;</span></button>
                 <button id="button-next-task" disabled="true"><span class="next-sign"></span><span class="next-sign"></span></button>
                 <button id="button-submit" disabled="true" class="hidden"><span class="submit-sign">✓</span></button>
             </div>
