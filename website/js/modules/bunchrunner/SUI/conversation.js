@@ -57,6 +57,8 @@ function registerEvents() {
 }
 
 export function init() {
+    appSound.init()
+    appVoice.init()
     updateConversationButton()
     registerEvents()
 }

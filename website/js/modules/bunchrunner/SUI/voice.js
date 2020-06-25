@@ -1,10 +1,9 @@
-import * as Main from '../../main/main.js'
 import * as appSystem from '../../main/system.js'
 import * as appSound from './sound.js'
 import * as appNotification from '../../notification/onboarding.js'
 import * as appTranslation from '../../language/translation.js'
-import * as appMath from '../../math/math.js'
 import * as autoTask from '../autoTask.js'
+import * as appRunner from '../bunchRunner.js'
 
 export let isActive = false
 let isBetweenTasks = false
@@ -18,6 +17,9 @@ let voiceTechIsEndlessLocalStorageKey = "voice-tech"
 let tagIdButtonVoiceTech = "button-voice-tech"
 
 let tagIdButtonVoice = "button-voice"
+
+let bunchStateCurrentTaskIndex = false
+let bunchStateCurrentTask = false
     // let tagIdMicrophoneImage = "mic-image"
 
 let lastInputs = []
@@ -74,7 +76,6 @@ function startRecognitionEndless() {
         recognitionObject.onstart = function() {
             appSystem.log("start recognition endless")
             setStatusPlaceholder()
-            lastInputs = []
             clearTimeout(recognitionKillTimout)
         }
 
@@ -105,7 +106,6 @@ function startRecognitionEndless() {
                     break
             }
             recognitionObject = null
-            lastInputs = []
         }
 
         recognitionObject.onend = function(e) {
@@ -114,7 +114,6 @@ function startRecognitionEndless() {
             recognitionObject = null
             clearTimeout(recognitionKillTimout)
             startRecognition()
-            lastInputs = []
         }
 
         recognitionObject.onaudioend = function(e) {
@@ -123,7 +122,6 @@ function startRecognitionEndless() {
             recognitionObject = null
             clearTimeout(recognitionKillTimout)
                 // stopRecognition()
-            lastInputs = []
         }
     } else {
         alert("voice recognition is not supported in your browser")
@@ -207,7 +205,6 @@ function handleRecognitionNoise() {
     recognitionObject.onstart = function() {
         appSystem.log("start recognition noise")
         setStatusPlaceholder()
-        lastInputs = []
     }
 
     recognitionObject.onresult = recognitionOnResult
@@ -216,16 +213,13 @@ function handleRecognitionNoise() {
         // Main.currentSolution.placeholder = "🙉"
         appSystem.log("uppps.. dictation interrupted", 1)
         stopRecognition()
-        lastInputs = []
     }
 
     recognitionObject.onend = function(e) {
         // Main.currentSolution.placeholder = "🙉"
         appSystem.log("dictation finished", 1)
         recognitionObject = null
-        lastInputs = []
-
-        // startRecognition()
+            // startRecognition()
     }
 }
 
@@ -253,13 +247,39 @@ function recognitionOnResult(e) {
         if (e.results[e.results.length - 1].isFinal) {
             let lang = appTranslation.getSelectedLanguage()
             let command = detected.trim().toLowerCase()
+            appSystem.log("vr command: '" + command + "'")
             if (lastInputs.includes(command)) {
+                appSystem.log("vr command skipped: '" + command + "'")
                 return
             }
-            if (isCommandNewTask(lang, command)) {
-                appSystem.events.dispatchEvent(new CustomEvent('create-new-task'))
+            if (isCommandNextTask(lang, command)) {
                 lastInputs.push(command)
                 window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
+                return
+            }
+            if (isCommandRestart(lang, command)) {
+                lastInputs.push(command)
+                window.dispatchEvent(new CustomEvent('bunch-request-new'))
+                return
+            }
+            if (isCommandPreviousTask(lang, command)) {
+                lastInputs.push(command)
+                window.dispatchEvent(new CustomEvent('bunch-request-previous-task'))
+                return
+            }
+            if (isCommandStart(lang, command)) {
+                lastInputs.push(command)
+                window.dispatchEvent(new CustomEvent('bunch-request-runner-start'))
+                return
+            }
+            if (isCommandPause(lang, command)) {
+                lastInputs.push(command)
+                window.dispatchEvent(new CustomEvent('bunch-request-runner-pause'))
+                return
+            }
+            if (isCommandStop(lang, command)) {
+                lastInputs.push(command)
+                window.dispatchEvent(new CustomEvent('bunch-request-new'))
                 return
             }
             if (isCommandRepeatTask(lang, command)) {
@@ -280,13 +300,14 @@ function recognitionOnResult(e) {
 
             let foundNumber = guessFinalVoiceInput(detected)
             appSystem.log("final vr='" + detected + "' => '" + foundNumber + "'")
-            if (foundNumber && !lastInputs.includes(foundNumber.toString())) {
-                lastInputs.push(foundNumber.toString())
+            appSystem.log(lastInputs, 1, "console")
+            if (foundNumber && !lastInputs.includes(foundNumber)) {
+                lastInputs.push(foundNumber)
                     // Main.currentSolution.value = foundNumber
                 window.dispatchEvent(new CustomEvent('bunch-request-solution-input', {
                     detail: {
                         input: foundNumber,
-                        taskIndex: 0,
+                        taskIndex: bunchStateCurrentTaskIndex,
                     }
                 }))
                 setStatusPlaceholder()
@@ -300,16 +321,31 @@ function recognitionOnResult(e) {
             let inputTogether = input.replace(/ /g, "").replace(/[/]/g, "")
             let parts = input.split(" ")
             appSystem.log("vr='" + detected + "' => (t: '" + inputTogether + "' p: '" + parts.join("|") + "')")
-            if (!lastInputs.includes(inputTogether) && guessVoiceInput(inputTogether)) {
-                lastInputs.push(inputTogether)
+            let inputTogetherGuessed = guessVoiceInput(inputTogether)
+            if (!lastInputs.includes(inputTogetherGuessed) && inputTogetherGuessed) {
+                // lastInputs.push(inputTogetherGuessed)
+                window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
+                    detail: {
+                        input: inputTogetherGuessed,
+                        taskIndex: bunchStateCurrentTaskIndex,
+                    }
+                }))
                 appSystem.log("ok.. dictation restart", 1)
                 stopRecognition()
                 return
             }
             for (let i = 0; i < parts.length; i++) {
                 appSystem.log(parts[i], 1)
-                if (!lastInputs.includes(parts[i]) && guessVoiceInput(parts[i])) {
-                    lastInputs.push(parts[i])
+                let inputPart = guessVoiceInput(parts[i])
+                if (!lastInputs.includes(inputPart) && inputPart) {
+                    // lastInputs.push(inputPart)
+                    window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
+                        detail: {
+                            input: inputPart,
+                            taskIndex: bunchStateCurrentTaskIndex,
+                        }
+                    }))
+
                     appSystem.log("ok.. dictation restart", 1)
                     stopRecognition()
                     return
@@ -320,11 +356,46 @@ function recognitionOnResult(e) {
     }
 }
 
-function isCommandNewTask(lang, input) {
+function isCommandNextTask(lang, input) {
     if (lang == "de-DE") {
-        return ["neue aufgabe", "neu", "next", "weiter"].includes(input)
+        return ["neue aufgabe", "next", "weiter", "nächste"].includes(input)
     }
     return ["new task", "new", "next", "continue"].includes(input)
+}
+
+function isCommandPreviousTask(lang, input) {
+    if (lang == "de-DE") {
+        return ["letzte aufgabe", "letzte", "zurück"].includes(input)
+    }
+    return ["last task", "last", "back"].includes(input)
+}
+
+function isCommandRestart(lang, input) {
+    if (lang == "de-DE") {
+        return ["neue runde", "neue übung", "noch eine runde"].includes(input)
+    }
+    return ["restart", "again", "new round", "new exercise"].includes(input)
+}
+
+function isCommandStart(lang, input) {
+    if (lang == "de-DE") {
+        return ["starten", "start", "anfangen", "los"].includes(input)
+    }
+    return ["play", "start", "new round", "new exercise"].includes(input)
+}
+
+function isCommandPause(lang, input) {
+    if (lang == "de-DE") {
+        return ["pause", "pausieren", "warte", "warten", "halt", "moment", "stop"].includes(input)
+    }
+    return ["pause", "hold on", "wait", "stop"].includes(input)
+}
+
+function isCommandStop(lang, input) {
+    if (lang == "de-DE") {
+        return ["abbrechen", "übung abbrechen", "übung stoppen"].includes(input)
+    }
+    return ["abbort", "abbort exercise"].includes(input)
 }
 
 function isCommandRepeatTask(lang, input) {
@@ -409,25 +480,44 @@ function guessFinalVoiceInput(s) {
 }
 
 function guessVoiceInput(s) {
+    s = mapStringToNumber(s)
     s = s.replace(",", ".")
-    if (s.length != appMath.result.toString().length) {
+    if (!bunchStateCurrentTask) {
         return false
     }
     let c = parseFloat(s)
-    if (c == appMath.factor1 || c == appMath.factor2) {
+    if (!c) {
         return false
     }
-    if (c == appMath.result) {
-        // Main.currentSolution.value = s
-        window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
-            detail: {
-                input: s,
-            }
-        }))
-        setStatusPlaceholder()
-        return true
+    if (c == bunchStateCurrentTask.values[0] || c == bunchStateCurrentTask.values[1]) {
+        return false
     }
-    return false
+    return c
+}
+
+function mapStringToNumber(s) {
+    switch (s) {
+        case 'eins':
+            return "1"
+        case 'zwei':
+            return "2"
+        case 'drei':
+            return "3"
+        case 'vier':
+            return "4"
+        case 'fünf':
+            return "5"
+        case 'sechs':
+            return "6"
+        case 'sieben':
+            return "7"
+        case 'acht':
+            return "8"
+        case 'neun':
+            return "9"
+        default:
+            return s
+    }
 }
 
 function setStatusPlaceholder() {
@@ -470,43 +560,64 @@ export function init() {
 
     window.addEventListener('bunch-action-solution-found', function(e) {
         // workaround to omit mobile beeps as mutch as possible
-        isBetweenTasks = true
+        stopRecognition()
     })
 
     window.addEventListener('bunch-action-solution-timed-out', function(e) {
         // workaround to omit mobile beeps as mutch as possible
-        isBetweenTasks = true
         stopRecognition()
     })
 
     window.addEventListener('bunch-action-task-next', function() {
-        isBetweenTasks = false
         if (isActive) {
-            setTimeout(function() {
+            if (!appSound.isActive) {
                 startRecognition()
-            }, 100)
+            }
+            lastInputs = []
         }
-        setStatusPlaceholder()
+    })
+
+    window.addEventListener('bunch-action-task-previous', function() {
+        if (isActive) {
+            if (!appSound.isActive) {
+                startRecognition()
+            }
+            lastInputs = []
+        }
+    })
+
+    window.addEventListener('bunch-action-new', function() {
+        if (isActive) {
+            lastInputs = []
+        }
     })
 
     document.getElementById(tagIdButtonVoiceTech).addEventListener('click', function(e) {
         toggleVoiceTech()
     })
 
-    window.addEventListener('speak-before', function(e) {
+    appSystem.events.addEventListener('speak-before', function(e) {
         if (isActive) {
             abortRecognition()
         }
         setStatusPlaceholder()
     })
 
-    window.addEventListener('speak-after', function(e) {
+    appSystem.events.addEventListener('speak-after', function(e) {
         if (isActive) {
             setTimeout(function() {
                 startRecognition()
             }, 100)
         }
         setStatusPlaceholder()
+    })
+
+    appRunner.events.forEach((event) => {
+        window.addEventListener(event, function(e) {
+            let state = e.detail.state
+            bunchStateCurrentTaskIndex = state.currentTaskIndex
+            bunchStateCurrentTask = state.getTask()
+        })
     })
 
     document.getElementById(tagIdButtonVoice).addEventListener('click', toggleVoiceMode)

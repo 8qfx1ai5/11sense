@@ -1,6 +1,7 @@
 import * as appMath from '../math/math.js'
 import Config from './Config.js'
 import * as appTranslation from '../language/translation.js'
+import Answer from './Answer.js'
 
 let lastTasks = []
 
@@ -40,7 +41,7 @@ export default class Task {
     isValidSolution(input, doSave = false) {
         if (input == this.answer) {
             if (doSave) {
-                this.answers.push({ input: input, time: performance.now(), isValid: true })
+                this.answers.push(new Answer(input, true))
             }
             return true
         }
@@ -48,12 +49,15 @@ export default class Task {
     }
 
     isPartialSolution(input) {
+        let c = input
+        if (typeof input === 'string') {
+            c = parseFloat(input.replace(",", "."))
+        }
         if (input == this.answer) {
             return true
         }
-        let c = parseFloat(input.replace(",", "."))
         let analizationResult = analizeSolution(this, c)
-        this.answers.push({ input: input, time: performance.now(), isValid: false, analizationResult: analizationResult })
+        this.answers.push(new Answer(input, false, analizationResult))
         if (analizationResult == "") {
             return false
         } else {
@@ -68,16 +72,23 @@ export default class Task {
     isNew() {
         return !this.isSolved && !this.wasPaused && !this.wasSkipped && !this.wasTimedOut
     }
+
+    getLastAnswer() {
+        if (this.answers.length === 0) {
+            return false
+        }
+        return this.answers[this.answers.length - 1]
+    }
 }
 
-function formatNumberForGUI(n) {
+export function formatNumberForGUI(n) {
     if (!n) {
         return ""
     }
     return n.toString().replace(".", ",");
 }
 
-function formatNumberForSUI(n) {
+export function formatNumberForSUI(n) {
     if (appTranslation.getSelectedLanguage() == "de-DE") {
         let nS = n.toString();
         let nSsplit = nS.split(".");

@@ -1,6 +1,4 @@
 import * as Main from './modules/main/main.js'
-import * as appVoice from './modules/bunchrunner/SUI/voice.js'
-import * as appSound from './modules/bunchrunner/SUI/sound.js'
 import * as appConversation from './modules/bunchrunner/SUI/conversation.js'
 import * as appStatistics from './modules/statistics/statistics.js'
 import * as appSystem from './modules/main/system.js'
@@ -20,8 +18,6 @@ import * as appConfig from './modules/bunchrunner/Config.js'
 // TODO: rethink race conditons, currently init order matters
 appDev.init()
 Main.init()
-appVoice.init()
-appSound.init()
 appConversation.init()
 appStatistics.init()
 appSystem.init()
@@ -32,4 +28,6 @@ appPage.init()
 appTranslation.init()
 bunchrunner.init()
 
-window.dispatchEvent(new CustomEvent('bunch-request-new'))
+setTimeout(() => {
+    window.dispatchEvent(new CustomEvent('bunch-request-new'))
+}, 2000)

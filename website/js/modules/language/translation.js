@@ -45,6 +45,9 @@ let translationTableSound = {
     },
     "Hello, let's train.": {
         "de-DE": "Hallo. Lass uns üben."
+    },
+    "Well played. Let's have a look on the results.": {
+        "de-DE": "Gut gespielt. Lass uns einen Blick auf die Ergebnisse werfen."
     }
 }
 

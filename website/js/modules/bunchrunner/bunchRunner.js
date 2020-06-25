@@ -171,8 +171,18 @@ export function init() {
         appSystem.log(e, 2, "console");
         appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
 
+        if (state.isFinished) {
+            appSystem.log("SKIP: you can not change a finished bunch")
+            return
+        }
+
         if (e.detail.taskIndex != state.currentTaskIndex) {
             appSystem.log("SKIP: you can only solve the current task")
+            return
+        }
+
+        if (state.getTask().isSolved) {
+            appSystem.log("SKIP: task is already solved")
             return
         }
 
@@ -197,6 +207,14 @@ export function init() {
         }
         if (e.detail.taskIndex != state.currentTaskIndex) {
             appSystem.log("SKIP: you can only solve the current task")
+            return
+        }
+        if (!e.detail.hasOwnProperty("input") || !e.detail.input || e.detail.input == "") {
+            appSystem.log("SKIP: input missing")
+            return
+        }
+        if (state.getTask().isSolved) {
+            appSystem.log("SKIP: task is already solved")
             return
         }
 

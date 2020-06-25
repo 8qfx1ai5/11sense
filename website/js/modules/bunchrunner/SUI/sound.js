@@ -17,11 +17,11 @@ function getSuccessMessages() {
     return successMessagesEN
 }
 
-function speak(s, r = 1) {
+function speak(s, state) {
     if (isSoundModeActive) {
         let statement = new SpeechSynthesisUtterance(s);
         statement.lang = appTranslation.getSelectedLanguage();
-        statement.rate = r;
+        // statement.rate = r;
         statement.pitch = 0.6
         statement.onstart = function(event) {
             appSystem.events.dispatchEvent(new CustomEvent('speak-before'));
@@ -35,23 +35,6 @@ function speak(s, r = 1) {
 
 export function hasPendingSoundOutput() {
     return speechSynthesis.pending || speechSynthesis.speaking;
-}
-
-function formatToSpeakableNumber(n) {
-    if (appTranslation.getSelectedLanguage() == "de-DE") {
-        let nS = n.toString();
-        let nSsplit = nS.split(".");
-        if (nSsplit.length < 2) {
-            return nS;
-        }
-        let output = nSsplit[0] + ",";
-        for (let i = 0; i < nSsplit[1].length; i++) {
-            output += nSsplit[1][i] + " "
-        }
-        return output;
-    }
-
-    return n.toString();
 }
 
 function toggleSoundMode() {
@@ -87,51 +70,64 @@ export function init() {
 
     appSystem.events.addEventListener('repeat-task', function(e) {
         if (isSoundModeActive) {
-            speak(formatToSpeakableNumber(appMath.factor1) + " " + appTranslation.translateForSoundOutput("multiplied by") + " " + formatToSpeakableNumber(appMath.factor2), 1);
+            speak(e.detail.state.getTask().questionSUI);
         }
     });
 
     window.addEventListener('bunch-action-task-next', function(e) {
         if (isSoundModeActive) {
-            speak(formatToSpeakableNumber(e.detail.task.a) + " " + appTranslation.translateForSoundOutput("multiplied by") + " " + formatToSpeakableNumber(e.detail.task.b), 1);
+            speechSynthesis.cancel()
+            speak(e.detail.state.getTask().questionSUI);
+        }
+    });
+
+    window.addEventListener('bunch-action-task-previous', function(e) {
+        if (isSoundModeActive) {
+            speechSynthesis.cancel()
+            speak(e.detail.state.getTask().questionSUI);
         }
     });
 
     appSystem.events.addEventListener('sound-mode-start-after', function() {
         if (isSoundModeActive) {
-            speak(appTranslation.translateForSoundOutput("Hello, let's train."), 1);
-            // speak(formatToSpeakableNumber(appMath.factor1) + " " + appTranslation.translateForSoundOutput("multiplied by") + " " + formatToSpeakableNumber(appMath.factor2), 1);
+            speak(appTranslation.translateForSoundOutput("Hello, let's train."));
         }
     });
 
     appSystem.events.addEventListener('voice-mode-end-after', function(e) {
         if (isSoundModeActive) {
-            speak(appTranslation.translateForSoundOutput("See you next time."), 1);
+            speak(appTranslation.translateForSoundOutput("See you next time."));
         }
     });
 
-    appSystem.events.addEventListener('bunch-action-solution-partial-found', function(e) {
+    window.addEventListener('bunch-action-solution-partial-found', function(e) {
         if (isSoundModeActive) {
-            speak(formatToSpeakableNumber(e.detail.input) + ", " + appTranslation.translateForSoundOutput("that's the direction"));
+            speak(e.detail.state.getTask().getLastAnswer().outputSUI + ", " + appTranslation.translateForSoundOutput("that's the direction"));
         }
     });
 
-    appSystem.events.addEventListener('bunch-action-solution-invalid', function(e) {
+    window.addEventListener('bunch-action-solution-invalid', function(e) {
         if (isSoundModeActive) {
-            speak(formatToSpeakableNumber(e.detail.input) + "?");
+            speak(e.detail.state.getTask().getLastAnswer().outputSUI + "?");
         }
     });
 
-    appSystem.events.addEventListener('bunch-action-solution-found', function(e) {
+    window.addEventListener('bunch-action-solution-found', function(e) {
         if (isSoundModeActive) {
             speak(appMath.getRandomElement(getSuccessMessages()));
-            speak(appTranslation.translateForSoundOutput("is") + " " + formatToSpeakableNumber(e.detail.input) + "!");
+            speak(appTranslation.translateForSoundOutput("is") + " " + e.detail.state.getTask().answerSUI + "!");
         }
     });
 
-    appSystem.events.addEventListener('bunch-action-solution-timed-out', function(e) {
+    window.addEventListener('bunch-action-solution-timed-out', function(e) {
         if (isSoundModeActive) {
-            speak(appTranslation.translateForSoundOutput("is") + " " + formatToSpeakableNumber(appMath.result) + "!");
+            speak(appTranslation.translateForSoundOutput("is") + " " + e.detail.state.getTask().answerSUI + "!");
+        }
+    });
+
+    window.addEventListener('bunch-action-submit', function(e) {
+        if (isSoundModeActive) {
+            speak(appTranslation.translateForSoundOutput("Well played. Let's have a look on the results."));
         }
     });
 
@@ -143,7 +139,7 @@ export function init() {
 
     appSystem.events.addEventListener('give-status-answer-yes', function(e) {
         if (isSoundModeActive) {
-            speak(appTranslation.translateForSoundOutput("yes, I can hear you"), 1);
+            speak(appTranslation.translateForSoundOutput("yes, I can hear you"));
         }
     });
 

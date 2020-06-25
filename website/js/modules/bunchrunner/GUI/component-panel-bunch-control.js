@@ -88,11 +88,11 @@ customElements.define('panel-bunch-control', class extends HTMLElement {
             </style>
             <div id="panel-bunch-control">
                 <button id="button-previous-task" class="rotate" disabled="true">&#9654;&#9654;&nbsp;&nbsp;</button>
-                <button id="button-display"></button>
+                <button id="button-display">-/-</button>
                 <button id="button-stop" class="hidden">&#9724;</button>
                 <button id="button-pause" class="hidden">&#x275A; &#x275A;</button>
                 <button id="button-play">&#9654;</button>
-                <button id="button-restart">&#10227;</button>
+                <button id="button-restart" class="hidden">&#10227;</button>
                 <button id="button-next-task" disabled="true">&#9654;&#9654;&nbsp;&nbsp;</button>
                 <button id="button-submit" disabled="true" class="hidden">✓</button>
             </div>
