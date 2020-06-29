@@ -18,34 +18,44 @@ customElements.define('view-results', class extends HTMLElement {
                 .valid {
                     color: var(--theme-color-4);
                     float: right;
-                    font-family: monospace
                 }
 
                 .timedOut {
                     float: right;
-                    font-family: monospace
                 }
 
                 .paused {
                     color: var(--theme-color-3);
                     float: right;
-                    font-family: monospace
                 }
 
                 .answers {
                     color: red;
                     float: right;
-                    font-family: monospace
                 }
 
                 .skipped {
                     float: right;
-                    font-family: monospace
+                }
+
+                #results-view {
+                    margin: 0em 1em 0em 1em;
+                    font-family: monospace;
+                }
+
+                li {
+                    text-align: right;
+                }
+
+                .answer {
+                    width: 8em;
+                    display: inline-block;
+                    text-align: left;
                 }
 
             </style>
             <section id="results-view">
-                <ol reversed></ol>
+                <ol translate="no" class="notranslate" reversed></ol>
             </section>
         `
 
