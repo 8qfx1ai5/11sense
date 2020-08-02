@@ -16,9 +16,9 @@ Based on first tests with users, we figured out, that the calculation of tasks d
 __2. Generation:__ That was why I started to implement SUI usability to imitage the real-life situations with communication.
 Based on the SUI there was the ability to have a passive repetition of task and answer what had a big impact on the learning curve. But only for the little multiplication table between 1-100. The repetition of the tasks was triggering a "learned by heart" effect.
 
-__3. Generation:__ To prove the learning results and provide a usefull statistic, the app needed a comparable frame. I deceded to use a bunch of "x" tasks. One single tasks was not significant, so we needed some kind of average. The implementation was very time consuming (3 Weeks) and all in all I had to refactore the hole code 2 times. This was the time, where I dived into ES6, modules and the state machine pattern.
+__3. Generation:__ To prove the learning results and provide a usefull statistic, the app needed a comparable frame. I deceded to use a bunch of "x" tasks. One single tasks was not significant, so we needed some kind of average. The implementation was very time consuming (3 weeks) and all in all I had to refactor the hole code 2 times. This was the time, where I dived into ES6, modules and the state machine pattern.
 
-Based on the better statistics I figured out, that the "learning improvements" where only local and not transferable to bigger numbers and also not transferable to decimal places. The reason was, that the users "learned" the answers. But they are not able to calculate. So what is calculation?
+Based on the better statistics I figured out, that the "learning improvements" where only local and not transferable to bigger numbers and also not transferable to decimal places. The reason was, that the users "learned" the answers. But they are still not able to calculate. So what is calculation?
 
 Finally I found a very simpel task to train your calculation possibilities with a simple calculator. First of all, multiplication is not usefull for training, better use addition:
 
