@@ -4,6 +4,7 @@ You can find the current version here:
 [https://11sense.8qfx1ai5.de](https://11sense.8qfx1ai5.de)
 
 Unfortiunately: it does not work out for me xD
+
 So you do not get smart and a math genius by training with this tool.
 But the reason for this is actually really interesting.
 
@@ -25,7 +26,7 @@ __3. Generation:__ To prove the learning results and provide a usefull statistic
 
 Based on the better statistics I figured out, that the "learning improvements" where only local and not transferable to bigger numbers and also not transferable to decimal places. The reason was, that the users "learned" the answers. But they are still not able to calculate. So what is calculation?
 
-__4. Generation:__ maybe comming sometimes
+__4. Generation:__ Maybe in the future, but currently not planned.
 
 ## What is acturally missing
 
