@@ -1,7 +1,7 @@
 # This web app is a learning tool
 
 You can find the current version here:
-https://dorie.8qfx1ai5.de/
+https://11sense.8qfx1ai5.de/
 
 ## The original idea and evolution of the project
 The idea was to train mental arithmetic.
