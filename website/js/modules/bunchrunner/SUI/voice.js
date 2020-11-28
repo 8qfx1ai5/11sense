@@ -407,9 +407,9 @@ function isCommandRepeatTask(lang, input) {
 
 function isCommandAreYouThere(lang, input) {
     if (lang == "de-DE") {
-        return ["dorie", "dori", "bist du noch da"].includes(input)
+        return ["bist du noch da"].includes(input)
     }
-    return ["dorie", "dori", "are you there"].includes(input)
+    return ["are you there"].includes(input)
 }
 
 function isCommandHello(lang, input) {

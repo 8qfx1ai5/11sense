@@ -28,6 +28,12 @@ let translationTableSound = {
     "multiplied by": {
         "de-DE": "mal"
     },
+    "times": {
+        "de-DE": "mal"
+    },
+    "plus": {
+        "de-DE": "plus"
+    },
     "is": {
         "de-DE": "ist"
     },

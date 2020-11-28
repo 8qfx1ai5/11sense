@@ -91,13 +91,7 @@ function updateSolutionBeginner() {
 
 // function creates and sets the content of the solution page
 function updateSolution(task) {
-    if (task.isBeginnerMode()) {
-        // TODO:
-        // updateSolutionBeginner(task)
-    } else {
-        // TODO:
-        // updateSolutionPro(task)
-    }
+    // updateSolutionPro(task)
 }
 
 function onDocumentReadyEvent() {

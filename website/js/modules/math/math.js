@@ -144,49 +144,6 @@ export function sumRecursive(task, s, i, c) {
     return []
 }
 
-export function sumFlat(task, s) {
-    let tempProd = 0
-    let tempFactor1 = 0
-    let f1 = task.values[0]
-    let f1s = f1.toString()
-    let f2 = task.values[1]
-    let f2s = f2.toString()
-    let iterations = parseInt(f1s.replace(".", ""), 10);
-    let iterator = f1 / iterations;
-    do {
-        tempFactor1 = addDecimal(tempFactor1, iterator);
-        tempProd = multiplyDecimal(tempFactor1, f2);
-    } while (tempProd < s && tempFactor1 < f1);
-    if (tempProd == s) {
-        return [tempFactor1.toString() + "⋅" + f2s]
-    }
-    tempProd = 0;
-    let tempFactor2 = 0;
-    iterations = parseInt(f2s.replace(".", ""), 10);
-    iterator = f2 / iterations;
-    do {
-        tempFactor2 = addDecimal(tempFactor2, iterator);
-        tempProd = multiplyDecimal(tempFactor2, f1);
-    } while (tempProd < s && tempFactor2 < f2);
-    if (tempProd == s) {
-        return [f1.toString() + "⋅" + tempFactor2.toString()]
-    }
-    return []
-}
-
-export function arrayIncludesCombination(a, f1, f2) {
-    for (let i = 0; i < a.length; i++) {
-        let oldTask = a[i];
-        if (oldTask[0] == f1 && oldTask[1] == f2) {
-            return true;
-        }
-        if (oldTask[0] == f2 && oldTask[1] == f1) {
-            return true;
-        }
-    }
-    return false
-}
-
 export function init() {
     document.getElementById(tagIdDecimalPlaces).addEventListener('click', function(e) {
         toggleDecimalPlacesMode();

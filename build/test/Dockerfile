@@ -16,7 +16,7 @@ RUN apt-get install -y nodejs
 RUN npm install -g --save-dev jest
 
 # prepare code
-ENV WORKDIR /dorie
+ENV WORKDIR /11sense
 RUN mkdir -p ${WORKDIR}
 WORKDIR ${WORKDIR}
 COPY . ${WORKDIR}

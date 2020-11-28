@@ -3,6 +3,8 @@ import * as solutionGuide from './solutionGuide.js'
 import * as autoTask from './autoTask.js'
 import Task from './Task.js'
 import State from './State.js'
+import Multiplication from './Multiplication.js'
+import Addition from './Addition.js'
 
 let state = new State()
 
@@ -161,7 +163,7 @@ export function init() {
         state = new State()
 
         for (let i = 0; i < state.config.bunchSize; i++) {
-            state.taskList.push(new Task(state.config))
+            state.taskList.push(new Addition(state.config))
         }
         window.dispatchEvent(new CustomEvent('bunch-action-new', { detail: { state: state } }))
             // window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
