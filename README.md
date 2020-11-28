@@ -1,9 +1,14 @@
-# This web app is a learning tool
+# This web app was planned as a learning tool
 
 You can find the current version here:
-https://11sense.8qfx1ai5.de/
+[https://11sense.8qfx1ai5.de](https://11sense.8qfx1ai5.de)
+
+Unfortiunately: it does not work out for me xD
+So you do not get smart and a math genius by training with this tool.
+But the reason for this is actually really interesting.
 
 ## The original idea and evolution of the project
+
 The idea was to train mental arithmetic.
 The project had two pain points:
 
@@ -20,14 +25,11 @@ __3. Generation:__ To prove the learning results and provide a usefull statistic
 
 Based on the better statistics I figured out, that the "learning improvements" where only local and not transferable to bigger numbers and also not transferable to decimal places. The reason was, that the users "learned" the answers. But they are still not able to calculate. So what is calculation?
 
-Finally I found a very simpel task to train your calculation possibilities with a simple calculator. First of all, multiplication is not usefull for training, better use addition:
+__4. Generation:__ maybe comming sometimes
 
-1. get a random integer number (for instance 6) (this is a bias to change the resulting number chain every time and force calculation, instead of knowing)
-2. get a second integer number (for instance 13)
-3. add the second number on top of the first number (19)
-4. continue to add the second number on top of the result (6, 19, 32, 45, 58, 71, ...)
+## What is acturally missing
 
-__4. Generation:__ never implemented :(
+- select different task modes like addition, multiplication, ...
 
 ## How to run tests
 
@@ -35,9 +37,23 @@ __4. Generation:__ never implemented :(
 
 ## What I learned
 
-- the native power of ES6 with modules and namespaces in combination with web-components
-- the advantages of using a state machine
-- some clever tricks and nasty traps around SUI (Sound User Interface) design and creation
-- the native power of modern browsers to support voice recognition and voice output
-- the fun and power of user surveys in combination with common value creation
-- there is a big difference between knowledge and mental arithmetic, so you need to train different
+- The native power of ES6 with modules and namespaces in combination with web-components is impressive. In fact today you do not need any framework to make cool stuff with JS.
+- You need to use a state machines to hanle user interaction. Especially for SUIs.
+- There are some nasty traps around Sound User Interfaces (SUIs):
+  - How to do not recognize your own voice?
+  - How to make voice interaction visible?
+  - How to handle the "Are you thill there?" Problem?
+  - How to translate input and output?
+- There is so mutch native power of modern browsers to support voice recognition and voice output.
+- User surveys are magic. It takes a lot time to figure out what is needed.
+- There is a big difference between knowledge and mental arithmetic. I trained a lot, but it didn't make me mutch better than I was. So in fact the trainer was a failure. But the reason seams to be the way. It is not about voice. Not in the first place.
+- If you would train an neuronal network with my method, than it can only reproduce the trained results I think. Unseen tasks are not solvable, because it is not the way math works. So why does I expected something else for humans? I will try this with AI in my next project.
+
+## My current expectation how to train math calculation best
+
+Finally I found a very simpel task to train your calculation possibilities with a simple calculator. First of all, multiplication is not usefull for training, better use addition:
+
+1. get a random integer number (for instance 6) (this is a bias to change the resulting number chain every time and force calculation, instead of knowing)
+2. get a second integer number (for instance 13)
+3. add the second number on top of the first number (19)
+4. continue to add the second number on top of the result (6, 19, 32, 45, 58, 71, ...)
