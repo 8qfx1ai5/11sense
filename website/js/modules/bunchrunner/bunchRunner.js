@@ -1,10 +1,8 @@
 import * as appSystem from '../main/system.js'
 import * as solutionGuide from './solutionGuide.js'
 import * as autoTask from './autoTask.js'
-import Task from './Task.js'
 import State from './State.js'
-import Multiplication from './Multiplication.js'
-import Addition from './Addition.js'
+import * as BunchFactory from './BunchFactory.js'
 
 let state = new State()
 
@@ -160,13 +158,9 @@ export function init() {
         appSystem.log(e, 2, "console");
         appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
 
-        state = new State()
+        state = BunchFactory.create()
 
-        for (let i = 0; i < state.config.bunchSize; i++) {
-            state.taskList.push(new Addition(state.config))
-        }
         window.dispatchEvent(new CustomEvent('bunch-action-new', { detail: { state: state } }))
-            // window.dispatchEvent(new CustomEvent('bunch-request-next-task'))
     })
 
     window.addEventListener('bunch-request-possible-solution-input', function(e) {

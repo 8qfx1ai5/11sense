@@ -19,7 +19,7 @@
         <header id="header">
             <div id="header-main" class="dev-change">
                 <h1 id="mainPageTrigger">11. Sense</h1>
-                <p id="mainPageTriggerSubheadding"><span class="notranslate">Discover</span> ♡ <span class="notranslate">Learning</span> ♡</p>
+                <p id="mainPageTriggerSubheadding"><span class="notranslate">Discover</span> ♡ <span class="notranslate">Learning</span></p>
             </div>
             <figure id="header-left" class="inactive-page-icon">
                 <img id="stats-image" alt="Statistics" src="img/stats_100x100.png" />
@@ -43,12 +43,17 @@
                 <div class="subpage" id="settings-basic">
                     <ul id="basic-settings-list">
                         <li>
-                            <button disabled="true" class="option-item" title="Select your experience level.">Exercise<span
-                                class=" b-label-status"><select disabled="true" name="exercise-selector" id="exercise-selector" class="selector config" dir="rtl">
-                                <option value="-" selected="selected">-</option>
-                                <option value="level 1">level 1</option>
-                                <option value="level 2">level 2</option>
-                                <option value="sound">sound</option>
+                            <button disabled class="option-item" title="Select your experience level.">Exercise<span
+                                class=" b-label-status"><select disabled name="exercise-selector" id="exercise-selector" class="selector config notranslate" translate="no" dir="rtl">
+                                <option value="-">-</option>
+                                <option value="random_1" selected="selected">? L1</option>
+                                <option value="random_2">? L2</option>
+                                <option value="add_race_1">++ L1</option>
+                                <option value="add_1">+ L1</option>
+                                <option value="sub_1">- L1</option>
+                                <option value="mult_1">* L1</option>
+                                <option value="div_1">/ L1</option>
+                                <option value="sound_1">S L1</option>
                             </select></span><br /><span
                             class="button-sub">(select configuration)</span></button>
                         </li>
@@ -67,6 +72,17 @@
                 </div>
                 <div class="subpage" id="settings-advanced">
                     <ul id="advanced-settings-list">
+                        <li>
+                            <button disabled class="option-item">Operator<span class="b-label-status"><select disabled name="operator-selector" id="operator-selector" class="selector config" dir="rtl">
+                                    <option value="?" selected="selected">?</option>
+                                    <option value="+">+</option>
+                                    <option value="-">-</option>
+                                    <option value="*">*</option>
+                                    <option value="/">/</option>
+                                </select></span><br /><span
+                                class="button-sub">(+,-,*, ...)</span></button>
+                            </button>
+                        </li>
                         <li><button class="option-item" id="button-decimal-places" title="Allow randomly decimal places in the task.">Decimal Places <span
                                     class="hidden  b-label-status" id="button-decimal-places-on">on</span><span
                                     id="button-decimal-places-off" class=" b-label-status">off</span><br /><span
@@ -78,8 +94,7 @@
                         <li><button class="option-item" id="button-sound" title="Use audio output for tasks and status feedback.">You can listen<span class="hidden  b-label-status" id="sound-button-on">on</span><span id="sound-button-off" class=" b-label-status">off</span><br /><span class="button-sub">(get audio feedback)</span></button>
                         </li>
                         <li>
-                            <button class="option-item">
-                                <span class="config-label">Break Length</span><span class=" b-label-status notranslate" translate="no"><select name="auto-task-selector" id="auto-task-selector" class="selector config" dir="rtl">
+                            <button class="option-item">Break Length<span class="b-label-status notranslate" translate="no"><select name="auto-task-selector" id="auto-task-selector" class="selector config" dir="rtl">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="5" selected="selected">5</option>
@@ -94,8 +109,7 @@
                             </button>
                         </li>
                         <li>
-                            <button class="option-item">
-                                <span class="config-label">Solution Guide</span><span class=" b-label-status"><select name="solution-guide-selector" id="solution-guide-selector" class="selector config" dir="rtl">
+                            <button class="option-item">Solution Guide<span class=" b-label-status"><select name="solution-guide-selector" id="solution-guide-selector" class="selector config" dir="rtl">
                                     <option value="off" translate="yes">off</option>
                                     <option value="5" class="notranslate" translate="no">5</option>
                                     <option value="10" class="notranslate" translate="no">10</option>
@@ -128,6 +142,9 @@
                                 </select></span><br /><span
                                 class="button-sub">(number of tasks)</span></button>
                             </button>
+                        </li>
+                        <li><button disabled class="option-item" id="button-racing" title="Activate or deactivate the racing mode, so the following task continues at the result of the previous one.">Racing Mode<span class="hidden  b-label-status" id="button-racing-on">on</span><span id="button-racing-off" class=" b-label-status">off</span><br /><span
+                            class="button-sub">(continue at result)</span></button>
                         </li>
                         <li><button disabled class="option-item" id="button-impress" title="Print legal information and credits.">Legal Notice<br /><span
                                         class="button-sub">(Imprint)</span></button>

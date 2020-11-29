@@ -231,7 +231,8 @@ button:disabled {
 
 #auto-task-selector,
 #bunch-size-selector,
-#solution-guide-selector {
+#solution-guide-selector,
+#operator-selector {
     width: 3em;
     position: relative;
     right: -0.2em;
