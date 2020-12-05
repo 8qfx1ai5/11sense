@@ -8,11 +8,11 @@ let lastTasks = []
 
 export default class Addition extends Task {
 
-    constructor(config = new Config()) {
+    constructor(config = new Config(), index = 0) {
         super()
 
         this.config = config
-        let t = calculateTask(this.config)
+        let t = calculateTask(this.config, index)
         this.values[0] = t.part1
         this.values[1] = t.part2
         this.questionGUI = '<span class="question"><span class="value">' + formatNumberForGUI(this.values[0]) + '</span> <span class="operation">+</span> <span class="value">' + formatNumberForGUI(this.values[1]) + '</span></span>'
@@ -61,7 +61,10 @@ function analizeSolution(task, possibleSolution) {
     return keys.join("+")
 }
 
-function calculateTask(config) {
+/**
+ * @param {Config} config 
+ */
+function calculateTask(config, index) {
     let a = config.numberRanges[0]
     let b = config.numberRanges[1]
 
@@ -72,14 +75,31 @@ function calculateTask(config) {
 
     let f1 = 0
     let f2 = 0
-    do {
+
+    if (config.isRacingMode) {
+        if (index == 0) {
+            do {
+                f2 = Math.floor(Math.random() * (10 ** b));
+            } while (f2 < 2 || f2.toString().length != b);
+            do {
+                do {
+                    f1 = Math.floor(Math.random() * (10 ** a));
+                } while (f1 < 2 || f1.toString().length != a);
+            } while (f1 % f2 == 0);
+        } else {
+            f1 = lastTasks[0][0] + lastTasks[0][1]
+            f2 = lastTasks[0][1]
+        }
+    } else {
         do {
-            f1 = Math.floor(Math.random() * (10 ** a));
-        } while (f1 < 2 || f1.toString().length != a);
-        do {
-            f2 = Math.floor(Math.random() * (10 ** b));
-        } while (f2 < 2 || f2.toString().length != b);
-    } while (taskWasPlayedBefore(f1, f2));
+            do {
+                f1 = Math.floor(Math.random() * (10 ** a));
+            } while (f1 < 2 || f1.toString().length != a);
+            do {
+                f2 = Math.floor(Math.random() * (10 ** b));
+            } while (f2 < 2 || f2.toString().length != b);
+        } while (taskWasPlayedBefore(f1, f2));
+    }
 
     let factor1Decimals = 0;
     let factor2Decimals = 0;

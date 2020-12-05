@@ -5,7 +5,7 @@ import Config from './Config.js'
 
 export function create(state = new State()) {
     for (let i = 0; i < state.config.bunchSize; i++) {
-        state.taskList.push(new Addition(state.config))
+        state.taskList.push(new Addition(state.config, i))
     }
     return state
 }
