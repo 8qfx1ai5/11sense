@@ -1,6 +1,6 @@
 import * as appRunner from '../bunchRunner.js'
 
-customElements.define('view-task', class extends HTMLElement {
+customElements.define('view-task-vertical', class extends HTMLElement {
     constructor() {
         super()
 
@@ -23,7 +23,7 @@ customElements.define('view-task', class extends HTMLElement {
                     color: var(--theme-color-1);
                 }
 
-                #view-task {
+                #view-task-vertical {
                     display: inline-block;
                 }
 
@@ -34,16 +34,25 @@ customElements.define('view-task', class extends HTMLElement {
                 .solved .answer {
                     color: var(--theme-color-4);
                 }
+
+                .question > * {
+                    display: block;
+                }
+
+                .question {
+                    display: flex;
+                    flex-direction: column-reverse;
+                }
             </style>
-            <p><span id="task-view"></span></p>
+            <p><span id="task-view-vertical"></span></p>
         `
 
-        let taskView = this.shadowRoot.getElementById('task-view')
+        let taskView = this.shadowRoot.getElementById('task-view-vertical')
 
         appRunner.events.forEach((event) => {
             window.addEventListener(event, function(e) {
                 let state = e.detail.state
-                if (state.config.isRacingMode) {
+                if (!state.config.isRacingMode) {
                     taskView.classList.add('hidden')
                     return
                 }

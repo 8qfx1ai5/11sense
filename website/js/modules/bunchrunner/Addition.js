@@ -85,7 +85,7 @@ function calculateTask(config, index) {
                 do {
                     f1 = Math.floor(Math.random() * (10 ** a));
                 } while (f1 < 2 || f1.toString().length != a);
-            } while (f1 % f2 == 0);
+            } while (f1 % f2 == 0 || f2 % f1 == 0);
         } else {
             f1 = lastTasks[0][0] + lastTasks[0][1]
             f2 = lastTasks[0][1]
