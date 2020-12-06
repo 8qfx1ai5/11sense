@@ -9,6 +9,7 @@ export default class Config {
     isDecimalPlacesMode = false
     isRacingMode = false
     bunchSize = 10
+    operator = '+'
 
     constructor() {
         this.numberRanges[0] = parseInt(document.getElementById('f1').value, 10);
@@ -17,6 +18,7 @@ export default class Config {
         this.bunchSize = parseInt(document.getElementById('bunch-size-selector').value, 10);
         this.isDecimalPlacesMode = localStorage.getItem('isDecimalPlacesModeActive') == "true"
         this.isRacingMode = localStorage.getItem('isRacingModeActive') == "true"
+        this.operator = localStorage.getItem('operator')
     }
 }
 
@@ -31,6 +33,13 @@ export function init() {
 
     localStorage.setItem('isRacingModeActive', localStorage.getItem('isRacingModeActive') != "true");
     toggleRacingMode();
+
+    if (localStorage.getItem('operator')) {
+        document.getElementById('operator-selector').value = localStorage.getItem('operator')
+    }
+    document.getElementById('operator-selector').addEventListener('change', (e) => {
+        localStorage.setItem('operator', document.getElementById('operator-selector').value)
+    })
 }
 
 function toggleRacingMode() {
