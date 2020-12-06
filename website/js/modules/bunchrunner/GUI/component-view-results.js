@@ -44,7 +44,7 @@ customElements.define('view-results', class extends HTMLElement {
                 }
 
                 li {
-                    text-align: right;
+                    text-align: center;
                 }
 
                 .answer {
