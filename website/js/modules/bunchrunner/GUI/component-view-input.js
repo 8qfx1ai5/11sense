@@ -68,7 +68,11 @@ customElements.define('view-input', class extends HTMLElement {
 
                 if (currentTask) {
                     inputAnswer.setAttribute("taskindex", state.currentTaskIndex)
-                    if (currentTask.wasTimedOut || currentTask.wasSkipped) {
+                    if (state.config.isRacingMode) {
+                        inputAnswer.classList.remove('hidden')
+                        inputAnswer.disabled = false
+                        inputAnswer.focus()
+                    } else if (currentTask.wasTimedOut || currentTask.wasSkipped) {
                         inputAnswer.classList.add('hidden')
                         inputAnswer.disabled = true
                     } else if (currentTask.isSolved) {
