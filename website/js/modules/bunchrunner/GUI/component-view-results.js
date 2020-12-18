@@ -34,6 +34,12 @@ customElements.define('view-results', class extends HTMLElement {
                     float: right;
                 }
 
+                .events {
+                    width: 3em;
+                    text-align: right;
+                    display: inline-block
+                }
+
                 .skipped {
                     float: right;
                 }
@@ -44,11 +50,11 @@ customElements.define('view-results', class extends HTMLElement {
                 }
 
                 li {
-                    text-align: center;
+                    text-align: right;
                 }
 
                 .answer {
-                    width: 8em;
+                    width: 6em;
                     display: inline-block;
                     text-align: left;
                 }
@@ -71,36 +77,25 @@ customElements.define('view-results', class extends HTMLElement {
                         let task = state.taskList[i]
                         let li = document.createElement('li')
                         let text = task.questionGUI + ' = ' + task.answerGUI
+                        let text2 = ''
                         if (task.wasSkipped) {
-                            text += '<span class="skipped">&rarr;</span>'
-                        } else {
-                            text += '<span class="skipped">&nbsp;</span>'
+                            text2 += '<span class="skipped">&rarr;</span>'
                         }
                         if (task.wasPaused) {
-                            text += '<span class="paused">P</span>'
-                        } else {
-                            text += '<span class="paused">&nbsp;</span>'
+                            text2 += '<span class="paused">P</span>'
                         }
-                        if (task.isSolved && task.answers.length <= 1) {
-                            text += '<span class="answers">&nbsp;</span>'
-                        } else if (task.isSolved) {
-                            text += '<span class="answers">' + (task.answers.length - 1).toString() + '</span>'
-                        } else if (task.answers.length == 0) {
-                            text += '<span class="answers">&nbsp;</span>'
-                        } else {
-                            text += '<span class="answers">' + task.answers.length.toString() + '</span>'
+                        if (task.isSolved && task.answers.length <= 1) {} else if (task.isSolved) {
+                            text2 += '<span class="answers">' + (task.answers.length - 1).toString() + '</span>'
+                        } else if (task.answers.length == 0) {} else {
+                            text2 += '<span class="answers">' + task.answers.length.toString() + '</span>'
                         }
                         if (task.wasTimedOut) {
-                            text += '<span class="timedOut">T</span>'
-                        } else {
-                            text += '<span class="timedOut">&nbsp;</span>'
+                            text2 += '<span class="timedOut">T</span>'
                         }
                         if (task.isSolved) {
-                            text += '<span class="valid">✓</span>'
-                        } else {
-                            text += '<span class="valid">&nbsp;</span>'
+                            text2 += '<span class="valid">✓</span>'
                         }
-                        li.innerHTML = text
+                        li.innerHTML = text + '<span class="events">' + text2 + '</span>'
                         resultsList.append(li)
                     }
                     resultsList.classList.remove('hidden')
