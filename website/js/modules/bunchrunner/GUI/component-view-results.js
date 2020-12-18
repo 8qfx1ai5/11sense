@@ -62,10 +62,13 @@ customElements.define('view-results', class extends HTMLElement {
             </style>
             <section id="results-view">
                 <ol translate="no" class="notranslate" reversed></ol>
+                <span id="stats"></span>
             </section>
         `
 
         let resultsList = this.shadowRoot.querySelector('ol')
+        let resultsView = this.shadowRoot.querySelector('#results-view')
+        let resultsStats = this.shadowRoot.querySelector('#stats')
 
         appRunner.events.forEach((event) => {
             window.addEventListener(event, function(e) {
@@ -98,10 +101,11 @@ customElements.define('view-results', class extends HTMLElement {
                         li.innerHTML = text + '<span class="events">' + text2 + '</span>'
                         resultsList.append(li)
                     }
-                    resultsList.classList.remove('hidden')
+                    resultsView.classList.remove('hidden')
+                    resultsStats.innerHTML = (state.getEclapsedTime() / 1000).toPrecision(4).replace(".", ",") + " sec."
                     return
                 } else {
-                    resultsList.classList.add('hidden')
+                    resultsView.classList.add('hidden')
                 }
             })
         })

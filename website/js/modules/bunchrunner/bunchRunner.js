@@ -57,6 +57,7 @@ export function init() {
             return;
         }
         state.isRunning = true
+        state.startTime = performance.now()
         window.dispatchEvent(new CustomEvent('bunch-action-start', { detail: { state: state } }))
         let i = 0
         for (; i < state.taskList.length; i++) {
@@ -90,6 +91,7 @@ export function init() {
         }
 
         state.isFinished = true
+        state.endTime = performance.now()
         window.dispatchEvent(new CustomEvent('bunch-action-submit', { detail: { state: state } }))
     })
 

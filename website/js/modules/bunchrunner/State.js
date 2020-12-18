@@ -27,4 +27,8 @@ export default class State {
     isFirstTask() {
         return this.currentTaskIndex == 0
     }
+
+    getEclapsedTime() {
+        return this.endTime - this.startTime
+    }
 }
