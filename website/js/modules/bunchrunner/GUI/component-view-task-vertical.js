@@ -65,7 +65,15 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                 }
 
                 if (currentTask) {
-                    taskView.classList.remove('hidden')
+                    if (state.config.isRacingMode && state.config.isHideTaskModeActive) {
+                        if (state.isFirstTask() || !state.getLastTask().isSolved) {
+                            taskView.classList.remove('hidden')
+                        } else {
+                            taskView.classList.add('hidden')
+                        }
+                    } else {
+                        taskView.classList.remove('hidden')
+                    }
                     if (currentTask.wasTimedOut || currentTask.wasSkipped) {
                         taskView.innerHTML = "<span class='guided'>" + currentTask.questionGUI + " <span class='equals-sign'>=</span> " + currentTask.answerGUI + "</span>"
                     } else if (currentTask.isSolved) {

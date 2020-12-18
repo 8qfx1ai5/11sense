@@ -22,7 +22,7 @@ export function start() {
 }
 
 export function isEnabled() {
-    return getAutoTaskInterval() > 0
+    return getAutoTaskInterval() >= 0
 }
 
 function autoTaskStep(timestamp) {
@@ -58,7 +58,7 @@ function saveAutoTaskInterval() {
 }
 
 function getAutoTaskInterval() {
-    if (!autoTaskIntervalTime) {
+    if (autoTaskIntervalTime !== 0 && !autoTaskIntervalTime) {
         let i = localStorage.getItem(localStorageAutoTaskInterval)
         if (!i || i == "") {
             saveAutoTaskInterval()
