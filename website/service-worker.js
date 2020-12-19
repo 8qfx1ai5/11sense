@@ -1,6 +1,6 @@
-const staticCacheName = 'pages-cache-v1';
+const staticCacheName = 'pages-cache-v1'
 
-self.addEventListener('install', event => {});
+self.addEventListener('install', event => {})
 
 self.addEventListener('fetch', function(event) {
     let currentRequest = event.request
@@ -13,32 +13,33 @@ self.addEventListener('fetch', function(event) {
         })
     }
 
-    event.respondWith(caches.match(currentRequest)
-        .then(cachedResponse => {
-            if (cachedResponse) {
-                console.log('Found ', event.request.url, ' in cache');
-                return cachedResponse;
-            }
-            console.log('Network request for ', event.request.url);
-            return fetch(event.request)
+    event.respondWith(fetch(currentRequest)
 
+        .then(response => {
             // Add fetched files to the cache
-            .then(response => {
-                // TODO 5 - Respond with custom 404 page
-                return caches.open(staticCacheName).then(cache => {
-                    cache.put(event.request.url, response.clone());
-                    return response;
-                });
-            });
-
-        }).catch(error => {
-
-            console.log("file not in cache:" + event.request.url)
-                // TODO 6 - Respond with custom offline page
-
+            return caches.open(staticCacheName).then(cache => {
+                cache.put(event.request.url, response.clone())
+                console.log('Network request success: ', event.request.url);
+                return response
+            })
         })
-    );
-});
+        .catch(error => {
+            console.log("Offline: ", currentRequest.url, ' try to use cache')
+
+            return caches.match(currentRequest)
+                .then(cachedResponse => {
+                    if (cachedResponse) {
+                        console.log('Found ', currentRequest.url, ' in cache');
+                        return cachedResponse;
+                    }
+                }).catch(error => {
+                    console.log("File not in cache:" + currentRequest.url)
+                        // TODO 6 - Respond with custom offline page
+                })
+        })
+    )
+
+})
 
 // self.addEventListener('push', event => {
 //     event.waitUntil(
