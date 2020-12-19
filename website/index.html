@@ -12,13 +12,14 @@
     <link rel="stylesheet" type="text/css" href="styles/tablet.css" media="screen and (min-width: 650px) and (max-width: 1099px)" />
     <link rel="stylesheet" type="text/css" href="styles/desktop.css" media='screen and (min-width: 1100px)' />
     <link rel="stylesheet" type="text/css" href="styles/themes/dark.css" />
+    <link rel="manifest" href="manifest.webmanifest">
 </head>
 
 <body translate="yes">
     <div id="wrapper">
         <header id="header">
             <div id="header-main" class="dev-change">
-                <h1 id="mainPageTrigger">11. Sense</h1>
+                <h1 id="mainPageTrigger" translate="no" class="notranslate">11. Sense</h1>
                 <p id="mainPageTriggerSubheadding"><span class="notranslate">Discover</span> ♡ <span class="notranslate">Learning</span></p>
             </div>
             <figure id="header-left" class="inactive-page-icon">
@@ -199,8 +200,17 @@
             </div>
         </div>
     </div>
-    <script src="js/app.js" type="module"></script>
-    <script>
+    <script type="text/javascript">
+        window.addEventListener("load", () => {
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => console.log('Service worker successfully registered for ' + registration.scope))
+                    .catch(err => console.log('Service worker registration failed: ' + err));
+            }
+        });
+    </script>
+    <script type="module" src="js/app.js"></script>
+    <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 // pageLanguage: 'en',
