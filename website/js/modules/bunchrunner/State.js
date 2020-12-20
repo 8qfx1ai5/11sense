@@ -32,7 +32,7 @@ export default class State {
     isActiveTask() {
         let nextTask = this.getTask(this.currentTaskIndex + 1)
         if (!nextTask) {
-            return !this.getTask().isRunning()
+            return this.getTask().isRunning()
         }
         return !nextTask.isRunning() && nextTask.isNew()
     }
