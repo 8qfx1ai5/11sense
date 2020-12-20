@@ -14,17 +14,17 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                 #root {
                     height: 6em;
                     display: block;
-                    transition: 1s linear all;
+                    transition: 1s linear background-color;
                 }
 
                 .success {
-                    background-color: var(--theme-color-4);
                     transition: none !important;
+                    background-color: var(--theme-color-4);
                 }
 
                 .hidden {
-                    display: none !important;
                     transition: none !important;
+                    display: none !important;
                 }
 
                 .value {
@@ -82,15 +82,16 @@ customElements.define('view-task-vertical', class extends HTMLElement {
 
                 if (currentTask) {
                     if (state.config.isHideTaskModeActive) {
-                        if (state.isFirstTask()) {
+                        taskView.classList.add('hidden')
+                        if (state.isFirstTask() && currentTask.isNew()) {
                             taskView.classList.remove('hidden')
                             taskViewRoot.classList.remove('hidden')
                         } else if (!state.isActiveTask() || (!currentTask.isNew() && !currentTask.isSolved)) {
                             taskView.classList.remove('hidden')
-                        } else if (!state.getLastTask().isSolved) {
-                            taskView.classList.remove('hidden')
-                        } else {
+                        } else if (state.getLastTask().isSolved) {
                             taskView.classList.add('hidden')
+                        } else if (currentTask.isNew()) {
+                            taskView.classList.remove('hidden')
                         }
                         if (currentTask.isSolved && state.isActiveTask()) {
                             taskViewRoot.classList.add('success')
@@ -109,6 +110,7 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                     }
                 } else {
                     taskView.classList.add('hidden')
+                    taskViewRoot.classList.add('hidden')
                     taskViewRoot.classList.remove('success')
                 }
             })

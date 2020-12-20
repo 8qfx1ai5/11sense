@@ -26,7 +26,7 @@ export default class State {
     }
 
     isFirstTask() {
-        return this.currentTaskIndex == 0
+        return this.currentTaskIndex === 0
     }
 
     isActiveTask() {

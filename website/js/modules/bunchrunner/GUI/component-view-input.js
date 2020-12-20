@@ -72,6 +72,9 @@ customElements.define('view-input', class extends HTMLElement {
                         inputAnswer.classList.remove('hidden')
                         inputAnswer.disabled = false
                         inputAnswer.focus()
+                        if (!state.isActiveTask()) {
+                            inputAnswer.disabled = true
+                        }
                     } else if (currentTask.wasTimedOut || currentTask.wasSkipped) {
                         inputAnswer.classList.add('hidden')
                         inputAnswer.disabled = true
