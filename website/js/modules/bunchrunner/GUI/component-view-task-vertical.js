@@ -24,6 +24,7 @@ customElements.define('view-task-vertical', class extends HTMLElement {
 
                 .hidden {
                     display: none !important;
+                    transition: none !important;
                 }
 
                 .value {
