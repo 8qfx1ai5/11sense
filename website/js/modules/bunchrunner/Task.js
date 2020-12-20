@@ -40,6 +40,10 @@ export default class Task {
         return !this.isSolved && !this.wasPaused && !this.wasSkipped && !this.wasTimedOut
     }
 
+    isRunning() {
+        return this.startTime && this.isNew()
+    }
+
     getLastAnswer() {
         if (this.answers.length === 0) {
             return false

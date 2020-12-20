@@ -11,8 +11,19 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                     
                 }
 
+                #root {
+                    height: 6em;
+                    display: block;
+                    transition: 1s linear all;
+                }
+
+                .success {
+                    background-color: var(--theme-color-4);
+                    transition: none !important;
+                }
+
                 .hidden {
-                    display: none;
+                    display: none !important;
                 }
 
                 .value {
@@ -33,6 +44,7 @@ customElements.define('view-task-vertical', class extends HTMLElement {
 
                 .solved .answer {
                     color: var(--theme-color-4);
+                    -webkit-text-stroke: 2px var(--theme-color-2);
                 }
 
                 .question > * {
@@ -44,32 +56,42 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                     flex-direction: column-reverse;
                 }
             </style>
-            <p><span id="task-view-vertical"></span></p>
+            <p id="root"><span id="task-view-vertical"></span></p>
         `
 
         let taskView = this.shadowRoot.getElementById('task-view-vertical')
+        let taskViewRoot = this.shadowRoot.getElementById('root')
 
         appRunner.events.forEach((event) => {
             window.addEventListener(event, function(e) {
                 let state = e.detail.state
+                let currentTask = state.getTask()
+
                 if (!state.config.isRacingMode) {
                     taskView.classList.add('hidden')
                     return
                 }
 
-                let currentTask = state.getTask()
-
                 if (state.isFinished) {
                     taskView.classList.add('hidden')
+                    taskViewRoot.classList.remove('success')
+                    taskViewRoot.classList.add('hidden')
                     return
                 }
 
                 if (currentTask) {
-                    if (state.config.isRacingMode && state.config.isHideTaskModeActive) {
+                    if (state.config.isHideTaskModeActive) {
                         if (state.isFirstTask() || !state.getLastTask().isSolved) {
+                            taskView.classList.remove('hidden')
+                        } else if (!currentTask.isNew()) {
                             taskView.classList.remove('hidden')
                         } else {
                             taskView.classList.add('hidden')
+                        }
+                        if (currentTask.isSolved && state.isActiveTask()) {
+                            taskViewRoot.classList.add('success')
+                        } else {
+                            taskViewRoot.classList.remove('success')
                         }
                     } else {
                         taskView.classList.remove('hidden')
@@ -83,6 +105,7 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                     }
                 } else {
                     taskView.classList.add('hidden')
+                    taskViewRoot.classList.remove('success')
                 }
             })
         })

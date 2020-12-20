@@ -99,7 +99,7 @@ header p {
 
 #clipboard {
     overflow: auto;
-    height: calc(100% - 10em);
+    height: calc(100% - 20em);
 }
 
 #trainer-page {

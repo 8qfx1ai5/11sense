@@ -4,6 +4,7 @@ export default class State {
 
     taskList = []
     currentTaskIndex = false
+    activeTask = false
     startTime = false
     endTime = false
     config = new Config()
@@ -26,6 +27,14 @@ export default class State {
 
     isFirstTask() {
         return this.currentTaskIndex == 0
+    }
+
+    isActiveTask() {
+        let nextTask = this.getTask(this.currentTaskIndex + 1)
+        if (!nextTask) {
+            return !this.getTask().isRunning()
+        }
+        return !nextTask.isRunning() && nextTask.isNew()
     }
 
     getEclapsedTime() {
