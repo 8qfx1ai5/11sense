@@ -68,12 +68,7 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                 let state = e.detail.state
                 let currentTask = state.getTask()
 
-                if (!state.config.isRacingMode) {
-                    taskView.classList.add('hidden')
-                    return
-                }
-
-                if (state.isFinished) {
+                if (state.isFinished || !state.config.isRacingMode) {
                     taskView.classList.add('hidden')
                     taskViewRoot.classList.remove('success')
                     taskViewRoot.classList.add('hidden')

@@ -11,6 +11,7 @@ export default class Multiplication extends Task {
     constructor(config = new Config()) {
         super()
 
+        this.type = '*'
         this.config = config
         let t = calculateTask(this.config)
         this.values[0] = t.factor1

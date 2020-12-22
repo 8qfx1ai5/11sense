@@ -21,6 +21,8 @@ export default class Task {
     startTime = false
     endTime = false
     config = new Config()
+    date = new Date()
+    type = ''
 
     isValidSolution(input, doSave = false) {
         if (input == this.answer) {

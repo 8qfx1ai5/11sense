@@ -11,6 +11,7 @@ export default class Addition extends Task {
     constructor(config = new Config(), index = 0) {
         super()
 
+        this.type = '+'
         this.config = config
         let t = calculateTask(this.config, index)
         this.values[0] = t.part1

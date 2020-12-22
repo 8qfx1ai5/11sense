@@ -1,14 +1,16 @@
 import * as Main from '../main/main.js'
 import * as appSystem from '../main/system.js'
+import State from '../bunchrunner/State.js'
 
 let historyList;
-let historyLocalStorageKey = "resultHistory";
+let historyLocalStorageKey = "resultHistoryV2";
 
-export function pushToStatistics(f1, f2, result, time, now = new Date()) {
-    let date = now.getDate() + "." + now.getMonth() + "." + now.getFullYear();
-    let eclapesTime = (time / 1000).toPrecision(4);
-
-    saveInLocalStorage([f1, f2, result, eclapesTime, date]);
+/**
+ * analyze a completed task and store the results in the local storage
+ * @param {State} state 
+ */
+export function pushToStatistics(state) {
+    saveInLocalStorage(state);
 
     updateHistoryBasedOnLocalStorage();
 }
@@ -33,14 +35,21 @@ function updateHistoryBasedOnLocalStorage() {
     historyList.innerHTML = "";
     let resultHistory = getHistoryFromLocalStorage();
     for (let i = resultHistory.length - 1; 0 <= i; i--) {
+        let state = resultHistory[i]
         let entry = document.createElement('li');
         let content = document.createElement('span');
-        let date = resultHistory[i][4];
-        let eclapesTime = resultHistory[i][3];
-        let r = resultHistory[i][2];
-        let f2 = resultHistory[i][1];
-        let f1 = resultHistory[i][0];
-        content.appendChild(document.createTextNode(Main.formatNumberForDisplay(f1) + " ⋅ " + Main.formatNumberForDisplay(f2) + " = " + Main.formatNumberForDisplay(r) + " (time: " + Main.formatNumberForDisplay(eclapesTime) + " sec. | date: " + date + ")"));
+        let date = new Date(state.date)
+        let dateFormated = date.getDate() + "." + date.getMonth() + "." + date.getFullYear();
+        let eclapesTime = ((state.endTime - state.startTime) / 1000).toPrecision(4);;
+        let type = state.taskList[0].type
+        let valid = 0
+        for (let j = 0; j < state.taskList.length; j++) {
+            if (state.taskList[j].isSolved && !state.taskList[j].wasPaused) {
+                valid++
+            }
+        }
+        let text = valid + "/" + state.taskList.length + " \"" + type + "\" ( " + Main.formatNumberForDisplay(eclapesTime) + " sec. - " + dateFormated + " )"
+        content.appendChild(document.createTextNode(text));
         entry.appendChild(content);
         historyList.append(entry);
     }
@@ -51,8 +60,7 @@ export function init() {
 
     updateHistoryBasedOnLocalStorage();
 
-    window.addEventListener('bunch-action-solution-found', function(e) {
-        let currentTask = e.detail.state.taskList[e.detail.state.currentTaskIndex]
-        pushToStatistics(currentTask.values[0], currentTask.values[1], currentTask.answer, currentTask.endTime - currentTask.startTime)
+    window.addEventListener('bunch-action-submit', function(e) {
+        pushToStatistics(e.detail.state)
     })
 }

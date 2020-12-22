@@ -10,6 +10,7 @@ export default class State {
     config = new Config()
     isRunning = false
     isFinished = false
+    date = new Date()
 
     getTask(index = false) {
         if (index !== 0 && !index) {
@@ -23,6 +24,10 @@ export default class State {
 
     getLastTask() {
         return this.getTask(this.currentTaskIndex - 1)
+    }
+
+    getFirstTask() {
+        return this.getTask(0)
     }
 
     isFirstTask() {
@@ -39,5 +44,9 @@ export default class State {
 
     getEclapsedTime() {
         return this.endTime - this.startTime
+    }
+
+    getNumberOfTasks() {
+        return this.taskList.length + 1
     }
 }
