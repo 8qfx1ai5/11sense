@@ -1,6 +1,6 @@
 {
     "short_name": "11 Sense",
-    "name": "11 Sense - Discover ♡ Learning",
+    "name": "11 Sense \n Discover ♡ Learning",
     "description": "Learning toolkit for math and other skills.",
     "icons": [{
             "src": "img/settings_192x192.png",
@@ -16,6 +16,6 @@
     "start_url": "/",
     "background_color": "#252526",
     "display": "fullscreen",
-    "scope": "",
+    "scope": "/",
     "theme_color": "#d7ba7d"
 }
