@@ -1,8 +1,6 @@
 import * as appVoice from '../bunchrunner/SUI/voice.js'
 
 export let currentTask;
-export let f1input;
-export let f2input;
 export let navigation;
 export let Solution;
 export let psolutions;
@@ -22,8 +20,6 @@ export function formatNumberForDisplay(n) {
 
 export function init() {
     currentTask = document.getElementById('current-task');
-    f1input = document.getElementById('f1')
-    f2input = document.getElementById('f2')
     navigation = document.getElementById('nav')
     Solution = document.getElementById('Solution')
     psolutions = document.getElementById('partial-solutions')
@@ -51,20 +47,6 @@ export function init() {
             appPage.enterFullscreen();
         }
     });
-
-    if (localStorage.getItem('f1')) {
-        f1input.value = localStorage.getItem('f1');
-    }
-    if (localStorage.getItem('f2')) {
-        f2input.value = localStorage.getItem('f2');
-    }
-
-    f1input.addEventListener('input', function() {
-        window.dispatchEvent(new CustomEvent('bunch-request-new'))
-    })
-    f2input.addEventListener('input', function() {
-        window.dispatchEvent(new CustomEvent('bunch-request-new'))
-    })
 
     document.getElementById('button-feedback').addEventListener('click', function() {
         window.open('https://paypal.me/pools/c/8pfcrOnyif')

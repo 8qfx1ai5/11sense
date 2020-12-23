@@ -1,5 +1,5 @@
 import * as appMath from '../math/math.js'
-import Config from './Config.js'
+import Config from '../config/Config.js'
 import * as appTranslation from '../language/translation.js'
 import Answer from './Answer.js'
 import Task from './Task.js'
@@ -66,40 +66,28 @@ function analizeSolution(task, possibleSolution) {
  * @param {Config} config 
  */
 function calculateTask(config, index) {
-    let a = config.numberRanges[0]
-    let b = config.numberRanges[1]
 
-    a = Math.max(1, a)
-    a = Math.min(10, a)
-    b = Math.max(1, b)
-    b = Math.min(10, b)
+    let f1Diff = config.numberRange1[1] - config.numberRange1[0]
+    let f2Diff = config.numberRange2[1] - config.numberRange2[0]
 
     let f1 = 0
     let f2 = 0
 
     if (config.isRacingMode) {
         if (index == 0) {
+            f2 = Math.round(Math.random() * f2Diff) + config.numberRange2[0]
             do {
-                f2 = Math.floor(Math.random() * (10 ** b));
-            } while (f2 < 2 || f2.toString().length != b);
-            do {
-                do {
-                    f1 = Math.floor(Math.random() * (10 ** a));
-                } while (f1 < 2 || f1.toString().length != a);
-            } while (f1 % f2 == 0 || f2 % f1 == 0);
+                f1 = Math.round(Math.random() * f1Diff) + config.numberRange1[0]
+            } while (f1 % f2 == 0 || f2 % f1 == 0)
         } else {
             f1 = lastTasks[0][0] + lastTasks[0][1]
             f2 = lastTasks[0][1]
         }
     } else {
         do {
-            do {
-                f1 = Math.floor(Math.random() * (10 ** a));
-            } while (f1 < 2 || f1.toString().length != a);
-            do {
-                f2 = Math.floor(Math.random() * (10 ** b));
-            } while (f2 < 2 || f2.toString().length != b);
-        } while (taskWasPlayedBefore(f1, f2));
+            f1 = Math.round(Math.random() * f1Diff) + config.numberRange1[0]
+            f2 = Math.round(Math.random() * f2Diff) + config.numberRange2[0]
+        } while (taskWasPlayedBefore(f1, f2))
     }
 
     let factor1Decimals = 0;

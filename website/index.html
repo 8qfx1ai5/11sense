@@ -129,10 +129,12 @@
                             </button>
                         </li>
                         <li>
-                            <button class="option-item">
-                                <span class="config-label">Number Ranges:</span><span class=" b-label-status notranslate" translate="no"><input class="config" type="number" id="f1" name="factor1" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};" />⋅<input class="config" type="number" id="f2" name="factor2" placeholder="1" value="1" onblur="if(this.value==''){this.value=this.placeholder}" onclick="if(this.value != ''){this.placeholder=this.value;this.value=''};" /></span><br /><span
-                                class="button-sub">(2⋅3=xx⋅yyy)</span>
-                            </button>
+                            <button-select configName="number1Range" title="The range of the first number." label="Number 1" sublabel="Defines the value range" options='[["2-10","2-10"],["11-20","11-20"],["21-30","21-30"],["31-40","31-40"],["41-50","41-50"],["51-99","51-99"],["11-99","11-99"]]'
+                                defaultOption="2-10" />
+                        </li>
+                        <li>
+                            <button-select configName="number2Range" title="The range of the first number." label="Number 2" sublabel="Defines the value range" options='[["2-10","2-10"],["11-20","11-20"],["21-30","21-30"],["31-40","31-40"],["41-50","41-50"],["51-99","51-99"],["11-99","11-99"]]'
+                                defaultOption="2-10" />
                         </li>
                         <li>
                             <button class="option-item" titel="Select the number of tasks you need to solve together in an amount of time to succeed.">

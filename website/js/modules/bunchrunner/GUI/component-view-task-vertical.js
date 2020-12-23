@@ -83,9 +83,7 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                             taskViewRoot.classList.remove('hidden')
                         } else if (!state.isActiveTask() || (!currentTask.isNew() && !currentTask.isSolved)) {
                             taskView.classList.remove('hidden')
-                        } else if (state.getLastTask().isSolved) {
-                            taskView.classList.add('hidden')
-                        } else if (currentTask.isNew()) {
+                        } else if (!state.getLastTask().isSolved) {
                             taskView.classList.remove('hidden')
                         }
                         if (currentTask.isSolved && state.isActiveTask()) {

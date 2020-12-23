@@ -35,6 +35,8 @@ body {
     --theme-color-4: green;
     --theme-color-5: darkgreen;
     --theme-color-6: darkgray;
+    --theme-color-7: dimgrey;
+    --theme-color-8: cyan;
 }
 
 #button-language-selection {

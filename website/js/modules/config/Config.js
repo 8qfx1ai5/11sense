@@ -5,7 +5,9 @@ export default class Config {
     solutionGuideTime = 10000
     autoTaskTime = 5000
     language = "de"
-    numberRanges = [2, 3]
+        // numberRanges = [2, 3]
+    numberRange1 = [2, 10]
+    numberRange2 = [2, 10]
     isDecimalPlacesMode = false
     isRacingMode = false
     bunchSize = 10
@@ -13,8 +15,10 @@ export default class Config {
     isHideTaskModeActive = false
 
     constructor() {
-        this.numberRanges[0] = parseInt(document.getElementById('f1').value, 10);
-        this.numberRanges[1] = parseInt(document.getElementById('f2').value, 10);
+        let f1 = localStorage.getItem('number1Range').split('-')
+        this.numberRange1 = [parseInt(f1[0], 10), parseInt(f1[1], 10)]
+        let f2 = localStorage.getItem('number2Range').split('-')
+        this.numberRange2 = [parseInt(f2[0], 10), parseInt(f2[1], 10)]
 
         this.bunchSize = parseInt(document.getElementById('bunch-size-selector').value, 10);
         this.isDecimalPlacesMode = localStorage.getItem('isDecimalPlacesModeActive') == "true"
@@ -25,6 +29,13 @@ export default class Config {
 }
 
 export function init() {
+
+    window.addEventListener('config_changed', function(e) {
+        appSystem.log(e, 2, "console");
+        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
+        window.dispatchEvent(new CustomEvent('bunch-request-new'))
+    })
+
     document.getElementById('bunch-size-selector').addEventListener('change', (e) => {
         window.dispatchEvent(new CustomEvent('bunch-request-new'))
     })

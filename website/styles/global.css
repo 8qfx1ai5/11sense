@@ -177,16 +177,6 @@ h2 {
     text-align: right;
 }
 
-input#f1,
-input#f2 {
-    width: 1em;
-    height: 1em;
-}
-
-input#f1 {
-    padding-right: 0.6em;
-}
-
 .button-sub {
     font-size: 0.6em;
 }

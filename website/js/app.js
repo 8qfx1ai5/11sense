@@ -9,12 +9,13 @@ import * as appViewTaskVertical from './modules/bunchrunner/GUI/component-view-t
 import * as appViewInput from './modules/bunchrunner/GUI/component-view-input.js'
 import * as appViewResults from './modules/bunchrunner/GUI/component-view-results.js'
 import * as appPanelBunchControl from './modules/bunchrunner/GUI/component-panel-bunch-control.js'
+import * as appButtonSelect from './modules/config/component-button-select.js'
 import * as appSolution from './modules/bunchrunner/GUI/solution-view.js'
 import * as appDev from './modules/dev/dev-view.js'
 import * as appPage from './modules/page/page.js'
 import * as appTranslation from './modules/language/translation.js'
 import * as bunchrunner from './modules/bunchrunner/bunchRunner.js'
-import * as appConfig from './modules/bunchrunner/Config.js'
+import * as appConfig from './modules/config/Config.js'
 
 // TODO: rethink race conditons, currently init order matters
 appDev.init()
@@ -29,6 +30,4 @@ appPage.init()
 appTranslation.init()
 bunchrunner.init()
 
-setTimeout(() => {
-    window.dispatchEvent(new CustomEvent('bunch-request-new'))
-}, 2000)
+window.dispatchEvent(new CustomEvent('config_changed'))
