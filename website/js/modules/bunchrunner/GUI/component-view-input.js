@@ -31,8 +31,8 @@ customElements.define('view-input', class extends HTMLElement {
                 #input-answer {
                     border: none;
                     text-align: center;
-                    width: 100%;
-                    height: 2em;
+                    width: 90%;
+                    height: 1.2em;
                     border-radius: 25px;
                     padding: 0px 00px;
                     font-size: larger;
