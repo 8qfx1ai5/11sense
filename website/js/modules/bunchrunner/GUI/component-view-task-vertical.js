@@ -85,8 +85,8 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                         } else if (!state.isActiveTask() || (!currentTask.isNew() && !currentTask.isSolved)) {
                             // show task if old or paused
                             taskView.classList.remove('hidden')
-                        } else if (!state.isFirstTask() && !state.getLastTask().isSolved && state.isActiveTask()) {
-                            // show task if not solved in previous
+                        } else if (!state.isFirstTask() && !state.getLastTask().isSolved && state.isActiveTask() && currentTask.isNew()) {
+                            // show active task if not solved in previous
                             taskView.classList.remove('hidden')
                         }
                         if (currentTask.isSolved && state.isActiveTask()) {
