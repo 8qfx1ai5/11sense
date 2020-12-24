@@ -79,11 +79,14 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                     if (state.config.isHideTaskModeActive) {
                         taskView.classList.add('hidden')
                         if (state.isFirstTask() && currentTask.isNew()) {
+                            // show fist task all the time
                             taskView.classList.remove('hidden')
                             taskViewRoot.classList.remove('hidden')
                         } else if (!state.isActiveTask() || (!currentTask.isNew() && !currentTask.isSolved)) {
+                            // show task if old or paused
                             taskView.classList.remove('hidden')
-                        } else if (!state.getLastTask().isSolved) {
+                        } else if (!state.isFirstTask() && !state.getLastTask().isSolved && state.isActiveTask()) {
+                            // show task if not solved in previous
                             taskView.classList.remove('hidden')
                         }
                         if (currentTask.isSolved && state.isActiveTask()) {
