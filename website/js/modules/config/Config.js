@@ -15,6 +15,13 @@ export default class Config {
     isHideTaskModeActive = false
 
     constructor() {
+        if (!localStorage.getItem('number1Range') || !localStorage.getItem('number2Range')) {
+            setTimeout(function() {
+                // wait until the config is initialized
+                window.dispatchEvent(new CustomEvent('config_changed'))
+            }, 500)
+            return
+        }
         let f1 = localStorage.getItem('number1Range').split('-')
         this.numberRange1 = [parseInt(f1[0], 10), parseInt(f1[1], 10)]
         let f2 = localStorage.getItem('number2Range').split('-')
