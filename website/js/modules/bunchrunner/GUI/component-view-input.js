@@ -54,7 +54,7 @@ customElements.define('view-input', class extends HTMLElement {
 
             </style>
             <section id="input-view">
-                <input class="hidden" type="number" id="input-answer" name="input-answer" placeholder="=" onselect="return false;" onfocus="return false;" />
+                <input class="hidden" pattern="[0-9]*" inputmode="numeric" type="number" id="input-answer" name="input-answer" placeholder="=" onselect="return false;" onfocus="return false;" />
             </section>
         `
 
