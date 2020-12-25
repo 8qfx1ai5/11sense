@@ -57,7 +57,7 @@ customElements.define('view-input', class extends HTMLElement {
 
             </style>
             <section id="input-view">
-                <input class="hidden" pattern="[0-9]*" inputmode="numeric" type="number" id="input-answer" name="input-answer" placeholder="=" onselect="return false;" onfocus="return false;" />
+                <input class="hidden" pattern="[0-9]*,?[0-9]*" inputmode="numeric" type="number" id="input-answer" name="input-answer" placeholder="=" onselect="return false;" onfocus="return false;" />
             </section>
         `
 
@@ -77,10 +77,8 @@ customElements.define('view-input', class extends HTMLElement {
 
                 if (state.config.isRacingMode && state.config.isHideTaskModeActive) {
                     inputAnswer.classList.add('racing-hidden')
-                        // inputAnswer.type = "password"
                 } else {
                     inputAnswer.classList.remove('racing-hidden')
-                        // inputAnswer.type = "number"
                 }
 
                 if (currentTask) {
