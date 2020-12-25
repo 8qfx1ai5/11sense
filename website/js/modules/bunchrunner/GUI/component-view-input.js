@@ -32,7 +32,7 @@ customElements.define('view-input', class extends HTMLElement {
                     border: none;
                     text-align: center;
                     width: 90%;
-                    height: 1.2em;
+                    height: 2em;
                     border-radius: 25px;
                     padding: 0px 00px;
                     font-size: larger;
@@ -44,6 +44,12 @@ customElements.define('view-input', class extends HTMLElement {
                 
                 #input-answer:focus {
                     outline: none !important;
+                }
+
+                .racing-hidden {
+                    background-color: var(--theme-color-2) !important;
+                    color: var(--theme-color-7) !important;
+                    height: 4em !important;
                 }
 
             </style>
@@ -64,6 +70,14 @@ customElements.define('view-input', class extends HTMLElement {
                     inputAnswer.classList.add('hidden')
                     inputAnswer.disabled = true
                     return
+                }
+
+                if (state.config.isRacingMode && state.config.isHideTaskModeActive) {
+                    inputAnswer.classList.add('racing-hidden')
+                    inputAnswer.type = "password"
+                } else {
+                    inputAnswer.classList.remove('racing-hidden')
+                    inputAnswer.type = "text"
                 }
 
                 if (currentTask) {
