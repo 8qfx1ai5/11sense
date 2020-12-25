@@ -49,7 +49,6 @@ customElements.define('view-input', class extends HTMLElement {
                 .racing-hidden {
                     background-color: var(--theme-color-2) !important;
                     color: var(--theme-color-7) !important;
-                    height: 4em !important;
                     -webkit-text-security: disc;
                     -moz-webkit-text-security: disc;
                     -moz-text-security: disc;
