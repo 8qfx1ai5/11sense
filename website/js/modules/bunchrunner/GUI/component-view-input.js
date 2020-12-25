@@ -50,6 +50,9 @@ customElements.define('view-input', class extends HTMLElement {
                     background-color: var(--theme-color-2) !important;
                     color: var(--theme-color-7) !important;
                     height: 4em !important;
+                    -webkit-text-security: disc;
+                    -moz-webkit-text-security: disc;
+                    -moz-text-security: disc;
                 }
 
             </style>
@@ -74,10 +77,10 @@ customElements.define('view-input', class extends HTMLElement {
 
                 if (state.config.isRacingMode && state.config.isHideTaskModeActive) {
                     inputAnswer.classList.add('racing-hidden')
-                    inputAnswer.type = "password"
+                        // inputAnswer.type = "password"
                 } else {
                     inputAnswer.classList.remove('racing-hidden')
-                    inputAnswer.type = "text"
+                        // inputAnswer.type = "number"
                 }
 
                 if (currentTask) {
