@@ -74,14 +74,7 @@
                 <div class="subpage" id="settings-advanced">
                     <ul id="advanced-settings-list">
                         <li>
-                            <button class="option-item">Operator<span class="b-label-status"><select name="operator-selector" id="operator-selector" class="selector config" dir="rtl">
-                                    <option selected="selected" value="+">+</option>
-                                    <!-- <option value="-">-</option> -->
-                                    <option value="*">*</option>
-                                    <!-- <option value="/">/</option> -->
-                                </select></span><br /><span
-                                class="button-sub">(+,-,*, ...)</span></button>
-                            </button>
+                            <button-select configName="selectedOperator" title="This selection defined the type of tasks." label="Operator" sublabel="+,-,*, ..." options='[["+","+"],["*","*"]]' defaultOption="+" />
                         </li>
                         <li><button class="option-item" id="button-decimal-places" title="Allow randomly decimal places in the task.">Decimal Places <span
                                     class="hidden  b-label-status" id="button-decimal-places-on">on</span><span
@@ -94,39 +87,12 @@
                         <li><button class="option-item" id="button-sound" title="Use audio output for tasks and status feedback.">You can listen<span class="hidden  b-label-status" id="sound-button-on">on</span><span id="sound-button-off" class=" b-label-status">off</span><br /><span class="button-sub">(get audio feedback)</span></button>
                         </li>
                         <li>
-                            <button class="option-item">Break Length<span class="b-label-status notranslate" translate="no"><select name="auto-task-selector" id="auto-task-selector" class="selector config" dir="rtl">
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="5" selected="selected">5</option>
-                                    <option value="10">10</option>
-                                    <option value="15">15</option>
-                                    <option value="20">20</option>
-                                    <option value="25">25</option>
-                                    <option value="30">30</option>
-                                    <option value="∞">∞</option>
-                                </select></span><br /><span
-                                class="button-sub">(between tasks in sec.)</span></button>
-                            </button>
+                            <button-select configName="breakTimeout" title="The time in seconds after a finished task until the next task will be started automatically." label="Break Length" sublabel="between tasks in sec." options='[["0","0"],["1","1"],["2","2"],["5","5"],["10","10"],["15","15"],["20","20"],["25","25"],["30","30"],["∞","∞"]]'
+                                defaultOption="5" />
                         </li>
                         <li>
-                            <button class="option-item">Solution Guide<span class=" b-label-status"><select name="solution-guide-selector" id="solution-guide-selector" class="selector config" dir="rtl">
-                                    <option value="off" translate="yes">off</option>
-                                    <option value="5" class="notranslate" translate="no">5</option>
-                                    <option value="6" class="notranslate" translate="no">6</option>
-                                    <option value="7" class="notranslate" translate="no">7</option>
-                                    <option value="8" class="notranslate" translate="no">8</option>
-                                    <option value="9" class="notranslate" translate="no">9</option>
-                                    <option value="10" class="notranslate" translate="no">10</option>
-                                    <option value="15" class="notranslate" translate="no" selected="selected">15</option>
-                                    <option value="20" class="notranslate" translate="no">20</option>
-                                    <option value="30" class="notranslate" translate="no">30</option>
-                                    <option value="60" class="notranslate" translate="no">60</option>
-                                    <option value="120" class="notranslate" translate="no">120</option>
-                                    <option value="180" class="notranslate" translate="no">180</option>
-                                </select></span><br /><span
-                                class="button-sub">(solution after sec.)</span></button>
-                            </button>
+                            <button-select configName="solutionGuideTimeout" title="The time in seconds to provide a solution until the answer is guided." label="Solution Guide" sublabel="timeout after sec." options='[["off","off","true"],["5","5"],["6","6"],["7","7"],["8","8"],["9","9"],["10","10"],["15","15"],["20","20"],["25","25"],["30","30"],["60","60"],["120","120"],["180","180"]]'
+                                defaultOption="15" />
                         </li>
                         <li>
                             <button-select configName="number1Range" title="The range of the first number." label="Number 1" sublabel="Defines the value range" options='[["2-10","2-10"],["11-20","11-20"],["21-30","21-30"],["31-40","31-40"],["41-50","41-50"],["51-99","51-99"],["11-99","11-99"]]'
@@ -137,18 +103,8 @@
                                 defaultOption="2-10" />
                         </li>
                         <li>
-                            <button class="option-item" titel="Select the number of tasks you need to solve together in an amount of time to succeed.">
-                                <span class="config-label">Bunch Size</span><span class=" b-label-status notranslate" translate="no"><select name="bunch-size-selector" id="bunch-size-selector" class="selector config" dir="rtl">
-                                    <option value="1">1</option>
-                                    <option value="5">5</option>
-                                    <option value="10" selected="selected">10</option>
-                                    <option value="15">15</option>
-                                    <option value="20">20</option>
-                                    <option value="25">25</option>
-                                    <option value="30">30</option>
-                                </select></span><br /><span
-                                class="button-sub">(number of tasks)</span></button>
-                            </button>
+                            <button-select configName="bunchSize" title="Select the number of tasks you need to solve together in an amount of time to succeed." label="Bunch Size" sublabel="number of tasks" options='[["1","1"],["5","5"],["10","10"],["15","15"],["20","20"],["25","25"],["30","30"],["40","40"],["50","50"],["60","60"],["80","80"],["100","100"]]'
+                                defaultOption="10" />
                         </li>
                         <li><button class="option-item" id="button-racing" title="Activate or deactivate the racing mode, so the following task continues at the result of the previous one.">Racing Mode<span class="hidden  b-label-status" id="button-racing-on">on</span><span id="button-racing-off" class=" b-label-status">off</span><br /><span
                             class="button-sub">(continue at result)</span></button>

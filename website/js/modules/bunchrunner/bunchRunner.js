@@ -29,8 +29,6 @@ export function isRunning() {
 }
 
 export function init() {
-    solutionGuide.init()
-    autoTask.init()
 
     window.addEventListener('bunch-request-runner-pause', (e) => {
         appSystem.log(e, 2, "console");

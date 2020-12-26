@@ -1,10 +1,11 @@
 import * as appSound from './SUI/sound.js'
 
-let tagIdAutoTaskSelector = "auto-task-selector"
-let localStorageAutoTaskInterval = "autoTaskInterval"
+let localStorageAutoTaskInterval = "breakTimeout"
 
 let autoTaskStartTime = false
-let autoTaskIntervalTime = false
+
+/** @var currentAutoTaskInterval cached value used in the wait loop, to omit local storage access */
+let currentAutoTaskInterval = -1
 
 export function isRunning() {
     return autoTaskStartTime != false
@@ -30,7 +31,7 @@ function autoTaskStep(timestamp) {
         return
     }
     const elapsed = timestamp - autoTaskStartTime;
-    let interval = getAutoTaskInterval()
+    let interval = currentAutoTaskInterval
         // TODO: implement own component
         // document.getElementById('solution').style.backgroundSize = ((elapsed) * 102 / interval) + "%"
     if (elapsed < interval || appSound.hasPendingSoundOutput()) { // Stop the animation after 2 seconds
@@ -45,43 +46,12 @@ export function stop() {
     autoTaskStartTime = false
 }
 
-function saveAutoTaskInterval() {
-    let v = document.getElementById(tagIdAutoTaskSelector).value
-    stop()
-    if (v == "∞") {
-        localStorage.setItem(localStorageAutoTaskInterval, -1)
-        autoTaskIntervalTime = -1
-        return
-    }
-    localStorage.setItem(localStorageAutoTaskInterval, v * 1000)
-    autoTaskIntervalTime = v * 1000
-}
-
 function getAutoTaskInterval() {
-    if (autoTaskIntervalTime !== 0 && !autoTaskIntervalTime) {
-        let i = localStorage.getItem(localStorageAutoTaskInterval)
-        if (!i || i == "") {
-            saveAutoTaskInterval()
-            i = localStorage.getItem(localStorageAutoTaskInterval)
-        }
-        autoTaskIntervalTime = i
+    let interval = localStorage.getItem(localStorageAutoTaskInterval)
+    if (!interval || interval == "∞" || interval == "") {
+        currentAutoTaskInterval = -1
+        return currentAutoTaskInterval
     }
-
-    return autoTaskIntervalTime
-}
-
-export function init() {
-
-    document.getElementById(tagIdAutoTaskSelector).addEventListener('change', saveAutoTaskInterval)
-
-    let i = localStorage.getItem(localStorageAutoTaskInterval)
-
-    if (i) {
-        if (0 <= i) {
-            document.getElementById(tagIdAutoTaskSelector).value = i / 1000
-        } else {
-            document.getElementById(tagIdAutoTaskSelector).value = "∞"
-        }
-        saveAutoTaskInterval()
-    }
+    currentAutoTaskInterval = interval * 1000
+    return currentAutoTaskInterval
 }

@@ -71,8 +71,21 @@ customElements.define('button-select', class extends HTMLElement {
                     display: inline-block;
                 }
 
+                /* hide select button arrow */
+                select {
+                    appearance: none;
+                    /* for Firefox */
+                    -moz-appearance: none;
+                    /* for Chrome */
+                    -webkit-appearance: none;
+                }
+                select::-ms-expand {
+                    /* For IE10 */
+                    display: none;
+                }
+
             </style>
-            <button titel="${title}"><span id="label">${label}</span><span class="status notranslate" translate="no"><select dir="rtl"></select></span><br /><span id="sublabel">(${sublabel})</span></button>
+            <button titel="${title}"><span id="label">${label}</span><span class="status"><select dir="rtl"></select></span><br /><span id="sublabel">(${sublabel})</span></button>
         </button>
         `
 
@@ -82,6 +95,11 @@ customElements.define('button-select', class extends HTMLElement {
             let option = document.createElement("option");
             option.value = optionConfig[0]
             option.text = optionConfig[1]
+            if (optionConfig.hasOwnProperty(2) && optionConfig[2] == "true") {
+                option.setAttribute("translate", "yes")
+            } else {
+                option.setAttribute("translate", "no")
+            }
             inputSelect.add(option);
         })
 

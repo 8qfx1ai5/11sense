@@ -15,7 +15,7 @@ export default class Config {
     isHideTaskModeActive = false
 
     constructor() {
-        if (!localStorage.getItem('number1Range') || !localStorage.getItem('number2Range')) {
+        if (!localStorage.getItem('number1Range') || !localStorage.getItem('number2Range') || !localStorage.getItem('bunchSize') || !localStorage.getItem('selectedOperator')) {
             setTimeout(function() {
                 // wait until the config is initialized
                 window.dispatchEvent(new CustomEvent('config_changed'))
@@ -27,11 +27,11 @@ export default class Config {
         let f2 = localStorage.getItem('number2Range').split('-')
         this.numberRange2 = [parseInt(f2[0], 10), parseInt(f2[1], 10)]
 
-        this.bunchSize = parseInt(document.getElementById('bunch-size-selector').value, 10);
+        this.bunchSize = parseInt(localStorage.getItem('bunchSize'), 10);
         this.isDecimalPlacesMode = localStorage.getItem('isDecimalPlacesModeActive') == "true"
         this.isRacingMode = localStorage.getItem('isRacingModeActive') == "true"
         this.isHideTaskModeActive = localStorage.getItem('isHideTaskModeActive') == "true"
-        this.operator = localStorage.getItem('operator')
+        this.operator = localStorage.getItem('selectedOperator')
     }
 }
 
@@ -40,10 +40,6 @@ export function init() {
     window.addEventListener('config_changed', function(e) {
         appSystem.log(e, 2, "console");
         appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
-        window.dispatchEvent(new CustomEvent('bunch-request-new'))
-    })
-
-    document.getElementById('bunch-size-selector').addEventListener('change', (e) => {
         window.dispatchEvent(new CustomEvent('bunch-request-new'))
     })
 
@@ -60,13 +56,6 @@ export function init() {
 
     localStorage.setItem('isHideTaskModeActive', localStorage.getItem('isHideTaskModeActive') != "true");
     toggleHideTaskMode();
-
-    if (localStorage.getItem('operator')) {
-        document.getElementById('operator-selector').value = localStorage.getItem('operator')
-    }
-    document.getElementById('operator-selector').addEventListener('change', (e) => {
-        localStorage.setItem('operator', document.getElementById('operator-selector').value)
-    })
 }
 
 function toggleRacingMode() {
