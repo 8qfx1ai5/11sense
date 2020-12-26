@@ -96,6 +96,8 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                         }
                     } else {
                         taskView.classList.remove('hidden')
+                        taskViewRoot.classList.remove('hidden')
+                        taskViewRoot.classList.remove('success')
                     }
                     if (currentTask.wasTimedOut || currentTask.wasSkipped) {
                         taskView.innerHTML = "<span class='guided'>" + currentTask.questionGUI + " <span class='equals-sign'>=</span> " + currentTask.answerGUI + "</span>"
@@ -112,5 +114,4 @@ customElements.define('view-task-vertical', class extends HTMLElement {
             })
         })
     }
-
 })

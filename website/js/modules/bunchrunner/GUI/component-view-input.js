@@ -32,11 +32,11 @@ customElements.define('view-input', class extends HTMLElement {
                     border: none;
                     text-align: center;
                     width: 90%;
-                    height: 2em;
+                    height: 1.5em;
                     border-radius: 25px;
                     padding: 0px 00px;
                     font-size: larger;
-
+                    margin-top: 1em;
                     color: var(--theme-color-5);
                     background-color: var(--theme-color-6);
                     font-family: inherit;
