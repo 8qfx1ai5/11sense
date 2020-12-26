@@ -29,6 +29,7 @@ header p {
 
 #header-main {
     margin: auto;
+    padding-top: 0.2em;
 }
 
 #header-left {
@@ -228,6 +229,8 @@ select:disabled {
 body {
     /* hack to hide google translation top area */
     top: 0px !important;
+    /* force scaling under min-width */
+    min-width: 430px;
 }
 
 body>.skiptranslate {
