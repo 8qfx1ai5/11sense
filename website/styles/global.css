@@ -230,7 +230,7 @@ body {
     /* hack to hide google translation top area */
     top: 0px !important;
     /* force scaling under min-width */
-    min-width: 430px;
+    min-width: 400px;
 }
 
 body>.skiptranslate {
