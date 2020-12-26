@@ -50,7 +50,7 @@ customElements.define('button-select', class extends HTMLElement {
                     width: 4em;
                     height: 2em;
                     position: relative;
-                    right: -0.2em;
+                    right: -0em;
                     background-color: var(--theme-color-7);
                     font-family: inherit;
                     font-size: inherit;
