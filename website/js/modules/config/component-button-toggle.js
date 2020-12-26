@@ -70,7 +70,15 @@ customElements.define('button-toggle', class extends HTMLElement {
                 }
 
             </style>
-            <button titel="${title}"><span id="label">${label}</span><span id="status"><span class="hidden" id="on">on</span><span id="off">off</span></span><br /><span id="sublabel">(${sublabel})</span></button>
+            <button title="${title}">
+                <span id="label">${label}</span>
+                <span id="status">
+                    <span id="on" class="hidden" >on</span>
+                    <span id="off" >off</span>
+                </span>
+                <br />
+                <span id="sublabel">(${sublabel})</span>
+            </button>
         `
 
         let inputButton = this.shadowRoot.querySelector('button')

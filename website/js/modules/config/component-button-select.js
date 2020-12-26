@@ -38,7 +38,7 @@ customElements.define('button-select', class extends HTMLElement {
                     position: relative;
                 }
 
-                .status {
+                #status {
                     color: var(--theme-color-8);
                     position: relative;
                     /* display: inline-block; */
@@ -85,7 +85,14 @@ customElements.define('button-select', class extends HTMLElement {
                 }
 
             </style>
-            <button titel="${title}"><span id="label">${label}</span><span class="status"><select dir="rtl"></select></span><br /><span id="sublabel">(${sublabel})</span></button>
+            <button title="${title}">
+                <span id="label">${label}</span>
+                <span id="status">
+                    <select dir="rtl"></select>
+                </span>
+                <br />
+                <span id="sublabel">(${sublabel})</span>
+            </button>
         `
 
         let inputSelect = this.shadowRoot.querySelector("select")
