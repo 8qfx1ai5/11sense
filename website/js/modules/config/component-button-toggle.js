@@ -26,7 +26,7 @@ customElements.define('button-toggle', class extends HTMLElement {
                     text-align: left;
                     text-decoration: none;
                     display: inline-block;
-                    font-size: 1.5em;
+                    font-size: 1.4em;
                     cursor: pointer;
                     width: 100%;
                     margin-top: 5px;

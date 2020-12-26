@@ -12,7 +12,7 @@ let tagIdHeaderLeft = "header-left"
 let tagIdMainPage = "trainer-page"
 
 export function isDesktopMode() {
-    return 1100 <= screen.width
+    return 1300 <= screen.width
 }
 
 function switchToNextRightPage() {

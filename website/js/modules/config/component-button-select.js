@@ -28,11 +28,10 @@ customElements.define('button-select', class extends HTMLElement {
                     text-align: left;
                     text-decoration: none;
                     display: inline-block;
-                    font-size: 1.5em;
+                    font-size: 1.4em;
                     cursor: pointer;
                     width: 100%;
                     margin-top: 5px;
-                    /* height: 3em; */
                     vertical-align: top;
                     padding: 0.4em 1em 0.4em 1em;
                     position: relative;
@@ -53,7 +52,7 @@ customElements.define('button-select', class extends HTMLElement {
 
                 select {
                     width: 4em;
-                    height: 2em;
+                    height: 1em;
                     position: relative;
                     right: -0em;
                     background-color: var(--theme-color-7);
@@ -111,6 +110,7 @@ customElements.define('button-select', class extends HTMLElement {
                 option.setAttribute("translate", "yes")
             } else {
                 option.setAttribute("translate", "no")
+                option.classList.add("notranslate")
             }
             inputSelect.add(option)
         })
