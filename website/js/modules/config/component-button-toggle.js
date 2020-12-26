@@ -35,6 +35,10 @@ customElements.define('button-toggle', class extends HTMLElement {
                     position: relative;
                 }
 
+                button:focus {
+                    outline: none;
+                }
+
                 #status {
                     color: var(--theme-color-8);
                     position: relative;

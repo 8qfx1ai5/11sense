@@ -38,6 +38,11 @@ customElements.define('button-select', class extends HTMLElement {
                     position: relative;
                 }
 
+                button:focus,
+                select:focus {
+                    outline: none;
+                }
+
                 #status {
                     color: var(--theme-color-8);
                     position: relative;
@@ -95,6 +100,7 @@ customElements.define('button-select', class extends HTMLElement {
             </button>
         `
 
+        let inputButton = this.shadowRoot.querySelector("button")
         let inputSelect = this.shadowRoot.querySelector("select")
 
         options.forEach((optionConfig) => {
@@ -106,13 +112,19 @@ customElements.define('button-select', class extends HTMLElement {
             } else {
                 option.setAttribute("translate", "no")
             }
-            inputSelect.add(option);
+            inputSelect.add(option)
         })
+
+        inputButton.addEventListener('click', function(e) {
+            e.preventDefault()
+            inputSelect.focus()
+            inputSelect.click()
+        });
 
         inputSelect.addEventListener('change', (e) => {
             let oldValue = localStorage.getItem(configName)
             if (oldValue != inputSelect.value) {
-                localStorage.setItem(configName, inputSelect.value);
+                localStorage.setItem(configName, inputSelect.value)
                 window.dispatchEvent(new CustomEvent('config_changed'))
             }
         })
