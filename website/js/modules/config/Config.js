@@ -5,7 +5,6 @@ export default class Config {
     solutionGuideTime = 10000
     autoTaskTime = 5000
     language = "de"
-        // numberRanges = [2, 3]
     numberRange1 = [2, 10]
     numberRange2 = [2, 10]
     isDecimalPlacesMode = false
@@ -29,8 +28,8 @@ export default class Config {
 
         this.bunchSize = parseInt(localStorage.getItem('bunchSize'), 10);
         this.isDecimalPlacesMode = localStorage.getItem('decimalPlacesMode') == "on"
-        this.isRacingMode = localStorage.getItem('isRacingModeActive') == "true"
-        this.isHideTaskModeActive = localStorage.getItem('isHideTaskModeActive') == "true"
+        this.isRacingMode = localStorage.getItem('racingMode') == "on"
+        this.isHideTaskModeActive = localStorage.getItem('hideTaskMode') == "on"
         this.operator = localStorage.getItem('selectedOperator')
     }
 }
@@ -43,65 +42,4 @@ export function init() {
         window.dispatchEvent(new CustomEvent('bunch-request-new'))
     })
 
-    document.getElementById(tagIdRacingMode).addEventListener('click', function(e) {
-        toggleRacingMode();
-    });
-
-    localStorage.setItem('isRacingModeActive', localStorage.getItem('isRacingModeActive') != "true");
-    toggleRacingMode();
-
-    document.getElementById(tagIdHideTaskMode).addEventListener('click', function(e) {
-        toggleHideTaskMode();
-    });
-
-    localStorage.setItem('isHideTaskModeActive', localStorage.getItem('isHideTaskModeActive') != "true");
-    toggleHideTaskMode();
-}
-
-function toggleRacingMode() {
-    if (localStorage.getItem('isRacingModeActive') == "true") {
-        deactivateRacingMode();
-    } else {
-        activateRacingMode();
-    }
-}
-
-let tagIdRacingMode = 'button-racing'
-
-function activateRacingMode() {
-    appSystem.log("activate racing mode");
-    localStorage.setItem('isRacingModeActive', true);
-    document.getElementById(tagIdRacingMode + "-on").classList.remove("hidden");
-    document.getElementById(tagIdRacingMode + "-off").classList.add("hidden");
-}
-
-function deactivateRacingMode() {
-    appSystem.log("deactivate racing mode");
-    localStorage.setItem('isRacingModeActive', false);
-    document.getElementById(tagIdRacingMode + "-on").classList.add("hidden");
-    document.getElementById(tagIdRacingMode + "-off").classList.remove("hidden");
-}
-
-function toggleHideTaskMode() {
-    if (localStorage.getItem('isHideTaskModeActive') == "true") {
-        deactivateHideTaskMode();
-    } else {
-        activateHideTaskMode();
-    }
-}
-
-let tagIdHideTaskMode = 'button-hide-task'
-
-function activateHideTaskMode() {
-    appSystem.log("activate hide task mode");
-    localStorage.setItem('isHideTaskModeActive', true);
-    document.getElementById(tagIdHideTaskMode + "-on").classList.remove("hidden");
-    document.getElementById(tagIdHideTaskMode + "-off").classList.add("hidden");
-}
-
-function deactivateHideTaskMode() {
-    appSystem.log("deactivate hide task mode");
-    localStorage.setItem('isHideTaskModeActive', false);
-    document.getElementById(tagIdHideTaskMode + "-on").classList.add("hidden");
-    document.getElementById(tagIdHideTaskMode + "-off").classList.remove("hidden");
 }

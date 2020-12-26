@@ -79,6 +79,9 @@
                         <li>
                             <button-toggle configName="decimalPlacesMode" title="Allow randomly decimal places in the task." label="Decimal Places" sublabel="random" defaultOption="off" />
                         </li>
+                        <!-- <li>
+                            <button-toggle configName="voiceMode" title="Use voice recognition instead of keyboard input." label="You can talk" sublabel="use your voice" defaultOption="off" />
+                        </li> -->
                         <li><button class="option-item" id="button-voice" title="Use voice recognition instead of keyboard input.">You can talk<span class="hidden  b-label-status" id="button-voice-on">on</span><span id="button-voice-off" class=" b-label-status">off</span><br /><span
                             class="button-sub">(use your voice)</span></button>
                         </li>
@@ -104,11 +107,11 @@
                             <button-select configName="bunchSize" title="Select the number of tasks you need to solve together in an amount of time to succeed." label="Bunch Size" sublabel="number of tasks" options='[["1","1"],["5","5"],["10","10"],["15","15"],["20","20"],["25","25"],["30","30"],["40","40"],["50","50"],["60","60"],["80","80"],["100","100"]]'
                                 defaultOption="10" />
                         </li>
-                        <li><button class="option-item" id="button-racing" title="Activate or deactivate the racing mode, so the following task continues at the result of the previous one.">Racing Mode<span class="hidden  b-label-status" id="button-racing-on">on</span><span id="button-racing-off" class=" b-label-status">off</span><br /><span
-                            class="button-sub">(continue at result)</span></button>
+                        <li>
+                            <button-toggle configName="racingMode" title="Activate or deactivate the racing mode, so the following task continues at the result of the previous one." label="Racing Mode" sublabel="continue at result" defaultOption="off" />
                         </li>
-                        <li><button class="option-item" id="button-hide-task" title="Currently only supported during the racing mode. Hide all tasks after the first by default.">Hide Tasks<span class="hidden  b-label-status" id="button-hide-task-on">on</span><span id="button-hide-task-off" class=" b-label-status">off</span><br /><span
-                            class="button-sub">(first task is visible)</span></button>
+                        <li>
+                            <button-toggle configName="hideTaskMode" title="Currently only supported during the racing mode. Hide all tasks after the first by default." label="Hide Tasks" sublabel="first task is visible" defaultOption="off" />
                         </li>
                         <li><button disabled class="option-item" id="button-impress" title="Print legal information and credits.">Legal Notice<br /><span
                                         class="button-sub">(Imprint)</span></button>
