@@ -28,7 +28,7 @@ export default class Config {
         this.numberRange2 = [parseInt(f2[0], 10), parseInt(f2[1], 10)]
 
         this.bunchSize = parseInt(localStorage.getItem('bunchSize'), 10);
-        this.isDecimalPlacesMode = localStorage.getItem('isDecimalPlacesModeActive') == "true"
+        this.isDecimalPlacesMode = localStorage.getItem('decimalPlacesMode') == "on"
         this.isRacingMode = localStorage.getItem('isRacingModeActive') == "true"
         this.isHideTaskModeActive = localStorage.getItem('isHideTaskModeActive') == "true"
         this.operator = localStorage.getItem('selectedOperator')

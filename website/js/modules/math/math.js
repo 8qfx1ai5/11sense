@@ -1,32 +1,3 @@
-import * as appSystem from '../main/system.js'
-
-export let isDecimalPlacesMode = false;
-let tagIdDecimalPlaces = 'button-decimal-places'
-
-function toggleDecimalPlacesMode() {
-    if (isDecimalPlacesMode) {
-        deactivateDecimalPlacesMode();
-    } else {
-        activateDecimalPlacesMode();
-    }
-}
-
-function activateDecimalPlacesMode() {
-    appSystem.log("activate decimal places");
-    isDecimalPlacesMode = true;
-    localStorage.setItem('isDecimalPlacesModeActive', true);
-    document.getElementById(tagIdDecimalPlaces + "-on").classList.remove("hidden");
-    document.getElementById(tagIdDecimalPlaces + "-off").classList.add("hidden");
-}
-
-function deactivateDecimalPlacesMode() {
-    appSystem.log("deactivate decimal places");
-    isDecimalPlacesMode = false;
-    localStorage.setItem('isDecimalPlacesModeActive', false);
-    document.getElementById(tagIdDecimalPlaces + "-on").classList.add("hidden");
-    document.getElementById(tagIdDecimalPlaces + "-off").classList.remove("hidden");
-}
-
 export function multiplyDecimal(x, y) {
     let xSplit = x.toString().split(".");
     let ySplit = y.toString().split(".");
@@ -142,14 +113,4 @@ export function sumRecursive(task, s, i, c) {
         }
     }
     return []
-}
-
-export function init() {
-    document.getElementById(tagIdDecimalPlaces).addEventListener('click', function(e) {
-        toggleDecimalPlacesMode();
-    });
-
-    // set current decimal places mode
-    isDecimalPlacesMode = localStorage.getItem('isDecimalPlacesModeActive') != "true";
-    toggleDecimalPlacesMode();
 }

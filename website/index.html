@@ -76,10 +76,8 @@
                         <li>
                             <button-select configName="selectedOperator" title="This selection defined the type of tasks." label="Operator" sublabel="+,-,*, ..." options='[["+","+"],["*","*"]]' defaultOption="+" />
                         </li>
-                        <li><button class="option-item" id="button-decimal-places" title="Allow randomly decimal places in the task.">Decimal Places <span
-                                    class="hidden  b-label-status" id="button-decimal-places-on">on</span><span
-                                    id="button-decimal-places-off" class=" b-label-status">off</span><br /><span
-                                    class="button-sub">(random)</span></button>
+                        <li>
+                            <button-toggle configName="decimalPlacesMode" title="Allow randomly decimal places in the task." label="Decimal Places" sublabel="random" defaultOption="off" />
                         </li>
                         <li><button class="option-item" id="button-voice" title="Use voice recognition instead of keyboard input.">You can talk<span class="hidden  b-label-status" id="button-voice-on">on</span><span id="button-voice-off" class=" b-label-status">off</span><br /><span
                             class="button-sub">(use your voice)</span></button>

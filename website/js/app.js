@@ -10,6 +10,7 @@ import * as appViewInput from './modules/bunchrunner/GUI/component-view-input.js
 import * as appViewResults from './modules/bunchrunner/GUI/component-view-results.js'
 import * as appPanelBunchControl from './modules/bunchrunner/GUI/component-panel-bunch-control.js'
 import * as appButtonSelect from './modules/config/component-button-select.js'
+import * as appButtonToggle from './modules/config/component-button-toggle.js'
 import * as appSolution from './modules/bunchrunner/GUI/solution-view.js'
 import * as appDev from './modules/dev/dev-view.js'
 import * as appPage from './modules/page/page.js'
@@ -23,7 +24,6 @@ Main.init()
 appConversation.init()
 appStatistics.init()
 appSystem.init()
-appMath.init()
 appConfig.init()
 appSolution.init()
 appPage.init()

@@ -80,7 +80,7 @@ function calculateTask(config, index) {
                 f1 = Math.round(Math.random() * f1Diff) + config.numberRange1[0]
             } while (f1 % f2 == 0 || f2 % f1 == 0)
         } else {
-            f1 = lastTasks[0][0] + lastTasks[0][1]
+            f1 = roundNumber(lastTasks[0][0] + lastTasks[0][1])
             f2 = lastTasks[0][1]
         }
     } else {
@@ -94,18 +94,20 @@ function calculateTask(config, index) {
     let factor2Decimals = 0;
 
     if (config.isDecimalPlacesMode) {
-        for (let i = 0; i < a; i++) {
-            if (0 < Math.round(Math.random())) {
-                factor1Decimals++;
+        if (!config.isRacingMode || index == 0) {
+            for (let i = 0; i < f1.toString().length; i++) {
+                if (0 < Math.round(Math.random())) {
+                    factor1Decimals++;
+                }
             }
-        }
-        f1 = appMath.divideBy10(f1, factor1Decimals);
-        for (let i = 0; i < b; i++) {
-            if (0 < Math.round(Math.random())) {
-                factor2Decimals++;
+            f1 = appMath.divideBy10(f1, factor1Decimals);
+            for (let i = 0; i < f2.toString().length; i++) {
+                if (0 < Math.round(Math.random())) {
+                    factor2Decimals++;
+                }
             }
+            f2 = appMath.divideBy10(f2, factor2Decimals);
         }
-        f2 = appMath.divideBy10(f2, factor2Decimals);
     }
 
     for (let i = 19; i < lastTasks.length; i++) {
@@ -121,8 +123,13 @@ function calculateTask(config, index) {
         part2: f2,
         factor2Decimals: factor2Decimals,
         factor2StringJoined: f2.toString().split(".").join(""),
-        result: (f1 + f2)
+        result: roundNumber(f1 + f2)
     }
+}
+
+function roundNumber(number, decimals = 12) {
+    var newnumber = new Number(number + '').toFixed(parseInt(decimals));
+    return parseFloat(newnumber);
 }
 
 function taskWasPlayedBefore(f1, f2) {

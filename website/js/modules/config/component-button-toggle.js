@@ -1,4 +1,4 @@
-customElements.define('button-select', class extends HTMLElement {
+customElements.define('button-toggle', class extends HTMLElement {
 
     constructor() {
         super()
@@ -9,7 +9,6 @@ customElements.define('button-select', class extends HTMLElement {
         let title = this.getAttribute('title')
         let label = this.getAttribute('label')
         let sublabel = this.getAttribute('sublabel')
-        let options = JSON.parse(this.getAttribute('options'))
         let defaultOption = this.getAttribute('defaultOption')
 
         this.shadowRoot.innerHTML = `
@@ -24,7 +23,6 @@ customElements.define('button-select', class extends HTMLElement {
                     font-family: inherit;
                     line-height: 0.9em;
                     border: none;
-                    /* padding: 15px 32px; */
                     text-align: left;
                     text-decoration: none;
                     display: inline-block;
@@ -32,16 +30,14 @@ customElements.define('button-select', class extends HTMLElement {
                     cursor: pointer;
                     width: 100%;
                     margin-top: 5px;
-                    /* height: 3em; */
                     vertical-align: top;
                     padding: 0.4em 1em 0.4em 1em;
                     position: relative;
                 }
 
-                .status {
+                #status {
                     color: var(--theme-color-8);
                     position: relative;
-                    /* display: inline-block; */
                     float: right;
                     text-align: right;
                 }
@@ -59,8 +55,6 @@ customElements.define('button-select', class extends HTMLElement {
                     padding: 0;
                     border: none;
                     text-align: center;
-                    /* vertical-align: middle; */
-                    /* border-radius: 25px; */
                 }
 
                 #sublabel {
@@ -71,53 +65,49 @@ customElements.define('button-select', class extends HTMLElement {
                     display: inline-block;
                 }
 
-                /* hide select button arrow */
-                select {
-                    appearance: none;
-                    /* for Firefox */
-                    -moz-appearance: none;
-                    /* for Chrome */
-                    -webkit-appearance: none;
-                }
-                select::-ms-expand {
-                    /* For IE10 */
+                .hidden {
                     display: none;
                 }
 
             </style>
-            <button titel="${title}"><span id="label">${label}</span><span class="status"><select dir="rtl"></select></span><br /><span id="sublabel">(${sublabel})</span></button>
+            <button titel="${title}"><span id="label">${label}</span><span id="status"><span class="hidden" id="on">on</span><span id="off">off</span></span><br /><span id="sublabel">(${sublabel})</span></button>
         `
 
-        let inputSelect = this.shadowRoot.querySelector("select")
+        let inputButton = this.shadowRoot.querySelector('button')
+        let statusOn = this.shadowRoot.querySelector("#on")
+        let statusOff = this.shadowRoot.querySelector("#off")
 
-        options.forEach((optionConfig) => {
-            let option = document.createElement("option");
-            option.value = optionConfig[0]
-            option.text = optionConfig[1]
-            if (optionConfig.hasOwnProperty(2) && optionConfig[2] == "true") {
-                option.setAttribute("translate", "yes")
+        inputButton.addEventListener('click', function(e) {
+            let oldValue = localStorage.getItem(configName);
+            if (oldValue == 'on') {
+                localStorage.setItem(configName, 'off');
             } else {
-                option.setAttribute("translate", "no")
+                localStorage.setItem(configName, 'on');
             }
-            inputSelect.add(option);
-        })
-
-        inputSelect.addEventListener('change', (e) => {
-            let oldValue = localStorage.getItem(configName)
-            if (oldValue != inputSelect.value) {
-                localStorage.setItem(configName, inputSelect.value);
-                window.dispatchEvent(new CustomEvent('config_changed'))
-            }
-        })
+            window.dispatchEvent(new CustomEvent('config_changed'))
+        });
 
         window.addEventListener("config_changed", function(e) {
             let newValue = localStorage.getItem(configName);
             if (!newValue || newValue == '') {
                 localStorage.setItem(configName, defaultOption);
-                inputSelect.value = defaultOption
-            } else if (newValue != inputSelect.value) {
-                inputSelect.value = newValue
+                newValue = defaultOption
+            }
+            if (newValue == "on") {
+                activate();
+            } else {
+                deactivate();
             }
         })
+
+        function activate() {
+            statusOn.classList.remove("hidden");
+            statusOff.classList.add("hidden");
+        }
+
+        function deactivate() {
+            statusOn.classList.add("hidden");
+            statusOff.classList.remove("hidden");
+        }
     }
 })
