@@ -44,27 +44,16 @@
                 <div class="subpage" id="settings-basic">
                     <ul id="basic-settings-list">
                         <li>
-                            <button disabled class="option-item" title="Select your experience level.">Exercise<span
-                                class=" b-label-status"><select disabled name="exercise-selector" id="exercise-selector" class="selector config notranslate" translate="no" dir="rtl">
-                                <option value="-">-</option>
-                                <option value="random_1" selected="selected">? L1</option>
-                                <option value="random_2">? L2</option>
-                                <option value="add_race_1">++ L1</option>
-                                <option value="add_1">+ L1</option>
-                                <option value="sub_1">- L1</option>
-                                <option value="mult_1">* L1</option>
-                                <option value="div_1">/ L1</option>
-                                <option value="sound_1">S L1</option>
-                            </select></span><br /><span
-                            class="button-sub">(select configuration)</span></button>
+                            <button-select configName="selectedExercise" title="Select your experience level or global task configuration." label="Exercise" sublabel="select configuration" options='[["custom","&#8239;&#8239;&#8239;"],["random_1","? L1"],["random_2","? L2"],["add_race_1","++ L1"],["add_1","+ L1"],["sub_1","- L1"],["mult_1","* L1"],["div_1","/ L1"],["sound_1","S L1"]]'
+                                defaultOption="custom" disabled />
                         </li>
                         <li><button class="option-item" id="button-conversation" title="You can talk.">Conversation<span
                             class="hidden  b-label-status" id="button-conversation-on">on</span><span
                             id="button-conversation-off" class=" b-label-status">off</span><br /><span
                             class="button-sub">(listen & talk)</span></button>
                         </li>
-                        <li><button type="button" disabled class="option-item" id="howToUse" title="Get an introduction about the navigation and features.">How to use<br /><span
-                            class="button-sub">(Manual)</span></button>
+                        <li>
+                            <button-link disabled url="" title="Get an introduction about the navigation and features." label="Manual" sublabel="Introduction" />
                         </li>
                         <li>
                             <button class="option-item" id="button-language-selection" title="Select your language."><div id="google_translate_element"></div></button>
@@ -113,10 +102,11 @@
                         <li>
                             <button-toggle configName="hideTaskMode" title="Currently only supported during the racing mode. Hide all tasks after the first by default." label="Hide Tasks" sublabel="first task is visible" defaultOption="off" />
                         </li>
-                        <li><button disabled class="option-item" id="button-impress" title="Print legal information and credits.">Legal Notice<br /><span
-                                        class="button-sub">(Imprint)</span></button>
+                        <li>
+                            <button-link disabled url="" title="Print legal information and credits." label="Legal Notice" sublabel="Imprint" />
                         </li>
-                        <li><button class="option-item" id="button-feedback" title="Get information about how to contact.">Feedback, Bugs<br />& Support..</button>
+                        <li>
+                            <button-link url="https://paypal.me/pools/c/8pfcrOnyif" title="Get information about how to contact." label="Feedback, Bugs&lt;br /&gt;& Support.." />
                         </li>
                     </ul>
                 </div>

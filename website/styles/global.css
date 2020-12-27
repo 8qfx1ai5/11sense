@@ -220,12 +220,6 @@ select:disabled {
     color: black;
 }
 
-#exercise-selector {
-    width: 4em;
-    position: relative;
-    right: -0.2em;
-}
-
 body {
     /* hack to hide google translation top area */
     top: 0px !important;

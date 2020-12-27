@@ -11,6 +11,7 @@ import * as appViewResults from './modules/bunchrunner/GUI/component-view-result
 import * as appPanelBunchControl from './modules/bunchrunner/GUI/component-panel-bunch-control.js'
 import * as appButtonSelect from './modules/config/component-button-select.js'
 import * as appButtonToggle from './modules/config/component-button-toggle.js'
+import * as appButtonLink from './modules/config/component-button-link.js'
 import * as appSolution from './modules/bunchrunner/GUI/solution-view.js'
 import * as appDev from './modules/dev/dev-view.js'
 import * as appPage from './modules/page/page.js'

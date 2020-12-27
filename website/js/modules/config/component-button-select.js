@@ -138,6 +138,7 @@ customElements.define('button-select', class extends HTMLElement {
             } else {
                 inputSelect.selectedIndex = inputSelect.selectedIndex + 1
             }
+            inputSelect.dispatchEvent(new Event('change'))
         });
 
         inputSelect.addEventListener('click', function(e) {

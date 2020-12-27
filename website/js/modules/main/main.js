@@ -47,8 +47,4 @@ export function init() {
             appPage.enterFullscreen();
         }
     });
-
-    document.getElementById('button-feedback').addEventListener('click', function() {
-        window.open('https://paypal.me/pools/c/8pfcrOnyif')
-    })
 }
