@@ -16,16 +16,16 @@ export default class Config {
 
     constructor() {
         let defaultParams = ['number0Range', 'number1Range', 'number2Range', 'bunchSize', 'selectedOperator']
-        defaultParams.forEach((param) => {
+        for (let i = 0; i < defaultParams.length; i++) {
             // TODO: find some better way to initialize the default values
-            if (!localStorage.getItem(param)) {
+            if (!localStorage.getItem(defaultParams[i])) {
                 setTimeout(function() {
                     // wait some time and try again
                     window.dispatchEvent(new CustomEvent('config_changed'))
                 }, 500)
                 return
             }
-        })
+        }
 
         let f0 = localStorage.getItem('number0Range').split('-')
         this.numberRange0 = false
