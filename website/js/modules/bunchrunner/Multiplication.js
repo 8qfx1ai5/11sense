@@ -13,15 +13,21 @@ export default class Multiplication extends Task {
 
         this.type = '*'
         this.config = config
-        let t = calculateTask(this.config, index)
-        this.values[0] = t.factor1
-        this.values[1] = t.factor2
-        this.questionGUI = '<span class="question"><span class="value">' + formatNumberForGUI(this.values[0]) + '</span> <span class="operation">⋅</span> <span class="value">' + formatNumberForGUI(this.values[1]) + '</span></span>'
-        this.questionSUI = formatNumberForGUI(this.values[0]) + " " + appTranslation.translateForSoundOutput("multiplied by") + " " + formatNumberForGUI(this.values[1])
+        let t = calculateTask(this.config)
+        this.values[0] = t.factor0
+        this.values[1] = t.factor1
+        this.values[2] = t.factor2
+        if (config.numberRange0) {
+            this.questionGUI = '<span class="question"><span class="value">' + formatNumberForGUI(this.values[0]) + '</span> <span class="operation">+</span> <span class="value">' + formatNumberForGUI(this.values[1]) + '</span> <span class="operation">⋅</span> <span class="value">' + formatNumberForGUI(this.values[2]) + '</span></span>'
+            this.questionSUI = formatNumberForGUI(this.values[0]) + " " + appTranslation.translateForSoundOutput("plus") + " " + formatNumberForGUI(this.values[1]) + " " + appTranslation.translateForSoundOutput("multiplied by") + " " + formatNumberForGUI(this.values[2])
+        } else {
+            this.questionGUI = '<span class="question"><span class="value">' + formatNumberForGUI(this.values[1]) + '</span> <span class="operation">⋅</span> <span class="value">' + formatNumberForGUI(this.values[2]) + '</span></span>'
+            this.questionSUI = formatNumberForGUI(this.values[1]) + " " + appTranslation.translateForSoundOutput("multiplied by") + " " + formatNumberForGUI(this.values[2])
+        }
         this.answer = t.result
         this.answerGUI = '<span class="answer">' + formatNumberForGUI(t.result) + '</span>'
         this.answerSUI = formatNumberForSUI(t.result)
-        this.possiblePartialAnswers = calculateFractions(t.factor1, t.factor2)
+            // this.possiblePartialAnswers = calculateFractions(t.factor1, t.factor2)
     }
 
     isPartialSolution(input) {
@@ -75,49 +81,49 @@ function analizeSolution(task, possibleSolution) {
     return keys.join("+")
 }
 
-function calculateTask(config, index) {
+function calculateTask(config) {
 
     let f1Diff = config.numberRange1[1] - config.numberRange1[0]
     let f2Diff = config.numberRange2[1] - config.numberRange2[0]
 
+    let f0 = false
     let f1 = 0
     let f2 = 0
 
-    if (config.isRacingMode) {
-        if (index == 0) {
-            f2 = Math.round(Math.random() * f2Diff) + config.numberRange2[0]
-            do {
-                f1 = Math.round(Math.random() * f1Diff) + config.numberRange1[0]
-            } while (f1 % f2 == 0 || f2 % f1 == 0)
-        } else {
-            f1 = appMath.multiplyDecimal(lastTasks[0][0], lastTasks[0][1])
-            f2 = lastTasks[0][1]
-        }
-    } else {
-        do {
-            f1 = Math.round(Math.random() * f1Diff) + config.numberRange1[0]
-            f2 = Math.round(Math.random() * f2Diff) + config.numberRange2[0]
-        } while (taskWasPlayedBefore(f1, f2))
+
+    if (config.numberRange0) {
+        let f0Diff = config.numberRange0[1] - config.numberRange0[0]
+        f0 = Math.round(Math.random() * f0Diff) + config.numberRange0[0]
     }
 
+    do {
+        f1 = Math.round(Math.random() * f1Diff) + config.numberRange1[0]
+        f2 = Math.round(Math.random() * f2Diff) + config.numberRange2[0]
+    } while (taskWasPlayedBefore(f1, f2))
+
+    let factor0Decimals = 0;
     let factor1Decimals = 0;
     let factor2Decimals = 0;
 
     if (config.isDecimalPlacesMode) {
-        if (!config.isRacingMode || index == 0) {
-            for (let i = 0; i < f1.toString().length; i++) {
-                if (0 < Math.round(Math.random())) {
-                    factor1Decimals++;
-                }
+        for (let i = 0; i < f0.toString().length; i++) {
+            if (0 < Math.round(Math.random())) {
+                factor0Decimals++;
             }
-            f1 = appMath.divideBy10(f1, factor1Decimals);
-            for (let i = 0; i < f2.toString().length; i++) {
-                if (0 < Math.round(Math.random())) {
-                    factor2Decimals++;
-                }
-            }
-            f2 = appMath.divideBy10(f2, factor2Decimals);
         }
+        f2 = appMath.divideBy10(f2, factor2Decimals);
+        for (let i = 0; i < f1.toString().length; i++) {
+            if (0 < Math.round(Math.random())) {
+                factor1Decimals++;
+            }
+        }
+        f1 = appMath.divideBy10(f1, factor1Decimals);
+        for (let i = 0; i < f2.toString().length; i++) {
+            if (0 < Math.round(Math.random())) {
+                factor2Decimals++;
+            }
+        }
+        f2 = appMath.divideBy10(f2, factor2Decimals);
     }
 
     for (let i = 19; i < lastTasks.length; i++) {
@@ -126,15 +132,27 @@ function calculateTask(config, index) {
 
     lastTasks.unshift([f1, f2]);
 
+    let result = appMath.multiplyDecimal(f1, f2)
+    if (f0) {
+        result = roundNumber(f0 + result)
+    }
+
     return {
+        factor0: f0,
+        factor0StringJoined: f0.toString().split(".").join(""),
         factor1: f1,
         factor1Decimals: factor1Decimals,
         factor1StringJoined: f1.toString().split(".").join(""),
         factor2: f2,
         factor2Decimals: factor2Decimals,
         factor2StringJoined: f2.toString().split(".").join(""),
-        result: appMath.multiplyDecimal(f1, f2)
+        result: result
     }
+}
+
+function roundNumber(number, decimals = 12) {
+    var newnumber = new Number(number + '').toFixed(parseInt(decimals));
+    return parseFloat(newnumber);
 }
 
 function calculateFractions(factor1, factor2) {

@@ -5,6 +5,7 @@ export default class Config {
     solutionGuideTime = 10000
     autoTaskTime = 5000
     language = "de"
+    numberRange0 = [2, 10] // or false
     numberRange1 = [2, 10]
     numberRange2 = [2, 10]
     isDecimalPlacesMode = false
@@ -14,12 +15,22 @@ export default class Config {
     isHideTaskModeActive = false
 
     constructor() {
-        if (!localStorage.getItem('number1Range') || !localStorage.getItem('number2Range') || !localStorage.getItem('bunchSize') || !localStorage.getItem('selectedOperator')) {
-            setTimeout(function() {
-                // wait until the config is initialized
-                window.dispatchEvent(new CustomEvent('config_changed'))
-            }, 500)
-            return
+        let defaultParams = ['number0Range', 'number1Range', 'number2Range', 'bunchSize', 'selectedOperator']
+        defaultParams.forEach((param) => {
+            // TODO: find some better way to initialize the default values
+            if (!localStorage.getItem(param)) {
+                setTimeout(function() {
+                    // wait some time and try again
+                    window.dispatchEvent(new CustomEvent('config_changed'))
+                }, 500)
+                return
+            }
+        })
+
+        let f0 = localStorage.getItem('number0Range').split('-')
+        this.numberRange0 = false
+        if (1 < f0.length) {
+            this.numberRange0 = [parseInt(f0[0], 10), parseInt(f0[1], 10)]
         }
         let f1 = localStorage.getItem('number1Range').split('-')
         this.numberRange1 = [parseInt(f1[0], 10), parseInt(f1[1], 10)]
