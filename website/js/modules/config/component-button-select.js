@@ -11,6 +11,7 @@ customElements.define('button-select', class extends HTMLElement {
         let sublabel = this.getAttribute('sublabel')
         let options = JSON.parse(this.getAttribute('options'))
         let defaultOption = this.getAttribute('defaultOption')
+        let isDisabled = this.hasAttribute('disabled')
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -40,6 +41,12 @@ customElements.define('button-select', class extends HTMLElement {
                 button:focus,
                 select:focus {
                     outline: none;
+                }
+
+                .disabled {
+                    color: black;
+                    text-decoration: line-through !important;
+                    -webkit-tap-highlight-color: transparent;
                 }
 
                 #status {
@@ -101,6 +108,7 @@ customElements.define('button-select', class extends HTMLElement {
 
         let inputButton = this.shadowRoot.querySelector("button")
         let inputSelect = this.shadowRoot.querySelector("select")
+        let labelSpan = this.shadowRoot.querySelector("#label")
 
         options.forEach((optionConfig) => {
             let option = document.createElement("option");
@@ -115,10 +123,26 @@ customElements.define('button-select', class extends HTMLElement {
             inputSelect.add(option)
         })
 
+        if (isDisabled) {
+            inputButton.setAttribute("disabled", "disabled")
+            inputButton.classList.add("disabled")
+            inputSelect.setAttribute("disabled", "disabled")
+            inputSelect.classList.add("disabled")
+            labelSpan.classList.add("disabled")
+        }
+
         inputButton.addEventListener('click', function(e) {
             e.preventDefault()
-            inputSelect.focus()
-            inputSelect.click()
+            if (inputSelect.options.length - 1 <= inputSelect.selectedIndex) {
+                inputSelect.selectedIndex = 0
+            } else {
+                inputSelect.selectedIndex = inputSelect.selectedIndex + 1
+            }
+        });
+
+        inputSelect.addEventListener('click', function(e) {
+            e.preventDefault()
+            e.stopPropagation()
         });
 
         inputSelect.addEventListener('change', (e) => {

@@ -10,6 +10,7 @@ customElements.define('button-toggle', class extends HTMLElement {
         let label = this.getAttribute('label')
         let sublabel = this.getAttribute('sublabel')
         let defaultOption = this.getAttribute('defaultOption')
+        let isDisabled = this.hasAttribute('disabled')
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -39,26 +40,17 @@ customElements.define('button-toggle', class extends HTMLElement {
                     outline: none;
                 }
 
+                .disabled {
+                    color: black;
+                    text-decoration: line-through !important;
+                    -webkit-tap-highlight-color: transparent;
+                }
+
                 #status {
                     color: var(--theme-color-8);
                     position: relative;
                     float: right;
                     text-align: right;
-                }
-
-                select {
-                    width: 4em;
-                    height: 2em;
-                    position: relative;
-                    right: -0.2em;
-                    background-color: var(--theme-color-7);
-                    font-family: inherit;
-                    font-size: inherit;
-                    color: var(--theme-color-8);
-                    display: inline-block;
-                    padding: 0;
-                    border: none;
-                    text-align: center;
                 }
 
                 #sublabel {
@@ -88,6 +80,15 @@ customElements.define('button-toggle', class extends HTMLElement {
         let inputButton = this.shadowRoot.querySelector('button')
         let statusOn = this.shadowRoot.querySelector("#on")
         let statusOff = this.shadowRoot.querySelector("#off")
+        let labelSpan = this.shadowRoot.querySelector("#label")
+
+        if (isDisabled) {
+            inputButton.setAttribute("disabled", "disabled")
+            inputButton.classList.add("disabled")
+            statusOn.classList.add("disabled")
+            statusOff.classList.add("disabled")
+            labelSpan.classList.add("disabled")
+        }
 
         inputButton.addEventListener('click', function(e) {
             let oldValue = localStorage.getItem(configName);
