@@ -84,9 +84,8 @@ export function init() {
 
     let headerMain = document.getElementById(tagIdHeaderMain);
     headerMain.addEventListener('click', function(e) {
-        if (e.detail >= 8) {
+        if (e.detail == 8) {
             toggleDeveloperMode();
-            alert('Mode switched.');
         }
     });
 
@@ -98,9 +97,8 @@ export function init() {
             return;
         }
         devModeClickCounter++;
-        if (8 <= devModeClickCounter) {
+        if (devModeClickCounter == 8) {
             toggleDeveloperMode();
-            alert('Mode switched.');
             devModeClickCounter = 0;
             devModeClickCounterStart = 0;
         }
