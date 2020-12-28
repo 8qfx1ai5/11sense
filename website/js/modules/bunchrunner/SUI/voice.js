@@ -13,8 +13,7 @@ let mediaStreamObject = null
 let mobileSoundDetectionInterval = null
 
 let isVoiceTechEndless = true
-let voiceTechIsEndlessLocalStorageKey = "voice-tech"
-let tagIdButtonVoiceTech = "button-voice-tech"
+let voiceTechLocalStorageKey = "speechRecognitionMode"
 
 let tagIdButtonVoice = "button-voice"
 
@@ -532,31 +531,16 @@ function setStatusPlaceholder() {
     // Main.currentSolution.placeholder = "="
 }
 
-function toggleVoiceTech() {
-    if (isVoiceTechEndless) {
-        setVoiceTechNoise()
-    } else {
-        setVoiceTechEndless()
-    }
-}
-
-function setVoiceTechEndless() {
-    isVoiceTechEndless = true
-    localStorage.setItem(voiceTechIsEndlessLocalStorageKey, true)
-    document.getElementById(tagIdButtonVoiceTech + "-endless").classList.remove("hidden")
-    document.getElementById(tagIdButtonVoiceTech + "-noise").classList.add("hidden")
-    deactivateVoiceMode()
-}
-
-function setVoiceTechNoise() {
-    isVoiceTechEndless = false
-    localStorage.setItem(voiceTechIsEndlessLocalStorageKey, false)
-    document.getElementById(tagIdButtonVoiceTech + "-endless").classList.add("hidden")
-    document.getElementById(tagIdButtonVoiceTech + "-noise").classList.remove("hidden")
-    deactivateVoiceMode()
-}
-
 export function init() {
+
+    window.addEventListener('config_changed', function(e) {
+        let newVoiceTechMode = localStorage.getItem(voiceTechLocalStorageKey)
+        if (!newVoiceTechMode || newVoiceTechMode == "" || newVoiceTechMode == "endless") {
+            isVoiceTechEndless = true
+        } else {
+            isVoiceTechEndless = false
+        }
+    })
 
     window.addEventListener('bunch-action-solution-found', function(e) {
         // workaround to omit mobile beeps as mutch as possible
@@ -592,10 +576,6 @@ export function init() {
         }
     })
 
-    document.getElementById(tagIdButtonVoiceTech).addEventListener('click', function(e) {
-        toggleVoiceTech()
-    })
-
     appSystem.events.addEventListener('speak-before', function(e) {
         if (isActive) {
             abortRecognition()
@@ -621,13 +601,5 @@ export function init() {
     })
 
     document.getElementById(tagIdButtonVoice).addEventListener('click', toggleVoiceMode)
-        // document.getElementById('solution').addEventListener('click', startRecognition)
 
-    // if (localStorage.getItem(voiceTechIsEndlessLocalStorageKey)) {
-    //     isVoiceTechEndless = !localStorage.getItem(voiceTechIsEndlessLocalStorageKey)
-    // } else {
-    //     isVoiceTechEndless = !appPage.isDesktopMode()
-    // }
-    isVoiceTechEndless = false
-    toggleVoiceTech()
 }

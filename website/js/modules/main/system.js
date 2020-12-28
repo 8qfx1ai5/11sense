@@ -1,8 +1,7 @@
-export let isLoggingMode = false;
 let loggingMax = 99;
-let logLevel = 1;
+let logLevel = 4;
+let logLevelLocalStorageKey = "logLevel"
 let loggingLocalStorageKey = "debugLog"
-let tagIdLoggingButton = 'button-logging'
 
 /*
     log levels:
@@ -11,7 +10,7 @@ let tagIdLoggingButton = 'button-logging'
     3. only verry important things
 */
 export function log(s, l = 3, onlySingleLog = false) {
-    if (isLoggingMode && logLevel <= l) {
+    if (logLevel <= l) {
         switch (onlySingleLog) {
             case "console":
                 console.log(s);
@@ -68,34 +67,22 @@ let SysEvents = function(options) {
     }
 }
 
-export function toggleLoggingMode() {
-    if (isLoggingMode) {
-        deactivateLoggingMode();
-    } else {
-        activateLoggingMode();
-    }
-}
-
-function activateLoggingMode() {
-    isLoggingMode = true;
-    localStorage.setItem('isLoggingMode', true);
-    document.getElementById(tagIdLoggingButton + "-on").classList.remove("hidden");
-    document.getElementById(tagIdLoggingButton + "-off").classList.add("hidden");
-    log("activate logging");
-}
-
-function deactivateLoggingMode() {
-    log("deactivate logging");
-    isLoggingMode = false;
-    localStorage.setItem('isLoggingMode', false);
-    document.getElementById(tagIdLoggingButton + "-on").classList.add("hidden");
-    document.getElementById(tagIdLoggingButton + "-off").classList.remove("hidden");
-}
-
 export let events = new SysEvents()
 
 export function init() {
-    isLoggingMode = localStorage.getItem('isLoggingMode') != "true";
+
+    window.addEventListener('config_changed', function(e) {
+        let newLogLevel = localStorage.getItem(logLevelLocalStorageKey)
+        if (!newLogLevel || newLogLevel == "") {
+            logLevel = 3
+        } else {
+            newLogLevel = parseInt(newLogLevel, 10)
+            if (newLogLevel !== logLevel) {
+                log(`change log level to ${newLogLevel}`, 2);
+            }
+            logLevel = newLogLevel
+        }
+    })
 
     // log all errors
     window.onerror = function(errorMsg, url, lineNumber, column, errorObj) {
@@ -113,10 +100,4 @@ export function init() {
         );
     });
 
-    localStorage.setItem('isLoggingMode', "true");
-    toggleLoggingMode();
-
-    document.getElementById(tagIdLoggingButton).addEventListener('click', function(e) {
-        toggleLoggingMode();
-    });
 }

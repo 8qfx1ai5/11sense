@@ -15,7 +15,7 @@ function toggleDeveloperMode() {
 }
 
 function activateDeveloperMode() {
-    appSystem.log("activate dev mode");
+    appSystem.log("activate dev mode", 1);
     isDeveloperMode = true;
     localStorage.setItem('isDeveloperMode', true);
 
@@ -34,7 +34,7 @@ function activateDeveloperMode() {
 }
 
 function deactivateDeveloperMode() {
-    appSystem.log("deactivate dev mode");
+    appSystem.log("deactivate dev mode", 1);
     isDeveloperMode = false;
     localStorage.setItem('isDeveloperMode', false);
 
