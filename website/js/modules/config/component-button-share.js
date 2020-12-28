@@ -11,8 +11,8 @@ customElements.define('button-share', class extends HTMLElement {
         let label = this.getAttribute('label')
         let sublabel = this.getAttribute('sublabel')
         let isDisabled = this.hasAttribute('disabled')
-        let shareHeadline = this.hasAttribute('shareHeadline')
-        let shareText = this.hasAttribute('shareText')
+        let shareHeadline = this.getAttribute('shareHeadline')
+        let shareText = this.getAttribute('shareText')
 
         this.shadowRoot.innerHTML = `
             <style>
