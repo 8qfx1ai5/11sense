@@ -91,7 +91,7 @@ customElements.define('button-share', class extends HTMLElement {
                 .then(() => appSystem.log("Successful shared"), 2)
                 .catch(err => {
                     appSystem.log(err, 2, "console")
-                    appSystem.log(err.error, 2, "app")
+                    appSystem.log(err.text, 2, "app")
                 })
         })
     }
