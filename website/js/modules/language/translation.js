@@ -8,6 +8,10 @@ export function getSelectedLanguage() {
     return "en-US"
 }
 
+export function isSelectedLanguageGerman() {
+    return getSelectedLanguage() == "de-DE"
+}
+
 export function setSelectedLanguage(l) {
     let languageSelector = document.getElementsByClassName("goog-te-combo");
     if (0 < languageSelector.length) {

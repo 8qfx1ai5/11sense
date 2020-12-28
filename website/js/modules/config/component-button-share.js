@@ -1,4 +1,5 @@
 import * as appSystem from '../main/system.js'
+import * as appTranslation from '../language/translation.js'
 
 customElements.define('button-share', class extends HTMLElement {
 
@@ -11,8 +12,6 @@ customElements.define('button-share', class extends HTMLElement {
         let label = this.getAttribute('label')
         let sublabel = this.getAttribute('sublabel')
         let isDisabled = this.hasAttribute('disabled')
-        let shareHeadline = this.getAttribute('shareHeadline')
-        let shareText = this.getAttribute('shareText')
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -77,6 +76,12 @@ customElements.define('button-share', class extends HTMLElement {
         }
 
         inputButton.addEventListener('click', function(e) {
+            let shareHeadline = 'The new "11. Sense" learning App'
+            let shareText = "Check this out:"
+            if (appTranslation.isSelectedLanguageGerman()) {
+                shareHeadline = 'Die neue "11. Sense" lern App'
+                shareText = "Sieh dir das mal an:"
+            }
             navigator
                 .share({
                     title: shareHeadline,
