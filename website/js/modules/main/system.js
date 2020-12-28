@@ -11,6 +11,7 @@ let loggingLocalStorageKey = "debugLog"
 */
 export function log(s, l = 3, onlySingleLog = false) {
     if (logLevel <= l) {
+        // TODO: switch by objects like error and do intelligent stuff
         switch (onlySingleLog) {
             case "console":
                 console.log(s);

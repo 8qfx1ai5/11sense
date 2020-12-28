@@ -55,9 +55,23 @@ customElements.define('button-share', class extends HTMLElement {
                     display: inline-block;
                 }
 
+                #status {
+                    color: var(--theme-color-8);
+                    position: relative;
+                    float: right;
+                    text-align: right;
+                    opacity: 1;
+                }
+
+                .hidden {
+                    transition: 2s linear opacity;
+                    opacity: 0 !important;
+                }
+
             </style>
             <button title="${title}">
                 <span id="label">${label}</span>
+                <span id="status" class="hidden">Copied</span>
                 <br />
                 <span id="sublabel">(${sublabel})</span>
             </button>
@@ -66,8 +80,9 @@ customElements.define('button-share', class extends HTMLElement {
         let inputButton = this.shadowRoot.querySelector('button')
         let labelSpan = this.shadowRoot.querySelector('#label')
         let sublabelSpan = this.shadowRoot.querySelector('#sublabel')
+        let statusSpan = this.shadowRoot.querySelector('#status')
 
-        if (isDisabled || !("share" in navigator)) {
+        if (isDisabled || (!("share" in navigator) && !("clipboard" in navigator))) {
             // TODO: provide an alternative for sharing without navigator
             inputButton.setAttribute("disabled", "disabled")
             inputButton.classList.add("disabled")
@@ -76,23 +91,40 @@ customElements.define('button-share', class extends HTMLElement {
         }
 
         inputButton.addEventListener('click', function(e) {
-            let shareHeadline = 'The new "11. Sense" learning App'
-            let shareText = "Check this out:"
+            let shareHeadline = "Check this out"
+            let shareText = 'Found something new: the "11. Sense" learn App \n'
+            let shareURL = window.location.origin
             if (appTranslation.isSelectedLanguageGerman()) {
-                shareHeadline = 'Die neue "11. Sense" lern App'
-                shareText = "Sieh dir das mal an:"
+                shareHeadline = "Sieh dir das mal an"
+                shareText = 'Hab was Neues gefunden: die "11. Sense" lern App \n'
             }
-            navigator
-                .share({
-                    title: shareHeadline,
-                    text: shareText,
-                    url: window.location.origin
-                })
-                .then(() => appSystem.log("Successful shared"), 2)
-                .catch(err => {
-                    appSystem.log(err, 2, "console")
-                    appSystem.log(err.name + ': ' + err.message, 2, "app")
-                })
+            if ("share" in navigator) {
+                navigator
+                    .share({
+                        title: shareHeadline,
+                        text: shareText,
+                        url: shareURL
+                    })
+                    .then(() => appSystem.log("Successfully shared"), 2)
+                    .catch(err => {
+                        appSystem.log(err, 2, "console")
+                        appSystem.log(err.name + ': ' + err.message, 2, "app")
+                    })
+            } else if ("clipboard" in navigator) {
+                let text = `${shareText}${shareURL}`
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        appSystem.log('Successfully shared by copy to clipboard')
+                        statusSpan.classList.remove("hidden")
+                        setTimeout(function() {
+                            statusSpan.classList.add("hidden")
+                        }, 1000)
+                    })
+                    .catch(err => {
+                        appSystem.log(err, 2, "console")
+                        appSystem.log(err.name + ': ' + err.message, 2, "app")
+                    })
+            }
         })
     }
 })
