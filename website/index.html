@@ -56,8 +56,7 @@
                             <button-link disabled url="" title="Get an introduction about the navigation and features." label="Manual" sublabel="Introduction" />
                         </li>
                         <li>
-                            <button-action code='if ("share" in navigator) {navigator.share({ title: "New \"" + document.title + "\" learning App", text: "Check this out:", url: window.location.origin }) .then(() => console.log("Successful share! 🎉 ")) .catch(err => console.error(err));}else{console.error("sharing failed")}'
-                                title="Share this app with your frinds and family." label="Share with friends" sublabel="on social media" />
+                            <button-share title="Share this app with your frinds and family." label="Share with friends" sublabel="on social media" shareHeadline='New "11. Sense" learning App' shareText='Check this out:' />
                         </li>
                         <li>
                             <button class="option-item" id="button-language-selection" title="Select your language."><div id="google_translate_element"></div></button>
