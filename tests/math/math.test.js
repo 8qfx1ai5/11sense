@@ -1,4 +1,4 @@
-const m = require("../../website/js/math/math");
+const m = require("../../website/app/js/math/math");
 
 let fFData = [
     [0.5, 0.03, [
