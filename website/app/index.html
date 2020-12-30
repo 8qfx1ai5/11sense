@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-language" content="en" />
+    <title translate="no" class="notranslate">11. Sense</title>
+    <link rel="shortcut icon" type="image/png" href="img/settings.png" />
+    <link rel="stylesheet" type="text/css" href="styles/global.css" />
+    <link rel="stylesheet" type="text/css" href="styles/mobile.css" media="screen and (max-width: 649px)" />
+    <link rel="stylesheet" type="text/css" href="styles/tablet.css" media="screen and (min-width: 650px) and (max-width: 1299px)" />
+    <link rel="stylesheet" type="text/css" href="styles/desktop.css" media='screen and (min-width: 1300px)' />
+    <link rel="stylesheet" type="text/css" href="styles/themes/dark.css" />
+    <link rel="manifest" href="manifest.webmanifest">
+</head>
+
+
+<body translate="yes">
+    <div id="wrapper">
+        <header id="header">
+            <div id="header-main" class="dev-change">
+                <h1 id="mainPageTrigger" translate="no" class="notranslate">11. Sense</h1>
+                <p id="mainPageTriggerSubheadding"><span class="notranslate">Discover</span> ♡ <span class="notranslate">Learning</span></p>
+            </div>
+            <figure id="header-left" class="inactive-page-icon">
+                <img id="stats-image" alt="Statistics" src="img/stats_100x100.png" />
+            </figure>
+            <figure id="header-right" class="inactive-page-icon">
+                <img id="settings-image" alt="Settings" src="img/settings_200x200b.png" />
+            </figure>
+        </header>
+        <div id="content">
+            <div id="Solution" style="display: none;">
+                <h2>Solutions</h2>
+                <h3 id="Solution-task" translate="no" class="notranslate"></h3>
+                <p id="partial-solutions" translate="no" class="notranslate"></p>
+            </div>
+            <div id="nav" class="hidden page">
+                <h2><select name="settings-selector" id="settings-selector" class="selector dev-change">
+                    <option value="settings-basic">Basic Settings</option>
+                    <option value="settings-advanced" >More Settings</option>
+                    <option value="settings-dev" class="hidden dev-hidden" >Development</option>
+                </select></h2>
+                <div class="subpage" id="settings-basic">
+                    <ul id="basic-settings-list">
+                        <li>
+                            <button-select configName="selectedExercise" title="Select your experience level or global task configuration." label="Exercise" sublabel="select configuration" options='[["custom","&#8239;&#8239;&#8239;"],["random_1","? L1"],["random_2","? L2"],["add_race_1","++ L1"],["add_1","+ L1"],["sub_1","- L1"],["mult_1","* L1"],["div_1","/ L1"],["sound_1","S L1"]]'
+                                defaultOption="custom" disabled />
+                        </li>
+                        <li><button class="option-item" id="button-conversation" title="You can talk.">Conversation<span
+                            class="hidden  b-label-status" id="button-conversation-on">on</span><span
+                            id="button-conversation-off" class=" b-label-status">off</span><br /><span
+                            class="button-sub">(listen & talk)</span></button>
+                        </li>
+                        <li>
+                            <button-link disabled url="" title="Get an introduction about the navigation and features." label="Manual" sublabel="Introduction" />
+                        </li>
+                        <li>
+                            <button-share title="Share this app with your frinds and family." label="Share with friends" sublabel="on social media" />
+                        </li>
+                        <li>
+                            <button class="option-item" id="button-language-selection" title="Select your language."><div id="google_translate_element"></div></button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="subpage" id="settings-advanced">
+                    <ul id="advanced-settings-list">
+                        <li>
+                            <button-select configName="selectedOperator" title="This selection defined the type of tasks." label="Operator" sublabel="+,-,*, ..." options='[["+","+"],["*","*"]]' defaultOption="+" />
+                        </li>
+                        <li>
+                            <button-toggle configName="decimalPlacesMode" title="Allow randomly decimal places in the task." label="Decimal Places" sublabel="random" defaultOption="off" />
+                        </li>
+                        <!-- <li>
+                            <button-toggle configName="voiceMode" title="Use voice recognition instead of keyboard input." label="You can talk" sublabel="use your voice" defaultOption="off" />
+                        </li> -->
+                        <li><button class="option-item" id="button-voice" title="Use voice recognition instead of keyboard input.">You can talk<span class="hidden  b-label-status" id="button-voice-on">on</span><span id="button-voice-off" class=" b-label-status">off</span><br /><span
+                            class="button-sub">(use your voice)</span></button>
+                        </li>
+                        <li><button class="option-item" id="button-sound" title="Use audio output for tasks and status feedback.">You can listen<span class="hidden  b-label-status" id="sound-button-on">on</span><span id="sound-button-off" class=" b-label-status">off</span><br /><span class="button-sub">(get audio feedback)</span></button>
+                        </li>
+                        <li>
+                            <button-select configName="breakTimeout" title="The time in seconds after a finished task until the next task will be started automatically." label="Break Length" sublabel="between tasks in sec." options='[["0","0"],["1","1"],["2","2"],["5","5"],["10","10"],["15","15"],["20","20"],["25","25"],["30","30"],["∞","∞"]]'
+                                defaultOption="5" />
+                        </li>
+                        <li>
+                            <button-select configName="solutionGuideTimeout" title="The time in seconds to provide a solution until the answer is guided." label="Time Limit" sublabel="in seconds" options='[["off","off","true"],["5","5"],["6","6"],["7","7"],["8","8"],["9","9"],["10","10"],["15","15"],["20","20"],["25","25"],["30","30"],["60","60"],["120","120"],["180","180"]]'
+                                defaultOption="15" />
+                        </li>
+                        <li>
+                            <button-select configName="number0Range" title="The range of the base number." label="Number 0" sublabel="Defines the value range" options='[["off","off","true"],["2-10","2-10"],["11-20","11-20"],["21-30","21-30"],["31-40","31-40"],["41-50","41-50"],["11-50","11-50"],["51-99","51-99"],["11-99","11-99"],["99-299","99-299"],["99-999","99-999"]]'
+                                defaultOption="off" />
+                        </li>
+                        <li>
+                            <button-select configName="number1Range" title="The range of the first number." label="Number 1" sublabel="Defines the value range" options='[["2-10","2-10"],["11-20","11-20"],["21-30","21-30"],["31-40","31-40"],["41-50","41-50"],["11-50","11-50"],["51-99","51-99"],["11-99","11-99"],["99-299","99-299"],["99-999","99-999"]]'
+                                defaultOption="2-10" />
+                        </li>
+                        <li>
+                            <button-select configName="number2Range" title="The range of the first number." label="Number 2" sublabel="Defines the value range" options='[["2-10","2-10"],["11-20","11-20"],["21-30","21-30"],["31-40","31-40"],["41-50","41-50"],["11-50","11-50"],["51-99","51-99"],["11-99","11-99"],["99-299","99-299"],["99-999","99-999"]]'
+                                defaultOption="2-10" />
+                        </li>
+                        <li>
+                            <button-select configName="bunchSize" title="Select the number of tasks you need to solve together in an amount of time to succeed." label="Bunch Size" sublabel="number of tasks" options='[["1","1"],["5","5"],["10","10"],["15","15"],["20","20"],["25","25"],["30","30"],["40","40"],["50","50"],["60","60"],["80","80"],["100","100"]]'
+                                defaultOption="10" />
+                        </li>
+                        <li>
+                            <button-toggle configName="racingMode" title="Activate or deactivate the racing mode, so the following task continues at the result of the previous one." label="Racing Mode" sublabel="continue at result" defaultOption="off" />
+                        </li>
+                        <li>
+                            <button-toggle configName="hideTaskMode" title="Currently only supported during the racing mode. Hide all tasks after the first by default." label="Hide Tasks" sublabel="first task is visible" defaultOption="off" />
+                        </li>
+                        <li>
+                            <button-link disabled url="" title="Print legal information and credits." label="Imprint" sublabel="Legal Notice" />
+                        </li>
+                        <li>
+                            <button-link url="https://paypal.me/pools/c/8pfcrOnyif" title="Get information about how to contact." label="Support, Feedback &lt;br /&gt;& report bugs.." />
+                        </li>
+                    </ul>
+                </div>
+                <div class="subpage hidden" id="settings-dev">
+                    <ul id="dev-settings-list" class="subpage">
+                        <li>
+                            <button-select configName="logLevel" title="Select the log level for debugging." label="Log Level" sublabel="for debugging" options='[["4","off"],["3","error"],["2","default"],["1","verbose"]]' defaultOption="3" />
+                        </li>
+                        <li>
+                            <button-select disabled configName="speechRecognitionMode" title="Switch between types of the speech recognition loop." label="Voice Rec." sublabel="select a mode" options='[["endless","∞"],["noise","NOISE"]]' defaultOption="endless" />
+                        </li>
+                        <li>
+                            <button-action code="localStorage.clear();location.reload()" title="Delete all stored configuration and training progress." label="Reset page &#x26A0;" sublabel="DELETE ALL local information" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="stats" class="hidden page">
+                <h2><select name="display-selector" id="display-selector" class="selector dev-change">
+                    <option value="stats-history">History</option>
+                    <option value="stats-loggings" class="hidden dev-hidden" >Loggings</option>
+                </select></h2>
+                <div class="subpage" id="stats-history">
+                    <h3>Your last results:</h3>
+                    <ol reversed id="history-list" translate="no" class="notranslate">
+
+                    </ol>
+                </div>
+                <div class="subpage hidden" id="stats-loggings">
+                    <h3>The last logging entries:</h3>
+                    <ol reversed id="logging-list" translate="no" class="notranslate">
+
+                    </ol>
+                </div>
+            </div>
+            <div id="trainer-page" class="page">
+                <section id="task" translate="no" class="notranslate">
+                    <panel-bunch-control></panel-bunch-control>
+                    <view-input></view-input>
+                    <view-task></view-task>
+                    <view-task-vertical></view-task-vertical>
+                </section>
+                <view-results></view-results>
+                <section id="clipboard"></section>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        window.addEventListener("load", () => {
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => console.log('Service worker successfully registered for ' + registration.scope))
+                    .catch(err => console.log('Service worker registration failed: ' + err));
+            }
+        });
+    </script>
+    <script type="module" src="js/app.js"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                // pageLanguage: 'en',
+                includedLanguages: "de,en",
+                defaultlanguage: "en"
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+
+</html>
