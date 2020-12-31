@@ -34,11 +34,15 @@ export default class State {
         return this.currentTaskIndex === 0
     }
 
+    isLastTask() {
+        return this.currentTaskIndex === this.taskList.length - 1
+    }
+
     isActiveTask() {
-        let nextTask = this.getTask(this.currentTaskIndex + 1)
-        if (!nextTask) {
+        if (this.isLastTask()) {
             return this.getTask().isRunning()
         }
+        let nextTask = this.getLastTask()
         return !nextTask.isRunning() && nextTask.isNew()
     }
 

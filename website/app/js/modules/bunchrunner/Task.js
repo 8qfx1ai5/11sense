@@ -39,11 +39,15 @@ export default class Task {
     }
 
     isNew() {
-        return !this.isSolved && !this.wasPaused && !this.wasSkipped && !this.wasTimedOut
+        return !this.isClosed()
     }
 
     isRunning() {
         return this.startTime && this.isNew()
+    }
+
+    isClosed() {
+        return this.isSolved || this.wasSkipped || this.wasTimedOut
     }
 
     getLastAnswer() {

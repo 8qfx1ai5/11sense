@@ -93,7 +93,7 @@ customElements.define('button-share', class extends HTMLElement {
         inputButton.addEventListener('click', function(e) {
             let shareHeadline = "Check this out"
             let shareText = 'Found something new: the "11. Sense" learn App \n'
-            let shareURL = window.location.origin
+            let shareURL = window.location.href
             if (appTranslation.isSelectedLanguageGerman()) {
                 shareHeadline = "Sieh dir das mal an"
                 shareText = 'Hab was Neues gefunden: die "11. Sense" lern App \n'
