@@ -1,5 +1,128 @@
 import * as appSystem from '../main/system.js'
 
+let preconfiguredLevels = {
+
+    "add_race_1": {
+        "solutionGuideTime": false,
+        "autoTaskTime": 0,
+        "numberRange0": false,
+        "numberRange1": [2, 10],
+        "numberRange2": [2, 10],
+        "isDecimalPlacesMode": false,
+        "isRacingMode": true,
+        "bunchSize": 10,
+        "operator": '+',
+        "isHideTaskModeActive": false,
+        "title": "Title",
+        "desciption": "Description",
+        "successTime": 100000,
+        "successMessage": "Well done. If you feel comfortable, you should level up.",
+        "failureMessage": "There is a lot of potential. Continue training and you will grow and rise.",
+    },
+    "add_race_2": {
+        "solutionGuideTime": false,
+        "autoTaskTime": 0,
+        "numberRange0": false,
+        "numberRange1": [2, 10],
+        "numberRange2": [2, 10],
+        "isDecimalPlacesMode": false,
+        "isRacingMode": true,
+        "bunchSize": 10,
+        "operator": '+',
+        "isHideTaskModeActive": true,
+        "title": "Title",
+        "desciption": "Description",
+        "successTime": 100000,
+        "successMessage": "Well done. If you feel comfortable, you should level up.",
+        "failureMessage": "There is a lot of potential. Continue training and you will grow and rise.",
+    },
+    "add_race_3": {
+        "solutionGuideTime": false,
+        "autoTaskTime": 0,
+        "numberRange0": false,
+        "numberRange1": [99, 999],
+        "numberRange2": [2, 10],
+        "isDecimalPlacesMode": false,
+        "isRacingMode": true,
+        "bunchSize": 10,
+        "operator": '+',
+        "isHideTaskModeActive": true,
+        "title": "Title",
+        "desciption": "Description",
+        "successTime": 100000,
+        "successMessage": "Well done. If you feel comfortable, you should level up.",
+        "failureMessage": "There is a lot of potential. Continue training and you will grow and rise.",
+    },
+    "add_race_4": {
+        "solutionGuideTime": false,
+        "autoTaskTime": 0,
+        "numberRange0": false,
+        "numberRange1": [2, 10],
+        "numberRange2": [11, 20],
+        "isDecimalPlacesMode": false,
+        "isRacingMode": true,
+        "bunchSize": 10,
+        "operator": '+',
+        "isHideTaskModeActive": true,
+        "title": "Title",
+        "desciption": "Description",
+        "successTime": 100000,
+        "successMessage": "Well done. If you feel comfortable, you should level up.",
+        "failureMessage": "There is a lot of potential. Continue training and you will grow and rise.",
+    },
+    "add_race_5": {
+        "solutionGuideTime": false,
+        "autoTaskTime": 0,
+        "numberRange0": false,
+        "numberRange1": [99, 999],
+        "numberRange2": [11, 20],
+        "isDecimalPlacesMode": false,
+        "isRacingMode": true,
+        "bunchSize": 10,
+        "operator": '+',
+        "isHideTaskModeActive": true,
+        "title": "Title",
+        "desciption": "Description",
+        "successTime": 100000,
+        "successMessage": "Well done. If you feel comfortable, you should level up.",
+        "failureMessage": "There is a lot of potential. Continue training and you will grow and rise.",
+    },
+    "add_1": {
+        "solutionGuideTime": 20000,
+        "autoTaskTime": 3000,
+        "numberRange0": false,
+        "numberRange1": [2, 10],
+        "numberRange2": [2, 10],
+        "isDecimalPlacesMode": false,
+        "isRacingMode": false,
+        "bunchSize": 10,
+        "operator": '+',
+        "isHideTaskModeActive": false,
+        "title": "Title",
+        "desciption": "Description",
+        "successTime": 100000,
+        "successMessage": "Well done. If you feel comfortable, you should level up.",
+        "failureMessage": "There is a lot of potential. Continue training and you will grow and rise.",
+    },
+    "mult_1": {
+        "solutionGuideTime": 20000,
+        "autoTaskTime": 5000,
+        "numberRange0": false,
+        "numberRange1": [2, 10],
+        "numberRange2": [2, 10],
+        "isDecimalPlacesMode": false,
+        "isRacingMode": false,
+        "bunchSize": 10,
+        "operator": '*',
+        "isHideTaskModeActive": false,
+        "title": "Title",
+        "desciption": "Description",
+        "successTime": 100000,
+        "successMessage": "Well done. If you feel comfortable, you should level up.",
+        "failureMessage": "There is a lot of potential. Continue training and you will grow and rise.",
+    }
+}
+
 export default class Config {
     configID = false
     solutionGuideTime = 10000
@@ -13,6 +136,11 @@ export default class Config {
     bunchSize = 10
     operator = '+'
     isHideTaskModeActive = false
+    title = "Custom Mode"
+    desciption = "We use your manual configuration.\n(You can change the settings or select a preconfigured level in the nav on the right side.)"
+    successTime = 100000
+    successMessage = "Well done."
+    failureMessage = "There is a lot of potential. Continue training and you will grow and rise."
 
     constructor() {
         let defaultParams = ['number0Range', 'number1Range', 'number2Range', 'bunchSize', 'selectedOperator']
