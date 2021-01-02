@@ -1,6 +1,6 @@
 import * as Main from '../main/main.js'
-import * as appSystem from '../main/system.js'
 import State from '../bunchrunner/State.js'
+import * as appTranslation from '../language/translation.js'
 
 let historyList;
 let historyLocalStorageKey = "resultHistoryV2";
@@ -39,7 +39,10 @@ function updateHistoryBasedOnLocalStorage() {
         let entry = document.createElement('li');
         let content = document.createElement('span');
         let date = new Date(state.date)
-        let dateFormated = date.getDate() + "." + date.getMonth() + "." + date.getFullYear();
+        const options = { year: '2-digit', month: '2-digit', day: '2-digit' };
+        // TODO: handle translation for the date (race-condition with google translate)
+        // let dateFormated = date.toLocaleDateString(appTranslation.getSelectedLanguage(), options);
+        let dateFormated = date.toLocaleDateString("de-DE", options);
         let eclapesTime = ((state.endTime - state.startTime) / 1000).toPrecision(4);;
         let type = state.taskList[0].type
         let valid = 0
