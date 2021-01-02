@@ -39,8 +39,8 @@ export let preconfiguredLevels = {
     "add_race_3": {
         "solutionGuideTime": false,
         "autoTaskTime": 0,
-        "numberRange0": false,
-        "numberRange1": [99, 999],
+        "numberRange0": [11, 99],
+        "numberRange1": [2, 10],
         "numberRange2": [2, 10],
         "isDecimalPlacesMode": false,
         "isRacingMode": true,
@@ -56,8 +56,8 @@ export let preconfiguredLevels = {
     "add_race_4": {
         "solutionGuideTime": false,
         "autoTaskTime": 0,
-        "numberRange0": false,
-        "numberRange1": [2, 10],
+        "numberRange0": [2, 10],
+        "numberRange1": [11, 20],
         "numberRange2": [11, 20],
         "isDecimalPlacesMode": false,
         "isRacingMode": true,
@@ -73,8 +73,8 @@ export let preconfiguredLevels = {
     "add_race_5": {
         "solutionGuideTime": false,
         "autoTaskTime": 0,
-        "numberRange0": false,
-        "numberRange1": [99, 999],
+        "numberRange0": [99, 999],
+        "numberRange1": [11, 20],
         "numberRange2": [11, 20],
         "isDecimalPlacesMode": false,
         "isRacingMode": true,

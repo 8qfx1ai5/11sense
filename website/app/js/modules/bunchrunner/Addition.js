@@ -76,9 +76,14 @@ function calculateTask(config, index) {
     if (config.isRacingMode) {
         if (index == 0) {
             f2 = Math.round(Math.random() * f2Diff) + config.numberRange2[0]
-            do {
-                f1 = Math.round(Math.random() * f1Diff) + config.numberRange1[0]
-            } while (f1 % f2 == 0 || f2 % f1 == 0)
+            if (config.numberRange0) {
+                let f0Diff = config.numberRange0[1] - config.numberRange0[0]
+                do {
+                    f1 = Math.round(Math.random() * f0Diff) + config.numberRange0[0]
+                } while (f1 % f2 == 0 || f2 % f1 == 0)
+            } else {
+                f1 = f2
+            }
         } else {
             f1 = roundNumber(lastTasks[0][0] + lastTasks[0][1])
             f2 = lastTasks[0][1]
