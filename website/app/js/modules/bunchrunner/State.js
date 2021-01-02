@@ -12,6 +12,10 @@ export default class State {
     isFinished = false
     date = new Date()
 
+    isStarted() {
+        return !!this.startTime
+    }
+
     getTask(index = false) {
         if (index !== 0 && !index) {
             index = this.currentTaskIndex

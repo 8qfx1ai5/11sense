@@ -60,7 +60,7 @@ customElements.define('view-intro', class extends HTMLElement {
             window.addEventListener(event, function(e) {
                 let state = e.detail.state
 
-                if (state.isRunning || state.isFinished) {
+                if (state.isStarted()) {
                     section.classList.add('hidden')
                     return
                 }

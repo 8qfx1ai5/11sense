@@ -90,16 +90,17 @@ function calculateTask(config) {
     let f1 = 0
     let f2 = 0
 
-
-    if (config.numberRange0) {
-        let f0Diff = config.numberRange0[1] - config.numberRange0[0]
-        f0 = Math.round(Math.random() * f0Diff) + config.numberRange0[0]
-    }
-
     do {
         f1 = Math.round(Math.random() * f1Diff) + config.numberRange1[0]
         f2 = Math.round(Math.random() * f2Diff) + config.numberRange2[0]
     } while (taskWasPlayedBefore(f1, f2))
+
+    if (config.numberRange0) {
+        let f0Diff = config.numberRange0[1] - config.numberRange0[0]
+        do {
+            f0 = Math.round(Math.random() * f0Diff) + config.numberRange0[0]
+        } while (f0 % f2 == 0 || f2 % f0 == 0)
+    }
 
     let factor0Decimals = 0;
     let factor1Decimals = 0;
