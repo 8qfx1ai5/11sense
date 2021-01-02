@@ -22,12 +22,20 @@ export default class State {
         return false
     }
 
-    getLastTask() {
+    getPreviousTask() {
         return this.getTask(this.currentTaskIndex - 1)
+    }
+
+    getNextTask() {
+        return this.getTask(this.currentTaskIndex + 1)
     }
 
     getFirstTask() {
         return this.getTask(0)
+    }
+
+    getLastTask() {
+        return this.getTask(this.taskList.length - 1)
     }
 
     isFirstTask() {
@@ -42,7 +50,7 @@ export default class State {
         if (this.isLastTask()) {
             return this.getTask().isRunning()
         }
-        let nextTask = this.getLastTask()
+        let nextTask = this.getNextTask()
         return !nextTask.isRunning() && nextTask.isNew()
     }
 
