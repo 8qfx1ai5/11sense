@@ -1,4 +1,5 @@
 import * as appRunner from '../bunchRunner.js'
+import * as appConfig from '../../config/Config.js'
 
 customElements.define('view-intro', class extends HTMLElement {
     constructor() {
@@ -39,6 +40,21 @@ customElements.define('view-intro', class extends HTMLElement {
         let h2 = this.shadowRoot.querySelector('h2')
         let p = this.shadowRoot.querySelector('p')
 
+        // the initial loading of all texts is currently a hack to enable google translation
+        for (const [configId, config] of Object.entries(appConfig.preconfiguredLevels)) {
+            let title = document.createElement('span')
+            title.innerText = config.title
+            title.id = configId + "_title"
+            title.classList.add('hidden')
+            h2.append(title)
+
+            let description = document.createElement('span')
+            description.innerText = config.description
+            description.id = configId + "_description"
+            description.classList.add('hidden')
+            p.append(description)
+        }
+
         appRunner.events.forEach((event) => {
             window.addEventListener(event, function(e) {
                 let state = e.detail.state
@@ -49,14 +65,24 @@ customElements.define('view-intro', class extends HTMLElement {
                 }
 
                 section.classList.remove('hidden')
-                h2.innerHTML = ""
-                let title = document.createElement('span')
-                title.innerText = state.config.title
-                title.id = state.config.title
-                h2.append(title)
-                h2.translate = true
-                h2.classList.add('translate')
-                p.innerHTML = state.config.description
+
+                // make all labels hidden and then find the right one and show it
+                h2.childNodes.forEach(function(item) {
+                    item.classList.add('hidden')
+                })
+
+                p.childNodes.forEach(function(item) {
+                    item.classList.add('hidden')
+                })
+
+                let title = h2.querySelector(`#${state.config.configId}_title`)
+                if (title) {
+                    title.classList.remove('hidden')
+                }
+                let description = p.querySelector(`#${state.config.configId}_description`)
+                if (description) {
+                    description.classList.remove('hidden')
+                }
             })
         })
     }

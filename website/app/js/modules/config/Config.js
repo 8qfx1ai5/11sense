@@ -1,6 +1,6 @@
 import * as appSystem from '../main/system.js'
 
-let preconfiguredLevels = {
+export let preconfiguredLevels = {
 
     "add_race_1": {
         "solutionGuideTime": false,
@@ -120,11 +120,28 @@ let preconfiguredLevels = {
         "successTime": 100000,
         "successMessage": "Well done. If you feel comfortable, you should level up.",
         "failureMessage": "There is a lot of potential. Continue training and you will grow and rise.",
+    },
+    "custom": {
+        "solutionGuideTime": 20000,
+        "autoTaskTime": 5000,
+        "numberRange0": false,
+        "numberRange1": [2, 10],
+        "numberRange2": [2, 10],
+        "isDecimalPlacesMode": false,
+        "isRacingMode": false,
+        "bunchSize": 10,
+        "operator": '*',
+        "isHideTaskModeActive": false,
+        "title": "Custom Mode",
+        "description": "We use your manual configuration.\n(You can change the settings or select a preconfigured exercise in the nav on the right side.)",
+        "successTime": 100000,
+        "successMessage": "Well done.",
+        "failureMessage": "There is a lot of potential. Continue training and you will grow and rise.",
     }
 }
 
 export default class Config {
-    configID = false
+    configId = false
     solutionGuideTime = 10000
     autoTaskTime = 5000
     language = "de"
@@ -150,7 +167,9 @@ export default class Config {
             for (const [key, value] of Object.entries(preconfiguredLevels[level])) {
                 this[key] = value
             }
-        } else {
+            this.configId = level
+        }
+        if (!(level in preconfiguredLevels) || level == "custom") {
             let defaultParams = ['number0Range', 'number1Range', 'number2Range', 'bunchSize', 'selectedOperator']
             for (let i = 0; i < defaultParams.length; i++) {
                 // TODO: find some better way to initialize the default values
