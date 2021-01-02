@@ -17,6 +17,7 @@ customElements.define('view-intro', class extends HTMLElement {
                 }
 
                 section {
+                    padding: 0.5em;
                     padding-top: 1em;
                 }
 
