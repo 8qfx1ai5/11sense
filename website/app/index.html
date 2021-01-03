@@ -167,7 +167,17 @@
         window.addEventListener("load", () => {
             if ("serviceWorker" in navigator) {
                 navigator.serviceWorker.register('service-worker.js')
-                    .then(registration => console.log('Service worker successfully registered for ' + registration.scope))
+                    .then(registration => {
+                        registration.addEventListener('updatefound', function() {
+                            // If updatefound is fired, it means that there's
+                            // a new service worker being installed.
+                            var installingWorker = registration.installing;
+                            console.log('New service worker successfully registered for scope ' + registration.scope, ' ', installingWorker)
+
+                            // You can listen for changes to the installing service worker's
+                            // state via installingWorker.onstatechange
+                        })
+                    })
                     .catch(err => console.log('Service worker registration failed: ' + err));
             }
         });
