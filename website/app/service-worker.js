@@ -1,4 +1,9 @@
 const staticCacheName = 'pages-cache-v1'
+const cacheTimeoutInMs = 5000
+
+let version = ""
+
+let versionTime = 0
 
 self.addEventListener('install', event => {})
 
@@ -13,33 +18,48 @@ self.addEventListener('fetch', function(event) {
         })
     }
 
-    event.respondWith(fetch(currentRequest)
+    event.respondWith(caches.match(currentRequest)
+        .then(cachedResponse => {
+            if (cachedResponse && performance.now() - versionTime < cacheTimeoutInMs && cachedResponse.headers.version == version) {
+                console.log('Found in cache ', currentRequest.url, ' (right version and in time)');
+                return cachedResponse;
+            }
+            // wrong version or outdated cache
+            return sendRequest(currentRequest)
+        }).catch(error => {
+            // not in cache
+            return sendRequest(currentRequest)
+        }))
+})
 
+function sendRequest(request) {
+    return fetch(request)
         .then(response => {
+            versionTime = performance.now()
+            version = response.headers.version
+
             // Add fetched files to the cache
             return caches.open(staticCacheName).then(cache => {
-                cache.put(event.request.url, response.clone())
-                console.log('Network request success: ', event.request.url);
+                cache.put(request.url, response.clone())
+                console.log('Network request success: ', request.url);
                 return response
             })
-        })
-        .catch(error => {
-            console.log("Offline: ", currentRequest.url, ' try to use cache')
+        }).catch(error => {
+            console.log("Offline: ", request.url, ' try to use cache')
 
-            return caches.match(currentRequest)
+            return caches.match(request)
                 .then(cachedResponse => {
                     if (cachedResponse) {
-                        console.log('Found ', currentRequest.url, ' in cache');
+                        console.log('Found in cache (offline)', currentRequest.url);
                         return cachedResponse;
                     }
                 }).catch(error => {
-                    console.log("File not in cache:" + currentRequest.url)
-                        // TODO 6 - Respond with custom offline page
+                    console.log("File offline and not in cache:" + error.url)
+
+                    // TODO 6 - Respond with custom offline page
                 })
         })
-    )
-
-})
+}
 
 // self.addEventListener('push', event => {
 //     event.waitUntil(
