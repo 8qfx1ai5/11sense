@@ -167,7 +167,7 @@ export let preconfiguredLevels = {
         "operator": '*',
         "isHideTaskModeActive": false,
         "title": "Custom Mode",
-        "description": "We use your manual configuration.\n(You can change the settings or select a preconfigured exercise in the nav on the right side.)",
+        "description": "We use your manual configuration.\n\nYou can change the settings or select a preconfigured exercise in the nav on the right side.",
         "successTime": 100000,
         "successMessage": "Well done.",
         "failureMessage": "There is a lot of potential. Continue training and you will grow and rise.",

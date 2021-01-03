@@ -7,3 +7,7 @@
 
   # prevent coockies to be sended to other sites with js
   Set-Cookie: "HttpOnly;Secure;SameSite=Strict"
+
+/*
+  # set build_id in header
+  Version: "$BUILD_ID"
