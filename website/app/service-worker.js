@@ -1,5 +1,5 @@
 const staticCacheName = 'pages-cache-v1'
-const cacheTimeoutInMs = 1000000
+const cacheTimeoutInMs = 10000
 const headerVersionKey = 'version'
 const dbBuildVersionKey = 'version'
 const dbVersionUpdateTimeKey = 'versionTime'
@@ -7,12 +7,9 @@ const dbName = 'meta'
 const dbStoreName = '11sense'
 const isLoggingEnabled = true
 
-let version = ""
-let versionTime = 0
 let store
 let idbRequest
 let db
-let response = false
 
 // self.addEventListener('push', event => {});
 
@@ -31,6 +28,13 @@ self.addEventListener('activate', function(event) {
 
 self.addEventListener('fetch', function(event) {
 
+    isLoggingEnabled && console.log('Incomming Request ', event.request.url);
+    if (!event.request.url.startsWith(self.registration.scope)) {
+        isLoggingEnabled && console.log('Network access (not in scope) ', event.request.url);
+        event.respondWith(fetch(event.request))
+        return
+    }
+
     let currentRequest = event.request
     if (event.request.url.endsWith('.js')) {
         // handle js module loads exceptional, because of the different request behavior,
@@ -41,64 +45,84 @@ self.addEventListener('fetch', function(event) {
         })
     }
 
-    event.respondWith(caches.match(currentRequest)
-        .then(cachedResponse => {
-            if (cachedResponse) {
-                if (self.indexedDB) {
-                    idbRequest = self.indexedDB.open(dbName, 1);
-                    idbRequest.onsuccess = function(dbEvent) {
+    let cachedResponse = caches.match(currentRequest)
 
-                        let db = dbEvent.target.result
-                        db.onerror = (error) => {
-                            // handle all db errors
-                            console.log('db error:', error.target.errorCode)
-                            return sendRequest(currentRequest)
-                        }
+    if (!cachedResponse) {
+        event.respondWith(sendRequest(currentRequest))
+        return
+    }
 
-                        let store = db.transaction([dbStoreName]).objectStore(dbStoreName);
+    if (!self.indexedDB) {
+        event.respondWith(sendRequest(currentRequest))
+        return
+    }
 
-                        // TODO: here is a bug, wait until data returned
-                        store.get(dbBuildVersionKey).onsuccess = (event) => {
-                            version = event.target.result.value
-                        }
-                        store.get(dbVersionUpdateTimeKey).onsuccess = (event) => {
-                            versionTime = event.target.result.value
-                        }
+    event.respondWith(getIdbRequestPromise(self.indexedDB.open(dbName, 1))
+        .then(function(dbEvent) {
 
-                        isLoggingEnabled && console.log('now:', Date.now(), ' versionTime:', versionTime, ' diff:', Date.now() - versionTime)
-                        if (cachedResponse && Date.now() - versionTime < cacheTimeoutInMs && cachedResponse.headers.version == version) {
-                            isLoggingEnabled && console.log('version:', version, ' cachedVersion:', cachedResponse.headers.version)
-                            console.log('Found in cache ', currentRequest.url, ' (right version and in time)');
-                            response = cachedResponse;
-                            return
-                        }
+            let version = ""
+            let versionTime = 0
+            let db = dbEvent.target.result
+            db.onerror = (error) => {
 
-                        // cache outdated
-                        return sendRequest(currentRequest)
-                    }
-                    idbRequest.onerror = function(error) {
-                        console.log('indexedDB access failed:', error)
-                        return sendRequest(currentRequest)
-                    }
-                    if (response) {
-                        return response
-                    }
-                    return sendRequest(currentRequest)
-                } else {
-                    // IndexedDB is not supported
-                    // TODO: find alternative caching
-                    return sendRequest(currentRequest)
-                }
-            } else {
-                // there is no cache
+                // handle all db errors
+                console.log('db error:', error.target.errorCode)
+
                 return sendRequest(currentRequest)
             }
-        }).catch(error => {
-            // not in cache
+
+            return getIdbRequestPromise(db.transaction([dbStoreName]).objectStore(dbStoreName).get(0))
+                .then((event) => {
+                    let version = event.target.result[dbBuildVersionKey]
+                    let versionTime = event.target.result[dbVersionUpdateTimeKey]
+
+                    isLoggingEnabled && console.log('now:', Date.now(), ' versionTime:', versionTime, ' diff:', Date.now() - versionTime)
+                    if (!cachedResponse) {
+                        // no cache)
+                        return sendRequest(currentRequest)
+                    }
+                    if (cacheTimeoutInMs < Date.now() - versionTime) {
+                        // old cache
+                        return sendRequest(currentRequest)
+                    }
+                    if (!version || version == "") {
+                        console.log('Found in cache ', currentRequest.url, ' (in time, version ignored)');
+                        return cachedResponse
+                    }
+
+                    if (!("version" in cachedResponse.headers)) {
+                        // wrong version, because not set
+                        return sendRequest(currentRequest)
+                    }
+
+                    if (cachedResponse.headers.version == version) {
+                        isLoggingEnabled && console.log('version:', version, ' cachedVersion:', cachedResponse.headers.version)
+                        console.log('Found in cache ', currentRequest.url, ' (right version and in time)');
+                        return cachedResponse
+
+                    }
+
+                    // cache outdated by version
+                    return sendRequest(currentRequest)
+                })
+                .catch(function(error) {
+                    console.log('indexedDB read failed:', error)
+                    return sendRequest(currentRequest)
+                })
+        })
+        .catch(function(error) {
+            console.log('indexedDB access failed:', error)
             return sendRequest(currentRequest)
         })
     )
 })
+
+function getIdbRequestPromise(idbRequest) {
+    return new Promise(function(resolve, reject) {
+        idbRequest.onsuccess = resolve
+        idbRequest.onerror = reject
+    });
+}
 
 function sendRequest(request) {
     return fetch(request)
@@ -115,8 +139,7 @@ function sendRequest(request) {
 
                     let store = db.transaction([dbStoreName], 'readwrite').objectStore(dbStoreName);
 
-                    store.put({ key: dbBuildVersionKey, value: response.headers.version })
-                    store.put({ key: dbVersionUpdateTimeKey, value: Date.now() })
+                    store.put({ id: 0, [dbBuildVersionKey]: response.headers.version, [dbVersionUpdateTimeKey]: Date.now() })
                 }
                 idbRequest.onerror = function(error) {
                     console.log('indexedDB access failed:', error)
@@ -151,11 +174,10 @@ function createDB() {
     idbRequest.onupgradeneeded = function(event) {
         let db = event.target.result
         let store = db.createObjectStore(dbStoreName, {
-            keyPath: 'key'
+            keyPath: 'id'
         });
         // initiate value
-        store.add({ key: dbBuildVersionKey, value: "" });
-        store.add({ key: dbVersionUpdateTimeKey, value: 0 });
+        store.add({ id: 0, [dbBuildVersionKey]: "", [dbVersionUpdateTimeKey]: 0 });
     };
     idbRequest.onerror = function(error) {
         console.log("DB creation failed: ", error)
