@@ -117,5 +117,5 @@ export function init() {
         let e = document.querySelector(".goog-te-combo").addEventListener('change', function(e) {
             saveSelectedLanguage(e.target.value)
         });
-    }, 500)
+    }, 4000)
 }
