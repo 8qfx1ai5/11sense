@@ -184,7 +184,35 @@
     </script>
     <script type="module" src="js/app.js"></script>
     <script type="text/javascript">
+        function getStoredLanguage() {
+            let language = localStorage.getItem("storedLanguage")
+            if (!language || language == "") {
+                return false
+            }
+            return language
+        }
+
+        function getInitLanguage() {
+            let oldLanguage = getStoredLanguage()
+            if (oldLanguage) {
+                return oldLanguage
+            }
+            return getBrowserLanguage()
+        }
+
+        function getBrowserLanguage() {
+            return (navigator.language || navigator.userLanguage).split('-', 1)[0]
+        }
+
+        function setCookie(key, value, expiry) {
+            var expires = new Date();
+            expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
+            document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+        }
+
         function googleTranslateElementInit() {
+
+            setCookie('googtrans', '/en/' + getInitLanguage(), 1);
             new google.translate.TranslateElement({
                 // pageLanguage: 'en',
                 includedLanguages: "de,en",

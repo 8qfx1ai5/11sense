@@ -1,3 +1,5 @@
+let storedLanguageKey = "storedLanguage"
+
 export function getSelectedLanguage() {
     let languageSelector = document.getElementsByClassName("goog-te-combo");
     if (0 < languageSelector.length) {
@@ -13,15 +15,36 @@ export function isSelectedLanguageGerman() {
 }
 
 export function setSelectedLanguage(l) {
-    let languageSelector = document.getElementsByClassName("goog-te-combo");
-    if (0 < languageSelector.length) {
-        if (l == 'de' || l == "de-DE") {
-            languageSelector[0].value = 'de';
-        } else {
-            languageSelector[0].value = 'en';
-        }
-        languageSelector[0].dispatchEvent(new Event('change'));
+    let newLanguage = 'en'
+    if (l == 'de' || l == "de-DE") {
+        newLanguage = 'de'
     }
+    let languageSelector = document.getElementsByClassName("goog-te-combo")
+    if (0 < languageSelector.length) {
+        saveSelectedLanguage(newLanguage)
+        languageSelector[0].value = newLanguage
+        languageSelector[0].dispatchEvent(new Event('change'))
+    }
+}
+
+function saveSelectedLanguage(l) {
+    localStorage.setItem(storedLanguageKey, l)
+}
+
+function getStoredLanguage() {
+    let language = localStorage.getItem(storedLanguageKey)
+    if (!language || language == "") {
+        return false
+    }
+    return language
+}
+
+function getInitLanguage() {
+    let oldLanguage = getStoredLanguage()
+    if (oldLanguage) {
+        return oldLanguage
+    }
+    return getBrowserLanguage()
 }
 
 export function getBrowserLanguage() {
@@ -88,9 +111,11 @@ export function translateForScreenOutput(key) {
 }
 
 export function init() {
+
     setTimeout(function() {
         // hacks to ignore strange behavior of google translate
-        setSelectedLanguage(getBrowserLanguage())
-        document.getElementsByTagName('body')[0].removeAttribute("style");
+        let e = document.querySelector(".goog-te-combo").addEventListener('change', function(e) {
+            saveSelectedLanguage(e.target.value)
+        });
     }, 500)
 }
