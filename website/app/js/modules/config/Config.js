@@ -39,7 +39,7 @@ export let preconfiguredLevels = {
     "add_race_3": {
         "solutionGuideTime": false,
         "autoTaskTime": 0,
-        "numberRange0": [11, 99],
+        "numberRange0": [2, 10],
         "numberRange1": [2, 10],
         "numberRange2": [2, 10],
         "isDecimalPlacesMode": false,
