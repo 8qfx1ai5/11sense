@@ -43,71 +43,67 @@ self.addEventListener('fetch', function(event) {
         })
     }
 
-    let cachedResponse = caches.match(currentRequest)
-
-    if (!cachedResponse) {
-        event.respondWith(sendRequest(currentRequest))
-        return
-    }
-
     if (!self.indexedDB) {
         event.respondWith(sendRequest(currentRequest))
         return
     }
 
-    event.respondWith(getIdbRequestPromise(self.indexedDB.open(dbName, 1))
-        .then(function(dbEvent) {
+    event.respondWith(caches.match(currentRequest)
+        .then(function(cachedResponse) {
+            return getIdbRequestPromise(self.indexedDB.open(dbName, 1))
+                .then(function(dbEvent) {
 
-            let db = dbEvent.target.result
-            db.onerror = (error) => {
+                    let db = dbEvent.target.result
+                    db.onerror = (error) => {
 
-                // handle all db errors
-                console.log('db error:', error.target.errorCode)
+                        // handle all db errors
+                        console.log('db error:', error.target.errorCode)
 
-                return sendRequest(currentRequest)
-            }
-
-            return getIdbRequestPromise(db.transaction([dbStoreName]).objectStore(dbStoreName).get(0))
-                .then((event) => {
-                    let version = event.target.result[dbBuildVersionKey]
-                    let versionTime = event.target.result[dbVersionUpdateTimeKey]
-
-                    isLogEnabled && console.log('now:', Date.now(), ' versionTime:', versionTime, ' diff:', (Date.now() - versionTime))
-                    if (!cachedResponse) {
-                        // no cache)
-                        return sendRequest(currentRequest)
-                    }
-                    if (cacheTimeoutInMs < Date.now() - versionTime) {
-                        // old cache
-                        return sendRequest(currentRequest)
-                    }
-                    if (!version || version == "") {
-                        console.log('Found in cache ', currentRequest.url, ' (in time, version ignored)');
-                        return cachedResponse
-                    }
-
-                    if (!("version" in cachedResponse.headers)) {
-                        // wrong version, because not set
                         return sendRequest(currentRequest)
                     }
 
-                    if (cachedResponse.headers.version == version) {
-                        isLogEnabled && console.log('version:', version, ' cachedVersion:', cachedResponse.headers.version)
-                        console.log('Found in cache ', currentRequest.url, ' (right version and in time)');
-                        return cachedResponse
+                    return getIdbRequestPromise(db.transaction([dbStoreName]).objectStore(dbStoreName).get(0))
+                        .then((event) => {
+                            let version = event.target.result[dbBuildVersionKey]
+                            let versionTime = event.target.result[dbVersionUpdateTimeKey]
 
-                    }
+                            isLogEnabled && console.log('now:', Date.now(), ' versionTime:', versionTime, ' diff:', (Date.now() - versionTime))
+                            if (!cachedResponse) {
+                                // no cache)
+                                return sendRequest(currentRequest)
+                            }
+                            if (cacheTimeoutInMs < Date.now() - versionTime) {
+                                // old cache
+                                isLogEnabled && console.log('Cache ignored for ', currentRequest.url, ' (to old)');
+                                return sendRequest(currentRequest)
+                            }
+                            if (!version || version == "") {
+                                // the value for the latest cache version is not set in the db, so we need to ask
+                                isLogEnabled && console.log('Cache ignored for ', currentRequest.url, ' (latest version unkown)');
+                                return sendRequest(currentRequest)
+                            }
 
-                    // cache outdated by version
-                    return sendRequest(currentRequest)
+                            if (cachedResponse.headers.get('version') == version) {
+                                isLogEnabled && console.log('version:', version, ' cachedVersion:', cachedResponse.headers.get('version'))
+                                console.log('Found in cache ', currentRequest.url, ' (right version and in time)');
+                                return cachedResponse
+
+                            }
+
+                            // cache outdated by version
+                            return sendRequest(currentRequest)
+                        })
+                        .catch(function(error) {
+                            console.log('indexedDB read failed:', error)
+                            return sendRequest(currentRequest)
+                        })
                 })
                 .catch(function(error) {
-                    console.log('indexedDB read failed:', error)
+                    console.log('indexedDB access failed:', error)
                     return sendRequest(currentRequest)
                 })
         })
         .catch(function(error) {
-            console.log('indexedDB access failed:', error)
             return sendRequest(currentRequest)
         })
     )
@@ -130,15 +126,16 @@ function sendRequest(request) {
                         db.onerror = (error) => {
                             // handle all db errors
                             console.log('db error:', error.target.error)
-                            return
+                            return response
                         }
 
                         let store = db.transaction([dbStoreName], 'readwrite').objectStore(dbStoreName);
 
-                        store.put({ id: 0, [dbBuildVersionKey]: response.headers.version, [dbVersionUpdateTimeKey]: Date.now() })
+                        store.put({ id: 0, [dbBuildVersionKey]: response.headers.get('version'), [dbVersionUpdateTimeKey]: Date.now() })
                     })
                     .catch(error => {
                         console.log('indexedDB access failed:', error)
+                        return response
                     })
             }
 
