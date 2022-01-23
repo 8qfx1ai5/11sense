@@ -1,5 +1,5 @@
 const staticCacheName = 'pages-cache-v1'
-const cacheTimeoutInMs = 30000
+const cacheTimeoutInMs = 600000
 const headerVersionKey = 'version'
 const dbBuildVersionKey = 'version'
 const dbVersionUpdateTimeKey = 'versionTime'
@@ -157,30 +157,6 @@ function sendRequest(request, fallbackResponse = false) {
         }).catch(response => {
             if (fallbackResponse) {
                 console.log('Request failed, use cache');
-                if (self.indexedDB) {
-                    getIdbRequestPromise(self.indexedDB.open(dbName, 1))
-                        .then(function(dbEvent) {
-                            let db = dbEvent.target.result
-                            db.onerror = (error) => {
-                                // handle all db errors
-                                console.log('db error:', error.target.error)
-                                return fallbackResponse
-                            }
-
-                            let store = db.transaction([dbStoreName], 'readwrite').objectStore(dbStoreName);
-
-                            // let version = getIdbRequestPromise(store.get(0))
-                            //     .then((event) => {
-                            //         return event.target.result[dbBuildVersionKey]
-                            //     })
-
-                            store.update({ id: 0, [dbVersionUpdateTimeKey]: Date.now() })
-                        })
-                        .catch(error => {
-                            console.log('indexedDB access failed:', error)
-                            return fallbackResponse
-                        })
-                }
                 return fallbackResponse;
             }
             console.log("File offline and not in cache:" + response)
