@@ -5,7 +5,7 @@ const dbBuildVersionKey = 'version'
 const dbVersionUpdateTimeKey = 'versionTime'
 const dbName = 'meta'
 const dbStoreName = '11sense'
-const isLogEnabled = true
+const isLogEnabled = false
 
 let store
 let idbRequest
@@ -151,15 +151,15 @@ function sendRequest(request, fallbackResponse = false) {
             // Add fetched files to the cache
             return caches.open(staticCacheName).then(cache => {
                 cache.put(request.url, response.clone())
-                console.log('Network request success: ', request.url);
+                isLogEnabled && console.log('Network request success: ', request.url);
                 return response
             })
         }).catch(response => {
             if (fallbackResponse) {
-                console.log('Request failed, use cache');
+                isLogEnabled && console.log('Request failed, use cache');
                 return fallbackResponse;
             }
-            console.log("File offline and not in cache:" + response)
+            isLogEnabled && console.log("File offline and not in cache:" + response)
             return response
         })
 }
