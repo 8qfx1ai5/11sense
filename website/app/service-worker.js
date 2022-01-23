@@ -29,7 +29,15 @@ self.addEventListener('fetch', function(event) {
     isLogEnabled && console.log('Incomming Request ', event.request.url);
     if (!event.request.url.startsWith(self.registration.scope)) {
         isLogEnabled && console.log('Network access (not in scope) ', event.request.url);
-        event.respondWith(fetch(event.request))
+        event.respondWith(fetch(event.request)
+            .then(response => {
+                return response
+            })
+            .catch(() => {
+                isLogEnabled && console.log('fetch external resource faild for ', event.request.url);
+                var customResponse = { "status": 404, "statusText": "Offline" };
+                return new Response(null, customResponse);
+            }))
         return
     }
 
@@ -148,7 +156,7 @@ function sendRequest(request, fallbackResponse = false) {
             })
         }).catch(response => {
             if (fallbackResponse) {
-                console.log('Request failed, use cache, error: ', response);
+                console.log('Request failed, use cache');
                 if (self.indexedDB) {
                     getIdbRequestPromise(self.indexedDB.open(dbName, 1))
                         .then(function(dbEvent) {
