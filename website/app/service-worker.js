@@ -1,5 +1,5 @@
 const staticCacheName = 'pages-cache-v1'
-const cacheTimeoutInMs = 10000
+const cacheTimeoutInMs = 30000
 const headerVersionKey = 'version'
 const dbBuildVersionKey = 'version'
 const dbVersionUpdateTimeKey = 'versionTime'
@@ -67,31 +67,28 @@ self.addEventListener('fetch', function(event) {
                             let version = event.target.result[dbBuildVersionKey]
                             let versionTime = event.target.result[dbVersionUpdateTimeKey]
 
-                            isLogEnabled && console.log('now:', Date.now(), ' versionTime:', versionTime, ' diff:', (Date.now() - versionTime))
                             if (!cachedResponse) {
                                 // no cache)
                                 return sendRequest(currentRequest)
                             }
                             if (cacheTimeoutInMs < Date.now() - versionTime) {
                                 // old cache
-                                isLogEnabled && console.log('Cache ignored for ', currentRequest.url, ' (to old)');
-                                return sendRequest(currentRequest)
+                                isLogEnabled && console.log('Cache ignored for ', currentRequest.url, ' (to old, diff=', (Date.now() - versionTime), ')');
+                                return sendRequest(currentRequest, cachedResponse)
                             }
                             if (!version || version == "") {
                                 // the value for the latest cache version is not set in the db, so we need to ask
                                 isLogEnabled && console.log('Cache ignored for ', currentRequest.url, ' (latest version unkown)');
-                                return sendRequest(currentRequest)
+                                return sendRequest(currentRequest, cachedResponse)
                             }
 
                             if (cachedResponse.headers.get('version') == version) {
-                                isLogEnabled && console.log('version:', version, ' cachedVersion:', cachedResponse.headers.get('version'))
-                                console.log('Found in cache ', currentRequest.url, ' (right version and in time)');
+                                isLogEnabled && console.log('Found in cache ', currentRequest.url, ' (right version "', version, '" and in time=', (Date.now() - versionTime), ')');
                                 return cachedResponse
-
                             }
 
                             // cache outdated by version
-                            return sendRequest(currentRequest)
+                            return sendRequest(currentRequest, cachedResponse)
                         })
                         .catch(function(error) {
                             console.log('indexedDB read failed:', error)
@@ -104,11 +101,13 @@ self.addEventListener('fetch', function(event) {
                 })
         })
         .catch(function(error) {
+            isLogEnabled && console.log('No cache entry found for ', currentRequest.url, 'error: ', error);
             return sendRequest(currentRequest)
         })
     )
 })
 
+// just wrap a database event into an promise
 function getIdbRequestPromise(idbRequest, resolve = 'onsuccess', reject = 'onerror') {
     return new Promise(function(res, rej) {
         idbRequest[resolve] = res
@@ -116,7 +115,9 @@ function getIdbRequestPromise(idbRequest, resolve = 'onsuccess', reject = 'onerr
     });
 }
 
-function sendRequest(request) {
+// only way to make a call into the internet
+// also updates the cache
+function sendRequest(request, fallbackResponse = false) {
     return fetch(request)
         .then(response => {
             if (self.indexedDB) {
@@ -145,20 +146,37 @@ function sendRequest(request) {
                 console.log('Network request success: ', request.url);
                 return response
             })
-        }).catch(() => {
+        }).catch(response => {
+            if (fallbackResponse) {
+                console.log('Request failed, use cache, error: ', response);
+                if (self.indexedDB) {
+                    getIdbRequestPromise(self.indexedDB.open(dbName, 1))
+                        .then(function(dbEvent) {
+                            let db = dbEvent.target.result
+                            db.onerror = (error) => {
+                                // handle all db errors
+                                console.log('db error:', error.target.error)
+                                return fallbackResponse
+                            }
 
-            return caches.match(request, { ignoreSearch: true })
-                .then(cachedResponse => {
-                    if (cachedResponse) {
-                        console.log('Found in cache (offline)', currentRequest.url);
-                        return cachedResponse;
-                    }
-                }).catch(error => {
-                    console.log("File offline and not in cache:" + error.url)
-                })
+                            let store = db.transaction([dbStoreName], 'readwrite').objectStore(dbStoreName);
+
+                            store.put({ id: 0, [dbVersionUpdateTimeKey]: Date.now() })
+                        })
+                        .catch(error => {
+                            console.log('indexedDB access failed:', error)
+                            return fallbackResponse
+                        })
+                }
+                return fallbackResponse;
+            }
+            console.log("File offline and not in cache:" + response)
+            return response
         })
 }
 
+// The database is used to store global caching information like the current page (build) version
+// and the last time a service worker has seen a response from the server or tried to get one.
 function createDB() {
     self.indexedDB.deleteDatabase(dbName)
     getIdbRequestPromise(self.indexedDB.open(dbName, 1), 'onupgradeneeded')
