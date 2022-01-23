@@ -169,7 +169,12 @@ function sendRequest(request, fallbackResponse = false) {
 
                             let store = db.transaction([dbStoreName], 'readwrite').objectStore(dbStoreName);
 
-                            store.put({ id: 0, [dbVersionUpdateTimeKey]: Date.now() })
+                            // let version = getIdbRequestPromise(store.get(0))
+                            //     .then((event) => {
+                            //         return event.target.result[dbBuildVersionKey]
+                            //     })
+
+                            store.update({ id: 0, [dbVersionUpdateTimeKey]: Date.now() })
                         })
                         .catch(error => {
                             console.log('indexedDB access failed:', error)
