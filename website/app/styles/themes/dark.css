@@ -12,7 +12,10 @@ header {
 
 .debugging {
     color: darkred !important;
-    opacity: 1 !important;
+}
+
+#header-main.debugging.inactive-page-icon {
+    opacity: 0.5;
 }
 
 .option-item {

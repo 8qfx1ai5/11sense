@@ -277,6 +277,8 @@ function handlePageStatus() {
 
     setSubpageHeight()
     setTrainerPageHeight()
+
+    window.dispatchEvent(new CustomEvent('page-location-changed'))
 }
 
 // set page height on subpages, to omit page scroll bar

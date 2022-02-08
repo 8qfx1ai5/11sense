@@ -77,6 +77,19 @@ function updateLoggingAddSingleLine(s) {
 
 export function init() {
 
+    // switch color of the navigation sections
+    window.addEventListener('page-location-changed', function(e) {
+        if (isDeveloperMode) {
+            Array.prototype.forEach.call(document.querySelectorAll("option.dev-change"), function(element) {
+                if (element.parentElement.value == element.value) {
+                    element.parentElement.classList.add("debugging");
+                } else {
+                    element.parentElement.classList.remove("debugging");
+                }
+            })
+        }
+    })
+
     isDeveloperMode = false;
     if (localStorage.getItem('isDeveloperMode') == "true") {
         activateDeveloperMode();
