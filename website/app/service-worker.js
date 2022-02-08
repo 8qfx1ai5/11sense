@@ -1,5 +1,5 @@
 const staticCacheName = 'pages-cache-v1'
-const cacheTimeoutInMs = 600000
+const cacheTimeoutInMs = 300000
 const headerVersionKey = 'version'
 const dbBuildVersionKey = 'version'
 const dbVersionUpdateTimeKey = 'versionTime'
