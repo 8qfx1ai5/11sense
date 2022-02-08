@@ -327,10 +327,10 @@ function handleTouchMove(evt) {
     var yDiff = yDown - yUp;
 
     if (Math.abs(xDiff) > Math.abs(yDiff)) { /*most significant*/
-        if (12 < xDiff) {
+        if (10 < xDiff) {
             /* left swipe */
             switchToNextRightPage();
-        } else if (xDiff < -12) {
+        } else if (xDiff < -10) {
             /* right swipe */
             switchToNextLeftPage();
         }
