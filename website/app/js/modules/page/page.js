@@ -10,6 +10,8 @@ export let tagIdSettingsSelector = "settings-selector";
 let tagIdHeaderRight = "header-right"
 let tagIdHeaderLeft = "header-left"
 let tagIdMainPage = "trainer-page"
+let ongoingTouches = []
+
 
 export function isDesktopMode() {
     return 1300 <= screen.width
@@ -299,52 +301,74 @@ function setTrainerPageHeight() {
     document.getElementById("trainer-page").style.height = (window.visualViewport.height - topOffset) + "px"
 }
 
-var xDown = null;
-var yDown = null;
+function handleTouchStart(evt) {
+    /* ignored to enable normal clicks */
+    if (isDesktopMode()) {
+        return
+    }
+    let touches = evt.changedTouches
 
-function getTouches(evt) {
-    return evt.touches // browser API
+    for (let i = 0; i < touches.length; i++) {
+        ongoingTouches.push(copyTouch(touches[i]))
+    }
 }
 
-function handleTouchStart(evt) {
+function handleTouchMove(evt) {}
+
+function handleTouchEnd(evt) {
     if (isDesktopMode()) {
-        return;
+        return
     }
-    const firstTouch = getTouches(evt)[0];
-    xDown = firstTouch.clientX;
-    yDown = firstTouch.clientY;
-};
+    let touches = evt.changedTouches
 
-function handleTouchMove(evt) {
-    if (!xDown || !yDown) {
-        return;
-    }
+    for (let i = 0; i < touches.length; i++) {
+        let idx = ongoingTouchIndexById(touches[i].identifier)
 
-    var xUp = evt.touches[0].clientX;
-    var yUp = evt.touches[0].clientY;
-
-    var xDiff = xDown - xUp;
-    var yDiff = yDown - yUp;
-
-    if (Math.abs(xDiff) > Math.abs(yDiff)) { /*most significant*/
-        if (10 < xDiff) {
-            /* left swipe */
-            switchToNextRightPage();
-        } else if (xDiff < -10) {
-            /* right swipe */
-            switchToNextLeftPage();
-        }
-    } else {
-        if (yDiff > 0) {
-            /* up swipe */
+        if (idx >= 0) {
+            let xDiff = ongoingTouches[idx].pageX - touches[i].pageX
+            let yDiff = ongoingTouches[idx].pageY - touches[i].pageY
+            if (Math.abs(xDiff) > Math.abs(yDiff)) { /*most significant*/
+                if (50 < xDiff) {
+                    /* left swipe if significant */
+                    switchToNextRightPage()
+                } else if (xDiff < -50) {
+                    /* right swipe if significant */
+                    switchToNextLeftPage()
+                }
+            }
+            ongoingTouches.splice(idx, 1) // remove it; we're done
         } else {
-            /* down swipe */
+            /* can't figure out which touch to end */
         }
     }
-    /* reset values */
-    xDown = null;
-    yDown = null;
-};
+}
+
+function handleTouchCancel(evt) {
+    if (isDesktopMode()) {
+        return
+    }
+    let touches = evt.changedTouches
+
+    for (let i = 0; i < touches.length; i++) {
+        let idx = ongoingTouchIndexById(touches[i].identifier)
+        ongoingTouches.splice(idx, 1) // remove it; we're done
+    }
+}
+
+function copyTouch({ identifier, pageX, pageY }) {
+    return { identifier, pageX, pageY }
+}
+
+function ongoingTouchIndexById(idToFind) {
+    for (let i = 0; i < ongoingTouches.length; i++) {
+        let id = ongoingTouches[i].identifier
+
+        if (id == idToFind) {
+            return i
+        }
+    }
+    return -1 // not found
+}
 
 export function init() {
     settingsImage = document.getElementById("settings-image");
@@ -354,6 +378,8 @@ export function init() {
 
     document.addEventListener('touchstart', handleTouchStart, false);
     document.addEventListener('touchmove', handleTouchMove, false);
+    document.addEventListener("touchend", handleTouchEnd, false);
+    document.addEventListener("touchcancel", handleTouchCancel, false);
 
     window.addEventListener('popstate', function(e) {
         handlePageStatus()
