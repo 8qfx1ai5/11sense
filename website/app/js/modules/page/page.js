@@ -290,13 +290,13 @@ function setSubpageHeight() {
     // add global header height to the offset
     topOffset += document.getElementById("header").getBoundingClientRect().height
     for (var i = 0; i < subpages.length; i++) {
-        subpages[i].style.height = (window.innerHeight - topOffset) + "px"
+        subpages[i].style.height = (window.visualViewport.height - topOffset) + "px"
     }
 }
 
 function setTrainerPageHeight() {
     let topOffset = document.getElementById("header").getBoundingClientRect().height
-    document.getElementById("trainer-page").style.height = (window.innerHeight - topOffset) + "px"
+    document.getElementById("trainer-page").style.height = (window.visualViewport.height - topOffset) + "px"
 }
 
 var xDown = null;
