@@ -328,10 +328,10 @@ function handleTouchEnd(evt) {
             let xDiff = ongoingTouches[idx].pageX - touches[i].pageX
             let yDiff = ongoingTouches[idx].pageY - touches[i].pageY
             if (Math.abs(xDiff) > Math.abs(yDiff)) { /*most significant*/
-                if (50 < xDiff) {
+                if (100 < xDiff) {
                     /* left swipe if significant */
                     switchToNextRightPage()
-                } else if (xDiff < -50) {
+                } else if (xDiff < -100) {
                     /* right swipe if significant */
                     switchToNextLeftPage()
                 }
