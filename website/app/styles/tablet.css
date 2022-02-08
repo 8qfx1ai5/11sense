@@ -71,13 +71,6 @@ body {
     margin: 10px auto;
 }
 
-.subpage {
-    margin: auto;
-    height: calc(100% - 5em);
-    overflow: auto;
-    min-height: 8em;
-}
-
 .hidden {
     display: none !important;
 }

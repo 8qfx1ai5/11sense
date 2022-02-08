@@ -272,6 +272,31 @@ function handlePageStatus() {
             showStats(page);
         }
     })
+
+    setSubpageHeight()
+    setTrainerPageHeight()
+}
+
+// set page height on subpages, to omit page scroll bar
+function setSubpageHeight() {
+    let subpages = document.getElementsByClassName("subpage")
+    let h2s = document.querySelectorAll("#content > div > h2")
+    let topOffset = 0
+
+    // get maximum height of all subpage headers for the offset
+    for (var j = 0; j < h2s.length; j++) {
+        topOffset = Math.max(topOffset, h2s[j].getBoundingClientRect().height)
+    }
+    // add global header height to the offset
+    topOffset += document.getElementById("header").getBoundingClientRect().height
+    for (var i = 0; i < subpages.length; i++) {
+        subpages[i].style.height = (window.innerHeight - topOffset) + "px"
+    }
+}
+
+function setTrainerPageHeight() {
+    let topOffset = document.getElementById("header").getBoundingClientRect().height
+    document.getElementById("trainer-page").style.height = (window.innerHeight - topOffset) + "px"
 }
 
 var xDown = null;
@@ -341,6 +366,9 @@ export function init() {
     document.getElementById('header-left').addEventListener('click', onClickStatsPage)
     document.getElementById(tagIdSettingsSelector).addEventListener('change', setNavPageLocation)
     document.getElementById(tagIdDisplaySelector).addEventListener('change', setStatsPageLocation)
+    window.addEventListener('resize', setSubpageHeight)
+    window.addEventListener('resize', setTrainerPageHeight)
+    window.addEventListener('load', setTrainerPageHeight)
 
     handlePageStatus()
 }

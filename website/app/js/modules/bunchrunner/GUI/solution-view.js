@@ -123,6 +123,10 @@ function onDocumentReadyEvent() {
         updateSolution(currentTask)
         document.getElementById(tagIdSolutionTable).style.display = "none"
     })
+
+    window.addEventListener('bunch-action-new', function(e) {
+        document.getElementById(tagIdClipboard).innerHTML = ""
+    })
 }
 
 export function init() {

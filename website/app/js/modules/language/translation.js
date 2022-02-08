@@ -1,12 +1,12 @@
 let storedLanguageKey = "storedLanguage"
 
 export function getSelectedLanguage() {
-    let languageSelector = document.getElementsByClassName("goog-te-combo");
-    if (0 < languageSelector.length) {
-        if (languageSelector[0].value == "de") {
-            return "de-DE"
-        }
-    }
+    // let languageSelector = document.getElementsByClassName("goog-te-combo");
+    // if (0 < languageSelector.length) {
+    //     if (languageSelector[0].value == "de") {
+    //         return "de-DE"
+    //     }
+    // }
     return "en-US"
 }
 
@@ -15,16 +15,16 @@ export function isSelectedLanguageGerman() {
 }
 
 export function setSelectedLanguage(l) {
-    let newLanguage = 'en'
-    if (l == 'de' || l == "de-DE") {
-        newLanguage = 'de'
-    }
-    let languageSelector = document.getElementsByClassName("goog-te-combo")
-    if (0 < languageSelector.length) {
-        saveSelectedLanguage(newLanguage)
-        languageSelector[0].value = newLanguage
-        languageSelector[0].dispatchEvent(new Event('change'))
-    }
+    // let newLanguage = 'en'
+    // if (l == 'de' || l == "de-DE") {
+    //     newLanguage = 'de'
+    // }
+    // let languageSelector = document.getElementsByClassName("goog-te-combo")
+    // if (0 < languageSelector.length) {
+    //     saveSelectedLanguage(newLanguage)
+    //     languageSelector[0].value = newLanguage
+    //     languageSelector[0].dispatchEvent(new Event('change'))
+    // }
 }
 
 function saveSelectedLanguage(l) {
@@ -112,10 +112,10 @@ export function translateForScreenOutput(key) {
 
 export function init() {
 
-    setTimeout(function() {
-        // hacks to ignore strange behavior of google translate
-        let e = document.querySelector(".goog-te-combo").addEventListener('change', function(e) {
-            saveSelectedLanguage(e.target.value)
-        });
-    }, 4000)
+    // setTimeout(function() {
+    //     // hacks to ignore strange behavior of google translate
+    //     let e = document.querySelector(".goog-te-combo").addEventListener('change', function(e) {
+    //         saveSelectedLanguage(e.target.value)
+    //     });
+    // }, 4000)
 }

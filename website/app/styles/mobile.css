@@ -60,13 +60,6 @@ body {
     margin: 10px auto;
 }
 
-.subpage {
-    margin: auto;
-    height: calc(100% - 5em);
-    overflow: auto;
-    min-height: 8em;
-}
-
 #header img {
     max-width: 4em;
     width: 55%;
@@ -79,8 +72,6 @@ body {
 }
 
 .page {
-    height: calc(100vh - 6em);
-    z-index: 10;
     position: relative;
     min-width: 330px;
     width: 100%;

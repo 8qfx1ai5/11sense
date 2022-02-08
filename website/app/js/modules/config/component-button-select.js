@@ -69,7 +69,7 @@ customElements.define('button-select', class extends HTMLElement {
                     display: inline-block;
                     padding: 0;
                     border: none;
-                    text-align: center;
+                    text-align: right;
                     /* vertical-align: middle; */
                     /* border-radius: 25px; */
                 }

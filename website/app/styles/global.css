@@ -94,11 +94,6 @@ header p {
     font-size: 1.5em;
 }
 
-#clipboard {
-    overflow: auto;
-    height: calc(100% - 20em);
-}
-
 #trainer-page {
     overflow: auto;
 }
@@ -107,9 +102,16 @@ header p {
     opacity: 0.3;
 }
 
+.subpage {
+    margin: auto;
+    overflow: auto;
+    min-height: 8em;
+}
+
 .subpage ul {
     list-style-type: none;
     padding: 0px;
+    margin: 0px;
 }
 
 .subpage li {
@@ -225,6 +227,7 @@ body {
     top: 0px !important;
     /* force scaling under min-width */
     min-width: 400px;
+    overflow: overlay;
 }
 
 body>.skiptranslate {

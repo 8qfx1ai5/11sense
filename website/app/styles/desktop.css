@@ -55,9 +55,7 @@ body {
 #trainer-page {
     width: 45%;
     max-width: 380px;
-    margin: auto;
     display: inline-block;
-    margin: 10px;
     vertical-align: top;
     position: relative;
 }
@@ -77,12 +75,6 @@ body {
     border-right: 1px solid;
 }
 
-.subpage {
-    margin: auto;
-    overflow: auto;
-    height: calc(100% - 3em);
-}
-
 #nav {
     right: 10px;
 }
@@ -92,12 +84,8 @@ body {
 }
 
 .page {
-    margin-top: 15px;
     width: 45%;
     max-width: 30%;
-    height: calc(100% - 9em);
-    z-index: 40;
-    padding: 10px 10px 40px 10px;
     min-width: 300px;
     position: absolute;
 }
