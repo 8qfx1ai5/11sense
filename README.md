@@ -1,12 +1,9 @@
-# This web app was planned as a learning tool
+You can find the current version online:
+[https://11sense.8qfx1ai5.de](https://11sense.8qfx1ai5.de)
 
-You can find the current version here:
-[https://11sense.institute](https://11sense.institute)
+# This Web App was planned as a learning tool, but became a toolbox for experimentation
 
-Unfortiunately: it does not work out for me xD
-
-So you do not get smart and a math genius by training with this tool.
-But the reason for this is actually really interesting.
+If you ever wanted to figure out what kind of learning type you are and what input you need to preform the best, this toolbox maybe can help you. The App contains a lot of configurable features to explore yourself and your skills.
 
 ## The original idea and evolution of the project
 
@@ -30,15 +27,13 @@ __Version 4:__ To make the training more brainfull instead of knowledge-based, I
 
 ## Known errors
 
-- got the feedback, that the app does not fit the screen on old mobile devices (scroll bar visible)
-- if microphone access is decined, there is no second chance to allow the usage
-- mobile swipe feature for navigation can be disturbing
+- If the microphone access is decined, there is no second chance to allow the usage
 
 ## How to run tests
 
     time make test
 
-## What I learned
+## What I learned so far
 
 - The native power of ES6 with modules and namespaces in combination with web-components is impressive. In fact today you do not need any framework to make cool stuff with JS.
 - You need to use a state machines to hanle user interaction. Especially for SUIs.
