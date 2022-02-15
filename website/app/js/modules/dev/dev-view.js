@@ -118,6 +118,6 @@ export function init() {
     }, { passive: true })
 
     appSystem.events.addEventListener("custom-log-changed", function(e) {
-        updateLoggingAddSingleLine(e.detail.log);
-    });
+        updateLoggingAddSingleLine(e.detail.log)
+    })
 }
