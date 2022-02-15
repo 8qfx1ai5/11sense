@@ -81,6 +81,9 @@
                         <li><button class="option-item" id="button-sound" title="Use audio output for tasks and status feedback.">You can listen<span class="hidden  b-label-status" id="sound-button-on">on</span><span id="sound-button-off" class=" b-label-status">off</span><br /><span class="button-sub">(get audio feedback)</span></button>
                         </li>
                         <li>
+                            <button-select id="speechVoiceType" configName="speechVoiceType" title="Select the voice you will hear from the installed voices in your browser." label="Voice Type" sublabel="browser dependent" options='[]' defaultOption="0" />
+                        </li>
+                        <li>
                             <button-select configName="breakTimeout" title="The time in seconds after a finished task until the next task will be started automatically." label="Break Length" sublabel="between tasks in sec." options='[["0","0"],["1","1"],["2","2"],["5","5"],["10","10"],["15","15"],["20","20"],["25","25"],["30","30"],["∞","∞"]]'
                                 defaultOption="5" />
                         </li>

@@ -76,7 +76,7 @@ let translationTableSound = {
     "See you next time.": {
         "de-DE": "Bis zum nächsten Mal."
     },
-    "Hello, let's train.": {
+    "Hello! Let's train.": {
         "de-DE": "Hallo. Lass uns üben."
     },
     "Well played. Let's have a look on the results.": {

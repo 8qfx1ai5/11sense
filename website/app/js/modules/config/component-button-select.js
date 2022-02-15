@@ -1,10 +1,13 @@
+import * as appSystem from '../main/system.js'
+
 customElements.define('button-select', class extends HTMLElement {
 
     constructor() {
         super()
-
         this.attachShadow({ mode: 'open' })
+    }
 
+    render() {
         let configName = this.getAttribute('configName')
         let title = this.getAttribute('title')
         let label = this.getAttribute('label')
@@ -70,8 +73,8 @@ customElements.define('button-select', class extends HTMLElement {
                     padding: 0;
                     border: none;
                     text-align: right;
-                    /* vertical-align: middle; */
-                    /* border-radius: 25px; */
+                    text-overflow: ellipsis;
+                    direction: ltr;
                 }
 
                 #sublabel {
@@ -122,6 +125,7 @@ customElements.define('button-select', class extends HTMLElement {
             }
             inputSelect.add(option)
         })
+        inputSelect.value = defaultOption
 
         if (isDisabled) {
             inputButton.setAttribute("disabled", "disabled")
@@ -150,7 +154,8 @@ customElements.define('button-select', class extends HTMLElement {
             let oldValue = localStorage.getItem(configName)
             if (oldValue != inputSelect.value) {
                 localStorage.setItem(configName, inputSelect.value)
-                window.dispatchEvent(new CustomEvent('config_changed'))
+                appSystem.events.dispatchEvent(new CustomEvent('config_changed'))
+                appSystem.events.dispatchEvent(new CustomEvent(this.getAttribute('configName') + '-changed'))
             }
         })
 
@@ -163,5 +168,17 @@ customElements.define('button-select', class extends HTMLElement {
                 inputSelect.value = newValue
             }
         })
+    }
+
+    connectedCallback() {
+        this.render()
+    }
+
+    static get observedAttributes() {
+        return ['options']
+    }
+
+    attributeChangedCallback(attrName, oldVal, newVal) {
+        this.render()
     }
 })

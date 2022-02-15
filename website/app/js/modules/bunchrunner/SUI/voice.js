@@ -4,6 +4,7 @@ import * as appNotification from '../../notification/onboarding.js'
 import * as appTranslation from '../../language/translation.js'
 import * as autoTask from '../autoTask.js'
 import * as appRunner from '../bunchRunner.js'
+import * as appPage from '../../page/page.js'
 
 export let isActive = false
 let isBetweenTasks = false
@@ -11,6 +12,12 @@ let recognitionObject = null
 let recognitionKillTimout = false
 let mediaStreamObject = null
 let mobileSoundDetectionInterval = null
+
+// is set by the start and stop events
+let isEndlessRecognitionRunning = false
+
+// is used between the start and stop events
+let isEndlessRecognitionOnRestart = false
 
 let isVoiceTechEndless = true
 let voiceTechLocalStorageKey = "speechRecognitionMode"
@@ -28,7 +35,7 @@ function startRecognition() {
         appSystem.log("rc start omitted, voice not active", 1)
         return
     }
-    if (isRecognitionRunning()) {
+    if (isRecognitionRunning() && !isEndlessRecognitionOnRestart) {
         appSystem.log("rc start omitted, already exists", 1)
         return
     }
@@ -55,6 +62,7 @@ function startRecognitionEndless() {
     }
 
     const speechRecognition = window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition || window.oSpeechRecognition || window.SpeechRecognition
+    const speechGrammarList = window.webkitSpeechGrammarList || window.mozSpeechGrammarList || window.msSpeechGrammarList || window.oSpeechGrammarList || window.SpeechGrammarList
 
     if (speechRecognition !== undefined) {
 
@@ -63,6 +71,70 @@ function startRecognitionEndless() {
             recognitionObject.continuous = true
             recognitionObject.interimResults = true
             recognitionObject.lang = appTranslation.getSelectedLanguage()
+            recognitionObject.maxAlternatives = 5
+
+            let grammar = '#JSGF V1.0; grammar number'
+            let speechRecognitionList = new speechGrammarList()
+            speechRecognitionList.addFromString(grammar, 1)
+            recognitionObject.grammars = speechRecognitionList
+
+            recognitionObject.onstart = function() {
+                isEndlessRecognitionRunning = true
+                isEndlessRecognitionOnRestart = false
+                appSystem.log("start recognition endless")
+                setStatusPlaceholder()
+                clearTimeout(recognitionKillTimout)
+            }
+
+            recognitionObject.onresult = recognitionOnResult
+
+            recognitionObject.onerror = function(e) {
+
+                // Main.currentSolution.placeholder = "🙉"
+                clearTimeout(recognitionKillTimout)
+                switch (e.error) {
+                    case "no-speech":
+                    case "aborted":
+                        appSystem.log("dictation hint: " + e.error, 1)
+                        abortRecognition()
+                        break
+                    case "not-allowed":
+                        if (appPage.isMobileMode()) {
+                            appNotification.requireMessage("voiceScreenSaverConflictHint")
+                        } else {
+                            // no microphone permissions, deaktivate mode
+                            appSystem.log("dictation critical error: " + e.error, 3, "app")
+                            appSystem.log(e, 3, "console")
+                            appNotification.sendMessage("voiceMicrophoneMissingPermission")
+                            deactivateVoiceMode()
+                            break
+                        }
+                    case "audio-capture":
+                    case "network":
+                    case "service-not-allowed":
+                    case "bad-grammar":
+                    case "language-not-supported":
+                    default:
+                        appSystem.log("dictation critical error: " + e.error, 3, "app")
+                        appSystem.log(e, 3, "console")
+                        abortRecognition()
+                        break
+                }
+            }
+
+            recognitionObject.onend = function(e) {
+                isEndlessRecognitionRunning = false
+                isEndlessRecognitionOnRestart = true
+                appSystem.log("dictation endless finished", 1)
+                clearTimeout(recognitionKillTimout)
+                startRecognition()
+            }
+
+            recognitionObject.onaudioend = function(e) {
+                appSystem.log("dictation audio ended", 1)
+                clearTimeout(recognitionKillTimout)
+                    // stopRecognition()
+            }
         }
 
         // recognitionObject.lang = "en-US"
@@ -70,57 +142,6 @@ function startRecognitionEndless() {
             recognitionObject.start()
         } catch (e) {
             return
-        }
-
-        recognitionObject.onstart = function() {
-            appSystem.log("start recognition endless")
-            setStatusPlaceholder()
-            clearTimeout(recognitionKillTimout)
-        }
-
-        recognitionObject.onresult = recognitionOnResult
-
-        recognitionObject.onerror = function(e) {
-            // Main.currentSolution.placeholder = "🙉"
-            clearTimeout(recognitionKillTimout)
-            switch (e.error) {
-                case "no-speech":
-                case "aborted":
-                    appSystem.log("dictation hint: " + e.error, 1)
-                    stopRecognition()
-                    break
-                case "not-allowed":
-                    if (!appPage.isDesktopMode()) {
-                        appNotification.requireMessage("voiceScreenSaverConflictHint")
-                    }
-                case "audio-capture":
-                case "network":
-                case "service-not-allowed":
-                case "bad-grammar":
-                case "language-not-supported":
-                default:
-                    appSystem.log("dictation critical error: " + e.error, 3, "app")
-                    appSystem.log(e, 3, "console")
-                    abortRecognition()
-                    break
-            }
-            recognitionObject = null
-        }
-
-        recognitionObject.onend = function(e) {
-            // Main.currentSolution.placeholder = "🙉"
-            appSystem.log("dictation finished", 1)
-            recognitionObject = null
-            clearTimeout(recognitionKillTimout)
-            startRecognition()
-        }
-
-        recognitionObject.onaudioend = function(e) {
-            // Main.currentSolution.placeholder = "🙉"
-            appSystem.log("dictation audio ended", 1)
-            recognitionObject = null
-            clearTimeout(recognitionKillTimout)
-                // stopRecognition()
         }
     } else {
         alert("voice recognition is not supported in your browser")
@@ -185,7 +206,7 @@ function startRecognitionNoise() {
 }
 
 function isRecognitionRunning() {
-    return typeof recognitionObject == "object" && typeof recognitionObject !== 'undefined' && recognitionObject !== null
+    return (isEndlessRecognitionRunning || isEndlessRecognitionOnRestart) && typeof recognitionObject == "object" && typeof recognitionObject !== 'undefined' && recognitionObject !== null
 }
 
 function handleRecognitionNoise() {
@@ -217,7 +238,7 @@ function handleRecognitionNoise() {
     recognitionObject.onend = function(e) {
         // Main.currentSolution.placeholder = "🙉"
         appSystem.log("dictation finished", 1)
-        recognitionObject = null
+            // recognitionObject = null
             // startRecognition()
     }
 }
@@ -301,8 +322,8 @@ function recognitionOnResult(e) {
             appSystem.log("final vr='" + detected + "' => '" + foundNumber + "'")
             appSystem.log(lastInputs, 1, "console")
             if (foundNumber && !lastInputs.includes(foundNumber)) {
+                // success case, solution found
                 lastInputs.push(foundNumber)
-                    // Main.currentSolution.value = foundNumber
                 window.dispatchEvent(new CustomEvent('bunch-request-solution-input', {
                     detail: {
                         input: foundNumber,
@@ -311,10 +332,11 @@ function recognitionOnResult(e) {
                 }))
                 setStatusPlaceholder()
                 appSystem.log("ok.. dictation restart", 1)
-                stopRecognition()
+                abortRecognition()
                 return
             }
         } else {
+            // only temporary and unfinished recognition
             let input = detected.replace("Uhr", "")
             input = input.replace("/", " ")
             let inputTogether = input.replace(/ /g, "").replace(/[/]/g, "")
@@ -322,7 +344,8 @@ function recognitionOnResult(e) {
             appSystem.log("vr='" + detected + "' => (t: '" + inputTogether + "' p: '" + parts.join("|") + "')")
             let inputTogetherGuessed = guessVoiceInput(inputTogether)
             if (!lastInputs.includes(inputTogetherGuessed) && inputTogetherGuessed) {
-                // lastInputs.push(inputTogetherGuessed)
+                // solution found for concatinated input
+                lastInputs.push(inputTogetherGuessed)
                 window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
                     detail: {
                         input: inputTogetherGuessed,
@@ -330,14 +353,16 @@ function recognitionOnResult(e) {
                     }
                 }))
                 appSystem.log("ok.. dictation restart", 1)
-                stopRecognition()
+                abortRecognition()
                 return
             }
             for (let i = 0; i < parts.length; i++) {
+                // handle every part as possible answer
                 appSystem.log(parts[i], 1)
                 let inputPart = guessVoiceInput(parts[i])
                 if (!lastInputs.includes(inputPart) && inputPart) {
-                    // lastInputs.push(inputPart)
+                    // solution found
+                    lastInputs.push(inputPart)
                     window.dispatchEvent(new CustomEvent('bunch-request-possible-solution-input', {
                         detail: {
                             input: inputPart,
@@ -346,7 +371,7 @@ function recognitionOnResult(e) {
                     }))
 
                     appSystem.log("ok.. dictation restart", 1)
-                    stopRecognition()
+                    abortRecognition()
                     return
                 }
                 appSystem.log("invalid", 1)
@@ -451,18 +476,18 @@ export function activateVoiceMode() {
 }
 
 export function deactivateVoiceMode(isJustARestart = false) {
-    stopRecognition()
-    clearInterval(mobileSoundDetectionInterval)
-    mobileSoundDetectionInterval = null
     if (!isJustARestart) {
         // document.getElementById(tagIdMicrophoneImage).classList.add("hidden")
+        isActive = false
         document.getElementById(tagIdButtonVoice + "-on").classList.add("hidden")
         document.getElementById(tagIdButtonVoice + "-off").classList.remove("hidden")
-        isActive = false
         localStorage.setItem('isActive', false)
             // Main.currentSolution.removeAttribute("readonly")
         appSystem.events.dispatchEvent(new CustomEvent('voice-mode-end-after'))
     }
+    abortRecognition()
+    clearInterval(mobileSoundDetectionInterval)
+    mobileSoundDetectionInterval = null
 }
 
 // TODO: unit tests

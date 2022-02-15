@@ -17,6 +17,10 @@ export function isDesktopMode() {
     return 1300 <= screen.width
 }
 
+export function isMobileMode() {
+    return !isDesktopMode()
+}
+
 function switchToNextRightPage() {
     let allSubpages = getRegisteredDisplaySubpages().concat([""]).concat(getRegisteredSettingsSubpages())
     let currentSubpageIndex = allSubpages.indexOf(window.location.hash.substr(1))

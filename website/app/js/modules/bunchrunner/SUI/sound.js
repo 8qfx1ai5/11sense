@@ -5,10 +5,14 @@ import * as appMath from '../../math/math.js'
 export let isSoundModeActive = false;
 let successMessagesDE = ["richtig", "sehr gut", "hervorragend", "gut gemacht", "genau so", "weiter so", "bravo", "ja"];
 let successMessagesEN = ["right", "very good", "excellent", "well done", "that's it", "keep it up", "good job", "yes"];
-let soundButtonLabelOn;
-let soundButtonLabelOff;
+let soundButtonLabelOn = document.getElementById('sound-button-on')
+let soundButtonLabelOff = document.getElementById('sound-button-off')
+let soundButton = document.getElementById('button-sound')
 
-let tagIdButtonSound = "button-sound"
+const browserIndependentSpeechSynthesisUtterance = window.webkitSpeechSynthesisUtterance || window.mozSpeechSynthesisUtterance || window.msSpeechSynthesisUtterance || window.oSpeechSynthesisUtterance || window.SpeechSynthesisUtterance
+const browserIndependentSpeechSynthesis = window.webkitSpeechSynthesis || window.mozSpeechSynthesis || window.msSpeechSynthesis || window.oSpeechSynthesis || window.speechSynthesis
+
+let voiceSelectButton = document.getElementById("speechVoiceType")
 
 function getSuccessMessages() {
     if (appTranslation.getSelectedLanguage() == "de-DE") {
@@ -19,22 +23,23 @@ function getSuccessMessages() {
 
 function speak(s, state) {
     if (isSoundModeActive) {
-        let statement = new SpeechSynthesisUtterance(s);
+        let statement = new browserIndependentSpeechSynthesisUtterance(s);
         statement.lang = appTranslation.getSelectedLanguage();
-        // statement.rate = r;
-        statement.pitch = 0.6
+        statement.rate = 1
+        statement.pitch = 1
+        statement.voice = browserIndependentSpeechSynthesis.getVoices()[localStorage.getItem(voiceSelectButton.getAttribute('configName'))]
         statement.onstart = function(event) {
             appSystem.events.dispatchEvent(new CustomEvent('speak-before'));
         }
         statement.onend = function(event) {
             appSystem.events.dispatchEvent(new CustomEvent('speak-after'));
         }
-        speechSynthesis.speak(statement);
+        browserIndependentSpeechSynthesis.speak(statement);
     }
 }
 
 export function hasPendingSoundOutput() {
-    return speechSynthesis.pending || speechSynthesis.speaking;
+    return browserIndependentSpeechSynthesis.pending || browserIndependentSpeechSynthesis.speaking;
 }
 
 function toggleSoundMode() {
@@ -54,7 +59,7 @@ export function acitvateSoundMode() {
 }
 
 export function deactivateSoundMode() {
-    speechSynthesis.cancel();
+    browserIndependentSpeechSynthesis.cancel()
     isSoundModeActive = false;
     soundButtonLabelOn.classList.add("hidden");
     soundButtonLabelOff.classList.remove("hidden");
@@ -63,10 +68,6 @@ export function deactivateSoundMode() {
 }
 
 export function init() {
-    soundButtonLabelOn = document.getElementById('sound-button-on');
-    soundButtonLabelOff = document.getElementById('sound-button-off');
-    //isSoundModeActive = localStorage.getItem('isSoundModeActive') != "true";
-    //toggleSoundMode();
 
     appSystem.events.addEventListener('repeat-task', function(e) {
         if (isSoundModeActive) {
@@ -76,21 +77,29 @@ export function init() {
 
     window.addEventListener('bunch-action-task-next', function(e) {
         if (isSoundModeActive) {
-            speechSynthesis.cancel()
+            browserIndependentSpeechSynthesis.cancel()
             speak(e.detail.state.getTask().questionSUI);
         }
     });
 
     window.addEventListener('bunch-action-task-previous', function(e) {
         if (isSoundModeActive) {
-            speechSynthesis.cancel()
+            browserIndependentSpeechSynthesis.cancel()
             speak(e.detail.state.getTask().questionSUI);
         }
     });
 
     appSystem.events.addEventListener('sound-mode-start-after', function() {
+        // speak intro after sounde mode was started
         if (isSoundModeActive) {
-            speak(appTranslation.translateForSoundOutput("Hello, let's train."));
+            speak(appTranslation.translateForSoundOutput("Hello! Let's train."))
+        }
+    });
+
+    appSystem.events.addEventListener(voiceSelectButton.getAttribute('configName') + '-changed', function() {
+        // speak something after voice type was changed
+        if (isSoundModeActive) {
+            speak(appTranslation.translateForSoundOutput("Hello! I will support you."))
         }
     });
 
@@ -143,6 +152,20 @@ export function init() {
         }
     });
 
-    document.getElementById(tagIdButtonSound).addEventListener('click', toggleSoundMode)
+    soundButton.addEventListener('click', toggleSoundMode)
 
+    // add voice options to the select button
+    // requires timeout, because of missing voices after page-load
+    setTimeout(() => {
+        let voiceTypeOptions = []
+        let voices = browserIndependentSpeechSynthesis.getVoices()
+        for (let i = 0; i < voices.length; i++) {
+            if (voices[i].lang == "en-US") {
+                voiceTypeOptions.push('["' + i + '","' + voices[i].name + '"]')
+            }
+        }
+
+        voiceSelectButton.setAttribute('defaultOption', localStorage.getItem(voiceSelectButton.getAttribute('configName')))
+        voiceSelectButton.setAttribute('options', '[' + voiceTypeOptions.join(',') + ']')
+    }, 500)
 }
