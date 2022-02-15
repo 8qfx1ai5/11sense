@@ -1,9 +1,9 @@
-You can find the current version online:
-[https://11sense.8qfx1ai5.de](https://11sense.8qfx1ai5.de)
-
 # This Web App was planned as a learning tool, but became a toolbox for experimentation
 
 If you ever wanted to figure out what kind of learning type you are and what input you need to preform the best, this toolbox maybe can help you. The App contains a lot of configurable features to explore yourself and your skills.
+
+You can find the current version online:
+[https://11sense.8qfx1ai5.de](https://11sense.8qfx1ai5.de)
 
 ## The original idea and evolution of the project
 
