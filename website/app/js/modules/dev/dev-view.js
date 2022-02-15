@@ -115,7 +115,7 @@ export function init() {
             devModeClickCounter = 0;
             devModeClickCounterStart = 0;
         }
-    });
+    }, { passive: true })
 
     appSystem.events.addEventListener("custom-log-changed", function(e) {
         updateLoggingAddSingleLine(e.detail.log);
