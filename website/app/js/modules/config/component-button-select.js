@@ -124,8 +124,10 @@ customElements.define('button-select', class extends HTMLElement {
                 option.classList.add("notranslate")
             }
             inputSelect.add(option)
+            if (defaultOption == option.value) {
+                inputSelect.value = option.value
+            }
         })
-        inputSelect.value = defaultOption
 
         if (isDisabled) {
             inputButton.setAttribute("disabled", "disabled")

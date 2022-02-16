@@ -158,14 +158,24 @@ export function init() {
     // requires timeout, because of missing voices after page-load
     setTimeout(() => {
         let voiceTypeOptions = []
+        let voiceTypeOptionsStrings = []
         let voices = browserIndependentSpeechSynthesis.getVoices()
+
         for (let i = 0; i < voices.length; i++) {
             if (voices[i].lang == "en-US") {
-                voiceTypeOptions.push('["' + i + '","' + voices[i].name + '"]')
+                // TODO: handle other languages
+                voiceTypeOptionsStrings.push('["' + i + '","' + voices[i].name + '"]')
+                voiceTypeOptions[i] = voices[i].name
             }
         }
 
-        voiceSelectButton.setAttribute('defaultOption', localStorage.getItem(voiceSelectButton.getAttribute('configName')))
-        voiceSelectButton.setAttribute('options', '[' + voiceTypeOptions.join(',') + ']')
+        let current = localStorage.getItem(voiceSelectButton.getAttribute('configName'))
+        if (typeof voiceTypeOptions[current] === 'undefined') {
+            current = voiceTypeOptions.find(Boolean)
+            localStorage.setItem(voiceSelectButton.getAttribute('configName'), current)
+        }
+
+        voiceSelectButton.setAttribute('defaultOption', voiceTypeOptions[current])
+        voiceSelectButton.setAttribute('options', '[' + voiceTypeOptionsStrings.join(',') + ']')
     }, 500)
 }
