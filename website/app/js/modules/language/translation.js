@@ -1,54 +1,65 @@
-let storedLanguageKey = "storedLanguage"
+import * as appSystem from '../main/system.js'
+
+let selectLanguageButton = document.getElementById("select-language-button")
+let cachedLanguage = false
+
+export let supportedLanguages = ['en-US', 'de-DE']
+export let defaultLanguage = ['en-US']
 
 export function getSelectedLanguage() {
-    // let languageSelector = document.getElementsByClassName("goog-te-combo");
-    // if (0 < languageSelector.length) {
-    //     if (languageSelector[0].value == "de") {
-    //         return "de-DE"
-    //     }
-    // }
-    return "en-US"
+    if (cachedLanguage) {
+        return cachedLanguage
+    }
+    let storedLanguage = getStoredLanguage()
+    if (storedLanguage) {
+        cachedLanguage = storedLanguage
+        return storedLanguage
+    }
+    setLanguage(defaultLanguage)
+    return defaultLanguage
 }
 
 export function isSelectedLanguageGerman() {
+    // TODO: this function should not be necessary
     return getSelectedLanguage() == "de-DE"
 }
 
-export function setSelectedLanguage(l) {
-    // let newLanguage = 'en'
-    // if (l == 'de' || l == "de-DE") {
-    //     newLanguage = 'de'
-    // }
-    // let languageSelector = document.getElementsByClassName("goog-te-combo")
-    // if (0 < languageSelector.length) {
-    //     saveSelectedLanguage(newLanguage)
-    //     languageSelector[0].value = newLanguage
-    //     languageSelector[0].dispatchEvent(new Event('change'))
-    // }
+export function setLanguage(newLanguage) {
+    if (supportedLanguages.includes(newLanguage)) {
+        selectLanguageButton.setAttribute('value') = newLanguage
+        saveSelectedLanguage(newLanguage)
+        return
+    }
+    appSystem.log('selected language "' + newLanguage + '" not supported', 1)
 }
 
-function saveSelectedLanguage(l) {
-    localStorage.setItem(storedLanguageKey, l)
+function saveSelectedLanguage(newLanguage) {
+    localStorage.setItem(selectLanguageButton.getAttribute('configName'), newLanguage)
+    cachedLanguage = newLanguage
 }
 
 function getStoredLanguage() {
-    let language = localStorage.getItem(storedLanguageKey)
-    if (!language || language == "") {
-        return false
+    let storedLanguage = localStorage.getItem(selectLanguageButton.getAttribute('configName'))
+    if (supportedLanguages.includes(storedLanguage)) {
+        return storedLanguage
     }
-    return language
+    return false
 }
 
 function getInitLanguage() {
-    let oldLanguage = getStoredLanguage()
-    if (oldLanguage) {
-        return oldLanguage
+    let storedLanguage = getStoredLanguage()
+    if (storedLanguage) {
+        return storedLanguage
     }
-    return getBrowserLanguage()
+    let browserLanguage = getBrowserLanguage()
+    if (supportedLanguages.includes(browserLanguage)) {
+        return browserLanguage
+    }
+    return defaultLanguage
 }
 
-export function getBrowserLanguage() {
-    return (navigator.language || navigator.userLanguage).split('-', 1)[0]
+function getBrowserLanguage() {
+    return (navigator.language || navigator.userLanguage)
 }
 
 let translationTableSound = {
@@ -78,6 +89,9 @@ let translationTableSound = {
     },
     "Hello! Let's train.": {
         "de-DE": "Hallo. Lass uns üben."
+    },
+    "Hello! I will support you.": {
+        "de-DE": "Hallo. Ich werde dich unterstützen."
     },
     "Well played. Let's have a look on the results.": {
         "de-DE": "Gut gespielt. Lass uns einen Blick auf die Ergebnisse werfen."
@@ -112,10 +126,10 @@ export function translateForScreenOutput(key) {
 
 export function init() {
 
-    // setTimeout(function() {
-    //     // hacks to ignore strange behavior of google translate
-    //     let e = document.querySelector(".goog-te-combo").addEventListener('change', function(e) {
-    //         saveSelectedLanguage(e.target.value)
-    //     });
-    // }, 4000)
+    saveSelectedLanguage(getInitLanguage())
+
+    window.addEventListener(selectLanguageButton.getAttribute('configName') + '-changed', () => {
+        cachedLanguage = false
+    })
+
 }

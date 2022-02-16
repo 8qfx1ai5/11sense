@@ -1,16 +1,18 @@
 import * as appSystem from '../main/system.js'
-import * as Main from '../main/main.js';
 
-let settingsImage;
-let statsImage;
-let headerMain;
-let stats;
+let settingsImage = document.getElementById("settings-image")
+let statsImage = document.getElementById("stats-image")
+let headerMain = document.getElementById("header-main")
+let stats = document.getElementById("stats")
 export let tagIdDisplaySelector = "display-selector";
 export let tagIdSettingsSelector = "settings-selector";
 let tagIdHeaderRight = "header-right"
 let tagIdHeaderLeft = "header-left"
 let tagIdMainPage = "trainer-page"
 let ongoingTouches = []
+
+let navigation = document.getElementById('nav')
+let Solution = document.getElementById('Solution')
 
 
 export function isDesktopMode() {
@@ -54,13 +56,11 @@ function isMainPageActive() {
 function showMainPage() {
     headerMain.classList.remove("inactive-page-icon");
     document.getElementById(tagIdMainPage).classList.remove("hidden");
-    // Main.currentSolution.focus();
 }
 
 function hideMainPage() {
     headerMain.classList.add("inactive-page-icon");
     document.getElementById(tagIdMainPage).classList.add("hidden");
-    // Main.currentSolution.blur();
 }
 
 function clickMainPage() {
@@ -95,19 +95,19 @@ export function toggleNav() {
 }
 
 function showNav(subpage = "settings-basic") {
-    Main.navigation.classList.remove("hidden");
+    navigation.classList.remove("hidden");
     hideSolution();
     document.getElementById(tagIdHeaderRight).classList.remove("inactive-page-icon");
     if (!isDesktopMode()) {
         hideMainPage();
         hideStats();
     }
-    Main.navigation.focus();
+    navigation.focus();
     changeSettingsSubpageTo(subpage);
 }
 
 function hideNav() {
-    Main.navigation.classList.add("hidden");
+    navigation.classList.add("hidden");
     document.getElementById(tagIdHeaderRight).classList.add("inactive-page-icon");
 }
 
@@ -205,35 +205,32 @@ export function onClickStatsPage() {
 // all about solution pages
 
 export function toggleSolution() {
-    if (Main.Solution.style.display === "none") {
+    if (Solution.style.display === "none") {
         showSolution()
     } else {
         hideSolution()
-            // Main.currentSolution.focus();
     }
 }
 
 function showSolution() {
-    Main.Solution.style.display = "block";
+    Solution.style.display = "block";
     hideNav();
-    Main.Solution.focus();
+    Solution.focus();
 }
 
 function hideSolution() {
-    Main.Solution.style.display = "none";
+    Solution.style.display = "none";
 }
 
 // all about fullscreen
 
 export function toggleFullScreen() {
-    let element = document.documentElement
     if (!document.fullscreen && !document.mozFullScreen && !document.webkitFullScreen && !document.msRequestFullscreen) {
         enterFullscreen()
     } else {
         exitFullscreen()
     }
     hideNav();
-    // Main.currentSolution.focus();
 }
 
 export function enterFullscreen() {
@@ -377,10 +374,6 @@ function ongoingTouchIndexById(idToFind) {
 }
 
 export function init() {
-    settingsImage = document.getElementById("settings-image");
-    statsImage = document.getElementById("stats-image");
-    headerMain = document.getElementById("header-main");
-    stats = document.getElementById("stats");
 
     document.addEventListener('touchstart', handleTouchStart, false);
     document.addEventListener('touchmove', handleTouchMove, false);

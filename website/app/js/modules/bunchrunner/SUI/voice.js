@@ -260,7 +260,7 @@ function recognitionOnResult(e) {
         }
 
         if (currentResult == "stop") {
-            appSystem.events.dispatchEvent(new CustomEvent('request-deactivate-conversation'))
+            window.dispatchEvent(new CustomEvent('request-deactivate-conversation'))
             return
         }
         let detected = e.results[e.results.length - 1][0].transcript
@@ -304,17 +304,17 @@ function recognitionOnResult(e) {
             }
             if (isCommandRepeatTask(lang, command)) {
                 lastInputs.push(command)
-                appSystem.events.dispatchEvent(new CustomEvent('repeat-task'))
+                window.dispatchEvent(new CustomEvent('repeat-task'))
                 return
             }
             if (isCommandAreYouThere(lang, command)) {
                 lastInputs.push(command)
-                appSystem.events.dispatchEvent(new CustomEvent('give-status-answer-yes'))
+                window.dispatchEvent(new CustomEvent('give-status-answer-yes'))
                 return
             }
             if (isCommandHello(lang, command)) {
                 lastInputs.push(command)
-                appSystem.events.dispatchEvent(new CustomEvent('give-status-answer-hallo'))
+                window.dispatchEvent(new CustomEvent('give-status-answer-hallo'))
                 return
             }
 
@@ -472,7 +472,7 @@ export function activateVoiceMode() {
         // Main.currentSolution.setAttribute("readonly", "readonly")
     isActive = true
     startRecognition()
-    appSystem.events.dispatchEvent(new CustomEvent('voice-mode-start-after'))
+    window.dispatchEvent(new CustomEvent('voice-mode-start-after'))
 }
 
 export function deactivateVoiceMode(isJustARestart = false) {
@@ -483,7 +483,7 @@ export function deactivateVoiceMode(isJustARestart = false) {
         document.getElementById(tagIdButtonVoice + "-off").classList.remove("hidden")
         localStorage.setItem('isActive', false)
             // Main.currentSolution.removeAttribute("readonly")
-        appSystem.events.dispatchEvent(new CustomEvent('voice-mode-end-after'))
+        window.dispatchEvent(new CustomEvent('voice-mode-end-after'))
     }
     abortRecognition()
     clearInterval(mobileSoundDetectionInterval)
@@ -601,14 +601,14 @@ export function init() {
         }
     })
 
-    appSystem.events.addEventListener('speak-before', function(e) {
+    window.addEventListener('speak-before', function(e) {
         if (isActive) {
             abortRecognition()
         }
         setStatusPlaceholder()
     })
 
-    appSystem.events.addEventListener('speak-after', function(e) {
+    window.addEventListener('speak-after', function(e) {
         if (isActive) {
             setTimeout(function() {
                 startRecognition()

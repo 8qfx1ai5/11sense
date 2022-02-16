@@ -31,8 +31,6 @@ export function isRunning() {
 export function init() {
 
     window.addEventListener('bunch-request-runner-pause', (e) => {
-        appSystem.log(e, 2, "console");
-        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
         if (!isRunning()) {
             appSystem.log("SKIP: bunch runner already pausing")
             return;
@@ -48,8 +46,6 @@ export function init() {
     })
 
     window.addEventListener('bunch-request-runner-start', (e) => {
-        appSystem.log(e, 2, "console");
-        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
         if (isRunning()) {
             appSystem.log("SKIP: bunch runner already running")
             return;
@@ -78,9 +74,6 @@ export function init() {
     })
 
     window.addEventListener('bunch-request-submit', (e) => {
-        appSystem.log(e, 2, "console");
-        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
-
         solutionGuide.stop()
         autoTask.stop()
 
@@ -94,8 +87,6 @@ export function init() {
     })
 
     window.addEventListener('bunch-request-next-task', function(e) {
-        appSystem.log(e, 2, "console");
-        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
         if (state.taskList.length == 0) {
             appSystem.log("SKIP: task list empty")
             return
@@ -130,8 +121,6 @@ export function init() {
     })
 
     window.addEventListener('bunch-request-previous-task', function(e) {
-        appSystem.log(e, 2, "console");
-        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
         if (!state.currentTaskIndex || state.currentTaskIndex == 0) {
             appSystem.log("SKIP: there is no previous-task")
             return
@@ -155,18 +144,12 @@ export function init() {
     })
 
     window.addEventListener('bunch-request-new', function(e) {
-        appSystem.log(e, 2, "console");
-        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
-
         state = BunchFactory.create()
 
         window.dispatchEvent(new CustomEvent('bunch-action-new', { detail: { state: state } }))
     })
 
     window.addEventListener('bunch-request-possible-solution-input', function(e) {
-        appSystem.log(e, 2, "console");
-        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
-
         if (state.isFinished) {
             appSystem.log("SKIP: you can not change a finished bunch")
             return
@@ -194,9 +177,6 @@ export function init() {
     })
 
     window.addEventListener('bunch-request-solution-input', function(e) {
-        appSystem.log(e, 2, "console");
-        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
-
         if (state.isFinished) {
             appSystem.log("SKIP: you can not change a finished bunch")
             return
@@ -225,7 +205,7 @@ export function init() {
                 window.dispatchEvent(new CustomEvent('bunch-request-submit'))
                 return
             }
-            autoTask.start()
+            autoTask.start(state)
             return
         } else if (state.getTask(e.detail.taskIndex).isPartialSolution(e.detail.input)) {
             window.dispatchEvent(new CustomEvent('bunch-action-solution-partial-found', { detail: { state: state } }))
@@ -235,8 +215,6 @@ export function init() {
     })
 
     window.addEventListener('bunch-request-solution-timed-out', function(e) {
-        appSystem.log(e, 2, "console");
-        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
         if (e.detail.taskIndex != state.currentTaskIndex) {
             appSystem.log("SKIP: task is out of date")
             return
@@ -257,13 +235,6 @@ export function init() {
             window.dispatchEvent(new CustomEvent('bunch-request-submit'))
             return
         }
-        autoTask.start()
-    })
-
-    events.forEach((event) => {
-        window.addEventListener(event, function(e) {
-            appSystem.log(e, 2, "console");
-            appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
-        })
+        autoTask.start(state)
     })
 }

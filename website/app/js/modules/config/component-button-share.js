@@ -93,9 +93,11 @@ customElements.define('button-share', class extends HTMLElement {
         inputButton.addEventListener('click', function(e) {
             let shareHeadline = "Check this out"
             let shareText = 'Found something new: the "11. Sense" learn App \n'
-                // ignore paging information in the link
+
+            // ignore paging information in the link
             let shareURL = window.location.origin + window.location.pathname
             if (appTranslation.isSelectedLanguageGerman()) {
+                // TODO: implement generic translation
                 shareHeadline = "Sieh dir das mal an"
                 shareText = 'Hab was Neues gefunden: die "11. Sense" lern App \n'
             }

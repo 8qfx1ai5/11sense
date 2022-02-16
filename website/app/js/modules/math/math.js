@@ -114,3 +114,10 @@ export function sumRecursive(task, s, i, c) {
     }
     return []
 }
+
+export function formatNumberForDisplay(n) {
+    if (!n) {
+        return ""
+    }
+    return n.toString().replace(".", ",")
+}

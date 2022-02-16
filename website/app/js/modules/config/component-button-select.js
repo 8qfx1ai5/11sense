@@ -1,5 +1,3 @@
-import * as appSystem from '../main/system.js'
-
 customElements.define('button-select', class extends HTMLElement {
 
     constructor() {
@@ -7,6 +5,10 @@ customElements.define('button-select', class extends HTMLElement {
         this.attachShadow({ mode: 'open' })
     }
 
+    /*
+     * It is important, that the render function works only on the given data.
+     * Do NOT trigger any events and also do NOT change the local storage!
+     */
     render() {
         let configName = this.getAttribute('configName')
         let title = this.getAttribute('title')
@@ -113,6 +115,8 @@ customElements.define('button-select', class extends HTMLElement {
         let inputSelect = this.shadowRoot.querySelector("select")
         let labelSpan = this.shadowRoot.querySelector("#label")
 
+        let storedValue = localStorage.getItem(configName)
+        let wasValueFound = false
         options.forEach((optionConfig) => {
             let option = document.createElement("option");
             option.value = optionConfig[0]
@@ -124,10 +128,19 @@ customElements.define('button-select', class extends HTMLElement {
                 option.classList.add("notranslate")
             }
             inputSelect.add(option)
-            if (defaultOption == option.value) {
-                inputSelect.value = option.value
+            if (!wasValueFound) {
+                if (storedValue === option.value) {
+                    inputSelect.value = storedValue
+                    wasValueFound = true
+                } else if (defaultOption === option.value) {
+                    inputSelect.value = defaultOption
+                }
             }
         })
+
+        if (!inputSelect.value) {
+            inputSelect.selectedIndex = 0
+        }
 
         if (isDisabled) {
             inputButton.setAttribute("disabled", "disabled")
@@ -156,18 +169,14 @@ customElements.define('button-select', class extends HTMLElement {
             let oldValue = localStorage.getItem(configName)
             if (oldValue != inputSelect.value) {
                 localStorage.setItem(configName, inputSelect.value)
-                appSystem.events.dispatchEvent(new CustomEvent('config_changed'))
-                appSystem.events.dispatchEvent(new CustomEvent(this.getAttribute('configName') + '-changed'))
-            }
-        })
-
-        window.addEventListener("config_changed", function(e) {
-            let newValue = localStorage.getItem(configName);
-            if (!newValue || newValue == '') {
-                localStorage.setItem(configName, defaultOption);
-                inputSelect.value = defaultOption
-            } else if (newValue != inputSelect.value) {
-                inputSelect.value = newValue
+                this.dispatchEvent(new CustomEvent(this.getAttribute('configName') + '-changed', {
+                    bubbles: true,
+                    composed: true
+                }))
+                this.dispatchEvent(new CustomEvent('config_changed', {
+                    bubbles: true,
+                    composed: true
+                }))
             }
         })
     }

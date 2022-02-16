@@ -1,6 +1,6 @@
-import * as Main from '../main/main.js'
 import State from '../bunchrunner/State.js'
 import * as appTranslation from '../language/translation.js'
+import * as appMath from '../math/math.js'
 
 let historyList;
 let historyLocalStorageKey = "resultHistoryV2";
@@ -51,7 +51,7 @@ function updateHistoryBasedOnLocalStorage() {
                 valid++
             }
         }
-        let text = valid + "/" + state.taskList.length + " \"" + type + "\" ( " + Main.formatNumberForDisplay(eclapesTime) + " sec. - " + dateFormated + " )"
+        let text = valid + "/" + state.taskList.length + " \"" + type + "\" ( " + appMath.formatNumberForDisplay(eclapesTime) + " sec. - " + dateFormated + " )"
         content.appendChild(document.createTextNode(text));
         entry.appendChild(content);
         historyList.append(entry);

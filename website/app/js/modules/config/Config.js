@@ -197,50 +197,49 @@ export default class Config {
 
         // load preconfigured level if selected
         let level = localStorage.getItem('selectedExercise')
-        if (level in preconfiguredLevels) {
-            for (const [key, value] of Object.entries(preconfiguredLevels[level])) {
-                this[key] = value
-            }
-            this.configId = level
+        if (!preconfiguredLevels.hasOwnProperty(level)) {
+            level = 'custom'
         }
+        for (const [key, value] of Object.entries(preconfiguredLevels[level])) {
+            this[key] = value
+        }
+        this.configId = level
         if (!(level in preconfiguredLevels) || level == "custom") {
-            let defaultParams = ['number0Range', 'number1Range', 'number2Range', 'bunchSize', 'selectedOperator']
-            for (let i = 0; i < defaultParams.length; i++) {
-                // TODO: find some better way to initialize the default values
-                if (!localStorage.getItem(defaultParams[i])) {
-                    setTimeout(function() {
-                        // wait some time and try again
-                        window.dispatchEvent(new CustomEvent('config_changed'))
-                    }, 500)
-                    return
+            if (localStorage.getItem('number0Range')) {
+                let f0 = localStorage.getItem('number0Range').split('-')
+                this.numberRange0 = false
+                if (1 < f0.length) {
+                    this.numberRange0 = [parseInt(f0[0], 10), parseInt(f0[1], 10)]
                 }
             }
-
-            let f0 = localStorage.getItem('number0Range').split('-')
-            this.numberRange0 = false
-            if (1 < f0.length) {
-                this.numberRange0 = [parseInt(f0[0], 10), parseInt(f0[1], 10)]
+            if (localStorage.getItem('number1Range')) {
+                let f1 = localStorage.getItem('number1Range').split('-')
+                this.numberRange1 = [parseInt(f1[0], 10), parseInt(f1[1], 10)]
             }
-            let f1 = localStorage.getItem('number1Range').split('-')
-            this.numberRange1 = [parseInt(f1[0], 10), parseInt(f1[1], 10)]
-            let f2 = localStorage.getItem('number2Range').split('-')
-            this.numberRange2 = [parseInt(f2[0], 10), parseInt(f2[1], 10)]
-
-            this.bunchSize = parseInt(localStorage.getItem('bunchSize'), 10);
+            if (localStorage.getItem('number2Range')) {
+                let f2 = localStorage.getItem('number2Range').split('-')
+                this.numberRange2 = [parseInt(f2[0], 10), parseInt(f2[1], 10)]
+            }
+            if (localStorage.getItem('bunchSize')) {
+                this.bunchSize = parseInt(localStorage.getItem('bunchSize'), 10)
+            }
             this.isDecimalPlacesMode = localStorage.getItem('decimalPlacesMode') == "on"
             this.isRacingMode = localStorage.getItem('racingMode') == "on"
             this.isHideTaskModeActive = localStorage.getItem('hideTaskMode') == "on"
-            this.operator = localStorage.getItem('selectedOperator')
+            if (localStorage.getItem('selectedOperator')) {
+                this.operator = localStorage.getItem('selectedOperator')
+            }
+            this.autoTaskTime = localStorage.getItem("breakTimeout")
+            if (!this.autoTaskTime || this.autoTaskTime == "∞" || this.autoTaskTime == "") {
+                this.autoTaskTime = -1
+            }
         }
-
     }
 }
 
 export function init() {
 
     window.addEventListener('config_changed', function(e) {
-        appSystem.log(e, 2, "console");
-        appSystem.log(e.constructor.name.toUpperCase() + ": " + e.type, 2, "app");
         window.dispatchEvent(new CustomEvent('bunch-request-new'))
     })
 

@@ -1,17 +1,19 @@
 import * as appSound from './SUI/sound.js'
 
-let localStorageAutoTaskInterval = "breakTimeout"
-
 let autoTaskStartTime = false
 
 /** @var currentAutoTaskInterval cached value used in the wait loop, to omit local storage access */
 let currentAutoTaskInterval = -1
 
+/** @var currentState the state object */
+let currentState
+
 export function isRunning() {
     return autoTaskStartTime != false
 }
 
-export function start() {
+export function start(state) {
+    currentState = state
     if (!isEnabled()) {
         return
     }
@@ -47,11 +49,11 @@ export function stop() {
 }
 
 function getAutoTaskInterval() {
-    let interval = localStorage.getItem(localStorageAutoTaskInterval)
-    if (!interval || interval == "∞" || interval == "") {
+    let interval = currentState.config.autoTaskTime
+    if (!Number.isInteger(interval)) {
         currentAutoTaskInterval = -1
         return currentAutoTaskInterval
     }
-    currentAutoTaskInterval = interval * 1000
+    currentAutoTaskInterval = interval
     return currentAutoTaskInterval
 }

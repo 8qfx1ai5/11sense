@@ -33,23 +33,23 @@ function updateConversationButton() {
 }
 
 function registerEvents() {
-    appSystem.events.addEventListener('voice-mode-start-after', function(e) {
+    window.addEventListener('voice-mode-start-after', function(e) {
         updateConversationButton()
     })
 
-    appSystem.events.addEventListener('voice-mode-end-after', function(e) {
+    window.addEventListener('voice-mode-end-after', function(e) {
         updateConversationButton()
     })
 
-    appSystem.events.addEventListener('sound-mode-start-after', function(e) {
+    window.addEventListener('sound-mode-start-after', function(e) {
         updateConversationButton()
     })
 
-    appSystem.events.addEventListener('sound-mode-end-after', function(e) {
+    window.addEventListener('sound-mode-end-after', function(e) {
         updateConversationButton()
     })
 
-    appSystem.events.addEventListener('request-deactivate-conversation', function(e) {
+    window.addEventListener('request-deactivate-conversation', function(e) {
         deactivateConversationMode()
     })
 

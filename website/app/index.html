@@ -45,7 +45,7 @@
                 <div class="subpage" id="settings-basic">
                     <ul id="basic-settings-list">
                         <li>
-                            <button-select configName="selectedExercise" title="Select your experience level or global task configuration." label="Exercise" sublabel="select configuration" options='[["custom","&#8239;&#8239;&#8239;"],["add_race_1","A1"],["add_race_2","A2"],["add_race_3","A3"],["add_race_4","A4"],["add_race_5","A5"],["add_race_10","B1"],["add_race_11","B2"],["add_1","L1 +"],["mult_1","L1 *"]]'
+                            <button-select configName="selectedExercise" title="Select your experience level or global task configuration." label="Exercise" sublabel="select configuration" options='[["custom","custom"],["add_race_1","A1"],["add_race_2","A2"],["add_race_3","A3"],["add_race_4","A4"],["add_race_5","A5"],["add_race_10","B1"],["add_race_11","B2"],["add_1","L1 +"],["mult_1","L1 *"]]'
                                 defaultOption="custom" />
                         </li>
                         <li><button class="option-item" id="button-conversation" title="You can talk.">Conversation<span
@@ -54,14 +54,15 @@
                             class="button-sub">(listen & talk)</span></button>
                         </li>
                         <li>
+                            <button-select id="select-language-button" configName="selectedLanguage" title="This selection defined the language of the page for GUI and SUI." label="Language" sublabel="for GUI and SUI" options='[["en-US","en-US"],["de-DE","de-DE"]]' defaultOption="en-US"
+                            />
+                        </li>
+                        <li>
                             <button-link disabled url="" title="Get an introduction about the navigation and features." label="Manual" sublabel="Introduction" />
                         </li>
                         <li>
                             <button-share title="Share this app with your frinds and family." label="Share with friends" sublabel="on social media" />
                         </li>
-                        <!-- <li>
-                            <button class="option-item" id="button-language-selection" title="Select your language."><div id="google_translate_element"></div></button>
-                        </li> -->
                     </ul>
                 </div>
                 <div class="subpage" id="settings-advanced">
@@ -72,9 +73,6 @@
                         <li>
                             <button-toggle configName="decimalPlacesMode" title="Allow randomly decimal places in the task." label="Decimal Places" sublabel="random" defaultOption="off" />
                         </li>
-                        <!-- <li>
-                            <button-toggle configName="voiceMode" title="Use voice recognition instead of keyboard input." label="You can talk" sublabel="use your voice" defaultOption="off" />
-                        </li> -->
                         <li><button class="option-item" id="button-voice" title="Use voice recognition instead of keyboard input.">You can talk<span class="hidden  b-label-status" id="button-voice-on">on</span><span id="button-voice-off" class=" b-label-status">off</span><br /><span
                             class="button-sub">(use your voice)</span></button>
                         </li>
@@ -84,7 +82,7 @@
                             <button-select id="speechVoiceType" configName="speechVoiceType" title="Select the voice you will hear from the installed voices in your browser." label="Voice Type" sublabel="browser dependent" options='[]' defaultOption="0" />
                         </li>
                         <li>
-                            <button-select configName="breakTimeout" title="The time in seconds after a finished task until the next task will be started automatically." label="Break Length" sublabel="between tasks in sec." options='[["0","0"],["1","1"],["2","2"],["5","5"],["10","10"],["15","15"],["20","20"],["25","25"],["30","30"],["∞","∞"]]'
+                            <button-select configName="breakTimeout" title="The time in seconds after a finished task until the next task will be started automatically." label="Break Length" sublabel="between tasks in sec." options='[["0","0"],["1000","1"],["2000","2"],["5000","5"],["10000","10"],["15000","15"],["20000","20"],["25000","25"],["30000","30"],["∞","∞"]]'
                                 defaultOption="5" />
                         </li>
                         <li>
@@ -166,64 +164,7 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        window.addEventListener("load", () => {
-            if ("serviceWorker" in navigator) {
-                navigator.serviceWorker.register('service-worker.js')
-                    .then(registration => {
-                        registration.addEventListener('updatefound', function() {
-                            // If updatefound is fired, it means that there's
-                            // a new service worker being installed.
-                            var installingWorker = registration.installing;
-                            console.log('New service worker successfully registered for scope ' + registration.scope, ' ', installingWorker)
-
-                            // You can listen for changes to the installing service worker's
-                            // state via installingWorker.onstatechange
-                        })
-                    })
-                    .catch(err => console.log('Service worker registration failed: ' + err));
-            }
-        });
-    </script>
     <script type="module" src="js/app.js"></script>
-    <script type="text/javascript">
-        function getStoredLanguage() {
-            let language = localStorage.getItem("storedLanguage")
-            if (!language || language == "") {
-                return false
-            }
-            return language
-        }
-
-        function getInitLanguage() {
-            let oldLanguage = getStoredLanguage()
-            if (oldLanguage) {
-                return oldLanguage
-            }
-            return getBrowserLanguage()
-        }
-
-        function getBrowserLanguage() {
-            return (navigator.language || navigator.userLanguage).split('-', 1)[0]
-        }
-
-        function setCookie(key, value, expiry) {
-            var expires = new Date();
-            expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
-            document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
-        }
-
-        // function googleTranslateElementInit() {
-
-        //     setCookie('googtrans', '/en/' + getInitLanguage(), 1);
-        //     new google.translate.TranslateElement({
-        //         // pageLanguage: 'en',
-        //         includedLanguages: "de,en",
-        //         defaultlanguage: "en"
-        //     }, 'google_translate_element');
-        // }
-    </script>
-    <!-- <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> -->
 </body>
 
 </html>

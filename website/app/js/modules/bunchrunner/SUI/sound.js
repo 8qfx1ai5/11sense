@@ -23,16 +23,16 @@ function getSuccessMessages() {
 
 function speak(s, state) {
     if (isSoundModeActive) {
-        let statement = new browserIndependentSpeechSynthesisUtterance(s);
-        statement.lang = appTranslation.getSelectedLanguage();
+        let statement = new browserIndependentSpeechSynthesisUtterance(s)
+        statement.lang = appTranslation.getSelectedLanguage()
         statement.rate = 1
         statement.pitch = 1
         statement.voice = browserIndependentSpeechSynthesis.getVoices()[localStorage.getItem(voiceSelectButton.getAttribute('configName'))]
         statement.onstart = function(event) {
-            appSystem.events.dispatchEvent(new CustomEvent('speak-before'));
+            window.dispatchEvent(new CustomEvent('speak-before'));
         }
         statement.onend = function(event) {
-            appSystem.events.dispatchEvent(new CustomEvent('speak-after'));
+            window.dispatchEvent(new CustomEvent('speak-after'));
         }
         browserIndependentSpeechSynthesis.speak(statement);
     }
@@ -55,7 +55,7 @@ export function acitvateSoundMode() {
     soundButtonLabelOn.classList.remove("hidden");
     soundButtonLabelOff.classList.add("hidden");
     localStorage.setItem('isSoundModeActive', true);
-    appSystem.events.dispatchEvent(new CustomEvent('sound-mode-start-after'));
+    window.dispatchEvent(new CustomEvent('sound-mode-start-after'));
 }
 
 export function deactivateSoundMode() {
@@ -64,12 +64,36 @@ export function deactivateSoundMode() {
     soundButtonLabelOn.classList.add("hidden");
     soundButtonLabelOff.classList.remove("hidden");
     localStorage.setItem('isSoundModeActive', false);
-    appSystem.events.dispatchEvent(new CustomEvent('sound-mode-end-after'));
+    window.dispatchEvent(new CustomEvent('sound-mode-end-after'));
+}
+
+function updateVoiceTypeOptions() {
+    // based on the selected language
+    let voiceTypeOptions = []
+    let voiceTypeOptionsStrings = []
+    let voices = browserIndependentSpeechSynthesis.getVoices()
+
+    let getSelectedLanguage = appTranslation.getSelectedLanguage()
+    for (let i = 0; i < voices.length; i++) {
+        if (voices[i].lang == getSelectedLanguage) {
+            voiceTypeOptionsStrings.push('["' + i + '","' + voices[i].name + '"]')
+            voiceTypeOptions[i] = voices[i].name
+        }
+    }
+
+    let current = localStorage.getItem(voiceSelectButton.getAttribute('configName'))
+    if (typeof voiceTypeOptions[current] === 'undefined') {
+        current = voiceTypeOptions.find(Boolean)
+        localStorage.setItem(voiceSelectButton.getAttribute('configName'), current)
+    }
+
+    voiceSelectButton.setAttribute('defaultOption', voiceTypeOptions[current])
+    voiceSelectButton.setAttribute('options', '[' + voiceTypeOptionsStrings.join(',') + ']')
 }
 
 export function init() {
 
-    appSystem.events.addEventListener('repeat-task', function(e) {
+    window.addEventListener('repeat-task', function(e) {
         if (isSoundModeActive) {
             speak(e.detail.state.getTask().questionSUI);
         }
@@ -89,21 +113,26 @@ export function init() {
         }
     });
 
-    appSystem.events.addEventListener('sound-mode-start-after', function() {
+    window.addEventListener('sound-mode-start-after', function() {
         // speak intro after sounde mode was started
         if (isSoundModeActive) {
             speak(appTranslation.translateForSoundOutput("Hello! Let's train."))
         }
     });
 
-    appSystem.events.addEventListener(voiceSelectButton.getAttribute('configName') + '-changed', function() {
+    window.addEventListener(voiceSelectButton.getAttribute('configName') + '-changed', function() {
         // speak something after voice type was changed
         if (isSoundModeActive) {
             speak(appTranslation.translateForSoundOutput("Hello! I will support you."))
         }
     });
 
-    appSystem.events.addEventListener('voice-mode-end-after', function(e) {
+    window.addEventListener('config_changed', () => {
+        // update possible voices (depending on the selected language)
+        updateVoiceTypeOptions()
+    })
+
+    window.addEventListener('voice-mode-end-after', function(e) {
         if (isSoundModeActive) {
             speak(appTranslation.translateForSoundOutput("See you next time."));
         }
@@ -140,13 +169,13 @@ export function init() {
         }
     });
 
-    appSystem.events.addEventListener('give-status-answer-hallo', function(e) {
+    window.addEventListener('give-status-answer-hallo', function(e) {
         if (isSoundModeActive) {
             speak(appTranslation.translateForSoundOutput("hello"));
         }
     });
 
-    appSystem.events.addEventListener('give-status-answer-yes', function(e) {
+    window.addEventListener('give-status-answer-yes', function(e) {
         if (isSoundModeActive) {
             speak(appTranslation.translateForSoundOutput("yes, I can hear you"));
         }
@@ -154,28 +183,8 @@ export function init() {
 
     soundButton.addEventListener('click', toggleSoundMode)
 
-    // add voice options to the select button
-    // requires timeout, because of missing voices after page-load
     setTimeout(() => {
-        let voiceTypeOptions = []
-        let voiceTypeOptionsStrings = []
-        let voices = browserIndependentSpeechSynthesis.getVoices()
-
-        for (let i = 0; i < voices.length; i++) {
-            if (voices[i].lang == "en-US") {
-                // TODO: handle other languages
-                voiceTypeOptionsStrings.push('["' + i + '","' + voices[i].name + '"]')
-                voiceTypeOptions[i] = voices[i].name
-            }
-        }
-
-        let current = localStorage.getItem(voiceSelectButton.getAttribute('configName'))
-        if (typeof voiceTypeOptions[current] === 'undefined') {
-            current = voiceTypeOptions.find(Boolean)
-            localStorage.setItem(voiceSelectButton.getAttribute('configName'), current)
-        }
-
-        voiceSelectButton.setAttribute('defaultOption', voiceTypeOptions[current])
-        voiceSelectButton.setAttribute('options', '[' + voiceTypeOptionsStrings.join(',') + ']')
+        // requires timeout, because of missing voices after page-load
+        updateVoiceTypeOptions()
     }, 500)
 }
