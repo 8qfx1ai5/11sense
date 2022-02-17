@@ -1,12 +1,13 @@
 :root {
-  --theme-color-1: #d7ba7d;
-  --theme-color-2: #252526;
+  --theme-color-1: #252526;
+  --theme-color-2: white;
   --theme-color-3: darkcyan;
   --theme-color-4: green;
   --theme-color-5: darkgreen;
-  --theme-color-6: darkgray;
-  --theme-color-7: dimgrey;
-  --theme-color-8: cyan;
+  --theme-color-6: #e7e4e4;
+  --theme-color-7: #cfdbcd;
+  --theme-color-8: #00933b;
+  --theme-color-9: grey;
 }
 
 body {

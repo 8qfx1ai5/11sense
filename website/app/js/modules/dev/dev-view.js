@@ -120,4 +120,12 @@ export function init() {
     window.addEventListener("custom-log-changed", function(e) {
         updateLoggingAddSingleLine(e.detail.log)
     })
+
+    window.addEventListener("config_changed", function(e) {
+        let theme = localStorage.getItem('designTheme')
+        if (theme != "bright") {
+            theme = "dark"
+        }
+        document.getElementById('designThemeLink').setAttribute("href", "styles/themes/" + localStorage.getItem('designTheme') + ".css")
+    })
 }

@@ -190,7 +190,7 @@ button:focus {
 }
 
 button:disabled {
-    color: black;
+    color: var(--theme-color-9);
     text-decoration: line-through !important;
 }
 

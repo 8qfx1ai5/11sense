@@ -1,0 +1,53 @@
+:root {
+    --theme-color-1: #d7ba7d;
+    --theme-color-2: #252526;
+    --theme-color-3: darkcyan;
+    --theme-color-4: green;
+    --theme-color-5: darkgreen;
+    --theme-color-6: darkgray;
+    --theme-color-7: dimgrey;
+    --theme-color-8: cyan;
+}
+
+body {
+    background-color: var(--theme-color-2);
+    color: var(--theme-color-1);
+    font-family: sans-serif;
+    header {
+        color: var(--theme-color-1);
+        -webkit-box-shadow: 0px 12px 8px -12px rgba(215, 186, 125, 1);
+        -moz-box-shadow: 0px 12px 8px -12px rgba(215, 186, 125, 1);
+        box-shadow: 0px 12px 8px -12px rgba(215, 186, 125, 1);
+        #header-main.debugging.inactive-page-icon {
+            opacity: 0.5;
+        }
+    }
+    .debugging {
+        color: darkred !important;
+    }
+    .page {
+        background-color: var(--theme-color-2);
+        .subpage {
+            border-color: var(--theme-color-1);
+            #logging-list,
+            #history-list {
+                color: var(--theme-color-3);
+            }
+            #logging-list li span,
+            #history-list li span {
+                color: var(--theme-color-1);
+            }
+            .option-item {
+                background-color: var(--theme-color-7);
+                color: var(--theme-color-1);
+                font-family: inherit;
+                .b-label-status {
+                    color: var(--theme-color-8);
+                }
+            }
+        }
+        &#nav input::placeholder {
+            color: var(--theme-color-2);
+        }
+    }
+}

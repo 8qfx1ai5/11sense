@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="styles/mobile.css" media="screen and (max-width: 649px)" />
     <link rel="stylesheet" type="text/css" href="styles/tablet.css" media="screen and (min-width: 650px) and (max-width: 1299px)" />
     <link rel="stylesheet" type="text/css" href="styles/desktop.css" media='screen and (min-width: 1300px)' />
-    <link rel="stylesheet" type="text/css" href="styles/themes/dark.css" />
+    <link id="designThemeLink" rel="stylesheet" type="text/css" href="styles/themes/dark.css" />
     <link rel="manifest" href="manifest.webmanifest">
 </head>
 
@@ -129,6 +129,9 @@
                         </li>
                         <li>
                             <button-action code="localStorage.clear();location.reload()" title="Delete all stored configuration and training progress." label="Reset page &#x26A0;" sublabel="DELETE ALL local information" />
+                        </li>
+                        <li>
+                            <button-select configName="designTheme" title="The selected GUI design theme." label="Design" sublabel="have a look.." options='[["dark","dark"],["bright","bright"]]' defaultOption="dark" />
                         </li>
                     </ul>
                 </div>
