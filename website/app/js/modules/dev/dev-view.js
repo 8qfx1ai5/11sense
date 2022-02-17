@@ -126,6 +126,6 @@ export function init() {
         if (theme != "bright") {
             theme = "dark"
         }
-        document.getElementById('designThemeLink').setAttribute("href", "styles/themes/" + localStorage.getItem('designTheme') + ".css")
+        document.getElementById('designThemeLink').setAttribute("href", "styles/themes/" + theme + ".css")
     })
 }
