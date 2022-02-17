@@ -183,8 +183,7 @@ export function init() {
 
     soundButton.addEventListener('click', toggleSoundMode)
 
-    setTimeout(() => {
-        // requires timeout, because of missing voices after page-load
+    window.addEventListener("load", function() {
         updateVoiceTypeOptions()
-    }, 500)
+    })
 }
