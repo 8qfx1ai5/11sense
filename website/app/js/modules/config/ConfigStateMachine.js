@@ -668,7 +668,7 @@ function updateVoiceTypeOptions() {
     const voices = browserIndependentSpeechSynthesis.getVoices()
 
     if (voices.length == 0) {
-        return
+        return false
     }
 
     const getSelectedLanguage = globalParamConfig['selectedLanguage']['value']
@@ -676,6 +676,9 @@ function updateVoiceTypeOptions() {
         if (voices[i].lang == getSelectedLanguage) {
             newOptions[i] = { gui: voices[i].name }
         }
+    }
+    if (JSON.stringify(newOptions) === JSON.stringify(globalParamConfig['soundOutputVoiceType']['options'])) {
+        return false
     }
     globalParamConfig['soundOutputVoiceType']['options'] = newOptions
 
@@ -686,24 +689,37 @@ function updateVoiceTypeOptions() {
         globalParamConfig['soundOutputVoiceType']['value'] = currentValue
         saveConfigParamInLocalStorage('soundOutputVoiceType', currentValue)
     }
-
+    return true
 }
 
 export function init() {
+
+    window.addEventListener('action-config-init', function(e) {})
 
     window.addEventListener('action-config-changed', function(e) {
         window.dispatchEvent(new CustomEvent('bunch-request-new'))
     })
 
     loadAndInitializeConfig()
+    updateVoiceTypeOptions()
     currentConfig = new Config()
     window.dispatchEvent(new CustomEvent('action-config-init', { detail: { config: currentConfig } }))
 
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = function() {
+            if (updateVoiceTypeOptions()) {
+                currentConfig = new Config()
+                window.dispatchEvent(new CustomEvent('action-config-changed', { detail: { config: currentConfig } }))
+            }
+        }
+    }
+
     setTimeout(function() {
-        updateVoiceTypeOptions()
-        currentConfig = new Config()
-        window.dispatchEvent(new CustomEvent('action-config-changed', { detail: { config: currentConfig } }))
-    }, 1000)
+        if (updateVoiceTypeOptions()) {
+            currentConfig = new Config()
+            window.dispatchEvent(new CustomEvent('action-config-changed', { detail: { config: currentConfig } }))
+        }
+    }, 3000)
 
     window.addEventListener('request-config-change', function(e) {
         // TODO: maybe some checks required
