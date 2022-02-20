@@ -1,4 +1,8 @@
+import * as appSystem from '../main/system.js'
+
 customElements.define('button-select', class extends HTMLElement {
+
+    currentConfig
 
     constructor() {
         super()
@@ -14,8 +18,6 @@ customElements.define('button-select', class extends HTMLElement {
         let title = this.getAttribute('title')
         let label = this.getAttribute('label')
         let sublabel = this.getAttribute('sublabel')
-        let options = JSON.parse(this.getAttribute('options'))
-        let defaultOption = this.getAttribute('defaultOption')
         let isDisabled = this.hasAttribute('disabled')
 
         this.shadowRoot.innerHTML = `
@@ -115,28 +117,35 @@ customElements.define('button-select', class extends HTMLElement {
         let inputSelect = this.shadowRoot.querySelector("select")
         let labelSpan = this.shadowRoot.querySelector("#label")
 
-        let storedValue = localStorage.getItem(configName)
+        let selectedValue = this.currentConfig.getGlobalValue(configName)
         let wasValueFound = false
-        options.forEach((optionConfig) => {
-            let option = document.createElement("option");
-            option.value = optionConfig[0]
-            option.text = optionConfig[1]
-            if (optionConfig.hasOwnProperty(2) && optionConfig[2] == "true") {
-                option.setAttribute("translate", "yes")
-            } else {
-                option.setAttribute("translate", "no")
-                option.classList.add("notranslate")
+        if (this.currentConfig.getGlobalOptions(configName).length == 0) {
+            appSystem.log('error: invalid guiOptions config for "' + configName + '"', 1)
+        }
+        const options = this.currentConfig.getGlobalOptions(configName)
+        for (let key in options) {
+            if (typeof options[key] !== 'object') {
+                appSystem.log('error: invalid option config "' + key + '" for "' + configName + '"', 1)
             }
-            inputSelect.add(option)
+            let optionElement = document.createElement("option");
+            optionElement.value = key
+            optionElement.text = this.currentConfig.getGuiLabel(key, options[key])
+                // if (optionConfig.hasOwnProperty(2) && optionConfig[2] == "true") {
+                //     option.setAttribute("translate", "yes")
+                // } else {
+                //     option.setAttribute("translate", "no")
+                //     option.classList.add("notranslate")
+                // }
+            inputSelect.add(optionElement)
             if (!wasValueFound) {
-                if (storedValue === option.value) {
-                    inputSelect.value = storedValue
+                if (selectedValue == optionElement.value) {
+                    inputSelect.value = selectedValue
                     wasValueFound = true
-                } else if (defaultOption === option.value) {
-                    inputSelect.value = defaultOption
+                } else if (this.currentConfig.getGlobalDefault(configName) === optionElement.value) {
+                    inputSelect.value = optionElement.value
                 }
             }
-        })
+        }
 
         if (!inputSelect.value) {
             inputSelect.selectedIndex = 0
@@ -158,38 +167,42 @@ customElements.define('button-select', class extends HTMLElement {
                 inputSelect.selectedIndex = inputSelect.selectedIndex + 1
             }
             inputSelect.dispatchEvent(new Event('change'))
-        });
+        }.bind(this))
 
         inputSelect.addEventListener('click', function(e) {
             e.preventDefault()
             e.stopPropagation()
-        });
+        }.bind(this))
 
-        inputSelect.addEventListener('change', (e) => {
-            let oldValue = localStorage.getItem(configName)
-            if (oldValue != inputSelect.value) {
-                localStorage.setItem(configName, inputSelect.value)
-                this.dispatchEvent(new CustomEvent(this.getAttribute('configName') + '-changed', {
-                    bubbles: true,
-                    composed: true
-                }))
-                this.dispatchEvent(new CustomEvent('config_changed', {
-                    bubbles: true,
-                    composed: true
+        inputSelect.addEventListener('change', function(e) {
+            if (this.currentConfig.getGlobalValue(configName) != inputSelect.value) {
+                window.dispatchEvent(new CustomEvent('request-config-change', {
+                    detail: {
+                        [configName]: { value: inputSelect.value }
+                    }
                 }))
             }
-        })
+        }.bind(this))
     }
 
     connectedCallback() {
-        this.render()
+        window.addEventListener("action-config-init", function(e) {
+            // no error handling, fail fast, if config is missing
+            this.currentConfig = e.detail.config
+            this.render()
+        }.bind(this))
+        window.addEventListener("action-config-changed", function(e) {
+            // no error handling, fail fast, if config is missing
+            this.currentConfig = e.detail.config
+            this.render()
+        }.bind(this))
     }
 
-    static get observedAttributes() {
-        return ['options']
-    }
+    // static get observedAttributes() {
+    //     return ['options']
+    // }
 
-    attributeChangedCallback(attrName, oldVal, newVal) {
-        this.render()
-    }
+    // attributeChangedCallback(attrName, oldVal, newVal) {
+    //     this.render()
+    // }
 })

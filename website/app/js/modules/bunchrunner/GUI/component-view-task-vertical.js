@@ -68,7 +68,7 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                 let state = e.detail.state
                 let currentTask = state.getTask()
 
-                if (state.isFinished || !state.config.isRacingMode) {
+                if (state.isFinished || !state.config.getValue("isModeRacing")) {
                     taskView.classList.add('hidden')
                     taskViewRoot.classList.remove('success')
                     taskViewRoot.classList.add('hidden')
@@ -76,7 +76,7 @@ customElements.define('view-task-vertical', class extends HTMLElement {
                 }
 
                 if (currentTask) {
-                    if (state.config.isHideTaskModeActive) {
+                    if (state.config.isModeHideTask) {
                         taskView.classList.add('hidden')
                         if (state.isFirstTask() && currentTask.isNew()) {
                             // show fist task all the time

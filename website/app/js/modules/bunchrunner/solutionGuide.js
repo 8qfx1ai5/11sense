@@ -1,7 +1,7 @@
 import * as appSystem from '../main/system.js'
 import * as bunchRunner from './bunchRunner.js'
 
-let localStorageKeySolutionGuideInterval = "solutionGuideTimeout"
+let localStorageKeySolutionGuideInterval = "solutionGuideTime"
 let solutionGuideIntervalObject = false
 
 export function isActive() {

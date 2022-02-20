@@ -20,7 +20,7 @@ let isEndlessRecognitionRunning = false
 let isEndlessRecognitionOnRestart = false
 
 let isVoiceTechEndless = true
-let voiceTechLocalStorageKey = "speechRecognitionMode"
+let voiceTechLocalStorageKey = "isModeUserTalks"
 
 let tagIdButtonVoice = "button-voice"
 

@@ -1,4 +1,4 @@
-import Config from '../config/Config.js'
+import Config from '../config/ConfigStateMachine.js'
 import * as appTranslation from '../language/translation.js'
 import Answer from './Answer.js'
 

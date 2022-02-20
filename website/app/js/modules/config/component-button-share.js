@@ -1,13 +1,15 @@
 import * as appSystem from '../main/system.js'
-import * as appTranslation from '../language/translation.js'
 
 customElements.define('button-share', class extends HTMLElement {
 
+    currentConfig
+
     constructor() {
         super()
-
         this.attachShadow({ mode: 'open' })
+    }
 
+    render() {
         let title = this.getAttribute('title')
         let label = this.getAttribute('label')
         let sublabel = this.getAttribute('sublabel')
@@ -96,7 +98,7 @@ customElements.define('button-share', class extends HTMLElement {
 
             // ignore paging information in the link
             let shareURL = window.location.origin + window.location.pathname
-            if (appTranslation.isSelectedLanguageGerman()) {
+            if (this.currentConfig.getGlobalValue('selectedLanguage') == "de-DE") {
                 // TODO: implement generic translation
                 shareHeadline = "Sieh dir das mal an"
                 shareText = 'Hab was Neues gefunden: die "11. Sense" lern App \n'
@@ -128,6 +130,27 @@ customElements.define('button-share', class extends HTMLElement {
                         appSystem.log(err.name + ': ' + err.message, 2, "app")
                     })
             }
-        })
+        }.bind(this))
     }
+
+    connectedCallback() {
+        window.addEventListener("action-config-init", function(e) {
+            // no error handling, fail fast, if config is missing
+            this.currentConfig = e.detail.config
+            this.render()
+        }.bind(this))
+        window.addEventListener("action-config-changed", function(e) {
+            // no error handling, fail fast, if config is missing
+            this.currentConfig = e.detail.config
+            this.render()
+        }.bind(this))
+    }
+
+    // static get observedAttributes() {
+    //     return ['options']
+    // }
+
+    // attributeChangedCallback(attrName, oldVal, newVal) {
+    //     this.render()
+    // }
 })

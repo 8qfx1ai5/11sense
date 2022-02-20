@@ -2,8 +2,10 @@ customElements.define('button-link', class extends HTMLElement {
 
     constructor() {
         super()
-
         this.attachShadow({ mode: 'open' })
+    }
+
+    render() {
 
         let url = this.getAttribute('url')
         let title = this.getAttribute('title')
@@ -80,4 +82,16 @@ customElements.define('button-link', class extends HTMLElement {
             inputButton.innerHTML += `<br /><span id="sublabel">(${sublabel})</span>`
         }
     }
+
+    connectedCallback() {
+        this.render()
+    }
+
+    // static get observedAttributes() {
+    //     return ['options']
+    // }
+
+    // attributeChangedCallback(attrName, oldVal, newVal) {
+    //     this.render()
+    // }
 })

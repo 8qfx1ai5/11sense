@@ -18,16 +18,14 @@ import * as appDev from './modules/dev/dev-view.js'
 import * as appPage from './modules/page/page.js'
 import * as appTranslation from './modules/language/translation.js'
 import * as appBunchrunner from './modules/bunchrunner/bunchRunner.js'
-import * as appConfig from './modules/config/Config.js'
+import * as appConfig from './modules/config/ConfigStateMachine.js'
 
 // TODO: rethink race conditons, currently init order matters
 appDev.init()
 appSystem.init()
-appConversation.init()
-appStatistics.init()
 appConfig.init()
 appPage.init()
 appTranslation.init()
 appBunchrunner.init()
-
-window.dispatchEvent(new CustomEvent('config_changed'))
+appStatistics.init()
+appConversation.init()

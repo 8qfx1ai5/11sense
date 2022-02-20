@@ -9,10 +9,12 @@ let soundButtonLabelOn = document.getElementById('sound-button-on')
 let soundButtonLabelOff = document.getElementById('sound-button-off')
 let soundButton = document.getElementById('button-sound')
 
+let currentConfig
+
 const browserIndependentSpeechSynthesisUtterance = window.webkitSpeechSynthesisUtterance || window.mozSpeechSynthesisUtterance || window.msSpeechSynthesisUtterance || window.oSpeechSynthesisUtterance || window.SpeechSynthesisUtterance
 const browserIndependentSpeechSynthesis = window.webkitSpeechSynthesis || window.mozSpeechSynthesis || window.msSpeechSynthesis || window.oSpeechSynthesis || window.speechSynthesis
 
-let voiceSelectButton = document.getElementById("speechVoiceType")
+let voiceSelectButton = document.getElementById("soundOutputVoiceType")
 
 function getSuccessMessages() {
     if (appTranslation.getSelectedLanguage() == "de-DE") {
@@ -24,10 +26,10 @@ function getSuccessMessages() {
 function speak(s, state) {
     if (isSoundModeActive) {
         let statement = new browserIndependentSpeechSynthesisUtterance(s)
-        statement.lang = appTranslation.getSelectedLanguage()
+        statement.lang = currentConfig.getGlobalValue('selectedLanguage')
         statement.rate = 1
         statement.pitch = 1
-        statement.voice = browserIndependentSpeechSynthesis.getVoices()[localStorage.getItem(voiceSelectButton.getAttribute('configName'))]
+        statement.voice = browserIndependentSpeechSynthesis.getVoices()[currentConfig.getGlobalValue('soundOutputVoiceType')]
         statement.onstart = function(event) {
             window.dispatchEvent(new CustomEvent('speak-before'));
         }
@@ -67,30 +69,6 @@ export function deactivateSoundMode() {
     window.dispatchEvent(new CustomEvent('sound-mode-end-after'));
 }
 
-function updateVoiceTypeOptions() {
-    // based on the selected language
-    let voiceTypeOptions = []
-    let voiceTypeOptionsStrings = []
-    let voices = browserIndependentSpeechSynthesis.getVoices()
-
-    let getSelectedLanguage = appTranslation.getSelectedLanguage()
-    for (let i = 0; i < voices.length; i++) {
-        if (voices[i].lang == getSelectedLanguage) {
-            voiceTypeOptionsStrings.push('["' + i + '","' + voices[i].name + '"]')
-            voiceTypeOptions[i] = voices[i].name
-        }
-    }
-
-    let current = localStorage.getItem(voiceSelectButton.getAttribute('configName'))
-    if (typeof voiceTypeOptions[current] === 'undefined') {
-        current = voiceTypeOptions.find(Boolean)
-        localStorage.setItem(voiceSelectButton.getAttribute('configName'), current)
-    }
-
-    voiceSelectButton.setAttribute('defaultOption', voiceTypeOptions[current])
-    voiceSelectButton.setAttribute('options', '[' + voiceTypeOptionsStrings.join(',') + ']')
-}
-
 export function init() {
 
     window.addEventListener('repeat-task', function(e) {
@@ -120,16 +98,11 @@ export function init() {
         }
     });
 
-    window.addEventListener(voiceSelectButton.getAttribute('configName') + '-changed', function() {
+    window.addEventListener('action-config-changed_' + voiceSelectButton.getAttribute('configName'), function() {
         // speak something after voice type was changed
         if (isSoundModeActive) {
             speak(appTranslation.translateForSoundOutput("Hello! I will support you."))
         }
-    });
-
-    window.addEventListener('config_changed', () => {
-        // update possible voices (depending on the selected language)
-        updateVoiceTypeOptions()
     })
 
     window.addEventListener('voice-mode-end-after', function(e) {
@@ -183,7 +156,13 @@ export function init() {
 
     soundButton.addEventListener('click', toggleSoundMode)
 
-    window.addEventListener("load", function() {
-        updateVoiceTypeOptions()
-    })
+    window.addEventListener("action-config-init", function(e) {
+        // no error handling, fail fast, if config is missing
+        currentConfig = e.detail.config
+    }.bind(this))
+
+    window.addEventListener("action-config-changed", function(e) {
+        // no error handling, fail fast, if config is missing
+        currentConfig = e.detail.config
+    }.bind(this))
 }

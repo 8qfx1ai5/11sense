@@ -1,4 +1,5 @@
 import * as appSystem from '../main/system.js'
+import * as appConfig from '../config/ConfigStateMachine.js'
 
 let selectLanguageButton = document.getElementById("select-language-button")
 let cachedLanguage = false
@@ -7,16 +8,7 @@ export let supportedLanguages = ['en-US', 'de-DE']
 export let defaultLanguage = ['en-US']
 
 export function getSelectedLanguage() {
-    if (cachedLanguage) {
-        return cachedLanguage
-    }
-    let storedLanguage = getStoredLanguage()
-    if (storedLanguage) {
-        cachedLanguage = storedLanguage
-        return storedLanguage
-    }
-    setLanguage(defaultLanguage)
-    return defaultLanguage
+    return appConfig.currentConfig.getGlobalValue('selectedLanguage')
 }
 
 export function isSelectedLanguageGerman() {
@@ -31,19 +23,6 @@ export function setLanguage(newLanguage) {
         return
     }
     appSystem.log('selected language "' + newLanguage + '" not supported', 1)
-}
-
-function saveSelectedLanguage(newLanguage) {
-    localStorage.setItem(selectLanguageButton.getAttribute('configName'), newLanguage)
-    cachedLanguage = newLanguage
-}
-
-function getStoredLanguage() {
-    let storedLanguage = localStorage.getItem(selectLanguageButton.getAttribute('configName'))
-    if (supportedLanguages.includes(storedLanguage)) {
-        return storedLanguage
-    }
-    return false
 }
 
 function getInitLanguage() {
@@ -125,8 +104,6 @@ export function translateForScreenOutput(key) {
 }
 
 export function init() {
-
-    saveSelectedLanguage(getInitLanguage())
 
     window.addEventListener(selectLanguageButton.getAttribute('configName') + '-changed', () => {
         cachedLanguage = false

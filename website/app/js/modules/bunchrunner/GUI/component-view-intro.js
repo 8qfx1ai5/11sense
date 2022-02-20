@@ -1,5 +1,5 @@
 import * as appRunner from '../bunchRunner.js'
-import * as appConfig from '../../config/Config.js'
+import * as appConfig from '../../config/ConfigStateMachine.js'
 
 customElements.define('view-intro', class extends HTMLElement {
     constructor() {
@@ -43,13 +43,13 @@ customElements.define('view-intro', class extends HTMLElement {
         // the initial loading of all texts is currently a hack to enable google translation
         for (const [configId, config] of Object.entries(appConfig.preconfiguredLevels)) {
             let title = document.createElement('span')
-            title.innerText = config.title
+            title.innerText = config.levelTitle
             title.id = configId + "_title"
             title.classList.add('hidden')
             h2.append(title)
 
             let description = document.createElement('span')
-            description.innerText = config.description
+            description.innerText = config.levelDescription
             description.id = configId + "_description"
             description.classList.add('hidden')
             p.append(description)

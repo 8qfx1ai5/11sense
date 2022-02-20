@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <script type="module" src="js/app.js"></script>
     <meta charset="UTF-8">
     <meta id="viewport" name="viewport" content="width=device-width">
     <meta http-equiv="content-language" content="en" />
@@ -45,8 +46,7 @@
                 <div class="subpage" id="settings-basic">
                     <ul id="basic-settings-list">
                         <li>
-                            <button-select configName="selectedExercise" title="Select your experience level or global task configuration." label="Exercise" sublabel="select configuration" options='[["custom","custom"],["add_race_1","A1"],["add_race_2","A2"],["add_race_3","A3"],["add_race_4","A4"],["add_race_5","A5"],["add_race_10","B1"],["add_race_11","B2"],["add_1","L1 +"],["mult_1","L1 *"]]'
-                                defaultOption="custom" />
+                            <button-select configName="selectedExercise" title="Select your experience level or global task configuration." label="Exercise" sublabel="select configuration" />
                         </li>
                         <li><button class="option-item" id="button-conversation" title="You can talk.">Conversation<span
                             class="hidden  b-label-status" id="button-conversation-on">on</span><span
@@ -54,8 +54,7 @@
                             class="button-sub">(listen & talk)</span></button>
                         </li>
                         <li>
-                            <button-select id="select-language-button" configName="selectedLanguage" title="This selection defined the language of the page for GUI and SUI." label="Language" sublabel="for GUI and SUI" options='[["en-US","en-US"],["de-DE","de-DE"]]' defaultOption="en-US"
-                            />
+                            <button-select id="select-language-button" configName="selectedLanguage" title="This selection defined the language of the page for GUI and SUI." label="Language" sublabel="for GUI and SUI" />
                         </li>
                         <li>
                             <button-link disabled url="" title="Get an introduction about the navigation and features." label="Manual" sublabel="Introduction" />
@@ -68,10 +67,10 @@
                 <div class="subpage" id="settings-advanced">
                     <ul id="advanced-settings-list">
                         <li>
-                            <button-select configName="selectedOperator" title="This selection defined the type of tasks." label="Operator" sublabel="+,-,*, ..." options='[["+","+"],["*","*"]]' defaultOption="+" />
+                            <button-select configName="selectedOperator" title="This selection defined the type of tasks." label="Operator" sublabel="+,-,*, ..." />
                         </li>
                         <li>
-                            <button-toggle configName="decimalPlacesMode" title="Allow randomly decimal places in the task." label="Decimal Places" sublabel="random" defaultOption="off" />
+                            <button-toggle configName="isModeDecimalPlaces" title="Allow randomly decimal places in the task." label="Decimal Places" sublabel="random" />
                         </li>
                         <li><button class="option-item" id="button-voice" title="Use voice recognition instead of keyboard input.">You can talk<span class="hidden  b-label-status" id="button-voice-on">on</span><span id="button-voice-off" class=" b-label-status">off</span><br /><span
                             class="button-sub">(use your voice)</span></button>
@@ -79,37 +78,31 @@
                         <li><button class="option-item" id="button-sound" title="Use audio output for tasks and status feedback.">You can listen<span class="hidden  b-label-status" id="sound-button-on">on</span><span id="sound-button-off" class=" b-label-status">off</span><br /><span class="button-sub">(get audio feedback)</span></button>
                         </li>
                         <li>
-                            <button-select id="speechVoiceType" configName="speechVoiceType" title="Select the voice you will hear from the installed voices in your browser." label="Voice Type" sublabel="browser dependent" options='[]' defaultOption="0" />
+                            <button-select id="soundOutputVoiceType" configName="soundOutputVoiceType" title="Select the voice you will hear from the installed voices in your browser." label="Voice Type" sublabel="browser dependent" />
                         </li>
                         <li>
-                            <button-select configName="breakTimeout" title="The time in seconds after a finished task until the next task will be started automatically." label="Break Length" sublabel="between tasks in sec." options='[["0","0"],["1000","1"],["2000","2"],["5000","5"],["10000","10"],["15000","15"],["20000","20"],["25000","25"],["30000","30"],["∞","∞"]]'
-                                defaultOption="5" />
+                            <button-select configName="autoTaskTime" title="The time in seconds after a finished task until the next task will be started automatically." label="Break Length" sublabel="between tasks in sec." defaultOption="5" />
                         </li>
                         <li>
-                            <button-select configName="solutionGuideTimeout" title="The time in seconds to provide a solution until the answer is guided." label="Time Limit" sublabel="in seconds" options='[["off","off","true"],["5","5"],["6","6"],["7","7"],["8","8"],["9","9"],["10","10"],["15","15"],["20","20"],["25","25"],["30","30"],["60","60"],["120","120"],["180","180"]]'
-                                defaultOption="15" />
+                            <button-select configName="solutionGuideTime" title="The time in seconds to provide a solution until the answer is guided." label="Time Limit" sublabel="in seconds" />
                         </li>
                         <li>
-                            <button-select configName="number0Range" title="The range of the base number." label="Number 0" sublabel="Defines the value range" options='[["off","off","true"],["2-10","2-10"],["11-20","11-20"],["21-30","21-30"],["31-40","31-40"],["41-50","41-50"],["11-50","11-50"],["51-99","51-99"],["11-99","11-99"],["99-299","99-299"],["99-999","99-999"]]'
-                                defaultOption="off" />
+                            <button-select configName="numberRangeBias" title="The range of the base number." label="Bias Number" sublabel="Defines the value range" />
                         </li>
                         <li>
-                            <button-select configName="number1Range" title="The range of the first number." label="Number 1" sublabel="Defines the value range" options='[["2-10","2-10"],["11-20","11-20"],["21-30","21-30"],["31-40","31-40"],["41-50","41-50"],["11-50","11-50"],["51-99","51-99"],["11-99","11-99"],["99-299","99-299"],["99-999","99-999"]]'
-                                defaultOption="2-10" />
+                            <button-select configName="numberRange1" title="The range of the first number." label="Number 1" sublabel="Defines the value range" />
                         </li>
                         <li>
-                            <button-select configName="number2Range" title="The range of the first number." label="Number 2" sublabel="Defines the value range" options='[["2-10","2-10"],["11-20","11-20"],["21-30","21-30"],["31-40","31-40"],["41-50","41-50"],["11-50","11-50"],["51-99","51-99"],["11-99","11-99"],["99-299","99-299"],["99-999","99-999"]]'
-                                defaultOption="2-10" />
+                            <button-select configName="numberRange2" title="The range of the first number." label="Number 2" sublabel="Defines the value range" />
                         </li>
                         <li>
-                            <button-select configName="bunchSize" title="Select the number of tasks you need to solve together in an amount of time to succeed." label="Bunch Size" sublabel="number of tasks" options='[["1","1"],["5","5"],["10","10"],["15","15"],["20","20"],["25","25"],["30","30"],["40","40"],["50","50"],["60","60"],["80","80"],["100","100"]]'
-                                defaultOption="10" />
+                            <button-select configName="bunchSize" title="Select the number of tasks you need to solve together in an amount of time to succeed." label="Bunch Size" sublabel="number of tasks" />
                         </li>
                         <li>
-                            <button-toggle configName="racingMode" title="Activate or deactivate the racing mode, so the following task continues at the result of the previous one." label="Racing Mode" sublabel="continue at result" defaultOption="off" />
+                            <button-toggle configName="isModeRacing" title="Activate or deactivate the racing mode, so the following task continues at the result of the previous one." label="Racing Mode" sublabel="continue at result" />
                         </li>
                         <li>
-                            <button-toggle configName="hideTaskMode" title="Currently only supported during the racing mode. Hide all tasks after the first by default." label="Hide Tasks" sublabel="first task is visible" defaultOption="off" />
+                            <button-toggle configName="isModeHideTask" title="Currently only supported during the racing mode. Hide all tasks after the first by default." label="Hide Tasks" sublabel="first task is visible" />
                         </li>
                         <li>
                             <button-link disabled url="" title="Print legal information and credits." label="Imprint" sublabel="Legal Notice" />
@@ -122,16 +115,16 @@
                 <div class="subpage hidden" id="settings-dev">
                     <ul id="dev-settings-list" class="subpage">
                         <li>
-                            <button-select configName="logLevel" title="Select the log level for debugging." label="Log Level" sublabel="for debugging" options='[["4","off"],["3","error"],["2","default"],["1","verbose"]]' defaultOption="3" />
+                            <button-select configName="logLevel" title="Select the log level for debugging." label="Log Level" sublabel="for debugging" />
                         </li>
                         <li>
-                            <button-select disabled configName="speechRecognitionMode" title="Switch between types of the speech recognition loop." label="Voice Rec." sublabel="select a mode" options='[["endless","∞"],["noise","NOISE"]]' defaultOption="endless" />
+                            <button-select disabled configName="speechRecognitionType" title="Switch between types of the speech recognition loop." label="Voice Rec." sublabel="select a mode" />
                         </li>
                         <li>
                             <button-action code="localStorage.clear();location.reload()" title="Delete all stored configuration and training progress." label="Reset page &#x26A0;" sublabel="DELETE ALL local information" />
                         </li>
                         <li>
-                            <button-select configName="designTheme" title="The selected GUI design theme." label="Design" sublabel="have a look.." options='[["dark","dark"],["bright","bright"]]' defaultOption="dark" />
+                            <button-select configName="designTheme" title="The selected GUI design theme." label="Design" sublabel="have a look.." />
                         </li>
                     </ul>
                 </div>
@@ -167,7 +160,6 @@
             </div>
         </div>
     </div>
-    <script type="module" src="js/app.js"></script>
 </body>
 
 </html>

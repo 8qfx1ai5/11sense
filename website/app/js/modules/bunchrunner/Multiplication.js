@@ -1,5 +1,5 @@
 import * as appMath from '../math/math.js'
-import Config from '../config/Config.js'
+import Config from '../config/ConfigStateMachine.js'
 import * as appTranslation from '../language/translation.js'
 import Answer from './Answer.js'
 import Task from './Task.js'
@@ -17,7 +17,7 @@ export default class Multiplication extends Task {
         this.values[0] = t.factor0
         this.values[1] = t.factor1
         this.values[2] = t.factor2
-        if (config.numberRange0) {
+        if (config.getValue("numberRangeBias")) {
             this.questionGUI = '<span class="question"><span class="value">' + formatNumberForGUI(this.values[0]) + '</span> <span class="operation">+</span> <span class="value">' + formatNumberForGUI(this.values[1]) + '</span> <span class="operation">⋅</span> <span class="value">' + formatNumberForGUI(this.values[2]) + '</span></span>'
             this.questionSUI = formatNumberForGUI(this.values[0]) + " " + appTranslation.translateForSoundOutput("plus") + " " + formatNumberForGUI(this.values[1]) + " " + appTranslation.translateForSoundOutput("multiplied by") + " " + formatNumberForGUI(this.values[2])
         } else {
@@ -83,22 +83,22 @@ function analizeSolution(task, possibleSolution) {
 
 function calculateTask(config) {
 
-    let f1Diff = config.numberRange1[1] - config.numberRange1[0]
-    let f2Diff = config.numberRange2[1] - config.numberRange2[0]
+    let f1Diff = config.getValue('numberRange1')[1] - config.getValue('numberRange1')[0]
+    let f2Diff = config.getValue('numberRange2')[1] - config.getValue('numberRange2')[0]
 
     let f0 = false
     let f1 = 0
     let f2 = 0
 
     do {
-        f1 = Math.round(Math.random() * f1Diff) + config.numberRange1[0]
-        f2 = Math.round(Math.random() * f2Diff) + config.numberRange2[0]
+        f1 = Math.round(Math.random() * f1Diff) + config.getValue('numberRange1')[0]
+        f2 = Math.round(Math.random() * f2Diff) + config.getValue('numberRange2')[0]
     } while (taskWasPlayedBefore(f1, f2))
 
-    if (config.numberRange0) {
-        let f0Diff = config.numberRange0[1] - config.numberRange0[0]
+    if (config.getValue("numberRangeBias")) {
+        let f0Diff = config.getValue("numberRangeBias")[1] - config.getValue("numberRangeBias")[0]
         do {
-            f0 = Math.round(Math.random() * f0Diff) + config.numberRange0[0]
+            f0 = Math.round(Math.random() * f0Diff) + config.getValue("numberRangeBias")[0]
         } while (f0 % f2 == 0 || f2 % f0 == 0)
     }
 
@@ -106,7 +106,7 @@ function calculateTask(config) {
     let factor1Decimals = 0;
     let factor2Decimals = 0;
 
-    if (config.isDecimalPlacesMode) {
+    if (config.getValue("isModeDecimalPlaces")) {
         for (let i = 0; i < f0.toString().length; i++) {
             if (0 < Math.round(Math.random())) {
                 factor0Decimals++;

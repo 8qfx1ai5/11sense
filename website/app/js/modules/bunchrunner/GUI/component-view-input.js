@@ -74,7 +74,7 @@ customElements.define('view-input', class extends HTMLElement {
                     return
                 }
 
-                if (state.config.isRacingMode && state.config.isHideTaskModeActive) {
+                if (state.config.getValue("isModeRacing") && state.config.isModeHideTask) {
                     inputAnswer.classList.add('racing-hidden')
                 } else {
                     inputAnswer.classList.remove('racing-hidden')
@@ -82,7 +82,7 @@ customElements.define('view-input', class extends HTMLElement {
 
                 if (currentTask) {
                     inputAnswer.setAttribute("taskindex", state.currentTaskIndex)
-                    if (state.config.isRacingMode) {
+                    if (state.config.getValue("isModeRacing")) {
                         inputAnswer.classList.remove('hidden')
                         inputAnswer.disabled = false
                         inputAnswer.focus()

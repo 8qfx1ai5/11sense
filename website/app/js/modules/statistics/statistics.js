@@ -44,7 +44,7 @@ function updateHistoryBasedOnLocalStorage() {
         // let dateFormated = date.toLocaleDateString(appTranslation.getSelectedLanguage(), options);
         let dateFormated = date.toLocaleDateString("de-DE", options);
         let eclapesTime = ((state.endTime - state.startTime) / 1000).toPrecision(4);;
-        let type = state.taskList[0].type
+        let type = state.taskList.length > 0 ? state.taskList[0].type : '?'
         let valid = 0
         for (let j = 0; j < state.taskList.length; j++) {
             if (state.taskList[j].isSolved && !state.taskList[j].wasPaused) {

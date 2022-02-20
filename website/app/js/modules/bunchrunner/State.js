@@ -1,4 +1,4 @@
-import Config from '../config/Config.js'
+import Config from '../config/ConfigStateMachine.js'
 
 export default class State {
 

@@ -43,7 +43,7 @@ customElements.define('view-task', class extends HTMLElement {
         appRunner.events.forEach((event) => {
             window.addEventListener(event, function(e) {
                 let state = e.detail.state
-                if (state.config.isRacingMode) {
+                if (state.config.getValue("isModeRacing")) {
                     taskView.classList.add('hidden')
                     return
                 }

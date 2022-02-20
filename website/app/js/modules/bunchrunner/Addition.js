@@ -1,5 +1,5 @@
 import * as appMath from '../math/math.js'
-import Config from '../config/Config.js'
+import Config from '../config/ConfigStateMachine.js'
 import * as appTranslation from '../language/translation.js'
 import Answer from './Answer.js'
 import Task from './Task.js'
@@ -67,19 +67,19 @@ function analizeSolution(task, possibleSolution) {
  */
 function calculateTask(config, index) {
 
-    let f1Diff = config.numberRange1[1] - config.numberRange1[0]
-    let f2Diff = config.numberRange2[1] - config.numberRange2[0]
+    let f1Diff = config.getValue('numberRange1')[1] - config.getValue('numberRange1')[0]
+    let f2Diff = config.getValue('numberRange2')[1] - config.getValue('numberRange2')[0]
 
     let f1 = 0
     let f2 = 0
 
-    if (config.isRacingMode) {
+    if (config.getValue("isModeRacing")) {
         if (index == 0) {
-            f2 = Math.round(Math.random() * f2Diff) + config.numberRange2[0]
-            if (config.numberRange0) {
-                let f0Diff = config.numberRange0[1] - config.numberRange0[0]
+            f2 = Math.round(Math.random() * f2Diff) + config.getValue('numberRange2')[0]
+            if (config.getValue("numberRangeBias")) {
+                let f0Diff = config.getValue("numberRangeBias")[1] - config.getValue("numberRangeBias")[0]
                 do {
-                    f1 = Math.round(Math.random() * f0Diff) + config.numberRange0[0]
+                    f1 = Math.round(Math.random() * f0Diff) + config.getValue("numberRangeBias")[0]
                 } while (f1 % f2 == 0 || f2 % f1 == 0)
             } else {
                 f1 = f2
@@ -90,16 +90,16 @@ function calculateTask(config, index) {
         }
     } else {
         do {
-            f1 = Math.round(Math.random() * f1Diff) + config.numberRange1[0]
-            f2 = Math.round(Math.random() * f2Diff) + config.numberRange2[0]
+            f1 = Math.round(Math.random() * f1Diff) + config.getValue('numberRange1')[0]
+            f2 = Math.round(Math.random() * f2Diff) + config.getValue('numberRange2')[0]
         } while (taskWasPlayedBefore(f1, f2))
     }
 
     let factor1Decimals = 0;
     let factor2Decimals = 0;
 
-    if (config.isDecimalPlacesMode) {
-        if (!config.isRacingMode || index == 0) {
+    if (config.getValue("isModeDecimalPlaces")) {
+        if (!config.getValue("isModeRacing") || index == 0) {
             for (let i = 0; i < f1.toString().length; i++) {
                 if (0 < Math.round(Math.random())) {
                     factor1Decimals++;

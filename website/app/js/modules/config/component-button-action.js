@@ -2,8 +2,10 @@ customElements.define('button-action', class extends HTMLElement {
 
     constructor() {
         super()
-
         this.attachShadow({ mode: 'open' })
+    }
+
+    render() {
 
         let title = this.getAttribute('title')
         let label = this.getAttribute('label')
@@ -75,7 +77,19 @@ customElements.define('button-action', class extends HTMLElement {
 
         inputButton.addEventListener('click', function(e) {
             eval(code)
-        });
+        }.bind(this))
 
     }
+
+    connectedCallback() {
+        this.render()
+    }
+
+    // static get observedAttributes() {
+    //     return ['options']
+    // }
+
+    // attributeChangedCallback(attrName, oldVal, newVal) {
+    //     this.render()
+    // }
 })

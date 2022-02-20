@@ -96,7 +96,6 @@ export function init() {
         } else if (state.currentTaskIndex + 1 == state.taskList.length) {
             appSystem.log("SKIP: there is no next task")
             window.dispatchEvent(new CustomEvent('bunch-request-submit'))
-                // window.dispatchEvent(new CustomEvent('bunch-request-new'))
             return
         } else {
             // display next task

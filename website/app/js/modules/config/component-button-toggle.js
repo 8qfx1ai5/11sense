@@ -1,15 +1,17 @@
 customElements.define('button-toggle', class extends HTMLElement {
 
+    currentConfig
+
     constructor() {
         super()
-
         this.attachShadow({ mode: 'open' })
+    }
 
+    render() {
         let configName = this.getAttribute('configName')
         let title = this.getAttribute('title')
         let label = this.getAttribute('label')
         let sublabel = this.getAttribute('sublabel')
-        let defaultOption = this.getAttribute('defaultOption')
         let isDisabled = this.hasAttribute('disabled')
 
         this.shadowRoot.innerHTML = `
@@ -90,37 +92,49 @@ customElements.define('button-toggle', class extends HTMLElement {
             labelSpan.classList.add("disabled")
         }
 
-        inputButton.addEventListener('click', function(e) {
-            let oldValue = localStorage.getItem(configName);
-            if (oldValue == 'on') {
-                localStorage.setItem(configName, 'off');
-            } else {
-                localStorage.setItem(configName, 'on');
-            }
-            window.dispatchEvent(new CustomEvent('config_changed'))
-        });
+        if (typeof this.currentConfig == "undefined" || !this.currentConfig.getGlobalValue(configName)) {
+            deactivate()
+        } else {
+            activate()
+        }
 
-        window.addEventListener("config_changed", function(e) {
-            let newValue = localStorage.getItem(configName);
-            if (!newValue || newValue == '') {
-                localStorage.setItem(configName, defaultOption);
-                newValue = defaultOption
-            }
-            if (newValue == "on") {
-                activate();
-            } else {
-                deactivate();
-            }
-        })
+        inputButton.addEventListener('click', function(e) {
+            window.dispatchEvent(new CustomEvent('request-config-change', {
+                detail: {
+                    [configName]: { value: !this.currentConfig.getGlobalValue(configName) }
+                }
+            }))
+        }.bind(this))
 
         function activate() {
-            statusOn.classList.remove("hidden");
-            statusOff.classList.add("hidden");
+            statusOn.classList.remove("hidden")
+            statusOff.classList.add("hidden")
         }
 
         function deactivate() {
-            statusOn.classList.add("hidden");
-            statusOff.classList.remove("hidden");
+            statusOn.classList.add("hidden")
+            statusOff.classList.remove("hidden")
         }
     }
+
+    connectedCallback() {
+        window.addEventListener("action-config-init", function(e) {
+            // no error handling, fail fast, if config is missing
+            this.currentConfig = e.detail.config
+            this.render()
+        }.bind(this))
+        window.addEventListener("action-config-changed", function(e) {
+            // no error handling, fail fast, if config is missing
+            this.currentConfig = e.detail.config
+            this.render()
+        }.bind(this))
+    }
+
+    // static get observedAttributes() {
+    //     return ['options']
+    // }
+
+    // attributeChangedCallback(attrName, oldVal, newVal) {
+    //     this.render()
+    // }
 })
