@@ -681,6 +681,7 @@ function updateVoiceTypeOptions() {
     if (JSON.stringify(newOptions) === JSON.stringify(globalParamConfig['soundOutputVoiceType']['options'])) {
         return false
     }
+    appSystem.log(Object.keys(newOptions).length + ' voices for "' + selectedLanguage + '" found', 1)
     globalParamConfig['soundOutputVoiceType']['options'] = newOptions
 
     let currentValue = globalParamConfig['soundOutputVoiceType']['value']
