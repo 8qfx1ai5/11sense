@@ -666,14 +666,15 @@ function updateVoiceTypeOptions() {
     // based on the selected language
     let newOptions = {}
     const voices = browserIndependentSpeechSynthesis.getVoices()
+    appSystem.log(voices.length + " voices found for sound output", 1)
 
     if (voices.length == 0) {
         return false
     }
 
-    const getSelectedLanguage = globalParamConfig['selectedLanguage']['value']
+    const selectedLanguage = globalParamConfig['selectedLanguage']['value']
     for (let i = 0; i < voices.length; i++) {
-        if (voices[i].lang == getSelectedLanguage) {
+        if (voices[i].lang == selectedLanguage) {
             newOptions[i] = { gui: voices[i].name }
         }
     }
