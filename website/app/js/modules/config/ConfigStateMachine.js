@@ -678,10 +678,15 @@ function updateVoiceTypeOptions() {
             newOptions[i] = { gui: voices[i].name }
         }
     }
+    appSystem.log(Object.keys(newOptions).length + ' voices for "' + selectedLanguage + '" found', 1)
+    if (Object.keys(newOptions).length === 0) {
+        for (let i = 0; i < voices.length; i++) {
+            newOptions[i] = { gui: voices[i].name + ' ' + voices[i].lang }
+        }
+    }
     if (JSON.stringify(newOptions) === JSON.stringify(globalParamConfig['soundOutputVoiceType']['options'])) {
         return false
     }
-    appSystem.log(Object.keys(newOptions).length + ' voices for "' + selectedLanguage + '" found', 1)
     globalParamConfig['soundOutputVoiceType']['options'] = newOptions
 
     let currentValue = globalParamConfig['soundOutputVoiceType']['value']

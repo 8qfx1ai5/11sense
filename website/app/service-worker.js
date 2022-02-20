@@ -10,6 +10,7 @@ const isLogEnabled = false
 
 let idbRequest
 let db
+let latestSiteVersion = null
 
 // self.addEventListener('push', event => {});
 
@@ -85,23 +86,23 @@ self.addEventListener('fetch', function(event) {
 
                             return getIdbRequestPromise(db.transaction([dbStoreName]).objectStore(dbStoreName).get(0))
                                 .then((event) => {
-                                    let version = event.target.result[dbBuildVersionKey]
+                                    latestSiteVersion = event.target.result[dbBuildVersionKey]
 
-                                    if (!version || version == "") {
+                                    if (!latestSiteVersion || latestSiteVersion == "") {
                                         // the value for the latest cache version is not set in the db, so we need to ask
                                         isLogEnabled && console.log('Cache ignored for ', currentRequest.url, ' (latest version unkown)');
                                         return sendRequest(currentRequest, cachedResponse)
                                     }
 
-                                    if (cachedResponse.headers.get('version') == version) {
+                                    if (cachedResponse.headers.get('version') == latestSiteVersion) {
                                         // this is the cache case we want
-                                        isLogEnabled && console.log('Found in cache ', currentRequest.url, ' (right version "', version, ')');
+                                        isLogEnabled && console.log('Found in cache ', currentRequest.url, ' (right version "', latestSiteVersion, ')');
                                         return cachedResponse
                                     }
 
                                     // cache outdated by version
+                                    isLogEnabled && console.log('Cache version outdated for url ', currentRequest.url, ' (right version "', latestSiteVersion, ')');
                                     return sendRequest(currentRequest, cachedResponse, cachedResponse.headers.get('version'))
-                                    isLogEnabled && console.log('Cache version outdated for url ', currentRequest.url, ' (right version "', version, ')');
 
                                 })
                                 .catch(function(error) {
