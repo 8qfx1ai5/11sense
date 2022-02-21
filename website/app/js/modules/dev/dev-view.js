@@ -65,7 +65,7 @@ function updateLoggingAddSingleLine(s) {
     entry.addEventListener('click', function() {
         this.firstChild.firstChild.classList.toggle("tooltipvisible")
     })
-    let text = s.substring(s.indexOf(",") + 1);
+    let text = s.substring(s.indexOf(",") + 1) + '(' + s.substring(0, s.indexOf(",")) + ')'
     let tooltipText = document.createElement("span")
     tooltipText.classList.add("tooltiptext")
     tooltipText.innerHTML = text
