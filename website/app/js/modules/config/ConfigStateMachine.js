@@ -672,9 +672,9 @@ function updateVoiceTypeOptions() {
         return false
     }
 
-    const selectedLanguage = globalParamConfig['selectedLanguage']['value'].replace('/[\_]/', '-')
+    const selectedLanguage = globalParamConfig['selectedLanguage']['value'].replace('_', '-')
     for (let i = 0; i < voices.length; i++) {
-        const optionLang = voices[i].lang.replace('/[\_]/', '-')
+        const optionLang = voices[i].lang.replace('_', '-')
         if (optionLang == selectedLanguage) {
             newOptions[i] = { gui: voices[i].name }
         }
