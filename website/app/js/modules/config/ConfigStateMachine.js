@@ -672,18 +672,14 @@ function updateVoiceTypeOptions() {
         return false
     }
 
-    const selectedLanguage = globalParamConfig['selectedLanguage']['value']
+    const selectedLanguage = preg_replace('/[\_]/', '-', globalParamConfig['selectedLanguage']['value'])
     for (let i = 0; i < voices.length; i++) {
-        if (voices[i].lang == selectedLanguage) {
+        const optionLang = preg_replace('/[\_]/', '-', voices[i].lang)
+        if (optionLang == selectedLanguage) {
             newOptions[i] = { gui: voices[i].name }
         }
     }
     appSystem.log(Object.keys(newOptions).length + ' voices for "' + selectedLanguage + '" found', 1)
-    if (Object.keys(newOptions).length === 0) {
-        for (let i = 0; i < voices.length; i++) {
-            newOptions[i] = { gui: voices[i].name + ' ' + voices[i].lang }
-        }
-    }
     if (JSON.stringify(newOptions) === JSON.stringify(globalParamConfig['soundOutputVoiceType']['options'])) {
         return false
     }
