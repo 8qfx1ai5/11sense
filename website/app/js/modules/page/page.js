@@ -285,8 +285,9 @@ function handlePageStatus() {
 // set page height on subpages, to omit page scroll bar
 function setSubpageHeight() {
     let subpages = document.getElementsByClassName("subpage")
-    let h2s = document.querySelectorAll("#content > div > h2")
+    const h2s = document.querySelectorAll("#content > div > h2")
     let topOffset = 0
+    const bottomOffset = '10px'
 
     // get maximum height of all subpage headers for the offset
     for (var j = 0; j < h2s.length; j++) {
@@ -295,13 +296,14 @@ function setSubpageHeight() {
     // add global header height to the offset
     topOffset += document.getElementById("header").getBoundingClientRect().height
     for (var i = 0; i < subpages.length; i++) {
-        subpages[i].style.height = (window.visualViewport.height - topOffset) + "px"
+        subpages[i].style.height = `calc(${(window.visualViewport.height - topOffset)}px - ${bottomOffset})`
     }
 }
 
 function setTrainerPageHeight() {
-    let topOffset = document.getElementById("header").getBoundingClientRect().height
-    document.getElementById("trainer-page").style.height = (window.visualViewport.height - topOffset) + "px"
+    const topOffset = document.getElementById("header").getBoundingClientRect().height
+    const bottomOffset = '20px'
+    document.getElementById("trainer-page").style.height = `calc(${(window.visualViewport.height - topOffset)}px - ${bottomOffset})`
 }
 
 function handleTouchStart(evt) {
@@ -396,6 +398,60 @@ export function init() {
     window.addEventListener('load', setTrainerPageHeight)
 
     handlePageStatus()
+
+    document.querySelectorAll('.scroll-faid').forEach(function(element) {
+        updateScrollFader(element)
+        element.addEventListener('scroll', function(e) {
+            updateScrollFader(e.currentTarget)
+        })
+        onVisible(element, updateScrollFader)
+    })
+}
+
+function onVisible(element, callback) {
+    new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.intersectionRatio > 0) {
+                callback(element);
+                observer.disconnect()
+            }
+        })
+    }).observe(element)
+}
+
+function updateScrollFader(smallParentElement) {
+    let topFaidElement = smallParentElement.querySelector(".topFaid")
+    if (!topFaidElement) {
+        topFaidElement = document.createElement('div')
+        topFaidElement.classList.add('topFaid')
+        smallParentElement.prepend(topFaidElement)
+    }
+    let bottomFaidElement = smallParentElement.querySelector(".bottomFaid")
+    if (!bottomFaidElement) {
+        bottomFaidElement = document.createElement('div')
+        bottomFaidElement.classList.add('bottomFaid')
+        smallParentElement.append(bottomFaidElement)
+    }
+    let bigChildElement = smallParentElement.querySelector(':not(.topFaid):not(.bottomFaid)')
+
+    let scrollPositionChild = bigChildElement.getBoundingClientRect()
+    let scrollPositionParent = smallParentElement.getBoundingClientRect()
+
+    const fadeValue = 20
+
+    const topDiff = Math.min(fadeValue, (scrollPositionParent.y - scrollPositionChild.y))
+    const bottomDiff = Math.min(fadeValue, (scrollPositionChild.bottom - scrollPositionParent.bottom))
+
+    // topFaid.style.height = topDiff + "px"
+    topFaidElement.style.height = fadeValue + "px"
+    topFaidElement.style.width = scrollPositionParent.width + "px"
+    topFaidElement.style.opacity = topDiff / fadeValue
+    topFaidElement.style.top = scrollPositionParent.top - 1 + "px"
+        // bottomFaid.style.height = bottomDiff + "px"
+    bottomFaidElement.style.height = fadeValue + "px"
+    bottomFaidElement.style.width = scrollPositionParent.width + "px"
+    bottomFaidElement.style.opacity = bottomDiff / fadeValue
+    bottomFaidElement.style.bottom = 9 + "px"
 }
 
 // subpage stuff

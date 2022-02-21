@@ -43,7 +43,7 @@
                     <option value="settings-advanced" >More Settings</option>
                     <option value="settings-dev" class="hidden dev-hidden dev-change">Development</option>
                 </select></h2>
-                <div class="subpage" id="settings-basic">
+                <div class="subpage scroll-faid" id="settings-basic">
                     <ul id="basic-settings-list">
                         <li>
                             <button-select configName="selectedExercise" title="Select your experience level or global task configuration." label="Exercise" sublabel="select configuration" />
@@ -64,8 +64,8 @@
                         </li>
                     </ul>
                 </div>
-                <div class="subpage" id="settings-advanced">
-                    <ul id="advanced-settings-list">
+                <div class="subpage scroll-faid" id="settings-advanced">
+                    <ul id="advanced-settings-list" style="position: relative;">
                         <li>
                             <button-select configName="selectedOperator" title="This selection defined the type of tasks." label="Operator" sublabel="+,-,*, ..." />
                         </li>
@@ -112,7 +112,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="subpage hidden" id="settings-dev">
+                <div class="subpage hidden scroll-faid" id="settings-dev">
                     <ul id="dev-settings-list" class="subpage">
                         <li>
                             <button-select configName="logLevel" title="Select the log level for debugging." label="Log Level" sublabel="for debugging" />
@@ -134,29 +134,31 @@
                     <option value="stats-history">History</option>
                     <option value="stats-loggings" class="hidden dev-hidden dev-change" >Loggings</option>
                 </select></h2>
-                <div class="subpage" id="stats-history">
-                    <h3>Your last results:</h3>
-                    <ol reversed id="history-list" translate="no" class="notranslate">
-
-                    </ol>
+                <div class="subpage scroll-faid" id="stats-history">
+                    <section>
+                        <h3>Your last results:</h3>
+                        <ol reversed id="history-list" translate="no" class="notranslate"> </ol>
+                    </section>
                 </div>
-                <div class="subpage hidden" id="stats-loggings">
-                    <h3>The last logging entries:</h3>
-                    <ol reversed id="logging-list" translate="no" class="notranslate">
-
-                    </ol>
+                <div class="subpage hidden scroll-faid" id="stats-loggings">
+                    <section>
+                        <h3>The last logging entries:</h3>
+                        <ol reversed id="logging-list" translate="no" class="notranslate"> </ol>
+                    </section>
                 </div>
             </div>
-            <div id="trainer-page" class="page">
-                <section id="task" translate="no" class="notranslate">
-                    <panel-bunch-control></panel-bunch-control>
-                    <view-input></view-input>
-                    <view-task></view-task>
-                    <view-task-vertical></view-task-vertical>
+            <div id="trainer-page" class="page scroll-faid">
+                <section>
+                    <section id="task" translate="no" class="notranslate">
+                        <panel-bunch-control></panel-bunch-control>
+                        <view-input></view-input>
+                        <view-task></view-task>
+                        <view-task-vertical></view-task-vertical>
+                    </section>
+                    <view-intro></view-intro>
+                    <view-results></view-results>
+                    <section id="clipboard"></section>
                 </section>
-                <view-intro></view-intro>
-                <view-results></view-results>
-                <section id="clipboard"></section>
             </div>
         </div>
     </div>
