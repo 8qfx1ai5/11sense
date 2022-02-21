@@ -614,7 +614,10 @@ function checkParamValidity(name, value) {
             }
             return value
         case "boolean":
-            if (!(typeof value === 'boolean') && !["true", "false"].includes(value)) {
+            if (typeof value === 'boolean') {
+                return value
+            }
+            if (typeof value !== 'string' || !["true", "false"].includes(value)) {
                 return null
             }
             return value == "true"
