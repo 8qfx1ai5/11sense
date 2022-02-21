@@ -118,6 +118,9 @@ customElements.define('button-select', class extends HTMLElement {
         let labelSpan = this.shadowRoot.querySelector("#label")
 
         let selectedValue = this.currentConfig.getGlobalValue(configName)
+        if (typeof selectedValue !== "string") {
+            selectedValue = JSON.stringify(selectedValue)
+        }
         let wasValueFound = false
         if (this.currentConfig.getGlobalOptions(configName).length == 0) {
             appSystem.log('error: invalid guiOptions config for "' + configName + '"', 1)
