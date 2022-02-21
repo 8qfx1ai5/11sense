@@ -49,8 +49,8 @@ export function stop() {
 }
 
 function getAutoTaskInterval() {
-    let interval = currentState.config.autoTaskTime
-    if (!Number.isInteger(interval)) {
+    let interval = currentState.config.getValue('autoTaskTime')
+    if (!Number.isInteger(interval) || interval == 9999999) {
         currentAutoTaskInterval = -1
         return currentAutoTaskInterval
     }

@@ -1,7 +1,7 @@
 import * as appSystem from '../main/system.js'
 import * as bunchRunner from './bunchRunner.js'
+import * as appConfig from '../config/ConfigStateMachine.js'
 
-let localStorageKeySolutionGuideInterval = "solutionGuideTime"
 let solutionGuideIntervalObject = false
 
 export function isActive() {
@@ -9,11 +9,11 @@ export function isActive() {
 }
 
 function getSolutionGuideInterval() {
-    let interval = localStorage.getItem(localStorageKeySolutionGuideInterval)
-    if (!interval || interval == "false" || interval == "off" || interval == "") {
+    let interval = appConfig.currentConfig.getValue('solutionGuideTime')
+    if (!interval || interval === 0) {
         return false
     }
-    return interval * 1000
+    return interval
 }
 
 export function stop() {

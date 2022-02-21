@@ -29,7 +29,7 @@ let globalParamConfig = {
         "min": -1,
         "max": 1000000,
         "description": "milliseconds to solve the task",
-        "default": 15,
+        "default": 15000,
         "required": false,
         "guiOptions": [],
         "value": null,
@@ -52,7 +52,7 @@ let globalParamConfig = {
         "min": -1,
         "max": 9999999,
         "description": "milliseconds between two tasks, after the last was finished",
-        "default": 5,
+        "default": 5000,
         "required": false,
         "guiOptions": [],
         "value": null,
@@ -728,9 +728,15 @@ export function init() {
         // TODO: maybe some checks required
         for (const configKey in e.detail) {
             for (const property in e.detail[configKey]) {
-                globalParamConfig[configKey][property] = e.detail[configKey][property]
                 if (property == "value") {
-                    saveConfigParamInLocalStorage(configKey, e.detail[configKey]["value"])
+                    let value = checkParamValidity(configKey, e.detail[configKey]["value"])
+                    if (value === null) {
+                        continue
+                    }
+                    saveConfigParamInLocalStorage(configKey, value)
+                    globalParamConfig[configKey][property] = value
+                } else {
+                    globalParamConfig[configKey][property] = e.detail[configKey][property]
                 }
             }
             if (configKey == "selectedLanguage") {
